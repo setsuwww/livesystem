@@ -1,0 +1,125 @@
+'use client'
+
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
+import { ChevronDown, Users, CalendarDays, Clock, LayoutDashboard, User, Settings, CalendarClock, Ticket } from 'lucide-react'
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
+import SubHeading from './content/SubHeading'
+
+const linkBase = "flex items-center gap-2 text-md px-3 py-2 text-zinc-600 rounded-lg hover:bg-sky-100 hover:text-sky-700 transition-colors"
+const subLinkBase = "block text-sm px-3 py-1.5 font-light  text-zinc-500 rounded-lg hover:bg-sky-100 hover:text-sky-700 transition-colors"
+const triggerBase = "w-full flex items-center justify-between px-3 py-2 text-zinc-600 rounded-lg hover:bg-sky-100 hover:text-sky-700 transition-colors focus:outline-none"
+const subContentBase = "border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2"
+
+function SidebarLink({ href, icon: Icon, children }: { href: string; icon: React.ElementType; children: React.ReactNode }) {
+  return (
+    <Link href={href} className={linkBase}>
+      <Icon size={18} />
+      {children}
+    </Link>
+  )
+}
+
+function SidebarSubLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link href={href} className={subLinkBase}>
+      {children}
+    </Link>
+  )
+}
+
+function SidebarCollapsible({ title, open, onOpenChange, items, icon: Icon}: 
+  { title: string, open: boolean, onOpenChange: (event: boolean) => void, items: { label: string; href: string }[], icon: React.ElementType }) {
+  return (
+    <Collapsible open={open} onOpenChange={onOpenChange}>
+      <CollapsibleTrigger className={triggerBase}>
+        <div className={`flex items-center gap-x-2 ${open ? "text-sky-700" : ""}`}>
+          <Icon size={18} />
+          <span>{title}</span>
+        </div>
+        <ChevronDown size={20} className={`transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
+      </CollapsibleTrigger>
+
+      <CollapsibleContent className={subContentBase}>
+        {items.map((item) => (
+          <SidebarSubLink key={item.href} href={item.href}>
+            {item.label}
+          </SidebarSubLink>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
+export function Sidebar() {
+  const [userOpen, setUserOpen] = useState(false)
+  const [scheduleOpen, setScheduleOpen] = useState(false)
+  const [calendarOpen, setCalendarOpen] = useState(false)
+  const [ticketOpen, setTicketOpen] = useState(false)
+
+  return (
+    <aside className="w-64 h-screen bg-white font-semibold text-zinc-500 flex flex-col border-0 border-r-2 border-zinc-200">
+      <picture className='px-8 py-2 border-b border-gray-500'>
+        <Image src="/images/lintasarta.webp" width={150} height={150} alt='Lintasarta' />
+      </picture>
+      <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+
+        <SubHeading title='Main'/>
+        <SidebarLink href="/admin/dashboard" icon={LayoutDashboard}>
+          Dashboard
+        </SidebarLink>
+
+        <SidebarLink href="/admin/dashboard/shifts" icon={Clock}>
+          Shifts
+        </SidebarLink>
+        
+        <SubHeading title='Management'/>
+        <SidebarCollapsible title="Users"
+          open={userOpen} onOpenChange={setUserOpen}
+          icon={Users}
+          items={[
+            { label: 'Users', href: '/admin/dashboard/users' },
+            { label: 'Add Users', href: '/admin/dashboard/users/create' }
+          ]}
+        />
+
+        <SidebarCollapsible title="Schedules"
+          open={scheduleOpen} onOpenChange={setScheduleOpen}
+          icon={CalendarClock}
+          items={[
+            { label: 'Schedules', href: '/admin/dashboard/schedules' },
+            { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' }
+          ]}
+        />
+
+        <SidebarCollapsible title="Calendars"
+          open={calendarOpen} onOpenChange={setCalendarOpen}
+          icon={CalendarDays}
+          items={[
+            { label: 'Calendars', href: '/admin/dashboard/calendars' },
+            { label: 'Add Calendars', href: '/admin/dashboard/calendars/create' }
+          ]}
+        />
+
+        <SidebarCollapsible title="Tickets"
+          open={ticketOpen} onOpenChange={setTicketOpen}
+          icon={Ticket}
+          items={[
+            { label: 'Tickets', href: '/admin/dashboard/tickets' },
+            { label: 'Add Tickets', href: '/admin/dashboard/tickets/create' }
+          ]}
+        />
+
+        <SubHeading title='Account'/>
+        <SidebarLink href="admin/dashboard/profile" icon={User}>
+          Profile
+        </SidebarLink>
+
+        <SidebarLink href="admin/dashboard/setting" icon={Settings}>
+          Settings
+        </SidebarLink>
+      </nav>
+    </aside>
+  )
+}
