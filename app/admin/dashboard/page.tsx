@@ -1,6 +1,6 @@
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 import { DashboardStats } from "@/app/admin/dashboard/DashboardStats"
-import { Users, Calendar, Ticket } from "lucide-react"
+import { Users, CalendarClock, CalendarDays, Ticket } from "lucide-react"
 import { DashboardDiagram } from "./DashboardDiagram"
 
 export default function AdminDashboardPage() {
@@ -8,25 +8,25 @@ export default function AdminDashboardPage() {
     { name: "Jan", value: 120 },
     { name: "Feb", value: 200 },
     { name: "Mar", value: 110 },
-    { name: "Apr", value: 320 },
+    { name: "Apr", value: 120 },
     { name: "May", value: 200 },
     { name: "Jun", value: 100 },
-    { name: "Jul", value: 210 },
+    { name: "Jul", value: 110 },
     { name: "Aug", value: 220 },
-    { name: "Sep", value: 230 },
-    { name: "Oct", value: 300 },
+    { name: "Sep", value: 130 },
+    { name: "Oct", value: 100 },
     { name: "Nov", value: 290 },
-    { name: "Des", value: 280 },
+    { name: "Des", value: 80 },
   ]
 
   const ticketData = [
-    { name: "Support", value: 12 },
-    { name: "Sales", value: 25 },
-    { name: "Tech", value: 20 },
-    { name: "Tech", value: 12 },
-    { name: "Tech", value: 2 },
-    { name: "Tech", value: 12 },
-    { name: "Tech", value: 50 },
+    { name: "Senin", value: 12 },
+    { name: "Selasa", value: 25 },
+    { name: "Rabu", value: 12 },
+    { name: "Kamis", value: 22 },
+    { name: "Jumat", value: 10 },
+    { name: "Sabtu", value: 32 },
+    { name: "Minggu", value: 10 },
   ]
 
   return (
@@ -38,45 +38,41 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats title="Total Users"
           value="120"
-          icon={<Users strokeWidth={2.5}/>}
+          icon={<Users strokeWidth={2}/>}
           color="bg-sky-100 text-sky-600"
         />
         <DashboardStats
           title="Total Schedules"
           value="35"
-          icon={<Calendar strokeWidth={2.5} />}
+          icon={<CalendarClock strokeWidth={2}/>}
           color="bg-green-100 text-green-600"
         />
         <DashboardStats
           title="Total Calendars"
           value="20"
-          icon={<Calendar strokeWidth={2.5} />}
+          icon={<CalendarDays strokeWidth={2} />}
           color="bg-purple-100 text-purple-600"
         />
         <DashboardStats
           title="Total Tickets"
           value="12"
-          icon={<Ticket strokeWidth={2.5} />}
+          icon={<Ticket strokeWidth={2} />}
           color="bg-yellow-100 text-yellow-600"
         />
-      </div>
-
-      <div className="border border-gray-300 rounded-lg px-4 py-2 shadow-sm">
-        Shift
       </div>
 
       {/* Diagram */}
       <div className="grid gap-4 grid-cols-2">
         <DashboardDiagram
-          title="Pemasukan Ticket"
-          description="Data Ticket masuk"
+          title="Ticket in/month"
+          description="Tickets growth in/month"
           data={salesData}
           color="#1d293d"
           type="bar"
         />
         <DashboardDiagram
-          title="Tickets Trend (Area)"
-          description="Perkembangan tiket"
+          title="Ticket in/week"
+          description="Tickets growth in/week"
           data={ticketData}
           color="#00a6f4"
           type="area"

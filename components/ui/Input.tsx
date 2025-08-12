@@ -3,13 +3,14 @@ import { cn } from "@/lib/utils"
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
+  labelColor?: string
   error?: string
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, error, className, type = "text", ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, labelColor = 'text-gray-800', error, className, type = "text", ...props }, ref) => {
     return (
       <div className="w-full mb-4">
-        {label && <label className="block text-sm font-medium text-gray-800 mb-1">{label}</label>}
+        {label && <label className={`block text-sm font-medium ${labelColor} mb-1`}>{label}</label>}
 
         <input type={type} className={cn(
             "w-full px-3 py-2 text-sm border rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200",

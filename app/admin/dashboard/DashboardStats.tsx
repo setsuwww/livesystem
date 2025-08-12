@@ -1,21 +1,28 @@
-'use client'
+"use client"
 
+import { Plus } from "lucide-react"
 import React from "react"
 
 interface StatCardProps {
   title: string | React.ReactNode
   value: string | number
   icon?: React.ReactNode
-  color?: string
+  color?: string // ex: "bg-blue-100 text-blue-600"
 }
 
-export function DashboardStats({ title, value, icon, color = "bg-gray-100" }: StatCardProps) {
+export function DashboardStats({ title, value, icon, color = "bg-gray-100 text-gray-600" }: StatCardProps) {
   return (
-    <div className={`p-4 rounded-lg border border-gray-300 shadow-sm flex items-center gap-4`}>
-      <div className={`p-4 rounded-lg text-4xl font-semibold ${color}`}>{icon}</div>
-      <div>
-        <p className="text-sm text-gray-500">{title}</p>
-        <p className="text-xl font-semibold">{value}</p>
+    <div className="p-5 rounded-2xl border border-gray-200 shadow-sm bg-card text-card-foreground flex items-center gap-4 hover:border-primary/40 transition-all duration-200 ease-in-out">
+      <div className={`flex items-center justify-center w-14 h-14 rounded-full ${color} shadow-inner`}>
+        {icon}
+      </div>
+
+      <div className="flex flex-col flex-1">
+        <h2 className="text-sm font-medium text-gray-700">{title}</h2>
+        <div className="flex items-center space-x-1 text-gray-500">
+          <p className="text-2xl font-semibold">{value}</p>
+          <Plus className="w-4 h-4 text-primary" />
+        </div>
       </div>
     </div>
   )

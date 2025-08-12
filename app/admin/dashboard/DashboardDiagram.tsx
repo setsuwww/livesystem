@@ -25,22 +25,18 @@ function DashboardDiagramComponent({ title, description, data, type = "bar", col
   if (type === "bar") {
     chart = (
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey="value" fill={color} radius={[4, 4, 0, 0]} />
+        <CartesianGrid strokeDasharray="2 2" stroke="#ddd" />
+        <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+        <YAxis tick={{ fontSize: 10 }} />
+        <Tooltip contentStyle={{ fontSize: '10' }} />
+        <Bar dataKey="value" fill={color} radius={[4, 4, 0, 0]} barSize={10} />
       </BarChart>
     )
   } else if (type === "pie") {
     chart = (
       <PieChart>
         <Tooltip />
-        <Pie data={data} dataKey="value" nameKey="name"
-          cx="50%" cy="50%"
-          outerRadius={100}
-          label
-        >
+        <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
           {data.map((_, i) => (
             <Cell key={i} fill={COLORS[i % COLORS.length]} />
           ))}
@@ -56,11 +52,14 @@ function DashboardDiagramComponent({ title, description, data, type = "bar", col
             <stop offset="95%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Area type="monotone" dataKey="value" stroke={color}
+        <CartesianGrid strokeDasharray="2 2" stroke="#ddd" />
+        <XAxis tick={{ fontSize: 10 }}
+          dataKey="name"  
+        />
+        <YAxis tick={{ fontSize: 10 }} />
+        <Tooltip contentStyle={{ fontSize: '12px' }} />
+        <Area type="monotone" 
+          dataKey="value" stroke={color}
           fillOpacity={1} fill="url(#colorValue)"
         />
       </AreaChart>

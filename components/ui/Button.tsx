@@ -1,5 +1,5 @@
 interface ButtonProps {
-  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'danger' | 'custom';
   size?: 'sm' | 'md' | 'lg';
@@ -8,7 +8,7 @@ interface ButtonProps {
   className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ onClick, children, variant = 'primary', size = 'md', disabled = false, loading = false, className = '' }) => {
+export const Button: React.FC<ButtonProps> = ({ onClick, children, variant = 'primary', size = 'md', disabled = false, loading = false, className = '' }) => {
   const baseStyles = 'inline-flex items-center justify-center gap-x-2 rounded-md font-semibold transition duration-200 ease-in-out cursor-pointer';
 
   const variantStyles = {
@@ -45,5 +45,3 @@ const Button: React.FC<ButtonProps> = ({ onClick, children, variant = 'primary',
     </button>
   );
 };
-
-export default Button;

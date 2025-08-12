@@ -55,7 +55,6 @@ model Shift {
 enum Role {
   ADMIN
   MANAGER
-  STAFF
   USER
 }
 

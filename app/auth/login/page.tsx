@@ -5,10 +5,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
-import AuthForm from '@/app/auth/AuthForm';
-import AuthLink from '../AuthLink';
+import { Button } from '@/components/ui/Button';
 import Checkbox from '@/components/ui/Checkbox';
+import AuthForm from '@/app/auth/AuthForm';
+import AuthLink from '@/app/auth/AuthLink';
+import { api } from '@/lib/api';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -29,22 +30,25 @@ const LoginPage = () => {
       setError('Both fields are required');
       return;
     }
+
     setIsSubmitting(true);
 
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const { data } = await api.post('/auth/login', {
+        email,
+        password,
+      });
 
-    const data = await response.json();
-
-    setIsSubmitting(false);
-
-    if (response.ok) {
-      router.push('/admin/dashboard');
-    } else {
-      setError(data.message || 'Login failed');
+      // kalau login sukses → redirect sesuai role
+      if (data.success) {
+        if (data.role === 'ADMIN') router.push('/admin/dashboard');
+        else if (data.role === 'USER') router.push('/user/dashboard');
+        else if (data.role === 'MANAGER') router.push('/manager/dashboard');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -64,19 +68,19 @@ const LoginPage = () => {
         />
 
         <div className="flex items-center justify-between w-full text-sm">
-          <Checkbox label="Remember Me" checked={rememberMe} onChange={handleCheckboxChange} className="!mb-0 !w-auto"/>
+          <Checkbox label="Remember Me" checked={rememberMe} onChange={handleCheckboxChange} className="!mb-0 !w-auto" />
 
-          <AuthLink href="/forgot-password" link="Forgot Password?" question=""/>
+          <AuthLink href="/forgot-password" link="Forgot Password?" question="" />
         </div>
 
-        <Button onClick={handleSubmit} variant="custom" loading={isSubmitting} className='text-md text-white font-semibold w-full bg-indigo-600 py-2 rounded-md'>
+        <Button variant="custom" loading={isSubmitting} className='text-md text-white font-semibold w-full bg-indigo-600 py-2 rounded-md'>
           {isSubmitting ? 'Logging in...' : 'Login'}
         </Button>
       </form>
 
       {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
 
-      <AuthLink question="Don't have an account?" link='Register' href='/auth/register' className='mt-4' />
+      <AuthLink question="Don't have an account?" link='Register' href='/auth/register' className='text-sm mt-4' />
     </AuthForm>
   );
 };
