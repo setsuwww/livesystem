@@ -36,7 +36,7 @@ export default function CreateUserPage() {
       const res = await api.post("/users", form);
 
       if (res.status === 201 || res.status === 200) {
-        router.push("/admin/users");
+        router.push("/admin/dashboard/users");
       } else {
         alert("Failed to create user");
       }

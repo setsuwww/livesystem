@@ -1,5 +1,5 @@
 // prisma/seed.ts
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient, Role, ShiftType } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -30,6 +30,29 @@ async function main() {
       password: operatorPassword,
       role: Role.MANAGER,
     },
+  });
+
+  // Seed shifts
+  await prisma.shift.deleteMany(); // biar nggak dobel data
+
+  await prisma.shift.createMany({
+    data: [
+      {
+        type: ShiftType.MORNING,
+        startTime: new Date("1970-01-01T08:00:00.000Z"),
+        endTime: new Date("1970-01-01T16:00:00.000Z"),
+      },
+      {
+        type: ShiftType.AFTERNOON,
+        startTime: new Date("1970-01-01T16:00:00.000Z"),
+        endTime: new Date("1970-01-01T00:00:00.000Z"),
+      },
+      {
+        type: ShiftType.NIGHT,
+        startTime: new Date("1970-01-01T00:00:00.000Z"),
+        endTime: new Date("1970-01-01T08:00:00.000Z"),
+      },
+    ],
   });
 
   console.log("✅ Seeding selesai!");

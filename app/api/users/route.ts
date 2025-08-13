@@ -29,3 +29,22 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { ids } = await req.json();
+
+    if (!ids || !Array.isArray(ids)) {
+      return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+
+    await prisma.user.deleteMany({
+      where: { id: { in: ids } },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Failed to delete users" }, { status: 500 });
+  }
+}

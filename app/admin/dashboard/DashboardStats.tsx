@@ -12,7 +12,7 @@ interface StatCardProps {
 
 export function DashboardStats({ title, value, icon, color = "bg-gray-100 text-gray-600" }: StatCardProps) {
   return (
-    <div className="p-5 rounded-2xl border border-gray-200 shadow-sm bg-card text-card-foreground flex items-center gap-4 hover:border-primary/40 transition-all duration-200 ease-in-out">
+    <div className="p-5 rounded-2xl border border-gray-200 shadow-sm bg-white flex items-center gap-4 hover:border-gray-300 transition-colors">
       <div className={`flex items-center justify-center w-14 h-14 rounded-full ${color} shadow-inner`}>
         {icon}
       </div>

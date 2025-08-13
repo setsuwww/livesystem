@@ -9,7 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(({ label, labelColor = 'text-gray-800', error, className, type = "text", ...props }, ref) => {
     return (
-      <div className="w-full mb-4">
+      <div className="w-full">
         {label && <label className={`block text-sm font-medium ${labelColor} mb-1`}>{label}</label>}
 
         <input type={type} className={cn(

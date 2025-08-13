@@ -1,5 +1,6 @@
 "use client"
 
+import React from "react"
 import { LogOut } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -9,7 +10,7 @@ interface DashboardHeaderProps {
   subtitle?: string
 }
 
-export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
+export const DashboardHeader = React.memo<DashboardHeaderProps>(function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
 
@@ -54,4 +55,4 @@ export function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
       </div>
     </header>
   )
-}
+})
