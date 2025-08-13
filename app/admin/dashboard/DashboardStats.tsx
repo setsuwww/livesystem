@@ -7,10 +7,15 @@ interface StatCardProps {
   title: string | React.ReactNode
   value: string | number
   icon?: React.ReactNode
-  color?: string // ex: "bg-blue-100 text-blue-600"
+  color?: string
 }
 
-export function DashboardStats({ title, value, icon, color = "bg-gray-100 text-gray-600" }: StatCardProps) {
+function DashboardStatsComponent({
+  title,
+  value,
+  icon,
+  color = "bg-gray-100 text-gray-600"
+}: StatCardProps) {
   return (
     <div className="p-5 rounded-2xl border border-gray-200 shadow-sm bg-white flex items-center gap-4 hover:border-gray-300 transition-colors">
       <div className={`flex items-center justify-center w-14 h-14 rounded-full ${color} shadow-inner`}>
@@ -27,3 +32,6 @@ export function DashboardStats({ title, value, icon, color = "bg-gray-100 text-g
     </div>
   )
 }
+
+// Memoized version
+export const DashboardStats = React.memo(DashboardStatsComponent)

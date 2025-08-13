@@ -32,25 +32,30 @@ async function main() {
     },
   });
 
-  // Seed shifts
-  await prisma.shift.deleteMany(); // biar nggak dobel data
+  // Hapus shift lama
+  await prisma.shift.deleteMany();
 
+  // Helper untuk bikin Date dari jam (UTC)
+  const time = (hours: number, minutes: number = 0) =>
+    new Date(Date.UTC(1970, 0, 1, hours, minutes));
+
+  // Buat shift
   await prisma.shift.createMany({
     data: [
       {
         type: ShiftType.MORNING,
-        startTime: new Date("1970-01-01T08:00:00.000Z"),
-        endTime: new Date("1970-01-01T16:00:00.000Z"),
+        startTime: time(8, 0),
+        endTime: time(16, 0),
       },
       {
         type: ShiftType.AFTERNOON,
-        startTime: new Date("1970-01-01T16:00:00.000Z"),
-        endTime: new Date("1970-01-01T00:00:00.000Z"),
+        startTime: time(16, 0),
+        endTime: time(0, 0),
       },
       {
         type: ShiftType.NIGHT,
-        startTime: new Date("1970-01-01T00:00:00.000Z"),
-        endTime: new Date("1970-01-01T08:00:00.000Z"),
+        startTime: time(0, 0),
+        endTime: time(8, 0),
       },
     ],
   });

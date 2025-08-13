@@ -1,16 +1,13 @@
 "use client"
 
 import { memo, useCallback } from "react"
-import { Button } from "@/components/ui/Button"
 import { Trash2 } from "lucide-react"
 
-interface UsersTableActionProps {
-  userId: number
-  onEdit: (id: number) => void
-  onDelete: (id: number) => void
-}
+import { Button } from "@/components/ui/Button"
 
-function UsersActionButton({ userId, onEdit, onDelete }: UsersTableActionProps) {
+import { UsersActionButtonProps } from "@/static/interfaces/UsersActionButtonProps"
+
+function UsersActionButton({ userId, onEdit, onDelete }: UsersActionButtonProps) {
   const handleEdit = useCallback(() => onEdit(userId), [onEdit, userId])
   const handleDelete = useCallback(() => onDelete(userId), [onDelete, userId])
 

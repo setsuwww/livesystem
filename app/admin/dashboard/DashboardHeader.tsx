@@ -27,7 +27,6 @@ export const DashboardHeader = React.memo<DashboardHeaderProps>(function Dashboa
         </p>
       </div>
 
-      {/* Breadcrumb */}
       <div className="flex items-center space-x-6">
         <nav className="text-sm text-gray-500">
           {segments.map((segment, index) => {
@@ -48,7 +47,7 @@ export const DashboardHeader = React.memo<DashboardHeaderProps>(function Dashboa
             )
           })}
         </nav>
-        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold shadow-sm rounded-lg text-gray-500 bg-gray-200 hover:text-red-700 hover:bg-red-200">
+        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold rounded-lg text-gray-500 bg-gray-100 hover:text-red-700 hover:bg-red-200">
           <LogOut strokeWidth={2.5} size={15} />
           Logout
         </Link>

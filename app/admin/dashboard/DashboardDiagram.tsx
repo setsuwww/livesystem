@@ -25,7 +25,7 @@ function DashboardDiagramComponent({ title, description, data, type = "bar", col
   if (type === "bar") {
     chart = (
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="2 2" stroke="#ddd" />
+        <CartesianGrid strokeDasharray="2 2" stroke="#d5d7db" />
         <XAxis dataKey="name" tick={{ fontSize: 10 }} />
         <YAxis tick={{ fontSize: 10 }} />
         <Tooltip contentStyle={{ fontSize: '10' }} />
@@ -52,13 +52,13 @@ function DashboardDiagramComponent({ title, description, data, type = "bar", col
             <stop offset="95%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="2 2" stroke="#ddd" />
+        <CartesianGrid strokeDasharray="1 1" stroke="#d5d7db" />
         <XAxis tick={{ fontSize: 10 }}
-          dataKey="name"  
+          dataKey="name"
         />
         <YAxis tick={{ fontSize: 10 }} />
         <Tooltip contentStyle={{ fontSize: '12px' }} />
-        <Area type="monotone" 
+        <Area type="monotone"
           dataKey="value" stroke={color}
           fillOpacity={1} fill="url(#colorValue)"
         />
