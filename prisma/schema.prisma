@@ -21,50 +21,54 @@ model User {
   role       Role        @default(USER)
   tickets    Ticket[]
   schedules  Schedule[]
-  userShifts UserShift[] 
+  userShifts UserShift[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
 
-
 model UserShift {
-  id       Int    @id @default(autoincrement())
-  user     User   @relation(fields: [userId], references: [id])
-  userId   Int
-  shift    Shift  @relation(fields: [shiftId], references: [id])
-  shiftId  Int
-  date     DateTime? // opsional kalau shift berlaku pada hari tertentu
+  id      Int       @id @default(autoincrement())
+  user    User      @relation(fields: [userId], references: [id])
+  userId  Int
+  shift   Shift     @relation(fields: [shiftId], references: [id])
+  shiftId Int
+  date    DateTime? // opsional kalau shift berlaku pada hari tertentu
 }
 
 model Ticket {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   title       String
   description String?
   status      TicketStatus @default(PENDING)
-  user        User     @relation(fields: [userId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
   userId      Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Schedule {
-  id        Int      @id @default(autoincrement())
-  title     String
-  date      DateTime
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  id     Int      @id @default(autoincrement())
+  title  String
+  date   DateTime
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+
+  shift   Shift? @relation(fields: [shiftId], references: [id])
+  shiftId Int?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Shift {
-  id        Int        @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   type      ShiftType
   startTime DateTime
   endTime   DateTime
-  users     UserShift[] 
-}
 
+  users     UserShift[]
+  schedules Schedule[]
+}
 
 enum Role {
   ADMIN

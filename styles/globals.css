@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
 #nprogress .bar {
   background: #4f46e5 !important;
   height: 3px;

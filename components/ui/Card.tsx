@@ -25,6 +25,15 @@ export function CardTitle({ className, children }: { className?: string, childre
   )
 }
 
+export function CardDescription({ className, children }: { className?: string, children: React.ReactNode }) {
+  return (
+    <p className={clsx("text-sm text-gray-500", className)}>
+      {children}
+    </p>
+  )
+}
+
+
 export function CardContent({ className, children }: { className?: string, children: React.ReactNode }) {
   return (
     <div className={clsx("p-4", className)}>

@@ -1,0 +1,26 @@
+/* =======================
+   EVENT UTAMA (DAY GRID)
+   ======================= */
+.fc-daygrid-event {
+  background-color: rgba(59, 130, 246, 0.1);
+  padding: 10px 10px; 
+  font-size: 24px; 
+  border-radius: 10px;
+  color: white; 
+}
+
+.fc-daygrid-event:hover {
+  opacity: 0.9; 
+  cursor: pointer;
+}
+
+.fc-toolbar-title {
+  font-size: 20px; 
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.fc-bg-event {
+  background-color: rgba(59, 130, 246, 0.1); /* biru transparan */
+  border: none;
+}
