@@ -35,24 +35,19 @@ async function main() {
   // Hapus shift lama
   await prisma.shift.deleteMany();
 
-  // Helper untuk bikin Date dari jam (UTC)
   const time = (hours: number, minutes: number = 0) =>
     new Date(Date.UTC(1970, 0, 1, hours, minutes));
 
-  // Buat shift
   await prisma.shift.createMany({
-    data: [
-      {
+    data: [{
         type: ShiftType.MORNING,
         startTime: time(8, 0),
         endTime: time(16, 0),
-      },
-      {
+      }, {
         type: ShiftType.AFTERNOON,
         startTime: time(16, 0),
         endTime: time(0, 0),
-      },
-      {
+      }, {
         type: ShiftType.NIGHT,
         startTime: time(0, 0),
         endTime: time(8, 0),

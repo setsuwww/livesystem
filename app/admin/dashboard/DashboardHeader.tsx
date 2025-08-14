@@ -4,11 +4,7 @@ import React from "react"
 import { LogOut } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-
-interface DashboardHeaderProps {
-  title?: string
-  subtitle?: string
-}
+import { DashboardHeaderProps } from '@/static/interfaces/DashboardHeaderProps';
 
 export const DashboardHeader = React.memo<DashboardHeaderProps>(function DashboardHeader({ title, subtitle }: DashboardHeaderProps) {
   const pathname = usePathname()

@@ -33,18 +33,14 @@ export default async function Page() {
     email: u.email,
     role: u.role,
     shift: u.shift 
-      ? (() => {
-          const start = u.shift.startTime.toLocaleTimeString([], { 
+      ? (() => { const start = u.shift.startTime.toLocaleTimeString([], { 
             hour: "2-digit", 
             minute: "2-digit" 
-          })
-          const end = u.shift.endTime.toLocaleTimeString([], { 
+          }); const end = u.shift.endTime.toLocaleTimeString([], { 
             hour: "2-digit", 
             minute: "2-digit" 
-          })
-          return `${u.shift.type} (${start} - ${end})`
-        })()
-      : "-",
+          }); return `${u.shift.type} (${start} - ${end})`
+        })() : "-",
     createdAt: u.createdAt.toISOString()
   }))
 

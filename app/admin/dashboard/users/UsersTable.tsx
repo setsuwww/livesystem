@@ -10,7 +10,7 @@ import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
 
 // Hooks & Function
-import { handleUsersHandlers } from "./function/handleUsersHandlers";
+import { handleUsers } from "./function/handleUsers";
 
 export default function UsersTable({ data }: UsersTableProps) {
   const [search, setSearch] = useState("");
@@ -47,7 +47,7 @@ export default function UsersTable({ data }: UsersTableProps) {
 
   const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
-  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser } = handleUsersHandlers(selectedIds, setSelectedIds, filteredData, () => location.reload());
+  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
 
   const handleSearchChange = useCallback((value: string) => setSearch(value), []);
   const handleRoleFilterChange = useCallback((value: string) => setRoleFilter(value), []);
@@ -61,15 +61,10 @@ export default function UsersTable({ data }: UsersTableProps) {
   return (
     <div className="rounded-md space-y-4">
       <UsersActionHeader
-        search={search} 
-        onSearchChange={handleSearchChange}
-        roleFilter={roleFilter} 
-        onRoleFilterChange={handleRoleFilterChange}
-        shiftFilter={shiftFilter} 
-        onShiftFilterChange={handleShiftFilterChange}
-        selectedCount={selectedIds.length} 
-        onDeleteSelected={deleteSelected} 
-        onDeleteAll={deleteAll}
+        search={search} onSearchChange={handleSearchChange}
+        roleFilter={roleFilter} onRoleFilterChange={handleRoleFilterChange}
+        shiftFilter={shiftFilter} onShiftFilterChange={handleShiftFilterChange}
+        selectedCount={selectedIds.length} onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
       />
 
       <Table>
@@ -92,16 +87,12 @@ export default function UsersTable({ data }: UsersTableProps) {
               <TableCell colSpan={7} className="text-center text-muted-foreground">
                 No data found
               </TableCell>
-            </TableRow>
+            </TableRow> 
           ) : (
             filteredData.map(user => (
-              <UsersRow
-                key={user.id}
-                user={user}
-                isSelected={selectedIdsSet.has(user.id)}
-                onToggleSelect={toggleSelect}
-                onEdit={handleEditUser}
-                onDelete={handleDeleteUser}
+              <UsersRow key={user.id} user={user}
+                isSelected={selectedIdsSet.has(user.id)} onToggleSelect={toggleSelect}
+                onEdit={handleEditUser} onDelete={handleDeleteUser}
                 roleStyles={roleStyles}
               />
             ))

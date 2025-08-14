@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import AuthForm from '@/app/auth/AuthForm';
 import AuthLink from '../AuthLink';
-import { api } from '@/lib/api'; // Axios instance
+
+import { api } from '@/lib/api';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -33,12 +34,12 @@ const RegisterPage = () => {
         name,
         email,
         password,
-      });
-
-      router.push('/auth/login');
-    } catch (err: any) {
+      }); router.push('/auth/login');
+    } 
+    catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
-    } finally {
+    } 
+    finally {
       setIsSubmitting(false);
     }
   };

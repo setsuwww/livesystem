@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { api } from "@/lib/api";
 
-export const handleUsersHandlers = (
+export const handleUsers = (
   selectedIds: number[], 
   setSelectedIds: React.Dispatch<React.SetStateAction<number[]>>,
   filteredData: any[], 

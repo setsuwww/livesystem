@@ -5,15 +5,13 @@ import React, { useMemo, useCallback, memo } from "react"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { UsersTableAction } from "./UsersActionButton"
 
-import { User } from "@/static/types/User"
+import { UsersRowProps } from '@/static/interfaces/UserRowProps';
 
-export const UsersRow = memo(({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: {
-  user: User, 
-  isSelected: boolean, onToggleSelect: (id: number) => void, 
-  onEdit: (id: number) => void, 
-  onDelete: (id: number) => void, 
-  roleStyles: Record<string, string>
-}) => { const handleToggle = useCallback(() => { onToggleSelect(user.id)}, [user.id, onToggleSelect])
+export const UsersRow = memo(({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: UsersRowProps) => { 
+  
+  const handleToggle = useCallback(() => { 
+    onToggleSelect(user.id)}, 
+  [user.id, onToggleSelect])
 
   const formattedDate = useMemo(() => 
     new Date(user.createdAt).toLocaleDateString(),

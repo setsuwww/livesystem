@@ -12,6 +12,7 @@ import { UsersActionHeaderProps } from "@/static/interfaces/UsersActionHeaderPro
 export function UsersActionHeader({ search, onSearchChange, roleFilter, onRoleFilterChange, shiftFilter, onShiftFilterChange, selectedCount, onDeleteSelected, onDeleteAll }: UsersActionHeaderProps) {
   return (
     <div className="flex items-center justify-between gap-2 flex-wrap">
+
       {/* Search & Filters */}
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
@@ -44,12 +45,9 @@ export function UsersActionHeader({ search, onSearchChange, roleFilter, onRoleFi
 
       {/* Action Buttons */}
       <div className="flex items-center gap-2">
-        <Button
-          variant="destructive"
-          size="sm"
+        <Button variant="destructive" size="sm"
           onClick={onDeleteSelected}
-          disabled={selectedCount === 0}
-        >
+          disabled={selectedCount === 0}>
           Delete Selected ({selectedCount})
         </Button>
 
