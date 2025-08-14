@@ -13,7 +13,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, error, di
       <label className="flex items-center gap-x-2 text-sm font-medium text-gray-700 dark:text-gray-300">
         <input type="checkbox" checked={checked} onChange={onChange}
           disabled={disabled}
-          className={`h-3.5 w-3.5 text-indigo-500 border rounded focus:border-indigo-500 transition-all duration-200
+          className={`h-3.5 w-3.5 text-sky-500 border rounded focus:border-sky-500 transition-all duration-200
             ${disabled ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}
             ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'}
             `}

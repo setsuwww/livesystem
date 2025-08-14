@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useCallback } from "react"
+import { memo } from "react"
 import { Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/Button"
@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/Button"
 import { UsersActionButtonProps } from "@/static/interfaces/UsersActionButtonProps"
 
 function UsersActionButton({ userId, onEdit, onDelete }: UsersActionButtonProps) {
-  const handleEdit = useCallback(() => onEdit(userId), [onEdit, userId])
-  const handleDelete = useCallback(() => onDelete(userId), [onDelete, userId])
+  const handleEdit = () => onEdit(userId)
+  const handleDelete = () => onDelete(userId)
 
   return (
     <div className="flex items-center justify-end gap-2">

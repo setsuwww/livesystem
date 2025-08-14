@@ -5,4 +5,5 @@ export type User = {
   role: string;
   shift: string;
   createdAt: string;
+  updatedAt: string;
 };

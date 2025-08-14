@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import AuthForm from '@/app/auth/AuthForm';
 import AuthLink from '../AuthLink';
-import { api } from '@/lib/api'; // Axios instance
+
+import { api } from '@/lib/api';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -33,12 +34,12 @@ const RegisterPage = () => {
         name,
         email,
         password,
-      });
-
-      router.push('/auth/login');
-    } catch (err: any) {
+      }); router.push('/auth/login');
+    } 
+    catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
-    } finally {
+    } 
+    finally {
       setIsSubmitting(false);
     }
   };
@@ -79,7 +80,7 @@ const RegisterPage = () => {
         <Button
           variant="custom"
           loading={isSubmitting}
-          className="text-md text-white font-semibold w-full bg-indigo-600 py-2 rounded-md"
+          className="text-md text-white font-semibold w-full bg-sky-600 py-2 rounded-md"
         >
           {isSubmitting ? 'Registering...' : 'Register'}
         </Button>

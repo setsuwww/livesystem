@@ -1,42 +1,44 @@
 "use client"
 
-import React, { useMemo, useCallback, memo } from "react"
+import React, { useMemo, memo } from "react"
+import { format } from "date-fns";
 
-import { TableCell, TableRow } from "@/components/ui/table"
+import { TableCell, TableRow } from "@/components/ui/Table"
 import { UsersTableAction } from "./UsersActionButton"
 
-import { User } from "@/static/types/User"
+import { UsersRowProps } from '@/static/interfaces/UserRowProps';
 
-export const UsersRow = memo(({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: {
-  user: User, 
-  isSelected: boolean, onToggleSelect: (id: number) => void, 
-  onEdit: (id: number) => void, 
-  onDelete: (id: number) => void, 
-  roleStyles: Record<string, string>
-}) => { const handleToggle = useCallback(() => { onToggleSelect(user.id)}, [user.id, onToggleSelect])
+export const UsersRow = memo(({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: UsersRowProps) => { 
+  
+  const handleToggle = () => {onToggleSelect(user.id)}
 
-  const formattedDate = useMemo(() => 
-    new Date(user.createdAt).toLocaleDateString(),
+  const formatedCreatedDate = useMemo(() => 
+    format(new Date(user.createdAt), "dd-MM-yyyy"),
   [user.createdAt])
+
+  const formatedUpdatedDate = useMemo(() => 
+    format(new Date(user.updatedAt), "dd-MM-yyyy"),
+  [user.updatedAt])
 
   return (
     <TableRow>
-      <TableCell>
-        <input type="checkbox" checked={isSelected} onChange={handleToggle} />
-      </TableCell>
+      <TableCell><input type="checkbox" checked={isSelected} onChange={handleToggle} /></TableCell>
       <TableCell>{user.id}</TableCell>
       <TableCell>
         <h2 className="text-gray-600 font-semibold">{user.name}</h2>
         <p className="text-gray-400 font-base">{user.email}</p>
       </TableCell>
       <TableCell>
-        <span className={roleStyles[user.role] || ""}>
+        <span className={`px-2 py-1 text-sm font-semibold rounded-full ${roleStyles[user.role] || ""}`}>
           {user.role}
         </span>
       </TableCell>
-      <TableCell>{user.shift || "No Shift"}</TableCell>
-      <TableCell>{formattedDate}</TableCell>
-      <TableCell className="text-center">
+      <TableCell><span className="text-xs font-semibold">{user.shift || "No Shift"}</span></TableCell>
+      <TableCell className="flex flex-col">
+        <span className="text-sm font-semibold">{formatedCreatedDate}</span>
+        <span className="text-xs font-light text-gray-500">{formatedUpdatedDate}</span>
+      </TableCell>
+      <TableCell>
         <UsersTableAction userId={user.id} onEdit={onEdit} onDelete={onDelete}/>
       </TableCell>
     </TableRow>

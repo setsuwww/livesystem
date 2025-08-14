@@ -73,7 +73,7 @@ const LoginPage = () => {
           <AuthLink href="/forgot-password" link="Forgot Password?" question="" />
         </div>
 
-        <Button variant="custom" loading={isSubmitting} className='text-md text-white font-semibold w-full bg-indigo-600 py-2 rounded-md'>
+        <Button variant="custom" loading={isSubmitting} className='text-md text-white font-semibold w-full bg-sky-600 py-2 rounded-md'>
           {isSubmitting ? 'Logging in...' : 'Login'}
         </Button>
       </form>

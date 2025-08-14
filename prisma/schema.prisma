@@ -42,18 +42,19 @@ model Ticket {
 }
 
 model Schedule {
-  id       Int      @id @default(autoincrement())
-  title    String
-  date     DateTime
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  date          DateTime
   
-  user     User     @relation(fields: [userId], references: [id])
-  userId   Int
+  user          User     @relation(fields: [userId], references: [id])
+  userId        Int
   
-  shift    Shift?   @relation(fields: [shiftId], references: [id])
-  shiftId  Int?
+  shift         Shift?   @relation(fields: [shiftId], references: [id])
+  shiftId       Int?
   
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Shift {

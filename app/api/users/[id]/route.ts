@@ -1,20 +1,47 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const id = parseInt(params.id, 10);
-    const data = await req.json();
+    const body = await request.json();
+    const { name, email, password, role, shiftId } = body;
 
-    const updated = await prisma.user.update({
-      where: { id },
-      data,
+    if (!name || !email || !role) {
+      return NextResponse.json(
+        { message: "Name, email, and role are required" },
+        { status: 400 }
+      );
+    }
+
+    const dataToUpdate: any = {
+      name,
+      email,
+      role,
+      shiftId: shiftId ?? null,
+    };
+
+    // Update password hanya jika dikirim
+    if (password && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      dataToUpdate.password = hashedPassword;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: Number(params.id) },
+      data: dataToUpdate,
     });
 
-    return NextResponse.json(updated);
+    return NextResponse.json(updatedUser);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
+    console.error("Failed to update user:", error);
+    return NextResponse.json(
+      { message: "Failed to update user" },
+      { status: 500 }
+    );
   }
 }
 
