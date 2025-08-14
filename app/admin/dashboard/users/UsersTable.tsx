@@ -36,7 +36,7 @@ export default function UsersTable({ data }: UsersTableProps) {
 
     let matchShift = true;
     if (shiftFilter !== "all") {
-      if (shiftFilter === "NO_SHIFT") {
+      if (shiftFilter === "NO_SHIFT") { 
         matchShift = user.shift === "-" || user.shift === "Normal Shift";
       } else {
         matchShift = extractShiftType(user.shift) === shiftFilter;
@@ -61,12 +61,9 @@ export default function UsersTable({ data }: UsersTableProps) {
   return (
     <div className="rounded-md space-y-4">
       <UsersActionHeader
-        search={search} 
-        onSearchChange={handleSearchChange}
-        roleFilter={roleFilter} 
-        onRoleFilterChange={handleRoleFilterChange}
-        shiftFilter={shiftFilter} 
-        onShiftFilterChange={handleShiftFilterChange}
+        search={search} onSearchChange={handleSearchChange}
+        roleFilter={roleFilter} onRoleFilterChange={handleRoleFilterChange}
+        shiftFilter={shiftFilter} onShiftFilterChange={handleShiftFilterChange}
         selectedCount={selectedIds.length} 
         onDeleteSelected={deleteSelected} 
         onDeleteAll={deleteAll}
@@ -95,14 +92,9 @@ export default function UsersTable({ data }: UsersTableProps) {
             </TableRow>
           ) : (
             filteredData.map(user => (
-              <UsersRow
-                key={user.id}
-                user={user}
-                isSelected={selectedIdsSet.has(user.id)}
-                onToggleSelect={toggleSelect}
+              <UsersRow key={user.id} user={user} isSelected={selectedIdsSet.has(user.id)} onToggleSelect={toggleSelect}
                 onEdit={handleEditUser}
-                onDelete={handleDeleteUser}
-                roleStyles={roleStyles}
+                onDelete={handleDeleteUser} roleStyles={roleStyles}
               />
             ))
           )}
