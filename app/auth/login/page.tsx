@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import Checkbox from '@/components/ui/Checkbox';
+import { Checkbox } from '@/components/ui/Checkbox';
 import AuthForm from '@/app/auth/AuthForm';
 import AuthLink from '@/app/auth/AuthLink';
 import { api } from '@/lib/api';
@@ -73,7 +73,7 @@ const LoginPage = () => {
           <AuthLink href="/forgot-password" link="Forgot Password?" question="" />
         </div>
 
-        <Button variant="custom" loading={isSubmitting} className='text-md text-white font-semibold w-full bg-sky-600 py-2 rounded-md'>
+        <Button type='submit' variant='custom' size="sm" loading={isSubmitting} className='text-base text-white font-semibold w-full bg-sky-500 hover:bg-sky-600 py-2 rounded-md'>
           {isSubmitting ? 'Logging in...' : 'Login'}
         </Button>
       </form>

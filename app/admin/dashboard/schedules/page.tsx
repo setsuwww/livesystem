@@ -1,7 +1,8 @@
+import { prisma } from "@/lib/prisma";
+
 import ScheduleTable from "./SchedulesTable";
 import { DashboardHeader } from "../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
-import { prisma } from "@/lib/prisma";
 import ContentInformation from "@/components/content/ContentInformation";
 
 export async function getSchedules() {
@@ -9,8 +10,10 @@ export async function getSchedules() {
     select: {
       id: true,
       title: true,
+      description: true,
       date: true,
       userId: true,
+      shiftId: true,
       createdAt: true,
       updatedAt: true,
     },
@@ -26,6 +29,7 @@ export default async function Page() {
     date: s.date.toISOString(),
     createdAt: s.createdAt.toISOString(),
     updatedAt: s.updatedAt.toISOString(),
+    shiftId: s.shiftId ?? null,
   }));
 
   return (

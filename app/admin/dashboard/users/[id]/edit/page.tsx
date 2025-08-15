@@ -1,5 +1,5 @@
+import UsersEditForm from "./EditForm";
 import { prisma } from "@/lib/prisma";
-import EditForm from "./EditForm";
 
 export default async function EditUserPage({ params }: { params: { id: string } }) {
   const user = await prisma.user.findUnique({
@@ -25,10 +25,8 @@ export default async function EditUserPage({ params }: { params: { id: string } 
   });
 
   return (
-    <EditForm userId={user.id} shifts={shifts}
-      initialForm={{
-        name: user.name, email: user.email,
-        password: "", role: user.role,
+    <UsersEditForm userId={user.id} shifts={shifts}
+      initialForm={{ name: user.name, email: user.email, password: "", role: user.role,
         shiftId: user.shiftId ? String(user.shiftId) : "NONE",
       }}
     />

@@ -1,5 +1,5 @@
 interface CheckboxProps {
-  label: string;
+  label?: string;
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
@@ -7,7 +7,7 @@ interface CheckboxProps {
   className?: string;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, error, disabled, className = '' }) => {
+export const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, error, disabled, className = '' }) => {
   return (
     <div className={`w-full ${className}`}>
       <label className="flex items-center gap-x-2 text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -16,7 +16,7 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, error, di
           className={`h-3.5 w-3.5 text-sky-500 border rounded focus:border-sky-500 transition-all duration-200
             ${disabled ? 'bg-gray-100 dark:bg-gray-700 cursor-not-allowed' : 'bg-white dark:bg-gray-800'}
             ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'}
-            `}
+          `}
         />
         <span className="text-gray-900">{label}</span>
       </label>
@@ -31,5 +31,3 @@ const Checkbox: React.FC<CheckboxProps> = ({ label, checked, onChange, error, di
     </div>
   );
 };
-
-export default Checkbox;

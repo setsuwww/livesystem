@@ -1,63 +1,81 @@
-// components/schedule/ScheduleTable.tsx
 "use client";
 
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/Table";
-import { Button } from "@/components/ui/Button";
-import { Schedule } from "@/static/interfaces/Schedule";
+import { Checkbox } from "@/components/ui/Checkbox";
+import SchedulesActionHeader from "./SchedulesActionHeader";
+import { SchedulesRow } from "./SchedulesRow";
 
-interface Props {
-  data: Schedule[];
-  onEdit?: (id: number) => void;
-  onDelete?: (id: number) => void;
-}
+import { toggleSelectAll, toggleSelectItem, handleDeleteSelected, handleDeleteAll, exportToPDF } from "@/function/handleSchedules";
 
-export default function ScheduleTable({ data, onEdit, onDelete }: Props) {
+import { ScheduleTableProps } from "@/static/interfaces/ScheduleTableProps";
+
+export default function ScheduleTable({ data, onEdit, onDelete, onDeleteMultiple }: ScheduleTableProps) {
+  const [search, setSearch] = useState("");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const router = useRouter()
+
+  const filteredData = useMemo(() => {
+    const filtered = data.filter(
+      (s) =>
+        s.title.toLowerCase().includes(search.toLowerCase()) ||
+        s.description.toLowerCase().includes(search.toLowerCase())
+    );
+
+    return filtered.sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+  }, [data, search, sortOrder]);
+
+  const handleEdit = (id: number) => {
+    router.push(`/admin/dashboard/schedules/${id}/edit`);
+  };
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Title</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Created</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.length === 0 ? (
+    <div className="space-y-4">
+      <SchedulesActionHeader
+        search={search} setSearch={setSearch}
+        sortOrder={sortOrder} onSortChange={setSortOrder}
+        selectedCount={selectedIds.length} totalCount={filteredData.length}
+        onDeleteSelected={() => handleDeleteSelected(selectedIds, onDeleteMultiple, setSelectedIds)} onDeleteAll={() => handleDeleteAll(filteredData, onDeleteMultiple, setSelectedIds)}
+        onExportPDF={() => exportToPDF(filteredData)}
+      />
+
+      <Table>
+        <TableHeader>
           <TableRow>
-            <TableCell colSpan={5} className="text-center text-muted-foreground">
-              No schedules found
-            </TableCell>
+            <TableHead>
+              <Checkbox checked={selectedIds.length === filteredData.length && filteredData.length > 0} onChange={(e) => toggleSelectAll(e.target.checked, filteredData, setSelectedIds)}
+                disabled={filteredData.length === 0}
+              />
+            </TableHead>
+            <TableHead>ID</TableHead>
+            <TableHead>Title</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Created</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
-        ) : (
-          data.map((schedule) => (
-            <TableRow key={schedule.id}>
-              <TableCell>{schedule.id}</TableCell>
-              <TableCell>{schedule.title}</TableCell>
-              <TableCell>{new Date(schedule.date).toLocaleDateString()}</TableCell>
-              <TableCell>
-                <div>
-                  <div className="text-sm font-medium">
-                    {new Date(schedule.createdAt).toLocaleDateString()}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {new Date(schedule.updatedAt).toLocaleDateString()}
-                  </div>
-                </div>
-              </TableCell>
-              <TableCell className="space-x-2">
-                <Button variant="secondary" size="sm" onClick={() => onEdit && onEdit(schedule.id)}>
-                  Edit
-                </Button>
-                <Button variant="destructive" size="sm" onClick={() => onDelete && onDelete(schedule.id)}>
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))
-        )}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {filteredData.length === 0 ? (
+            <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">No schedules found</TableCell></TableRow>
+          ) : (
+            filteredData.map((schedule) => (
+              <SchedulesRow key={schedule.id} schedule={schedule}
+                isSelected={selectedIds.includes(schedule.id)}
+                onSelect={(id, checked) => toggleSelectItem(id, checked, setSelectedIds)}
+                onEdit={handleEdit} onDelete={onDelete}
+              />
+            ))
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

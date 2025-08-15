@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
 
-import { handleUsers } from "./function/handleUsers";
+import { handleUsers } from "@/function/handleUsers";
 
 export default function UsersTable({ data }: UsersTableProps) {
   const [search, setSearch] = useState("");
@@ -43,7 +43,7 @@ export default function UsersTable({ data }: UsersTableProps) {
 
   const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
-  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
+  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
 
   const handleSearchChange = useCallback((value: string) => setSearch(value), []);
   const handleRoleFilterChange = useCallback((value: string) => setRoleFilter(value), []);
@@ -57,6 +57,7 @@ export default function UsersTable({ data }: UsersTableProps) {
         search={search} onSearchChange={handleSearchChange}
         roleFilter={roleFilter} onRoleFilterChange={handleRoleFilterChange}
         shiftFilter={shiftFilter} onShiftFilterChange={handleShiftFilterChange}
+        filteredData={filteredData} onExportPDF={() => onExportPDF(filteredData)}
       />
 
       <Table>
@@ -73,8 +74,7 @@ export default function UsersTable({ data }: UsersTableProps) {
         </TableHeader>
         <TableBody>
           {filteredData.length === 0 ? (
-            <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">No data found</TableCell>
-            </TableRow>
+            <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">No data found</TableCell></TableRow>
           ) : (
             filteredData.map(user => (
               <UsersRow key={user.id} user={user} isSelected={selectedIdsSet.has(user.id)} onToggleSelect={toggleSelect}

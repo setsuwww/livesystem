@@ -1,19 +1,14 @@
 import React from "react";
 
 interface ContentInformationProps {
-  heading?: string;
-  subheading?: string;
+  heading?: string; subheading?: string;
   divider?: {
     color?: string;       // contoh: "border-gray-300"
     thickness?: string;   // contoh: "border-b-2"
-    marginY?: string;     // contoh: "mb-6"
   };
 }
 
-export default function ContentInformation({
-  heading,
-  subheading,
-}: ContentInformationProps) {
+export default function ContentInformation({ heading, subheading }: ContentInformationProps) {
   const hasHeader = heading || subheading;
 
   if (!hasHeader) return null;

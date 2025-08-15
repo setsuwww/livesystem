@@ -10,14 +10,14 @@ import { Calendar } from "./Calendar";
 import { CalendarsModal } from "./CalendarsModal";
 
 import { api } from "@/lib/api";
-import { Schedule } from "@/static/interfaces/Schedule";
+import { Schedule } from "@/static/types/Schedule";
 
 export default function CalendarPagview({ initialEvents }: { initialEvents: any[] }) {
   const [events, setEvents] = useState(initialEvents);
   const [selectedEvent, setSelectedEvent] = useState<Schedule | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({ title: "", date: "" });
+  const [formData, setFormData] = useState({ title: "", description: "", date: "" });
 
   const fetchSchedules = async () => {
     try { setIsLoading(true);
@@ -26,6 +26,7 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
         data.map((item) => ({
           id: item.id.toString(),
           title: item.title,
+          description: item.description,
           date: item.date.split("T")[0],
           backgroundColor: "#0070f3",
           borderColor: "#0070f3",
@@ -51,7 +52,7 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
       } else { await api.post("/schedules", formData) }
       await fetchSchedules();
       setIsModalOpen(false);
-      setFormData({ title: "", date: "" });
+      setFormData({ title: "", description: "", date: "" });
       setSelectedEvent(null);
       toast.success(selectedEvent ? "Updated" : "Created");
     } 
@@ -73,7 +74,7 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
               <CardTitle>Calendar grid</CardTitle>
               <CardDescription>Click date to add new event or schedules</CardDescription>
             </div>
-            <Button size="sm" onClick={() => { setFormData({ title: "", date: new Date().toISOString().split("T")[0] });
+            <Button size="sm" onClick={() => { setFormData({ title: "", description: "", date: new Date().toISOString().split("T")[0] });
                 setSelectedEvent(null);
                 setIsModalOpen(true);
               }}
@@ -83,16 +84,18 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
           </CardHeader>
           <CardContent>
             <Calendar events={events}
-              onDateClick={(info) => { setFormData({ title: "", date: info.dateStr });
+              onDateClick={(info) => { setFormData({ title: "", description: "", date: info.dateStr });
                 setSelectedEvent(null);
                 setIsModalOpen(true);
               }}
-              onEditEvent={(info) => { setFormData({ title: info.event.title, date: info.event.startStr });
+              onEditEvent={(info) => { setFormData({ title: info.event.title, description: info.event.description, date: info.event.startStr });
                 setSelectedEvent({
                   id: parseInt(info.event.id),
                   title: info.event.title,
+                  description: info.event.description,
                   date: info.event.startStr,
                   userId: 0,
+                  shiftId: 0,
                   createdAt: new Date().toISOString(),
                   updatedAt: new Date().toISOString()
                 });

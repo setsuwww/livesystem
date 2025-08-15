@@ -18,7 +18,7 @@ interface Props {
   shifts: Shift[];
 }
 
-export default function CreateForm({ shifts }: Props) {
+export default function UsersForm({ shifts }: Props) {
   const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "USER", shiftId: "" });
   const [loading, setLoading] = useState(false);

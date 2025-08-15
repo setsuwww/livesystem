@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/Button";
@@ -26,10 +26,10 @@ interface Props {
   };
 }
 
-export default function EditForm({ userId, shifts, initialForm }: Props) {
-  const router = useRouter();
-  const [form, setForm] = useState(initialForm);
+export default function UsersEditForm({ userId, shifts, initialForm }: Props) {
+  const [form, setForm] = useState({ ...initialForm });
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -44,8 +44,7 @@ export default function EditForm({ userId, shifts, initialForm }: Props) {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const payload: any = {
+    try { const payload: any = {
         name: form.name,
         email: form.email,
         role: form.role,
@@ -58,14 +57,13 @@ export default function EditForm({ userId, shifts, initialForm }: Props) {
 
       const res = await api.patch(`/users/${userId}`, payload);
 
-      if (res.status === 200) {
-        router.push("/admin/dashboard/users");
-      } else {
-        alert("Failed to update user");
-      }
-    } catch (error) {
+      if (res.status === 200) { router.push("/admin/dashboard/users");
+      } else { alert("Failed to update user") }
+    } 
+    catch (error) {
       alert("Error: " + error);
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };

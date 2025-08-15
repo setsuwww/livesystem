@@ -1,25 +1,19 @@
 import UsersTable from "./UsersTable"
-import { prisma } from "@/lib/prisma"
 import { DashboardHeader } from './../DashboardHeader';
 import ContentForm from '@/components/content/ContentForm';
 import ContentInformation from '@/components/content/ContentInformation';
-import { capitalize } from "./function/functionCapitalize";
+
+import { capitalize } from "../../../../function/functionCapitalize";
+import { prisma } from "@/lib/prisma"
 
 async function getUsers() {
   return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
+    select: { id: true, name: true, email: true, role: true,
+      createdAt: true, updatedAt: true,
       shift: {
         select: {
-          id: true,
-          type: true,
-          startTime: true,
-          endTime: true
+          id: true, type: true,
+          startTime: true, endTime: true
         }
       }
     }
@@ -30,10 +24,7 @@ export default async function Page() {
   const users = await getUsers()
   
   const tableData = users.map(u => ({
-    id: u.id,
-    name: u.name,
-    email: u.email,
-    role: capitalize(u.role),
+    id: u.id, name: u.name, email: u.email, role: capitalize(u.role),
     shift: u.shift 
       ? (() => { 
         const start = u.shift.startTime.toLocaleTimeString([], { 

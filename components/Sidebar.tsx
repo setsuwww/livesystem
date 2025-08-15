@@ -65,7 +65,6 @@ function SidebarCollapsible({ title, open, onOpenChange, items, icon: Icon}:
 
 export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
-  const [scheduleOpen, setScheduleOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [ticketOpen, setTicketOpen] = useState(false)
 

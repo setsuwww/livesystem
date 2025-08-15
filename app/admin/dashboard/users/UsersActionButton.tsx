@@ -1,13 +1,8 @@
-"use client"
-
-import { memo } from "react"
 import { Trash2 } from "lucide-react"
-
 import { Button } from "@/components/ui/Button"
-
 import { UsersActionButtonProps } from "@/static/interfaces/UsersActionButtonProps"
 
-function UsersActionButton({ userId, onEdit, onDelete }: UsersActionButtonProps) {
+export const UsersActionButton = ({ userId, onEdit, onDelete }: UsersActionButtonProps) => {
   const handleEdit = () => onEdit(userId)
   const handleDelete = () => onDelete(userId)
 
@@ -23,5 +18,3 @@ function UsersActionButton({ userId, onEdit, onDelete }: UsersActionButtonProps)
     </div>
   )
 }
-
-export const UsersTableAction = memo(UsersActionButton)

@@ -6,6 +6,7 @@ async function getSchedules() {
     select: {
       id: true,
       title: true,
+      description: true,
       date: true,
       userId: true,
       createdAt: true,
@@ -20,6 +21,7 @@ export default async function Page() {
   const initialEvents = schedules.map(s => ({
     id: s.id.toString(),
     title: s.title,
+    description: s.description,
     date: s.date.toISOString().split("T")[0],
     backgroundColor: "#0070f3",
     borderColor: "#0070f3",

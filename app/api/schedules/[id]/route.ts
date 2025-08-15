@@ -5,21 +5,26 @@ import { prisma } from "@/lib/prisma";
 
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
-async function getUserFromToken() {
-  const token = cookies().get("token")?.value;
+async function getUserFromToken(): Promise<{ id: number } | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
   if (!token) return null;
 
   try {
-    const { payload } = await jwtVerify(
-      token,
-      new TextEncoder().encode(JWT_SECRET)
-    );
-    return payload;
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
+    if (typeof payload === "object" && payload && "id" in payload) {
+      const id = Number((payload as any).id);
+      if (isNaN(id)) return null;
+      return { id };
+    }
+    return null;
   } catch {
     return null;
   }
 }
 
+// Update schedule
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   const user = await getUserFromToken();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -29,7 +34,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   const updated = await prisma.schedule.updateMany({
     where: { id: Number(params.id), userId: user.id },
     data: {
-      title: body.title,
+      title: String(body.title),
+      description: String(body.description),
       date: new Date(body.date),
     },
   });
@@ -41,6 +47,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   return NextResponse.json({ message: "Updated" });
 }
 
+// Delete schedule
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   const user = await getUserFromToken();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

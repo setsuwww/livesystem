@@ -2,12 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const body = await request.json();
+export async function PATCH( request: Request, { params }: { params: { id: string } }) {
+  try { const body = await request.json();
     const { name, email, password, role, shiftId } = body;
 
     if (!name || !email || !role) {
@@ -17,14 +13,7 @@ export async function PATCH(
       );
     }
 
-    const dataToUpdate: any = {
-      name,
-      email,
-      role,
-      shiftId: shiftId ?? null,
-    };
-
-    // Update password hanya jika dikirim
+    const dataToUpdate: any = { name, email, role, shiftId: shiftId ?? null};
     if (password && password.trim() !== "") {
       const hashedPassword = await bcrypt.hash(password, 10);
       dataToUpdate.password = hashedPassword;
@@ -36,19 +25,17 @@ export async function PATCH(
     });
 
     return NextResponse.json(updatedUser);
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Failed to update user:", error);
-    return NextResponse.json(
-      { message: "Failed to update user" },
+    return NextResponse.json({ message: "Failed to update user" },
       { status: 500 }
     );
   }
 }
 
 export async function PUT(req: Request) {
-  try {
-    const { id, name, email, role, shifts } = await req.json();
-
+  try { const { id, name, email, role, shifts } = await req.json();
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
@@ -67,7 +54,8 @@ export async function PUT(req: Request) {
     });
 
     return NextResponse.json(updatedUser);
-  } catch (error) {
+  } 
+  catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
   }
@@ -75,15 +63,14 @@ export async function PUT(req: Request) {
 
 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-  try {
-    const id = parseInt(params.id, 10);
-
+  try { const id = parseInt(params.id, 10);
     await prisma.user.delete({
       where: { id },
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } 
+  catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
   }

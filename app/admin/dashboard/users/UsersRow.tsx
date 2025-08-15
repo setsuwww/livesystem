@@ -1,15 +1,14 @@
 "use client"
 
-import React, { useMemo, memo } from "react"
+import React, { useMemo } from "react"
 import { format } from "date-fns";
 
 import { TableCell, TableRow } from "@/components/ui/Table"
-import { UsersTableAction } from "./UsersActionButton"
+import { UsersActionButton } from "./UsersActionButton"
 
 import { UsersRowProps } from '@/static/interfaces/UserRowProps';
 
-export const UsersRow = memo(({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: UsersRowProps) => { 
-  
+export const UsersRow = React.memo(function({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: UsersRowProps) { 
   const handleToggle = () => {onToggleSelect(user.id)}
 
   const formatedCreatedDate = useMemo(() => 
@@ -39,10 +38,8 @@ export const UsersRow = memo(({ user, isSelected, onToggleSelect, onEdit, onDele
         <span className="text-xs font-light text-gray-500">{formatedUpdatedDate}</span>
       </TableCell>
       <TableCell>
-        <UsersTableAction userId={user.id} onEdit={onEdit} onDelete={onDelete}/>
+        <UsersActionButton userId={user.id} onEdit={onEdit} onDelete={onDelete}/>
       </TableCell>
     </TableRow>
   )
 })
-
-UsersRow.displayName = 'UsersRow'

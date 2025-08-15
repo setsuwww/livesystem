@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
 
-import { ScheduleFormProps } from '@/static/interfaces/Schedule';
+import { ScheduleModalProps } from '@/static/types/Schedule';
 
-export function CalendarsModal({ open, loading, formData, selectedEvent, onClose, onChange, onSave }: ScheduleFormProps) {
+export function CalendarsModal({ open, loading, formData, selectedEvent, onClose, onChange, onSave }: ScheduleModalProps) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-white sm:max-w-[425px] border border-gray-300">
@@ -15,12 +15,13 @@ export function CalendarsModal({ open, loading, formData, selectedEvent, onClose
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
-          <Input label="Agenda" id="title" placeholder="Enter agenda title..."
-            value={formData.title}
+          <Input label="Agenda" id="title" placeholder="Enter agenda title..." value={formData.title}
             onChange={(e) => onChange("title", e.target.value)}
           />
-          <Input label="Due date" id="date" type="date"
-            value={formData.date}
+          <Input label="Description" id="description" placeholder="Enter agenda description..." value={formData.description}
+            onChange={(e) => onChange("description", e.target.value)}
+          />
+          <Input label="Due date" id="date" type="date" value={formData.date}
             onChange={(e) => onChange("date", e.target.value)}
           />
 

@@ -47,53 +47,29 @@ const RegisterPage = () => {
   return (
     <AuthForm headers="Register">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Name"
-          type="text"
-          value={name}
-          error={error && !name ? 'Name is required' : ''}
-          onChange={(e) => setName(e.target.value)}
+        <Input label="Name" type="text" value={name} error={error && !name ? 'Name is required' : ''} onChange={(e) => setName(e.target.value)}
           placeholder="Enter your name"
           className="w-full"
         />
 
-        <Input
-          label="Email"
-          type="email"
-          value={email}
-          error={error && !email ? 'Email is required' : ''}
-          onChange={(e) => setEmail(e.target.value)}
+        <Input label="Email" type="email" value={email} error={error && !email ? 'Email is required' : ''} onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           className="w-full"
         />
 
-        <Input
-          label="Password"
-          type="password"
-          value={password}
-          error={error && !password ? 'Password is required' : ''}
-          onChange={(e) => setPassword(e.target.value)}
+        <Input label="Password" type="password" value={password} error={error && !password ? 'Password is required' : ''} onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter your password"
           className="w-full"
         />
 
-        <Button
-          variant="custom"
-          loading={isSubmitting}
-          className="text-md text-white font-semibold w-full bg-sky-600 py-2 rounded-md"
-        >
+        <Button type="submit" variant='custom' size="sm" loading={isSubmitting} className='text-base text-white font-semibold w-full bg-sky-500 hover:bg-sky-600 py-2 rounded-md'>
           {isSubmitting ? 'Registering...' : 'Register'}
         </Button>
       </form>
 
       {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
 
-      <AuthLink
-        question="Already have an Account?"
-        link="Login"
-        href="/auth/login"
-        className="mt-4"
-      />
+      <AuthLink question="Already have an Account?" link="Login" href="/auth/login" className="mt-4"/>
     </AuthForm>
   );
 };

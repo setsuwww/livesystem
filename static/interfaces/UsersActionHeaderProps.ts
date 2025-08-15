@@ -1,3 +1,5 @@
+import { User } from "../types/User"
+
 export interface UsersActionHeaderProps {
   search: string
   onSearchChange: (value: string) => void
@@ -11,4 +13,7 @@ export interface UsersActionHeaderProps {
   selectedCount: number
   onDeleteSelected: () => void
   onDeleteAll: () => void
+
+  filteredData: User[];
+  onExportPDF: (data: User[]) => void
 }

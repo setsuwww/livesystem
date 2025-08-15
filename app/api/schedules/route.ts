@@ -3,19 +3,22 @@ import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 
-const JWT_SECRET = process.env.JWT_SECRET || "secret"; // ganti sesuai env lo
+const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
-async function getUserFromToken() {
-  const token = cookies().get("token")?.value;
+export async function getUserFromToken(): Promise<{ id: number } | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
   if (!token) return null;
 
-  try {
-    const { payload } = await jwtVerify(
-      token,
-      new TextEncoder().encode(JWT_SECRET)
-    );
-    return payload; // { id, email, role, ... }
-  } catch {
+  try {const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
+    if (typeof payload === "object" && payload && "id" in payload) {
+      const id = Number((payload as any).id);
+        if (isNaN(id)) return null;
+        return { id };
+    } return null;
+  } 
+  catch {
     return null;
   }
 }
@@ -38,11 +41,14 @@ export async function POST(req: Request) {
 
   const body = await req.json();
 
+  if (!body.title || !body.description || !body.date) {return NextResponse.json({ error: "Missing fields" }, { status: 400 })}
+
   const schedule = await prisma.schedule.create({
     data: {
-      title: body.title,
+      title: String(body.title),
+      description: String(body.description),
       date: new Date(body.date),
-      userId: user.id, // otomatis dari token
+      userId: user.id,
     },
   });
 
