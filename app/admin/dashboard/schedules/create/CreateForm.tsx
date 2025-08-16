@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { DashboardHeader } from "../../DashboardHeader";
+import ContentForm from "@/components/content/ContentForm";
+import ContentInformation from "@/components/content/ContentInformation";
 import { toast } from "sonner";
-import { api } from "@/lib/api";
+
 import { Schedule, Shift } from "@prisma/client";
+import { fetch } from "@/function/helpers/fetch";
 
 interface ScheduleWithShift extends Schedule {
   shift: Pick<Shift, "type" | "startTime" | "endTime"> | null;
@@ -18,6 +24,7 @@ export default function CreateForm({ schedules }: { schedules: ScheduleWithShift
     description: "",
     date: "",
   });
+  const router = useRouter()
 
   const handleChange = (field: keyof typeof form, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -31,43 +38,39 @@ export default function CreateForm({ schedules }: { schedules: ScheduleWithShift
       return;
     }
 
-    try {
-      setLoading(true);
-      await api.post("/schedules", form);
-      toast.success("Schedule created successfully");
-      setForm({ title: "", description: "", date: "" });
-    } catch {
-      toast.error("Failed to create schedule");
+    setLoading(true);
+    try { await fetch({ url: "/schedules",
+        method: "post",
+        data: form,
+        successMessage: "Schedule created successfully", errorMessage: "Failed to create schedule",
+        onSuccess: () => {
+          setForm({ title: "", description: "", date: "" });
+          router.push("/admin/dashboard/schedules");
+        },
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-        <Input label="Title" value={form.title} onChange={(e) => handleChange("title", e.target.value)} required />
-        <Input label="Description" value={form.description} onChange={(e) => handleChange("description", e.target.value)} required />
-        <Input label="Date" type="date" value={form.date} onChange={(e) => handleChange("date", e.target.value)} required />
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Saving..." : "Save Schedule"}
-        </Button>
-      </form>
 
-      <div className="space-y-2">
-        {schedules.map((s) => (
-          <div key={s.id} className="p-3 border rounded">
-            <p className="font-medium">{s.title}</p>
-            <p className="text-sm text-gray-500">{s.description}</p>
-            <p className="text-sm">{new Date(s.date).toLocaleDateString()}</p>
-            {s.shift && (
-              <p className="text-xs text-gray-400">
-                Shift: {s.shift.type} ({s.shift.startTime.toLocaleTimeString()} - {s.shift.endTime.toLocaleTimeString()})
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
+  return (
+    <section className="space-y-6">
+      <DashboardHeader title="Create Users" subtitle="Insert name, email, password, select role and shift for users data" />
+
+      <ContentForm>
+        <ContentInformation heading="Public" subheading="Schedule public information" />
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+          <Input label="Title" value={form.title} onChange={(e) => handleChange("title", e.target.value)} required />
+          <Input label="Description" value={form.description} onChange={(e) => handleChange("description", e.target.value)} required />
+          <Input label="Date" type="date" value={form.date} onChange={(e) => handleChange("date", e.target.value)} required />
+
+          <Button type="submit" disabled={loading}>
+            {loading ? "Saving..." : "Save Schedule"}
+          </Button>
+        </form>
+
+      </ContentForm>
+    </section>
   );
 }

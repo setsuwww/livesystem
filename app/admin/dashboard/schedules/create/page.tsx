@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import ScheduleForm from "./CreateForm";
-import { getUserFromToken } from "@/app/api/schedules/route"; // pastikan fungsi ini ada
+import { getUserFromToken } from "@/app/api/schedules/route";
 
 export default async function Page() {
   const user = await getUserFromToken();

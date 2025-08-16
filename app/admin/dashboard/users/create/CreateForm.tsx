@@ -11,8 +11,8 @@ import ContentForm from "@/components/content/ContentForm";
 import ContentInformation from "@/components/content/ContentInformation";
 import { DashboardHeader } from "../../DashboardHeader";
 
-import { api } from "@/lib/api";
-import { Shift } from '@/static/interfaces/Shift';
+import { Shift } from "@/static/interfaces/Shift";
+import { fetch } from "@/function/helpers/fetch";
 
 interface Props {
   shifts: Shift[];
@@ -23,8 +23,7 @@ export default function UsersForm({ shifts }: Props) {
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "USER", shiftId: "" });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => { const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -36,28 +35,28 @@ export default function UsersForm({ shifts }: Props) {
     e.preventDefault();
     setLoading(true);
 
-    try { const payload = { ...form, shiftId: form.shiftId ? parseInt(form.shiftId) : null };
-      const res = await api.post("/users", payload);
+    const payload = { ...form, shiftId: form.shiftId && form.shiftId !== "NONE" ? parseInt(form.shiftId) : null };
 
-      if (res.status === 201 || res.status === 200) { router.push("/admin/dashboard/users")
-      } else { alert("Failed to create user") }
-    } 
-    catch (error) {
-      alert("Error: " + error);
-    } 
-    finally {
+    try { await fetch({ url: "/users",
+        method: "post",
+        data: payload,
+        successMessage: "User created successfully ✅", errorMessage: "Failed to create user ❌",
+        onSuccess: () => router.push("/admin/dashboard/users"),
+      });
+    } finally {
       setLoading(false);
     }
   };
 
-  const formatTime = (time: string | Date) => { const dateObj = typeof time === "string" ? new Date(time) : time;
+  const formatTime = (time: string | Date) => {
+    const dateObj = typeof time === "string" ? new Date(time) : time;
     return dateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   const roleOptions = [
     { label: "Admin", description: "Maintain and manage all contents", value: "ADMIN" },
     { label: "Manager", description: "Manage shifts and schedules for users", value: "MANAGER" },
-    { label: "User", description: "Just for submitting helpdesk", value: "USER" }
+    { label: "User", description: "Just for submitting helpdesk", value: "USER" },
   ];
 
   return (
@@ -75,7 +74,12 @@ export default function UsersForm({ shifts }: Props) {
 
           <div>
             <label className="block mb-1 text-sm font-medium text-gray-600">Role</label>
-            <RadioButton name="role" options={roleOptions} value={form.role} onChange={(value) => handleCustomChange("role", value)} />
+            <RadioButton
+              name="role"
+              options={roleOptions}
+              value={form.role}
+              onChange={(value) => handleCustomChange("role", value)}
+            />
           </div>
 
           <div>

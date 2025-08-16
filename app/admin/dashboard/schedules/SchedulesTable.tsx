@@ -7,16 +7,15 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import SchedulesActionHeader from "./SchedulesActionHeader";
 import { SchedulesRow } from "./SchedulesRow";
 
-import { toggleSelectAll, toggleSelectItem, handleDeleteSelected, handleDeleteAll, exportToPDF } from "@/function/handleSchedules";
-
+import { handleSchedules } from "@/function/handleSchedules"; // ✅ centralized logic
 import { ScheduleTableProps } from "@/static/interfaces/ScheduleTableProps";
 
-export default function ScheduleTable({ data, onEdit, onDelete, onDeleteMultiple }: ScheduleTableProps) {
+export default function ScheduleTable({ data }: ScheduleTableProps) {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const filteredData = useMemo(() => {
     const filtered = data.filter(
@@ -32,25 +31,29 @@ export default function ScheduleTable({ data, onEdit, onDelete, onDeleteMultiple
     });
   }, [data, search, sortOrder]);
 
-  const handleEdit = (id: number) => {
-    router.push(`/admin/dashboard/schedules/${id}/edit`);
-  };
+  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditSchedule, handleDeleteSchedule, onExportPDF } = handleSchedules(selectedIds, setSelectedIds, filteredData, () => router.refresh());
 
   return (
     <div className="space-y-4">
       <SchedulesActionHeader
-        search={search} setSearch={setSearch}
-        sortOrder={sortOrder} onSortChange={setSortOrder}
-        selectedCount={selectedIds.length} totalCount={filteredData.length}
-        onDeleteSelected={() => handleDeleteSelected(selectedIds, onDeleteMultiple, setSelectedIds)} onDeleteAll={() => handleDeleteAll(filteredData, onDeleteMultiple, setSelectedIds)}
-        onExportPDF={() => exportToPDF(filteredData)}
+        search={search}
+        setSearch={setSearch}
+        sortOrder={sortOrder}
+        onSortChange={setSortOrder}
+        selectedCount={selectedIds.length}
+        totalCount={filteredData.length}
+        onDeleteSelected={deleteSelected}
+        onDeleteAll={deleteAll}
+        onExportPDF={() => onExportPDF(filteredData)}
       />
 
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>
-              <Checkbox checked={selectedIds.length === filteredData.length && filteredData.length > 0} onChange={(e) => toggleSelectAll(e.target.checked, filteredData, setSelectedIds)}
+              <Checkbox
+                checked={selectedIds.length === filteredData.length && filteredData.length > 0}
+                onChange={selectAll}
                 disabled={filteredData.length === 0}
               />
             </TableHead>
@@ -64,13 +67,20 @@ export default function ScheduleTable({ data, onEdit, onDelete, onDeleteMultiple
         </TableHeader>
         <TableBody>
           {filteredData.length === 0 ? (
-            <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">No schedules found</TableCell></TableRow>
+            <TableRow>
+              <TableCell colSpan={7} className="text-center text-muted-foreground">
+                No schedules found
+              </TableCell>
+            </TableRow>
           ) : (
             filteredData.map((schedule) => (
-              <SchedulesRow key={schedule.id} schedule={schedule}
+              <SchedulesRow
+                key={schedule.id}
+                schedule={schedule}
                 isSelected={selectedIds.includes(schedule.id)}
-                onSelect={(id, checked) => toggleSelectItem(id, checked, setSelectedIds)}
-                onEdit={handleEdit} onDelete={onDelete}
+                onSelect={() => toggleSelect(schedule.id)} // ✅ ganti toggleSelectItem
+                onEdit={handleEditSchedule}
+                onDelete={handleDeleteSchedule}
               />
             ))
           )}

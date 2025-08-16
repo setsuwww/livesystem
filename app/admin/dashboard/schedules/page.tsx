@@ -4,9 +4,14 @@ import ScheduleTable from "./SchedulesTable";
 import { DashboardHeader } from "../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
 import ContentInformation from "@/components/content/ContentInformation";
+import { Pagination } from "../Pagination";
 
-export async function getSchedules() {
+const PAGE_SIZE = 5;
+
+export async function getSchedules(page: number = 1) {
   return await prisma.schedule.findMany({
+    skip: (page - 1) * PAGE_SIZE,
+    take: PAGE_SIZE,
     select: {
       id: true,
       title: true,
@@ -21,8 +26,19 @@ export async function getSchedules() {
   });
 }
 
-export default async function Page() {
-  const schedulesRaw = await getSchedules();
+export async function getScheduleCount() {
+  return await prisma.schedule.count();
+}
+
+export const revalidate = 60;
+
+export default async function Page({ searchParams }: { searchParams?: { page?: string } }) {
+  const page = Number(searchParams?.page) || 1;
+
+  const [schedulesRaw, total] = await Promise.all([
+    getSchedules(page),
+    getScheduleCount(),
+  ]);
 
   const schedules = schedulesRaw.map(s => ({
     ...s,
@@ -32,12 +48,20 @@ export default async function Page() {
     shiftId: s.shiftId ?? null,
   }));
 
+  const totalPages = Math.ceil(total / 5);
+
+  if (page > totalPages && totalPages > 0) {
+    return <div className="p-4">Page not found</div>;
+  }
+
   return (
     <section>
       <DashboardHeader title="Schedules" subtitle="List of your schedules" />
       <ContentForm>
         <ContentInformation heading="Schedule table" subheading="Manage schedule more detail than calendar view" />
-        <ScheduleTable data={schedules} />
+        <ScheduleTable data={schedules}/>
+
+        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/schedules" />
       </ContentForm>
     </section>
   );
