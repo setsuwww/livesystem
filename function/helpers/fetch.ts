@@ -13,13 +13,13 @@ interface FetchOptions<T> {
   errorMessage?: string;
 }
 
-export async function fetch<T = any>({ url, method = "get", data, onSuccess, onError, successMessage, errorMessage }: FetchOptions<T>) {
-  try {const res = await api[method]<T>(url, data);
-    if (successMessage) toast.success(successMessage);
+export async function fetch<T = any>({ url, method = "get", data, onSuccess, onError, successMessage, errorMessage }: FetchOptions<T>) 
+{
+  try { const res = await api[method]<T>(url, data); if (successMessage) toast.success(successMessage);
     if (onSuccess) onSuccess(res.data);
     return res.data;
-  } catch (err) {
-    if (errorMessage) toast.error(errorMessage);
+  } 
+  catch (err) { if (errorMessage) toast.error(errorMessage);
     if (onError) onError(err);
     throw err;
   }

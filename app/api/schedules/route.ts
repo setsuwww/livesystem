@@ -30,6 +30,7 @@ export async function GET() {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const schedules = await prisma.schedule.findMany({
+    include: { shift: true, user: true },
     where: { userId: user.id },
     orderBy: { date: "asc" },
   });

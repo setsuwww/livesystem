@@ -23,20 +23,27 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
     try { setIsLoading(true);
       const { data } = await api.get<Schedule[]>("/schedules");
       setEvents(
-        data.map((item) => ({
-          id: item.id.toString(),
-          title: item.title,
-          description: item.description,
-          date: item.date.split("T")[0],
-          backgroundColor: "#0070f3",
-          borderColor: "#0070f3",
-          textColor: "#ffffff"
-        }))
+        data.map((item) => {
+          const dateStr = typeof item.date === "string"
+            ? item.date
+            : item.date.toISOString();
+
+          return {
+            id: item.id.toString(),
+            title: item.title,
+            description: item.description,
+            date: dateStr.split("T")[0],
+            backgroundColor: "#0070f3",
+            borderColor: "#0070f3",
+            textColor: "#ffffff",
+          };
+        })
       );
-    } 
+
+    }
     catch {
       toast.error("Failed to load schedules");
-    } 
+    }
     finally {
       setIsLoading(false);
     }
@@ -47,18 +54,20 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
       toast.error("Please enter a title");
       return;
     }
-    try { setIsLoading(true);
-      if (selectedEvent) { await api.put(`/schedules/${selectedEvent.id}`, formData);
+    try {
+      setIsLoading(true);
+      if (selectedEvent) {
+        await api.put(`/schedules/${selectedEvent.id}`, formData);
       } else { await api.post("/schedules", formData) }
       await fetchSchedules();
       setIsModalOpen(false);
       setFormData({ title: "", description: "", date: "" });
       setSelectedEvent(null);
       toast.success(selectedEvent ? "Updated" : "Created");
-    } 
+    }
     catch {
       toast.error("Failed to save schedule");
-    } 
+    }
     finally {
       setIsLoading(false);
     }
@@ -74,40 +83,45 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
               <CardTitle>Calendar grid</CardTitle>
               <CardDescription>Click date to add new event or schedules</CardDescription>
             </div>
-            <Button size="sm" onClick={() => { setFormData({ title: "", description: "", date: new Date().toISOString().split("T")[0] });
-                setSelectedEvent(null);
-                setIsModalOpen(true);
-              }}
-            >
+            <Button size="sm" onClick={() => {
+              setFormData({
+                title: "",
+                description: "",
+                date: new Date().toISOString().split("T")[0]
+              });
+              setSelectedEvent(null);
+              setIsModalOpen(true);
+            }}>
               Add Event
             </Button>
           </CardHeader>
           <CardContent>
             <Calendar events={events}
-              onDateClick={(info) => { setFormData({ title: "", description: "", date: info.dateStr });
+              onDateClick={(info) => {
+                setFormData({ title: "", description: "", date: info.dateStr });
                 setSelectedEvent(null);
                 setIsModalOpen(true);
               }}
-              onEditEvent={(info) => { setFormData({ title: info.event.title, description: info.event.description, date: info.event.startStr });
+              onEditEvent={(info) => {
+                setFormData({ title: info.event.title, description: info.event.extendedProps.description ?? "", date: info.event.startStr });
                 setSelectedEvent({
-                  id: parseInt(info.event.id),
-                  title: info.event.title,
-                  description: info.event.description,
+                  id: parseInt(info.event.id), title: info.event.title, description: info.event.extendedProps.description ?? "",
                   date: info.event.startStr,
-                  userId: 0,
-                  shiftId: 0,
-                  createdAt: new Date().toISOString(),
-                  updatedAt: new Date().toISOString()
+                  userId: 0, shiftId: 0,
+                  createdAt: new Date().toISOString(), updatedAt: new Date().toISOString()
                 });
                 setIsModalOpen(true);
               }}
-              onDeleteEvent={async (id) => { setIsLoading(true);
-                try { await api.delete(`/schedules/${id}`);
-                  await fetchSchedules();
+              onDeleteEvent={async (id) => {
+                setIsLoading(true);
+                try {
+                  await api.delete(`/schedules/${id}`); await fetchSchedules();
                   toast.success("Deleted");
-                } catch {
+                }
+                catch {
                   toast.error("Failed to delete");
-                } finally {
+                }
+                finally {
                   setIsLoading(false);
                 }
               }}

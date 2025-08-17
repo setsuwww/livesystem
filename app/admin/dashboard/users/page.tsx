@@ -1,7 +1,7 @@
 import UsersTable from "./UsersTable"
 import { DashboardHeader } from './../DashboardHeader';
 import ContentForm from '@/components/content/ContentForm';
-import ContentInformation from '@/components/content/ContentInformation';
+import { ContentInformation } from '@/components/content/ContentInformation';
 
 import { capitalize } from "../../../../function/functionCapitalize";
 import { prisma } from "@/lib/prisma"

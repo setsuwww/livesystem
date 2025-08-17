@@ -10,8 +10,8 @@ export default async function AdminDashboardPage() {
   const totalShifts = await prisma.shift.count();
   const totalSchedules = await prisma.schedule.count();
 
-  const totalTicketsPositive = await prisma.ticket.count({where: { status: "ACCEPTED" }});
-  const totalTicketsNegative = await prisma.ticket.count({where: { status: "REJECTED" }});
+  const totalTicketsPositive = await prisma.ticket.count({ where: { status: "ACCEPTED" } });
+  const totalTicketsNegative = await prisma.ticket.count({ where: { status: "REJECTED" } });
 
   const ticketData = await prisma.ticket.groupBy({
     by: ['createdAt', 'status'],
@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
   dayStart.setDate(today.getDate() - today.getDay());
   dayStart.setHours(0, 0, 0, 0);
 
-  const ticketWeekData = await prisma.ticket.findMany({where: { createdAt: { gte: dayStart } },select: { createdAt: true, status: true }});
+  const ticketWeekData = await prisma.ticket.findMany({ where: { createdAt: { gte: dayStart } }, select: { createdAt: true, status: true } });
 
   const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const ticketChartData = Array.from({ length: 7 }, (_, i) => {
@@ -49,7 +49,6 @@ export default async function AdminDashboardPage() {
       {/* Header */}
       <DashboardHeader title="Dashboard" />
 
-      {/* Statistik */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats
           link="/admin/dashboard/users"
@@ -82,7 +81,6 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      {/* Diagram */}
       <div className="grid gap-4 grid-cols-2">
         <DashboardDiagram
           title="Ticket in/month"
@@ -99,6 +97,7 @@ export default async function AdminDashboardPage() {
           type="area"
         />
       </div>
+
     </div>
   );
 }

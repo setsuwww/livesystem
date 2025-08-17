@@ -19,8 +19,8 @@ export const Button: React.FC<ButtonProps> = ({ onClick, children, variant = "pr
 
   const variantStyles: Record<Exclude<Variant, "custom">, string> = {
     primary: "bg-sky-500 border-sky-500 text-white hover:bg-sky-400",
-    secondary: "bg-gray-200 border-gray-200 text-gray-700 hover:bg-gray-300",
-    outline: "bg-transparent border-gray-300 text-gray-800 hover:bg-gray-50",
+    secondary: "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100",
+    outline: "bg-transparent border-gray-300 text-gray-800 hover:bg-gray-100",
     ghost: "bg-transparent border-transparent text-gray-700 hover:bg-gray-100",
     destructive: "bg-red-500 border-red-500 text-white hover:bg-red-400",
   };

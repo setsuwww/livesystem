@@ -15,10 +15,10 @@ export const DashboardHeader = React.memo<DashboardHeaderProps>(function Dashboa
   return (
     <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
       <div>
-        <h1 className="text-2xl font-bold text-gray-700">
+        <h1 className="text-xl font-bold text-gray-700 tracking-tight">
           {title || formatLabel(segments[segments.length - 1] || "Home")}
         </h1>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-gray-500 tracking-tight">
           {subtitle}
         </p>
       </div>

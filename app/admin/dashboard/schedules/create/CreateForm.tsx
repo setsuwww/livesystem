@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { DashboardHeader } from "../../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
-import ContentInformation from "@/components/content/ContentInformation";
+import { ContentInformation } from "@/components/content/ContentInformation";
 import { toast } from "sonner";
 
 import { Schedule, Shift } from "@prisma/client";

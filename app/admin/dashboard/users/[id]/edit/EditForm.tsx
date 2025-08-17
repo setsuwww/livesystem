@@ -8,11 +8,11 @@ import { Input } from "@/components/ui/Input";
 import { RadioButton } from "@/components/ui/RadioButton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
-import ContentInformation from "@/components/content/ContentInformation";
+import { ContentInformation } from "@/components/content/ContentInformation";
 import { DashboardHeader } from "../../../DashboardHeader";
 
 import { api } from "@/lib/api";
-import { Shift } from "@/static/interfaces/Shift";
+import { Shift } from "@/static/types/Shift";
 
 interface Props {
   userId: number; 

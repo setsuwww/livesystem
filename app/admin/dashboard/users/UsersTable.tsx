@@ -8,18 +8,13 @@ import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
 
 import { handleUsers } from "@/function/handleUsers";
+import { roleStyles } from "@/constants/roleStyles";
 
 export default function UsersTable({ data }: UsersTableProps) {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [shiftFilter, setShiftFilter] = useState("all");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
-  const roleStyles = useMemo(() => ({
-    Admin: "text-green-600 bg-green-100",
-    Manager: "text-blue-600 bg-blue-100",
-    User: "text-gray-600 bg-gray-100",
-  }), []);
 
   const extractShiftType = useCallback((shiftString: string) => {
     if (!shiftString || shiftString === "-" || shiftString.toLowerCase() === "normal shift") { return "no_shift"}
@@ -69,7 +64,7 @@ export default function UsersTable({ data }: UsersTableProps) {
             <TableHead>Role</TableHead>
             <TableHead>Shift</TableHead>
             <TableHead>Created At</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

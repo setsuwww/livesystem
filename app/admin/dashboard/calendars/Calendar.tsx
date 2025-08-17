@@ -39,7 +39,7 @@ export function Calendar({ events, onDateClick, onEditEvent, onDeleteEvent }: Pr
       dayHeaderFormat={{ weekday: 'long' }}
       dayCellClassNames={(arg) => {
         if (dayjs(arg.date).isSame(dayjs(), "day")) {
-          return "!bg-sky-200 !border-sky-300 today-highlight";
+          return "!bg-sky-200 today-highlight";
         }
         return "border border-gray-200";
       }}

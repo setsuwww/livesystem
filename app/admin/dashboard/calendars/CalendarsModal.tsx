@@ -21,7 +21,7 @@ export function CalendarsModal({ open, loading, formData, selectedEvent, onClose
           <Input label="Description" id="description" placeholder="Enter agenda description..." value={formData.description}
             onChange={(e) => onChange("description", e.target.value)}
           />
-          <Input label="Due date" id="date" type="date" value={formData.date}
+          <Input label="Due date" id="date" type="date" value={typeof formData.date === "string" ? formData.date : formData.date.toISOString().split("T")[0]}
             onChange={(e) => onChange("date", e.target.value)}
           />
 
@@ -36,10 +36,10 @@ export function CalendarsModal({ open, loading, formData, selectedEvent, onClose
         </div>
 
         <DialogFooter>
-          <Button variant="secondary" onClick={onClose} disabled={loading}>
+          <Button size="sm" variant="outline" onClick={onClose} disabled={loading}>
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={loading}>
+          <Button size="sm" variant="primary" onClick={onSave} disabled={loading}>
             {loading ? "Saving..." : selectedEvent ? "Update Event" : "Create Event"}
           </Button>
         </DialogFooter>

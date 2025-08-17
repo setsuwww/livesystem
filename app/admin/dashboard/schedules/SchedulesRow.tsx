@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import { format } from "date-fns";
 
-import { CalendarDays } from "lucide-react";
+import ScheduleActionsButtons from "./SchedulesActionButton";
 import { TableRow, TableCell } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 
 import { SchedulesRowProps } from "@/static/interfaces/SchedulesRowProps";
-import ScheduleActionsButtons from "./SchedulesActionButton";
+import { capitalize } from "@/function/functionCapitalize";
+
 
 export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelect, onEdit, onDelete }: SchedulesRowProps) {
 
@@ -25,13 +26,11 @@ export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelec
       </TableCell>
       <TableCell>{schedule.id}</TableCell>
       <TableCell>
-        <div className="flex items-center gap-x-2">
-          <div className="p-1.5 rounded-lg bg-sky-100 text-sky-600">
-            <CalendarDays strokeWidth={1.75} size={20} />
-          </div>
-          <span className="text-base font-semibold text-gray-600">
-            {schedule.title}
-          </span>
+        <div className="flex flex-col gap-x-2">
+          <h1 className="text-base font-bold text-gray-600">
+            {capitalize(schedule.title)}
+          </h1>
+          <p className="text-xs font-base text-gray-400">{capitalize(schedule.shift ? schedule.shift.type : "-")}</p>
         </div>
       </TableCell>
       <TableCell>{schedule.description}</TableCell>

@@ -40,11 +40,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     },
   });
 
-  if (updated.count === 0) {
-    return NextResponse.json({ error: "Not found or no permission" }, { status: 404 });
-  }
-
-  return NextResponse.json({ message: "Updated" });
+  if (updated.count === 0) { return NextResponse.json({ error: "Not found or no permission" }, { status: 404 });
+  } return NextResponse.json({ message: "Updated" });
 }
 
 // Delete schedule

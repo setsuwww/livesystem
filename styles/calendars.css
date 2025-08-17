@@ -27,10 +27,8 @@
 
 .fc-daygrid-day.today-highlight {
   background-color: #e0f2fe !important; 
-  border: 2px solid #0ea5e9 !important; 
 }
 .fc-day-today {
   content: 'NOW';
   background-color: #e0f2fe !important;
-  border: 2px solid #0ea5e9 !important;
 }

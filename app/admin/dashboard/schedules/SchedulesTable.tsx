@@ -7,7 +7,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import SchedulesActionHeader from "./SchedulesActionHeader";
 import { SchedulesRow } from "./SchedulesRow";
 
-import { handleSchedules } from "@/function/handleSchedules"; // ✅ centralized logic
+import { handleSchedules } from "@/function/handleSchedules";
 import { ScheduleTableProps } from "@/static/interfaces/ScheduleTableProps";
 
 export default function ScheduleTable({ data }: ScheduleTableProps) {
@@ -36,14 +36,10 @@ export default function ScheduleTable({ data }: ScheduleTableProps) {
   return (
     <div className="space-y-4">
       <SchedulesActionHeader
-        search={search}
-        setSearch={setSearch}
-        sortOrder={sortOrder}
-        onSortChange={setSortOrder}
-        selectedCount={selectedIds.length}
-        totalCount={filteredData.length}
-        onDeleteSelected={deleteSelected}
-        onDeleteAll={deleteAll}
+        search={search} setSearch={setSearch}
+        sortOrder={sortOrder} onSortChange={setSortOrder}
+        selectedCount={selectedIds.length} totalCount={filteredData.length}
+        onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
         onExportPDF={() => onExportPDF(filteredData)}
       />
 
@@ -51,10 +47,8 @@ export default function ScheduleTable({ data }: ScheduleTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead>
-              <Checkbox
-                checked={selectedIds.length === filteredData.length && filteredData.length > 0}
-                onChange={selectAll}
-                disabled={filteredData.length === 0}
+              <Checkbox checked={selectedIds.length === filteredData.length && filteredData.length > 0}
+                onChange={selectAll} disabled={filteredData.length === 0}
               />
             </TableHead>
             <TableHead>ID</TableHead>
@@ -74,11 +68,10 @@ export default function ScheduleTable({ data }: ScheduleTableProps) {
             </TableRow>
           ) : (
             filteredData.map((schedule) => (
-              <SchedulesRow
-                key={schedule.id}
+              <SchedulesRow key={schedule.id}
                 schedule={schedule}
                 isSelected={selectedIds.includes(schedule.id)}
-                onSelect={() => toggleSelect(schedule.id)} // ✅ ganti toggleSelectItem
+                onSelect={() => toggleSelect(schedule.id)}
                 onEdit={handleEditSchedule}
                 onDelete={handleDeleteSchedule}
               />

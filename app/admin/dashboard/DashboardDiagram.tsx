@@ -3,7 +3,7 @@
 import React from "react"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell, AreaChart, Area } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from "recharts"
 
 import { DashboardDiagramProps } from '@/static/interfaces/DashboardDiagramProps';
 

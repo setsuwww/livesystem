@@ -4,6 +4,6 @@ export type User = {
   email: string;
   role: string;
   shift: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 };

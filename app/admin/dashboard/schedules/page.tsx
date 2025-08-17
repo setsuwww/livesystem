@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import ScheduleTable from "./SchedulesTable";
 import { DashboardHeader } from "../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
-import ContentInformation from "@/components/content/ContentInformation";
+import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "../Pagination";
 
 const PAGE_SIZE = 5;
@@ -21,10 +21,19 @@ export async function getSchedules(page: number = 1) {
       shiftId: true,
       createdAt: true,
       updatedAt: true,
+      shift: {
+        select: {
+          id: true,
+          type: true,
+          startTime: true,
+          endTime: true,
+        },
+      },
     },
     orderBy: { date: "asc" },
   });
 }
+
 
 export async function getScheduleCount() {
   return await prisma.schedule.count();
@@ -45,7 +54,13 @@ export default async function Page({ searchParams }: { searchParams?: { page?: s
     date: s.date.toISOString(),
     createdAt: s.createdAt.toISOString(),
     updatedAt: s.updatedAt.toISOString(),
-    shiftId: s.shiftId ?? null,
+    shift: s.shift
+    ? {
+        ...s.shift,
+        startTime: s.shift.startTime.toISOString(),
+        endTime: s.shift.endTime.toISOString(),
+      }
+    : null,
   }));
 
   const totalPages = Math.ceil(total / 5);

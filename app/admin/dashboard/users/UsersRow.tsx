@@ -28,7 +28,7 @@ export const UsersRow = React.memo(function({ user, isSelected, onToggleSelect, 
         <p className="text-gray-400 font-base">{user.email}</p>
       </TableCell>
       <TableCell>
-        <span className={`px-2 py-1 text-sm font-semibold rounded-full ${roleStyles[user.role] || ""}`}>
+        <span className={`px-3 py-1 text-sm border font-semibold rounded-full ${roleStyles[user.role] || ""}`}>
           {user.role}
         </span>
       </TableCell>

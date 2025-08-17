@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Head from "next/head";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
@@ -9,6 +10,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0070f3" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </Head>
       <body>
         {children}
       </body>

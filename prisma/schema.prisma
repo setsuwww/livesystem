@@ -7,64 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ENUMS
 enum ShiftType {
   MORNING
   AFTERNOON
   NIGHT
-}
-
-model User {
-  id         Int       @id @default(autoincrement())
-  name       String
-  email      String    @unique
-  password   String
-  role       Role      @default(USER)
-  
-  tickets    Ticket[]
-  schedules  Schedule[]
-  
-  shift      Shift?    @relation(fields: [shiftId], references: [id])
-  shiftId    Int?
-  
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-}
-
-model Ticket {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String?
-  status      TicketStatus @default(PENDING)
-  user        User         @relation(fields: [userId], references: [id])
-  userId      Int
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-}
-
-model Schedule {
-  id            Int      @id @default(autoincrement())
-  title         String
-  description   String
-  date          DateTime
-  
-  user          User     @relation(fields: [userId], references: [id])
-  userId        Int
-  
-  shift         Shift?   @relation(fields: [shiftId], references: [id])
-  shiftId       Int?
-  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-model Shift {
-  id        Int         @id @default(autoincrement())
-  type      ShiftType
-  startTime DateTime
-  endTime   DateTime
-  
-  users     User[]
-  schedules Schedule[]
 }
 
 enum Role {
@@ -77,4 +24,60 @@ enum TicketStatus {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  name       String
+  email      String     @unique
+  password   String
+  role       Role       @default(USER)
+
+  tickets    Ticket[]
+  schedules  Schedule[]
+
+  shift      Shift?     @relation(fields: [shiftId], references: [id])
+  shiftId    Int?
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Ticket {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  status      TicketStatus @default(PENDING)
+
+  user        User         @relation(fields: [userId], references: [id])
+  userId      Int
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Schedule {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+
+  shift       Shift?    @relation(fields: [shiftId], references: [id])
+  shiftId     Int?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Shift {
+  id        Int         @id @default(autoincrement())
+  type      ShiftType
+  startTime DateTime @db.Time
+  endTime   DateTime @db.Time
+
+  users     User[]
+  schedules Schedule[]
 }

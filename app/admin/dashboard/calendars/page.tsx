@@ -15,6 +15,20 @@ async function getSchedules() {
   });
 }
 
+function formatDate(date: Date | string | null | undefined) {
+  if (!date) return ""; // kalau null/undefined langsung return ""
+  let d: Date;
+  try {
+    d = typeof date === "string" ? new Date(date) : date;
+  } catch {
+    return "";
+  }
+  // cek validitas date
+  if (isNaN(d.getTime())) return "";
+  return d.toISOString().split("T")[0];
+}
+
+
 export default async function Page() {
   const schedules = await getSchedules();
 
@@ -22,11 +36,12 @@ export default async function Page() {
     id: s.id.toString(),
     title: s.title,
     description: s.description,
-    date: s.date.toISOString().split("T")[0],
+    date: formatDate(s.date),
     backgroundColor: "#0070f3",
     borderColor: "#0070f3",
     textColor: "#ffffff"
   }));
+
 
   return <CalendarPageview initialEvents={initialEvents} />;
 }
