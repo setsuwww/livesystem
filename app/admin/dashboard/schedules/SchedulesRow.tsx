@@ -30,7 +30,9 @@ export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelec
           <h1 className="text-base font-bold text-gray-600">
             {capitalize(schedule.title)}
           </h1>
-          <p className="text-xs font-base text-gray-400">{capitalize(schedule.shift ? schedule.shift.type : "-")}</p>
+          <p className="text-xs font-base text-gray-400">
+            {capitalize(schedule.shift ? schedule.shift.type : "-")}
+          </p>
         </div>
       </TableCell>
       <TableCell>{schedule.description}</TableCell>

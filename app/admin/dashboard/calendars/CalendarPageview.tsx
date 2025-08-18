@@ -12,7 +12,7 @@ import { CalendarsModal } from "./CalendarsModal";
 import { api } from "@/lib/api";
 import { Schedule } from "@/static/types/Schedule";
 
-export default function CalendarPagview({ initialEvents }: { initialEvents: any[] }) {
+export default function CalendarPageview({ initialEvents }: { initialEvents: any[] }) {
   const [events, setEvents] = useState(initialEvents);
   const [selectedEvent, setSelectedEvent] = useState<Schedule | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,8 +54,7 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
       toast.error("Please enter a title");
       return;
     }
-    try {
-      setIsLoading(true);
+    try { setIsLoading(true);
       if (selectedEvent) {
         await api.put(`/schedules/${selectedEvent.id}`, formData);
       } else { await api.post("/schedules", formData) }

@@ -23,12 +23,22 @@ export default async function Page() {
         select: {
           type: true,
           startTime: true,
-          endTime: true
-        }
-      }
+          endTime: true,
+        },
+      },
     },
-    orderBy: { date: "asc" }
+    orderBy: { date: "asc" },
   });
 
-  return <ScheduleForm schedules={schedules} />;
+  const shifts = await prisma.shift.findMany({
+    select: {
+      id: true,
+      type: true,
+      startTime: true,
+      endTime: true,
+    },
+    orderBy: { id: "asc" },
+  });
+
+  return <ScheduleForm schedules={schedules} shifts={shifts} />;
 }
