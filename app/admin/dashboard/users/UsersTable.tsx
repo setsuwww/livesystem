@@ -1,211 +1,85 @@
 "use client"
 
-import React, { useState, useMemo, useCallback } from "react"
-import { Trash2 } from "lucide-react"
+import React, { useState, useMemo, useCallback } from "react";
+import { UsersTableProps } from "@/static/interfaces/UsersTableProps";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { UsersActionHeader } from "./UsersActionHeader";
+import { UsersRow } from "./UsersRow";
 
-import { UsersTableAction } from "./UsersActionButton"
-import { api } from "@/lib/api"
-
-type User = {
-  id: number
-  name: string
-  email: string
-  role: string
-  shift: string
-  createdAt: string
-}
-
-interface UsersTableProps {
-  data: User[]
-}
+import { handleUsers } from "@/function/handleUsers";
+import { roleStyles } from "@/constants/roleStyles";
 
 export default function UsersTable({ data }: UsersTableProps) {
-  const [search, setSearch] = useState("")
-  const [roleFilter, setRoleFilter] = useState("all")
-  const [shiftFilter, setShiftFilter] = useState("all")
-  const [selectedIds, setSelectedIds] = useState<number[]>([])
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [shiftFilter, setShiftFilter] = useState("all");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const extractShiftType = useCallback((shiftString: string) => {
+    if (!shiftString || shiftString === "-" || shiftString.toLowerCase() === "normal shift") { return "no_shift"}
+
+    const match = shiftString.match(/^([A-Za-z]+)/);
+    return match ? match[1].toLowerCase() : "no_shift";
+  }, []);
 
   const filteredData = useMemo(() => {
     return data.filter(user => {
-      const matchSearch =
-        search === "" ||
-        Object.values(user).join(" ").toLowerCase().includes(search.toLowerCase())
+      const matchSearch = search === "" || Object.values(user).join(" ").toLowerCase().includes(search.toLowerCase());
+      const matchRole = roleFilter === "all" || user.role.toLowerCase() === roleFilter.toLowerCase();
 
-      const matchRole = roleFilter === "all" || user.role === roleFilter
-      const matchShift = shiftFilter === "all" || user.shift === shiftFilter
+      let matchShift = true;
+      if (shiftFilter !== "all") {
+        if (shiftFilter.toLowerCase() === "no_shift") { matchShift = user.shift === "-" || user.shift.toLowerCase() === "normal shift" } 
+          else { matchShift = extractShiftType(user.shift) === shiftFilter.toLowerCase() }
+      } return matchSearch && matchRole && matchShift;
+    });
+  }, [data, search, roleFilter, shiftFilter, extractShiftType]);
 
-      return matchSearch && matchRole && matchShift
-    })
-  }, [data, search, roleFilter, shiftFilter])
+  const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
-  const toggleSelect = useCallback((id: number) => {
-    setSelectedIds(prev => (prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]))
-  }, [])
+  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
 
-  const selectAll = useCallback(() => {
-    setSelectedIds(prev => (prev.length === filteredData.length ? [] : filteredData.map(u => u.id)))
-  }, [filteredData])
+  const handleSearchChange = useCallback((value: string) => setSearch(value), []);
+  const handleRoleFilterChange = useCallback((value: string) => setRoleFilter(value), []);
+  const handleShiftFilterChange = useCallback((value: string) => setShiftFilter(value), []);
 
-  // Delete selected
-  const deleteSelected = useCallback(async () => {
-    try {
-      await api.delete("/users", { data: { ids: selectedIds } })
-      alert("Deleted successfully")
-      location.reload()
-    } catch {
-      alert("Failed to delete selected")
-    }
-  }, [selectedIds])
-
-  // Delete all
-  const deleteAll = useCallback(async () => {
-    try {
-      await api.delete("/users", { data: { ids: filteredData.map(u => u.id) } })
-      alert("All deleted")
-      location.reload()
-    } catch {
-      alert("Failed to delete all")
-    }
-  }, [filteredData])
-
-  // Edit user
-  const handleEditUser = useCallback(async (id: number) => {
-    const name = prompt("Enter new name:")
-    if (!name) return
-    try {
-      await api.patch(`/users/${id}`, { name })
-      alert("Updated successfully")
-      location.reload()
-    } catch {
-      alert("Failed to update")
-    }
-  }, [])
-
-  const handleDeleteUser = useCallback(async (id: number) => {
-    try {
-      await api.delete(`/users/${id}`)
-      alert("Deleted successfully")
-      location.reload()
-    } catch {
-      alert("Failed to delete")
-    }
-  }, [])
+  const isAllSelected = useMemo(() => selectedIds.length === filteredData.length && filteredData.length > 0, [selectedIds.length, filteredData.length]);
 
   return (
     <div className="rounded-md space-y-4">
-      {/* Filter & Search */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Input
-            placeholder="Search..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full sm:w-64 bg-white py-2"
-          />
+      <UsersActionHeader selectedCount={selectedIds.length} onDeleteSelected={deleteSelected} onDeleteAll={deleteAll} 
+        search={search} onSearchChange={handleSearchChange}
+        roleFilter={roleFilter} onRoleFilterChange={handleRoleFilterChange}
+        shiftFilter={shiftFilter} onShiftFilterChange={handleShiftFilterChange}
+        filteredData={filteredData} onExportPDF={() => onExportPDF(filteredData)}
+      />
 
-          <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-              <span className="font-semibold text-gray-700 mr-1">Filter:</span>
-              <SelectValue placeholder="All" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Role</SelectItem>
-              <SelectItem value="admin">Admin</SelectItem>
-              <SelectItem value="staff">Staff</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={shiftFilter} onValueChange={setShiftFilter}>
-            <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-              <span className="font-semibold text-gray-700 mr-1">Filter:</span>
-              <SelectValue placeholder="All" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Shift</SelectItem>
-              <SelectItem value="morning">Morning</SelectItem>
-              <SelectItem value="night">Night</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={deleteSelected}
-            disabled={selectedIds.length === 0}
-          >
-            Delete Selected ({selectedIds.length})
-          </Button>
-
-          <Button variant="destructive" size="sm" onClick={deleteAll}>
-            <Trash2 size={18} strokeWidth={2} />
-            Delete All
-          </Button>
-        </div>
-      </div>
-
-      {/* Table */}
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>
-              <input
-                type="checkbox"
-                checked={selectedIds.length === filteredData.length && filteredData.length > 0}
-                onChange={selectAll}
-              />
-            </TableHead>
+            <TableHead><input type="checkbox" checked={isAllSelected} onChange={selectAll} /></TableHead>
             <TableHead>ID</TableHead>
             <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Shift</TableHead>
             <TableHead>Created At</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {filteredData.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={8} className="text-center text-muted-foreground">
-                No data found
-              </TableCell>
-            </TableRow>
+            <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground">No data found</TableCell></TableRow>
           ) : (
             filteredData.map(user => (
-              <TableRow key={user.id}>
-                <TableCell>
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(user.id)}
-                    onChange={() => toggleSelect(user.id)}
-                  />
-                </TableCell>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>{user.shift}</TableCell>
-                <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell className="text-center">
-                  <UsersTableAction
-                    userId={user.id}
-                    onEdit={handleEditUser}
-                    onDelete={handleDeleteUser}
-                  />
-                </TableCell>
-              </TableRow>
+              <UsersRow key={user.id} user={user} isSelected={selectedIdsSet.has(user.id)} onToggleSelect={toggleSelect}
+                onEdit={handleEditUser} onDelete={handleDeleteUser}
+                roleStyles={roleStyles}
+              />
             ))
           )}
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }

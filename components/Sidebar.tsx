@@ -65,7 +65,6 @@ function SidebarCollapsible({ title, open, onOpenChange, items, icon: Icon}:
 
 export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
-  const [scheduleOpen, setScheduleOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [ticketOpen, setTicketOpen] = useState(false)
 
@@ -86,16 +85,12 @@ export function Sidebar() {
             { label: 'Add Users', href: '/admin/dashboard/users/create' }
           ]}
         />
-        <SidebarCollapsible title="Schedules" open={scheduleOpen} onOpenChange={setScheduleOpen} icon={CalendarClock}
-          items={[
-            { label: 'Schedules', href: '/admin/dashboard/schedules' },
-            { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' }
-          ]}
-        />
         <SidebarCollapsible title="Calendars" open={calendarOpen} onOpenChange={setCalendarOpen} icon={CalendarDays}
           items={[
+            //  Fungsi schedules adalah sebagai schedules, calendar adalah schedules dalam bentuk calendar grid
             { label: 'Calendars', href: '/admin/dashboard/calendars' },
-            { label: 'Add Calendars', href: '/admin/dashboard/calendars/create' }
+            { label: 'Schedules', href: '/admin/dashboard/schedules' },
+            { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },
           ]}
         />
         <SidebarCollapsible title="Tickets" open={ticketOpen} onOpenChange={setTicketOpen} icon={Ticket}

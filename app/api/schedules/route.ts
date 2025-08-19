@@ -1,35 +1,83 @@
+// app/api/schedules/route.ts
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
 
-// GET /api/schedules
-export async function GET() {
+const JWT_SECRET = process.env.JWT_SECRET || "secret";
+
+export async function getUserFromToken(): Promise<{ id: number } | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) return null;
+
   try {
-    const schedules = await prisma.schedule.findMany({
-      include: {
-        shift: true,
-        user: true,
-      },
-    });
-    return NextResponse.json(schedules);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch schedules" }, { status: 500 });
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
+    if (typeof payload === "object" && payload && "id" in payload) {
+      const id = Number((payload as any).id);
+      if (isNaN(id)) return null;
+      return { id };
+    }
+    return null;
+  } catch {
+    return null;
   }
 }
 
-// POST /api/schedules
+export async function GET() {
+  const user = await getUserFromToken();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const schedules = await prisma.schedule.findMany({
+    include: { shift: true, user: true },
+    where: { userId: user.id },
+    orderBy: { date: "asc" },
+  });
+
+  return NextResponse.json(schedules);
+}
+
 export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const schedule = await prisma.schedule.create({
-      data: {
-        title: body.title,
-        userId: body.userId,
-        shiftId: body.shiftId,
-        date: new Date(body.date),
-      },
-    });
-    return NextResponse.json(schedule, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create schedule" }, { status: 400 });
+  const user = await getUserFromToken();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const body = await req.json();
+  if (!body.title || !body.description || !body.date) {
+    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+  }
+
+  const schedule = await prisma.schedule.create({
+    data: {
+      title: String(body.title),
+      description: String(body.description),
+      date: new Date(body.date),
+      userId: user.id,
+    },
+  });
+
+  return NextResponse.json(schedule, { status: 201 });
+}
+
+export async function DELETE(req: Request) {
+  const user = await getUserFromToken();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try { const body = await req.json().catch(() => ({}));
+    const ids: number[] | undefined = body.ids;
+
+    if (ids && ids.length > 0) { await prisma.schedule.deleteMany({
+        where: { id: { in: ids }, userId: user.id },
+      });
+      return NextResponse.json({ message: "Selected schedules deleted" });
+    } else { await prisma.schedule.deleteMany({
+        where: { userId: user.id },
+      });
+      return NextResponse.json({ message: "All schedules deleted" });
+    }
+  } 
+  catch {
+    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
+

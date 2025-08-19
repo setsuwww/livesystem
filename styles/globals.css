@@ -22,4 +22,7 @@
   * {
     font-family: 'Inter';
   }
+  button, a {
+    @apply cursor-pointer;
+  }
 }

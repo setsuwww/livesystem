@@ -1,23 +1,11 @@
 "use client"
 
 import React from "react"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell, AreaChart, Area } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, AreaChart, Area } from "recharts"
 
-interface StatData {
-  name: string
-  value: number
-}
-
-interface DashboardDiagramProps {
-  title: string
-  description?: string
-  data: StatData[]
-  type?: "bar" | "pie" | "area"
-  color?: string
-}
-
-const COLORS = ["#4f46e5", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"]
+import { DashboardDiagramProps } from '@/static/interfaces/DashboardDiagramProps';
 
 function DashboardDiagramComponent({ title, description, data, type = "bar", color = "#4f46e5" }: DashboardDiagramProps) {
   let chart: React.ReactElement
@@ -25,23 +13,12 @@ function DashboardDiagramComponent({ title, description, data, type = "bar", col
   if (type === "bar") {
     chart = (
       <BarChart data={data}>
-        <CartesianGrid strokeDasharray="2 2" stroke="#ddd" />
+        <CartesianGrid strokeDasharray="2 2" stroke="#d5d7db" />
         <XAxis dataKey="name" tick={{ fontSize: 10 }} />
         <YAxis tick={{ fontSize: 10 }} />
         <Tooltip contentStyle={{ fontSize: '10' }} />
         <Bar dataKey="value" fill={color} radius={[4, 4, 0, 0]} barSize={10} />
       </BarChart>
-    )
-  } else if (type === "pie") {
-    chart = (
-      <PieChart>
-        <Tooltip />
-        <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-          {data.map((_, i) => (
-            <Cell key={i} fill={COLORS[i % COLORS.length]} />
-          ))}
-        </Pie>
-      </PieChart>
     )
   } else {
     chart = (
@@ -52,13 +29,13 @@ function DashboardDiagramComponent({ title, description, data, type = "bar", col
             <stop offset="95%" stopColor={color} stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="2 2" stroke="#ddd" />
+        <CartesianGrid strokeDasharray="1 1" stroke="#d5d7db" />
         <XAxis tick={{ fontSize: 10 }}
-          dataKey="name"  
+          dataKey="name"
         />
         <YAxis tick={{ fontSize: 10 }} />
         <Tooltip contentStyle={{ fontSize: '12px' }} />
-        <Area type="monotone" 
+        <Area type="monotone"
           dataKey="value" stroke={color}
           fillOpacity={1} fill="url(#colorValue)"
         />
