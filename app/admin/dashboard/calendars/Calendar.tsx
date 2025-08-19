@@ -24,7 +24,7 @@ export function Calendar({ events, onDateClick, onEditEvent, onDeleteEvent }: Pr
         center: "title",
         right: "dayGridYear,dayGridMonth,dayGridWeek",
       }} eventContent={(eventInfo) => (
-        <div className="flex items-center justify-between border border-gray-200 shadow-sm w-full rounded-lg bg-white px-2 py-2 hover:border-gray-300 transition">
+        <div className="flex items-center justify-between border border-gray-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-gray-300 transition">
           <p className="flex flex-col truncate font-medium">
             <span className="text-sm text-gray-800">{eventInfo.event.title}</span>
             <span className="text-xs text-gray-400">{eventInfo.event.extendedProps.description}</span>

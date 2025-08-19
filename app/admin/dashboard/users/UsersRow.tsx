@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react"
 import { format } from "date-fns";
+import { CircleUserRound } from "lucide-react";
 
 import { TableCell, TableRow } from "@/components/ui/Table"
 import { UsersActionButton } from "./UsersActionButton"
@@ -22,13 +23,19 @@ export const UsersRow = React.memo(function({ user, isSelected, onToggleSelect, 
   return (
     <TableRow>
       <TableCell><input type="checkbox" checked={isSelected} onChange={handleToggle} /></TableCell>
-      <TableCell>{user.id}</TableCell>
       <TableCell>
-        <h2 className="text-gray-600 font-semibold">{user.name}</h2>
-        <p className="text-gray-400 font-base">{user.email}</p>
+        <div className="flex items-center gap-x-2">
+          <div className="p-2 bg-gray-200 rounded-full">
+            <CircleUserRound strokeWidth={1.5} className="text-gray-600" />
+          </div>
+          <div>
+            <h2 className="text-gray-600 font-semibold">{user.name}</h2>
+            <p className="text-gray-400 font-base">{user.email}</p>
+          </div>
+        </div>
       </TableCell>
       <TableCell>
-        <span className={`px-3 py-1 text-sm border font-semibold rounded-full ${roleStyles[user.role] || ""}`}>
+        <span className={`px-2 py-0.5 text-xs border font-semibold rounded-full ${roleStyles[user.role] || ""}`}>
           {user.role}
         </span>
       </TableCell>

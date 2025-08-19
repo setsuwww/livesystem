@@ -58,4 +58,12 @@ USER(
   Melihat history 
 )
 
+Theme Color(
+  Night -> Violet
+  Afternoon -> Sky
+  Morning -> Yellow
+
+  Another -> Gray
+)
+
 

@@ -59,11 +59,10 @@ export default function UsersTable({ data }: UsersTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead><input type="checkbox" checked={isAllSelected} onChange={selectAll} /></TableHead>
-            <TableHead>ID</TableHead>
-            <TableHead>Name</TableHead>
+            <TableHead>Username</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Shift</TableHead>
-            <TableHead>Created At</TableHead>
+            <TableHead>Created & Updated</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>

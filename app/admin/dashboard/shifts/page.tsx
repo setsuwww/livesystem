@@ -14,7 +14,7 @@ async function getShifts(page: number = 1) {
   return await prisma.shift.findMany({
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
-    select: { id: true, type: true,
+    select: { id: true, type: true, customType: true,
       startTime: true,
       endTime: true,
       users: {
@@ -62,6 +62,7 @@ export default async function ShiftsPage({ searchParams }: { searchParams?: { pa
     return {
       id: s.id,
       type: capitalize(s.type),
+      customType: s.customType,
       timeRange: `${start} - ${end}`,
       usersCount: s.users.length,
       schedulesCount: s.schedules.length,

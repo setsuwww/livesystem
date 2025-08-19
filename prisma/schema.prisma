@@ -7,8 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ENUMS
 enum ShiftType {
+  CUSTOM
   MORNING
   AFTERNOON
   NIGHT
@@ -73,11 +73,12 @@ model Schedule {
 }
 
 model Shift {
-  id        Int         @id @default(autoincrement())
-  type      ShiftType
-  startTime DateTime @db.Time
-  endTime   DateTime @db.Time
+  id          Int         @id @default(autoincrement())
+  type        ShiftType
+  customType  String?
+  startTime   DateTime @db.Time
+  endTime     DateTime @db.Time
 
-  users     User[]
-  schedules Schedule[]
+  users       User[]
+  schedules   Schedule[]
 }

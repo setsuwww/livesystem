@@ -59,6 +59,7 @@ export default async function AdminDashboardPage() {
           color="bg-sky-100 text-sky-600"
         />
         <DashboardStats
+          link="/admin/dashboard/shifts"
           title="Total Shifts"
           value={totalShifts.toString()}
           negativeValue="0"
@@ -66,6 +67,7 @@ export default async function AdminDashboardPage() {
           color="bg-purple-100 text-purple-600"
         />
         <DashboardStats
+          link="/admin/dashboard/schedules"
           title="Total Schedules"
           value={totalSchedules.toString()}
           negativeValue="0"
@@ -73,6 +75,7 @@ export default async function AdminDashboardPage() {
           color="bg-green-100 text-green-600"
         />
         <DashboardStats
+          link="/admin/dashboard/tickets"
           title="Total Tickets"
           value={totalTicketsPositive.toString()}
           negativeValue={totalTicketsNegative.toString()}

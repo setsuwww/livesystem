@@ -37,12 +37,20 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       title: String(body.title),
       description: String(body.description),
       date: new Date(body.date),
+      shiftId: body.shiftId ? Number(body.shiftId) : null, // 👈 tambahkan ini
     },
   });
 
-  if (updated.count === 0) { return NextResponse.json({ error: "Not found or no permission" }, { status: 404 });
-  } return NextResponse.json({ message: "Updated" });
+  if (updated.count === 0) {
+    return NextResponse.json(
+      { error: "Not found or no permission" },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({ message: "Updated" });
 }
+
 
 // Delete schedule
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
