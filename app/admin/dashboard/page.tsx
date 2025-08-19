@@ -20,13 +20,13 @@ export default function AdminDashboardPage() {
   ]
 
   const ticketData = [
-    { name: "Senin", value: 12 },
-    { name: "Selasa", value: 25 },
-    { name: "Rabu", value: 12 },
-    { name: "Kamis", value: 22 },
-    { name: "Jumat", value: 10 },
-    { name: "Sabtu", value: 32 },
-    { name: "Minggu", value: 10 },
+    { name: "Senin", value: 32 },
+    { name: "Selasa", value: 15 },
+    { name: "Rabu", value: 22 },
+    { name: "Kamis", value: 12 },
+    { name: "Jumat", value: 30 },
+    { name: "Sabtu", value: 12 },
+    { name: "Minggu", value: 30 },
   ]
 
   return (
