@@ -20,7 +20,7 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
   const [formData, setFormData] = useState({ title: "", description: "", date: "" });
 
   const fetchSchedules = async () => {
-    try { setIsLoading(true);
+      try { setIsLoading(true);
       const { data } = await api.get<Schedule[]>("/schedules");
       setEvents(
         data.map((item) => {
