@@ -53,6 +53,7 @@ export async function POST(req: Request) {
       description: String(body.description),
       date: new Date(body.date),
       userId: user.id,
+      shiftId: body.shiftId ? Number(body.shiftId) : null,
     },
   });
 

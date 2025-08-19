@@ -65,6 +65,7 @@ function SidebarCollapsible({ title, open, onOpenChange, items, icon: Icon}:
 
 export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
+  const [shiftOpen, setShiftOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [ticketOpen, setTicketOpen] = useState(false)
 
@@ -76,7 +77,6 @@ export function Sidebar() {
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         <SubHeading title='Main'/>
         <SidebarLink href="/admin/dashboard" icon={LayoutDashboard}>Dashboard</SidebarLink>
-        <SidebarLink href="/admin/dashboard/shifts" icon={Clock}>Shifts</SidebarLink>
         
         <SubHeading title='Management'/>
         <SidebarCollapsible title="Users" open={userOpen} onOpenChange={setUserOpen} icon={Users}
@@ -85,6 +85,14 @@ export function Sidebar() {
             { label: 'Add Users', href: '/admin/dashboard/users/create' }
           ]}
         />
+        
+        <SidebarCollapsible title="Shift" open={shiftOpen} onOpenChange={setShiftOpen} icon={Clock}
+          items={[
+            { label: 'Shifts', href: '/admin/dashboard/shifts' },
+            { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' }
+          ]}
+        />
+
         <SidebarCollapsible title="Calendars" open={calendarOpen} onOpenChange={setCalendarOpen} icon={CalendarDays}
           items={[
             //  Fungsi schedules adalah sebagai schedules, calendar adalah schedules dalam bentuk calendar grid

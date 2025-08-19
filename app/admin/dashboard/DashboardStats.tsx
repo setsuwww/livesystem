@@ -31,7 +31,7 @@ function DashboardStatsComponent({ title, link, textlink, value, negativeValue, 
           <p className="text-2xl font-semibold">{showNegative ? negativeValue : value}</p>
           {/* Icon switch */}
           <button onClick={toggleValue} className={`${showNegative ? "hover:bg-red-200 bg-red-100" : "hover:bg-green-200 bg-green-100"} p-1 rounded-full text-gray-500 transition-colors`} title={showNegative ? "Show Positive" : "Show Negative"}>
-            {showNegative ? <ArrowUp className="w-4 h-4 text-red-500" /> : <ArrowDown className="w-4 h-4 text-green-500" />}
+            {showNegative ? <ArrowDown className="w-4 h-4 text-red-500" /> : <ArrowUp className="w-4 h-4 text-green-500" />}
           </button>
         </div>
       </div>

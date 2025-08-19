@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { format } from "date-fns";
+import { CalendarClock } from "lucide-react";
 
 import ScheduleActionsButtons from "./SchedulesActionButton";
 import { TableRow, TableCell } from "@/components/ui/Table";
@@ -24,13 +25,19 @@ export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelec
       <TableCell>
         <Checkbox checked={isSelected} onChange={(e) => onSelect(schedule.id, e.target.checked)}/>
       </TableCell>
-      <TableCell>{schedule.id}</TableCell>
       <TableCell>
-        <div className="flex flex-col gap-x-2">
+        <div className="flex items-center gap-x-2">
+          <div className="p-2 bg-gray-200 rounded-full">
+            <CalendarClock strokeWidth={1.5} className="text-gray-700" />
+          </div>
+          <div className="flex flex-col gap-x-2">
           <h1 className="text-base font-bold text-gray-600">
             {capitalize(schedule.title)}
           </h1>
-          <p className="text-xs font-base text-gray-400">{capitalize(schedule.shift ? schedule.shift.type : "-")}</p>
+          <p className="text-xs font-base text-gray-400">
+            {capitalize(schedule.shift ? schedule.shift.type : "-")}
+          </p>
+          </div>
         </div>
       </TableCell>
       <TableCell>{schedule.description}</TableCell>

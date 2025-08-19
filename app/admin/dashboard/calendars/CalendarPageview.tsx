@@ -11,8 +11,9 @@ import { CalendarsModal } from "./CalendarsModal";
 
 import { api } from "@/lib/api";
 import { Schedule } from "@/static/types/Schedule";
+import { Clock } from 'lucide-react';
 
-export default function CalendarPagview({ initialEvents }: { initialEvents: any[] }) {
+export default function CalendarPageview({ initialEvents }: { initialEvents: any[] }) {
   const [events, setEvents] = useState(initialEvents);
   const [selectedEvent, setSelectedEvent] = useState<Schedule | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,11 +55,11 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
       toast.error("Please enter a title");
       return;
     }
-    try {
-      setIsLoading(true);
-      if (selectedEvent) {
-        await api.put(`/schedules/${selectedEvent.id}`, formData);
-      } else { await api.post("/schedules", formData) }
+    try { setIsLoading(true);
+      if (selectedEvent) { await api.put(`/schedules/${selectedEvent.id}`, formData);
+      } else {
+        await api.post("/schedules", formData) 
+      }
       await fetchSchedules();
       setIsModalOpen(false);
       setFormData({ title: "", description: "", date: "" });
@@ -82,9 +83,28 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
             <div>
               <CardTitle>Calendar grid</CardTitle>
               <CardDescription>Click date to add new event or schedules</CardDescription>
+
+              <div className="flex items-center space-x-2 mt-4">
+                <div className="flex items-center space-x-2 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-full">
+                  <Clock className="bg-purple-500/50 text-transparent p-[2px] rounded-md" size={13}/>
+                  <span className="text-purple-700 text-sm font-base">Night</span>
+                </div>
+                <div className="flex items-center space-x-2 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-full">
+                  <Clock className="bg-orange-500/50 text-transparent p-[2px] rounded-md" size={13}/>
+                  <span className="text-orange-700 text-sm font-base">Afternoon</span>
+                </div>
+                <div className="flex items-center space-x-2 bg-yellow-50 border border-yellow-100 px-2 py-0.5 rounded-full">
+                  <Clock className="bg-yellow-500/50 text-transparent p-[2px] rounded-md" size={13}/>
+                  <span className="text-yellow-700 text-sm font-base">Morning</span>
+                </div>
+                <div className="flex items-center space-x-2 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
+                  <Clock className="bg-blue-500/50 text-transparent p-[2px] rounded-md" size={13}/>
+                  <span className="text-blue-700 text-sm font-base">Another</span>
+                </div>
+              </div>
+
             </div>
-            <Button size="sm" onClick={() => {
-              setFormData({
+            <Button size="sm" onClick={() => { setFormData({
                 title: "",
                 description: "",
                 date: new Date().toISOString().split("T")[0]
@@ -96,7 +116,7 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
             </Button>
           </CardHeader>
           <CardContent>
-            <Calendar events={events}
+            <Calendar events={events} 
               onDateClick={(info) => {
                 setFormData({ title: "", description: "", date: info.dateStr });
                 setSelectedEvent(null);
@@ -114,15 +134,12 @@ export default function CalendarPagview({ initialEvents }: { initialEvents: any[
               }}
               onDeleteEvent={async (id) => {
                 setIsLoading(true);
-                try {
-                  await api.delete(`/schedules/${id}`); await fetchSchedules();
+                try { await api.delete(`/schedules/${id}`); await fetchSchedules();
                   toast.success("Deleted");
                 }
-                catch {
-                  toast.error("Failed to delete");
+                catch { toast.error("Failed to delete");
                 }
-                finally {
-                  setIsLoading(false);
+                finally { setIsLoading(false);
                 }
               }}
             />
