@@ -95,7 +95,6 @@ export function Sidebar() {
 
         <SidebarCollapsible title="Calendars" open={calendarOpen} onOpenChange={setCalendarOpen} icon={CalendarDays}
           items={[
-            //  Fungsi schedules adalah sebagai schedules, calendar adalah schedules dalam bentuk calendar grid
             { label: 'Calendars', href: '/admin/dashboard/calendars' },
             { label: 'Schedules', href: '/admin/dashboard/schedules' },
             { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },

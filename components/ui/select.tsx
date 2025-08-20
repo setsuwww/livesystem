@@ -20,9 +20,10 @@ function SelectTrigger({
   return (
     <SelectPrimitive.Trigger
       className={cn(
-        "flex w-fit items-center justify-between gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-300/50 outline-none disabled:opacity-50",
+        "flex items-center justify-between gap-2 rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 transition-colors focus:border-gray-400 focus:ring-2 focus:ring-gray-300/50 outline-none disabled:opacity-50",
         size === "sm" ? "h-8" : "h-9",
-        className
+        "w-fit", // default
+        className // 👉 ini override, jadi kalau ada "w-full" dia akan menimpa "w-fit"
       )}
       {...props}
     >
@@ -33,6 +34,7 @@ function SelectTrigger({
     </SelectPrimitive.Trigger>
   )
 }
+
 
 function SelectContent({
   className,
