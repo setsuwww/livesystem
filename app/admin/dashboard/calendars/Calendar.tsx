@@ -19,6 +19,15 @@ export function Calendar({ events, onDateClick, onEditEvent, onDeleteEvent }: Pr
       dateClick={onDateClick} events={events}
       dayMaxEvents={3}
       moreLinkClick="popover"
+      moreLinkContent={(args) => {
+        return {
+          html: `<div class="mt-0.5">
+            <span class="px-2 py-1 bg-gray-800 text-white rounded-md text-xs transition">
+              +${args.num} more
+            </span>
+          </div>`
+        };
+      }}
       headerToolbar={{
         left: "prev,next today",
         center: "title",

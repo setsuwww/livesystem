@@ -10,7 +10,7 @@ import { capitalize } from "@/function/functionCapitalize";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export const revalidate = 620;
+export const revalidate = 60;
 
 interface ShiftUsersPageProps {
   params: { id: string };

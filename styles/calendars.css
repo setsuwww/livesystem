@@ -29,6 +29,10 @@
   background-color: #e0f2fe !important; 
 }
 .fc-day-today {
-  content: 'NOW';
   background-color: #e0f2fe !important;
 }
+
+.fc .fc-more-link {
+  @apply mt-1 block; /* kasih jarak ke atas */
+}
+
