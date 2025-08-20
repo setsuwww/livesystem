@@ -1,15 +1,17 @@
 "use client";
 
-import { CircleQuestionMark } from "lucide-react";
 import { useState, useMemo, useCallback } from "react";
+import { CircleHelp, CircleUser } from "lucide-react";
+
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ScrollArea } from "@/components/ui/Scroll-area";
+import { Label } from "@/components/ui/Label";
 
 interface User {
-  id: string;
+  id: number;
   name: string;
   email: string;
 }
@@ -20,21 +22,22 @@ interface CreateShiftFormProps {
 
 export default function CreateShiftForm({ users }: CreateShiftFormProps) {
   const [type, setType] = useState("MORNING");
-  const [customType, setCustomType] = useState(""); // ✅ untuk shift custom
+  const [customType, setCustomType] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
   const [search, setSearch] = useState("");
 
   const filteredUsers = useMemo(() => {
-    return users.filter((u) =>
-      u.name.toLowerCase().includes(search.toLowerCase()) ||
-      u.email.toLowerCase().includes(search.toLowerCase())
+    return users.filter(
+      (u) =>
+        u.name.toLowerCase().includes(search.toLowerCase()) ||
+        u.email.toLowerCase().includes(search.toLowerCase())
     );
   }, [users, search]);
 
-  const toggleUser = useCallback((id: string) => {
+  const toggleUser = useCallback((id: number) => {
     setSelectedUsers((prev) =>
       prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
     );
@@ -68,98 +71,121 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Shift Type</label>
-          <Select value={type} onValueChange={(v) => setType(v)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a shift type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="MORNING">Morning</SelectItem>
-              <SelectItem value="AFTERNOON">Afternoon</SelectItem>
-              <SelectItem value="NIGHT">Night</SelectItem>
-              <SelectItem value="CUSTOM">Custom</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Start time */}
-        <div>
-          <label className="block text-sm font-medium mb-1">Start Time</label>
-          <Input
-            type="time"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-          />
-        </div>
-
-        {/* End time */}
-        <div>
-          <label className="block text-sm font-medium mb-1">End Time</label>
-          <Input
-            type="time"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Kalau pilih CUSTOM muncul input tambahan */}
-{type === "CUSTOM" && (
-  <div className="bg-gray-100 border border-gray-300 rounded-lg p-3 space-y-2">
-    <label className="flex items-center space-x-1 font-medium text-gray-500">
-      <CircleQuestionMark strokeWidth={1.75} size={20} />
-      <span className="text-sm">Custom Shift Type</span>
-    </label>
-    <Input
-      type="text"
-      placeholder="Custom shift name"
-      value={customType}
-      onChange={(e) => setCustomType(e.target.value)}
-    />
-    <p className="text-xs text-gray-400 mt-2 max-w-xs">
-      This will be used to identify the custom shift.
-      Input on to is used for your custom shift
-    </p>
-  </div>
-)}
-
-
-      {/* Search user */}
-      <div>
-        <label className="block text-sm font-medium mb-1">Search User</label>
-        <Input
-          type="text"
-          placeholder="Search by name..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Users list */}
-      <div>
-        <label className="block text-sm font-medium mb-2">Assign Users</label>
-        <ScrollArea className="h-40 rounded-md border border-gray-300 p-2">
-          <div className="space-y-1">
-            {filteredUsers.length === 0 && (
-              <p className="text-sm text-center text-red-500">No users found</p>
-            )}
-            {filteredUsers.map((user) => (
-              <label key={user.id} className="flex items-center space-x-2 rounded hover:bg-muted px-2 py-1 cursor-pointer"> 
-                <Checkbox label={`${user.name} (${user.email})`} checked={selectedUsers.includes(user.id)}
-                  onChange={() => toggleUser(user.id)}
-                />
-              </label>
-            ))}
+    <section className="mx-auto">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Shift type, start time, end time */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <Label htmlFor="shift-type">Shift Type</Label>
+            <Select value={type} onValueChange={(v) => setType(v)}>
+              <SelectTrigger id="shift-type" className="w-full mt-1">
+                <SelectValue placeholder="Select shift type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="MORNING">Morning</SelectItem>
+                <SelectItem value="AFTERNOON">Afternoon</SelectItem>
+                <SelectItem value="NIGHT">Night</SelectItem>
+                <SelectItem value="CUSTOM">Custom</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-        </ScrollArea>
-      </div>
 
-      <Button type="submit" className="w-full">
-        Create Shift
-      </Button>
-    </form>
+          <div>
+            <Label htmlFor="start-time">Start Time</Label>
+            <Input
+              id="start-time"
+              type="time"
+              className="mt-1"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="end-time">End Time</Label>
+            <Input
+              id="end-time"
+              type="time"
+              className="mt-1"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {type === "CUSTOM" && (
+          <div className="bg-muted/30 border border-muted rounded-lg p-3 space-y-2">
+            <div className="flex items-center space-x-2">
+              <Label htmlFor="custom-type">Custom Shift Type</Label>
+            </div>
+            <Input
+              id="custom-type"
+              type="text"
+              placeholder="Custom shift name"
+              value={customType}
+              onChange={(e) => setCustomType(e.target.value)}
+            />
+            <p className="text-xs text-muted-foreground">
+              This will be used to identify your custom shift.
+            </p>
+          </div>
+        )}
+
+        <div>
+          <Label htmlFor="search-user">Search User</Label>
+          <Input id="search-user" type="text" className="mt-1" placeholder="Search by name or email..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <Label>Assign Users</Label>
+          <ScrollArea className="h-68 mt-2 rounded-md border border-gray-100 p-2">
+            <div className="space-y-2">
+              {filteredUsers.length === 0 && (
+                <p className="text-sm text-center text-muted-foreground">
+                  No users found
+                </p>
+              )}
+
+              {filteredUsers.map((user) => (
+                <Label
+                  key={user.id}
+                  htmlFor={`user-${user.id}`}
+                  className="flex items-center space-x-2 border border-gray-200 shadow-xs rounded-md p-2 cursor-pointer hover:bg-gray-50 transition"
+                >
+                  {/* Checkbox hidden, tapi tetap bisa diakses */}
+                  <Checkbox
+                    id={`user-${user.id}`}
+                    checked={selectedUsers.includes(user.id)}
+                    onCheckedChange={() => toggleUser(user.id)}
+                    className="size-4 rounded-md"
+                  />
+
+                  {/* Icon user */}
+                  <div className="bg-gray-200 text-gray-400 p-2 rounded-full shrink-0">
+                    <CircleUser strokeWidth={1} />
+                  </div>
+
+                  {/* Info user */}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-700">
+                      {user.name}
+                    </span>
+                    <span className="text-xs text-gray-500">{user.email}</span>
+                  </div>
+                </Label>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+
+
+        <Button type="submit" className="w-full">
+          Create Shift
+        </Button>
+      </form>
+    </section>
   );
 }

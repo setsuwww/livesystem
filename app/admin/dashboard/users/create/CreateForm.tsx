@@ -13,6 +13,7 @@ import { DashboardHeader } from "../../DashboardHeader";
 
 import { Shift } from "@/static/types/Shift";
 import { fetch } from "@/function/helpers/fetch";
+import { Label } from "@/components/ui/Label";
 
 interface Props {
   shifts: Shift[];
@@ -23,7 +24,8 @@ export default function UsersForm({ shifts }: Props) {
   const [form, setForm] = useState({ name: "", email: "", password: "", role: "USER", shiftId: "" });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => { const { name, value } = e.target;
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -37,7 +39,9 @@ export default function UsersForm({ shifts }: Props) {
 
     const payload = { ...form, shiftId: form.shiftId && form.shiftId !== "NONE" ? parseInt(form.shiftId) : null };
 
-    try { await fetch({ url: "/users",
+    try {
+      await fetch({
+        url: "/users",
         method: "post",
         data: payload,
         successMessage: "User created successfully ✅", errorMessage: "Failed to create user ❌",
@@ -66,14 +70,22 @@ export default function UsersForm({ shifts }: Props) {
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-4">
           <ContentInformation heading="Public" subheading="Users public username & email" />
-          <Input label="Name" placeholder="Username" name="name" value={form.name} onChange={handleChange} required />
-          <Input label="Email" placeholder="Users Email" type="email" name="email" value={form.email} onChange={handleChange} required />
+
+          <div className="space-y-2">
+            <Label htmlFor="username" className="text-gray-600">Username</Label>
+            <Input placeholder="Username" name="name" value={form.name} onChange={handleChange} required />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-gray-600">Email</Label>
+            <Input placeholder="Users Email" type="email" name="email" value={form.email} onChange={handleChange} required />
+          </div>
 
           <ContentInformation heading="Private" subheading="Users role, password and shift assignment" />
-          <Input label="Password" placeholder="Users Password" type="password" name="password" value={form.password} onChange={handleChange} required />
+          <Input placeholder="Users Password" type="password" name="password" value={form.password} onChange={handleChange} required />
 
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-600">Role</label>
+          <div className="space-y-2">
+            <Label htmlFor="role" className="text-gray-600">Role</Label>
             <RadioButton
               name="role"
               options={roleOptions}
@@ -82,10 +94,10 @@ export default function UsersForm({ shifts }: Props) {
             />
           </div>
 
-          <div>
-            <label className="block mb-1.5 text-sm font-medium text-gray-600">Shift Assignment</label>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-600">Shift Assignment</label>
             <Select value={form.shiftId} onValueChange={(value) => handleCustomChange("shiftId", value)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-1/2">
                 <SelectValue placeholder="No Shift Assigned" />
               </SelectTrigger>
               <SelectContent>

@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
-import { capitalize } from "@/function/functionCapitalize";
+import { capitalize } from "@/function/functionFormatters";
+import { ShiftType } from "@prisma/client";
 
 interface ShiftsTableProps {
   data: {
     id: number;
-    type: string;
-    customType?: string;
+    type: ShiftType;
+    customType?: string | null;
     timeRange: string;
     usersCount: number;
     schedulesCount: number;
@@ -83,13 +83,13 @@ export function ShiftsTable({ data }: ShiftsTableProps) {
                   </TableCell>
                   <TableCell className="space-x-2">
                     <Link href={`/admin/dashboard/shifts/${shift.id}/users`}>
-                      <Button size="sm" variant="custom" className="bg-gray-50 border-gray-300 text-sky-600 px-3 py-1 text-sm font-medium hover:bg-sky-50">
+                      <Button size="sm" className="bg-gray-50 border border-gray-200 text-sky-600 px-3 py-1 text-sm font-medium hover:bg-sky-50">
                         See Users
                         <ChevronRight size={16} />
                       </Button>
                     </Link>
                     <Link href={`/admin/dashboard/shifts/${shift.id}/schedules`}>
-                      <Button size="sm" variant="custom" className="bg-gray-50 border-gray-300 text-sky-600 px-3 py-1 text-sm font-medium hover:bg-sky-50">
+                      <Button size="sm" className="bg-gray-50 border border-gray-200 text-sky-600 px-3 py-1 text-sm font-medium hover:bg-sky-50">
                         See Schedules
                         <ChevronRight size={16} />
                       </Button>

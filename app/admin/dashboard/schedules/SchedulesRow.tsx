@@ -7,7 +7,7 @@ import { TableRow, TableCell } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 
 import { SchedulesRowProps } from "@/static/interfaces/SchedulesRowProps";
-import { capitalize } from "@/function/functionCapitalize";
+import { capitalize } from "@/function/functionFormatters";
 
 
 export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelect, onEdit, onDelete }: SchedulesRowProps) {
@@ -23,7 +23,7 @@ export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelec
   return (
     <TableRow>
       <TableCell>
-        <Checkbox checked={isSelected} onChange={(e) => onSelect(schedule.id, e.target.checked)}/>
+        <Checkbox checked={isSelected} onCheckedChange={(checked) => onSelect(schedule.id, checked === true)} />
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-x-2">

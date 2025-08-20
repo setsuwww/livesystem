@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import EditForm from "./EditForm"; // ganti path sesuai file EditForm.tsx kamu
-import { getUserFromToken } from "@/app/api/schedules/route";
+import EditForm from "./EditForm";
+import { getUserFromToken } from "@/lib/auth";
 
 interface Props {
   params: { id: string };
@@ -9,9 +9,8 @@ interface Props {
 
 export default async function Page({ params }: Props) {
   const user = await getUserFromToken();
-  if (!user) {
-    return <div>Unauthorized</div>;
-  }
+
+  if (!user) return <div>Unauthorized</div>
 
   const schedule = await prisma.schedule.findUnique({
     where: {
@@ -23,6 +22,7 @@ export default async function Page({ params }: Props) {
         select: {
           id: true,
           type: true,
+          customType: true,
           startTime: true,
           endTime: true,
         },
@@ -36,6 +36,7 @@ export default async function Page({ params }: Props) {
     select: {
       id: true,
       type: true,
+      customType: true,
       startTime: true,
       endTime: true,
     },

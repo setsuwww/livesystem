@@ -7,6 +7,9 @@ import { Pagination } from "../Pagination";
 import { ShiftsTable } from "./ShiftsTable";
 import { ShiftCustomCards } from "./ShiftsCustomCards";
 import { prisma } from "@/lib/prisma";
+import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 6;
 
@@ -67,7 +70,8 @@ export default async function ShiftsPage({ searchParams }: { searchParams?: { pa
     const start = s.startTime ? s.startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) : "??:??";
     const end = s.endTime ? s.endTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }) : "??:??";
 
-    return { id: s.id, type: s.type, customType: s.customType,
+    return { id: s.id, type: s.type, 
+      customType: s.customType ?? undefined,
       timeRange: `${start} - ${end}`,
       usersCount: s.users.length, schedulesCount: s.schedules.length,
       users: s.users,
@@ -86,14 +90,19 @@ export default async function ShiftsPage({ searchParams }: { searchParams?: { pa
       <ContentForm>
         <ContentInformation heading="List shifts" subheading="Manage all shift data in this table" />
         
-        {/* TABLE UNTUK MAIN SHIFT */}
         <ShiftsTable data={tableData} />
 
-        {/* CARD UNTUK CUSTOM SHIFT */}
         {mappedCustom.length > 0 && (
           <div className="mt-8">
             <ContentInformation heading="Custom Shifts" subheading="These are your custom defined shifts" />
             <ShiftCustomCards shifts={mappedCustom} />
+
+            <Link href="/otw-fitur" className="mt-10">
+              <Button variant="secondary">
+                Specific shift <ChevronRight size={10}/>
+              </Button>
+            </Link>
+
             {totalCustom > PAGE_SIZE && (
               <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/shifts" />
             )}

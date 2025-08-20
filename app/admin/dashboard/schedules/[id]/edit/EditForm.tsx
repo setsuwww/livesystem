@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Input } from "@/components/ui/Input";
@@ -13,7 +13,7 @@ import { Schedule, Shift } from "@prisma/client";
 import { fetch } from "@/function/helpers/fetch";
 
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select";
-import { capitalize } from "@/function/functionCapitalize";
+import { capitalize } from "@/function/functionFormatters";
 import { DashboardHeader } from './../../../DashboardHeader';
 
 interface ScheduleWithShift extends Schedule {
@@ -68,18 +68,19 @@ export default function EditForm({ schedule, shifts }: { schedule: ScheduleWithS
         <ContentInformation heading="Information" subheading="Schedule public information"/>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
             
-          <Input label="Title" value={form.title}
+          {/* tambahin label sebelum input */}
+          <Input value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
             required
           />
-          <Input label="Description" value={form.description}
+          <Input value={form.description}
             onChange={(e) => handleChange("description", e.target.value)}
             required
           />
 
           <ContentInformation heading="Date & shift" subheading="Schedule's date & shift data"/>
 
-          <Input label="Date" type="date" value={form.date}
+          <Input type="date" value={form.date}
             onChange={(e) => handleChange("date", e.target.value)}
             required
           />

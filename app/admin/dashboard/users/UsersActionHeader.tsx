@@ -50,7 +50,7 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
           Delete All
         </Button>
 
-        <Button variant="custom" size="sm" onClick={() => onExportPDF(filteredData)} className="bg-green-600 hover:bg-green-500 border-green-600 text-white">
+        <Button size="sm" onClick={() => onExportPDF(filteredData)} className="bg-green-600 hover:bg-green-500 border-green-600 text-white">
           <FolderInput size={16} /> Export PDF
         </Button>
       </div>

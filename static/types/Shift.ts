@@ -4,6 +4,7 @@ import { User } from "./User";
 export interface Shift {
   id: number;
   type: string;
+  customType?: string | null;
   startTime: string | Date;
   endTime: string | Date;
   users?: User[];

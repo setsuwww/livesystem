@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { capitalize } from "@/function/functionCapitalize";
+import { capitalize } from "@/function/functionFormatters";
 import { format } from "date-fns";
 
 import { roleStyles } from "@/constants/roleStyles";

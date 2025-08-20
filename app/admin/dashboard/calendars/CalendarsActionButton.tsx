@@ -9,14 +9,14 @@ interface Props {
 export function CalendarsActionButton({ onEdit, onDelete }: Props) {
   return (
     <div className="flex items-center gap-1">
-      <Button variant="custom" size="icon" className="border-blue-200 bg-white text-blue-500 hover:bg-blue-100 rounded"
+      <Button size="icon" className="border-blue-200 bg-white text-blue-500 hover:bg-blue-100 rounded"
         onClick={(e) => {e.stopPropagation();
           onEdit();
         }}>
         <Edit />
       </Button>
 
-      <Button variant="custom" size="icon" className="border-red-200 bg-white text-red-500 hover:bg-red-100 rounded"
+      <Button size="icon" className="border-red-200 bg-white text-red-500 hover:bg-red-100 rounded"
         onClick={(e) => {e.stopPropagation();
           onDelete();
         }}>
