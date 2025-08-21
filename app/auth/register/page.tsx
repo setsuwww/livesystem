@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Input } from '@/components/ui/Input';
+import { Label } from '@/components/ui/Label';
 import { Button } from '@/components/ui/Button';
 import AuthForm from '@/app/auth/AuthForm';
 import AuthLink from '../AuthLink';
@@ -29,12 +30,12 @@ const RegisterPage = () => {
     setIsSubmitting(true);
     setError('');
 
-    try {
-      await api.post('/auth/register', {
+    try { await api.post('/auth/register', {
         name,
         email,
         password,
-      }); router.push('/auth/login');
+      });
+      router.push('/auth/login');
     } 
     catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -47,29 +48,54 @@ const RegisterPage = () => {
   return (
     <AuthForm headers="Register">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input label="Name" type="text" value={name} error={error && !name ? 'Name is required' : ''} onChange={(e) => setName(e.target.value)}
-          placeholder="Enter your name"
-          className="w-full"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Enter your name"
+          />
+        </div>
 
-        <Input label="Email" type="email" value={email} error={error && !email ? 'Email is required' : ''} onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          className="w-full"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+          />
+        </div>
 
-        <Input label="Password" type="password" value={password} error={error && !password ? 'Password is required' : ''} onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          className="w-full"
-        />
+        <div className="space-y-2">
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
+          />
+        </div>
 
-        <Button type="submit" variant='custom' size="sm" loading={isSubmitting} className='text-base text-white font-semibold w-full bg-sky-500 hover:bg-sky-600 py-2 rounded-md'>
-          {isSubmitting ? 'Registering...' : 'Register'}
+        <Button type="submit" className="w-full text-base font-semibold bg-sky-600 hover:bg-sky-700" disabled={isSubmitting}>
+          {isSubmitting ? "Registering..." : "Register"}
         </Button>
       </form>
 
-      {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+      {error && (
+        <p className="text-red-500 mt-2 text-center text-sm">{error}</p>
+      )}
 
-      <AuthLink question="Already have an Account?" link="Login" href="/auth/login" className="mt-4"/>
+      <AuthLink
+        question="Already have an Account?"
+        link="Login"
+        href="/auth/login"
+        className="mt-4"
+      />
     </AuthForm>
   );
 };

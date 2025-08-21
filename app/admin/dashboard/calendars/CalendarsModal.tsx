@@ -8,7 +8,7 @@ import { ScheduleModalProps } from '@/static/types/Schedule';
 export function CalendarsModal({ open, loading, formData, selectedEvent, onClose, onChange, onSave }: ScheduleModalProps) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-white sm:max-w-[425px] border border-gray-300">
+      <DialogContent className="bg-white sm:max-w-[425px] border border-zinc-300">
         <DialogHeader>
           <DialogTitle>{selectedEvent ? "Edit Event" : "Add New Event"}</DialogTitle>
           <DialogDescription>{selectedEvent ? "Update the details of your event below." : "filling out the form below."}</DialogDescription>

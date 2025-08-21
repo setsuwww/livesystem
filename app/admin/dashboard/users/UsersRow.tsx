@@ -30,12 +30,12 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
 
       <TableCell>
         <div className="flex items-center gap-3">
-          <div className="bg-gray-200 p-2 rounded-full">
-            <CircleUserRound className="h-5 w-5 text-gray-400" strokeWidth={1}/>
+          <div className="bg-zinc-200 p-2 rounded-full">
+            <CircleUserRound className="h-5 w-5 text-zinc-400" strokeWidth={1}/>
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-700">{user.name}</p>
-            <p className="text-xs text-gray-500">{user.email}</p>
+            <p className="text-sm font-medium text-zinc-700">{user.name}</p>
+            <p className="text-xs text-zinc-500">{user.email}</p>
           </div>
         </div>
       </TableCell>
@@ -54,7 +54,7 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
 
       <TableCell className="flex flex-col">
         <span className="text-sm font-medium">{formatedCreatedDate}</span>
-        <span className="text-xs text-gray-500">{formatedUpdatedDate}</span>
+        <span className="text-xs text-zinc-500">{formatedUpdatedDate}</span>
       </TableCell>
 
       <TableCell>

@@ -13,7 +13,7 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-gray-700 mr-1">Role:</span>
+            <span className="font-semibold text-zinc-700 mr-1">Role:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -26,7 +26,7 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
 
         <Select value={shiftFilter} onValueChange={onShiftFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-gray-700 mr-1">Shift:</span>
+            <span className="font-semibold text-zinc-700 mr-1">Shift:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>

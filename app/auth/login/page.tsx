@@ -45,7 +45,7 @@ const LoginPage = () => {
 
   return (
     <AuthForm headers="Login">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input id="email" type="email" value={email}
@@ -72,10 +72,10 @@ const LoginPage = () => {
         {/* Remember me + Forgot password */}
         <div className="flex items-center justify-between w-full text-sm">
           <div className="flex items-center space-x-2">
-            <Checkbox id="remember" checked={rememberMe}
+            <Checkbox id="remember" checked={rememberMe} className="border-zinc-400"
               onCheckedChange={(checked) => setRememberMe(!!checked)}
             />
-            <Label htmlFor="remember" className="text-sm text-gray-500">
+            <Label htmlFor="remember" className="text-sm text-zinc-500">
               Remember Me
             </Label>
           </div>

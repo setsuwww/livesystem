@@ -139,14 +139,14 @@ export default function UsersEditForm({ userId, shifts, initialForm }: Props) {
             <RadioGroup value={form.role} onValueChange={(value) => handleCustomChange("role", value)}
               className="flex flex-col gap-2">
               {roleOptions.map((role) => (
-                <div key={role.value} className="flex flex-col rounded-md border border-gray-300 p-3">
+                <div key={role.value} className="flex flex-col rounded-md border border-zinc-300 p-3">
                   <div className="mb-1">
                     <RadioGroupItem value={role.value} id={role.value} />
                   </div>
 
                   <Label htmlFor={role.value} className="cursor-pointer flex flex-col text-left pl-0">
-                    <span className="font-medium text-gray-800">{role.label}</span>
-                    <span className="text-xs text-gray-500">{role.description}</span>
+                    <span className="font-medium text-zinc-800">{role.label}</span>
+                    <span className="text-xs text-zinc-500">{role.description}</span>
                   </Label>
                 </div>
               ))}

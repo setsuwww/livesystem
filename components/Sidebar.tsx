@@ -67,7 +67,6 @@ export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
   const [shiftOpen, setShiftOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
-  const [ticketOpen, setTicketOpen] = useState(false)
 
   return (
     <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-0 border-r-2 border-zinc-200">
@@ -98,12 +97,6 @@ export function Sidebar() {
             { label: 'Calendars', href: '/admin/dashboard/calendars' },
             { label: 'Schedules', href: '/admin/dashboard/schedules' },
             { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },
-          ]}
-        />
-        <SidebarCollapsible title="Tickets" open={ticketOpen} onOpenChange={setTicketOpen} icon={Ticket}
-          items={[
-            { label: 'Tickets', href: '/admin/dashboard/tickets' },
-            { label: 'Add Tickets', href: '/admin/dashboard/tickets/create' }
           ]}
         />
 

@@ -72,12 +72,12 @@ export default function UsersForm({ shifts }: Props) {
           <ContentInformation heading="Public" subheading="Users public username & email" />
 
           <div className="space-y-2">
-            <Label htmlFor="username" className="text-gray-600">Username</Label>
+            <Label htmlFor="username" className="text-zinc-600">Username</Label>
             <Input placeholder="Username" name="name" value={form.name} onChange={handleChange} required />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-600">Email</Label>
+            <Label htmlFor="email" className="text-zinc-600">Email</Label>
             <Input placeholder="Users Email" type="email" name="email" value={form.email} onChange={handleChange} required />
           </div>
 
@@ -85,7 +85,7 @@ export default function UsersForm({ shifts }: Props) {
           <Input placeholder="Users Password" type="password" name="password" value={form.password} onChange={handleChange} required />
 
           <div className="space-y-2">
-            <Label htmlFor="role" className="text-gray-600">Role</Label>
+            <Label htmlFor="role" className="text-zinc-600">Role</Label>
             <RadioButton
               name="role"
               options={roleOptions}
@@ -95,7 +95,7 @@ export default function UsersForm({ shifts }: Props) {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-600">Shift Assignment</label>
+            <label className="block text-sm font-medium text-zinc-600">Shift Assignment</label>
             <Select value={form.shiftId} onValueChange={(value) => handleCustomChange("shiftId", value)}>
               <SelectTrigger className="w-1/2">
                 <SelectValue placeholder="No Shift Assigned" />

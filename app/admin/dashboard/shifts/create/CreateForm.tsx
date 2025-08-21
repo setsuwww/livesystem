@@ -92,10 +92,7 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
 
           <div>
             <Label htmlFor="start-time">Start Time</Label>
-            <Input
-              id="start-time"
-              type="time"
-              className="mt-1"
+            <Input id="start-time" type="time" className="mt-1"
               value={startTime}
               onChange={(e) => setStartTime(e.target.value)}
             />
@@ -103,10 +100,7 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
 
           <div>
             <Label htmlFor="end-time">End Time</Label>
-            <Input
-              id="end-time"
-              type="time"
-              className="mt-1"
+            <Input id="end-time" type="time" className="mt-1"
               value={endTime}
               onChange={(e) => setEndTime(e.target.value)}
             />
@@ -114,18 +108,16 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
         </div>
 
         {type === "CUSTOM" && (
-          <div className="bg-muted/30 border border-muted rounded-lg p-3 space-y-2">
-            <div className="flex items-center space-x-2">
-              <Label htmlFor="custom-type">Custom Shift Type</Label>
+          <div className="bg-zinc-100 border border-zinc-300 rounded-lg p-3 space-y-2">
+            <div className="flex items-center space-x-1">
+              <CircleHelp strokeWidth={1.5} className="text-zinc-500" />
+              <Label htmlFor="custom-type" className="text-zinc-500">Custom Shift Type</Label>
             </div>
-            <Input
-              id="custom-type"
-              type="text"
-              placeholder="Custom shift name"
+            <Input id="custom-type" type="text" placeholder="Custom shift name" className="bg-zinc-100/40 focus:ring-zinc-500 focus:border-zinc-500"
               value={customType}
               onChange={(e) => setCustomType(e.target.value)}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-zinc-500">
               This will be used to identify your custom shift.
             </p>
           </div>
@@ -141,7 +133,7 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
 
         <div>
           <Label>Assign Users</Label>
-          <ScrollArea className="h-68 mt-2 rounded-md border border-gray-100 p-2">
+          <ScrollArea className="h-68 mt-2 rounded-md border border-zinc-100 p-2">
             <div className="space-y-2">
               {filteredUsers.length === 0 && (
                 <p className="text-sm text-center text-muted-foreground">
@@ -150,30 +142,20 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
               )}
 
               {filteredUsers.map((user) => (
-                <Label
-                  key={user.id}
-                  htmlFor={`user-${user.id}`}
-                  className="flex items-center space-x-2 border border-gray-200 shadow-xs rounded-md p-2 cursor-pointer hover:bg-gray-50 transition"
-                >
-                  {/* Checkbox hidden, tapi tetap bisa diakses */}
-                  <Checkbox
-                    id={`user-${user.id}`}
-                    checked={selectedUsers.includes(user.id)}
+                <Label key={user.id} htmlFor={`user-${user.id}`} className="flex items-center space-x-2 border border-zinc-200 shadow-xs rounded-lg p-2 cursor-pointer hover:bg-zinc-50 transition">
+                  <Checkbox id={`user-${user.id}`} checked={selectedUsers.includes(user.id)}
                     onCheckedChange={() => toggleUser(user.id)}
                     className="size-4 rounded-md"
                   />
-
-                  {/* Icon user */}
-                  <div className="bg-gray-200 text-gray-400 p-2 rounded-full shrink-0">
+                  <div className="bg-zinc-200 text-zinc-400 p-2 rounded-full shrink-0">
                     <CircleUser strokeWidth={1} />
                   </div>
 
-                  {/* Info user */}
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-zinc-700">
                       {user.name}
                     </span>
-                    <span className="text-xs text-gray-500">{user.email}</span>
+                    <span className="text-xs text-zinc-500">{user.email}</span>
                   </div>
                 </Label>
               ))}
@@ -182,7 +164,7 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
         </div>
 
 
-        <Button type="submit" className="w-full">
+        <Button type="submit">
           Create Shift
         </Button>
       </form>

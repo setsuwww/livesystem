@@ -82,7 +82,7 @@ export default function CreateForm({ schedules, shifts }: { schedules: ScheduleW
           />
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 mb-1">Select Shift</label>
+            <label className="text-sm font-medium text-zinc-700 mb-1">Select Shift</label>
             <Select value={form.shiftId} onValueChange={(val) => handleChange("shiftId", val)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Choose a shift" />
