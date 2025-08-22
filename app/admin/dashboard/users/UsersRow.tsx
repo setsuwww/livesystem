@@ -31,7 +31,7 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       <TableCell>
         <div className="flex items-center gap-3">
           <div className="bg-zinc-200 p-2 rounded-full">
-            <CircleUserRound className="h-5 w-5 text-zinc-400" strokeWidth={1}/>
+            <CircleUserRound className="h-5 w-5 text-zinc-600" strokeWidth={1}/>
           </div>
           <div>
             <p className="text-sm font-medium text-zinc-700">{user.name}</p>

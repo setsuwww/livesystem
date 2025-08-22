@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ChangeEvent } from "react";
+import { Globe } from 'lucide-react';
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/Button";
@@ -9,11 +10,12 @@ import { RadioButton } from "@/components/ui/RadioButton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
+import { Label } from "@/components/ui/Label";
+
 import { DashboardHeader } from "../../DashboardHeader";
 
 import { Shift } from "@/static/types/Shift";
 import { fetch } from "@/function/helpers/fetch";
-import { Label } from "@/components/ui/Label";
 
 interface Props {
   shifts: Shift[];
@@ -59,8 +61,9 @@ export default function UsersForm({ shifts }: Props) {
 
   const roleOptions = [
     { label: "Admin", description: "Maintain and manage all contents", value: "ADMIN" },
-    { label: "Manager", description: "Manage shifts and schedules for users", value: "MANAGER" },
-    { label: "User", description: "Just for submitting helpdesk", value: "USER" },
+    { label: "Coordinator", description: "Manage shifts and schedules for users", value: "COORDINATOR" },
+    { label: "Employee", description: "Communicate with another person in office", value: "EMPLOYEE" },
+    { label: "User", description: "Register, login and manage task", value: "USER" },
   ];
 
   return (
@@ -69,7 +72,7 @@ export default function UsersForm({ shifts }: Props) {
 
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <ContentInformation heading="Public" subheading="Users public username & email" />
+          <ContentInformation icon={<Globe className="w-8 h-8" strokeWidth={1.5} />} heading="Public" subheading="Users public username & email" />
 
           <div className="space-y-2">
             <Label htmlFor="username" className="text-zinc-600">Username</Label>
@@ -82,7 +85,11 @@ export default function UsersForm({ shifts }: Props) {
           </div>
 
           <ContentInformation heading="Private" subheading="Users role, password and shift assignment" />
-          <Input placeholder="Users Password" type="password" name="password" value={form.password} onChange={handleChange} required />
+
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-zinc-600">Password</Label>
+            <Input placeholder="Users Password" type="password" name="password" value={form.password} onChange={handleChange} required />
+          </div>
 
           <div className="space-y-2">
             <Label htmlFor="role" className="text-zinc-600">Role</Label>

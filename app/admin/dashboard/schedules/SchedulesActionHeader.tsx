@@ -12,12 +12,21 @@ export default function SchedulesActionHeader({ search, setSearch, sortOrder, on
       <div className="flex items-center gap-x-1">
         <Input placeholder="Search schedule..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full sm:w-64 bg-white py-1.5"/>
 
-        <Tabs value={sortOrder} onValueChange={(v) => onSortChange(v as "newest" | "oldest")} className="w-max">
-          <TabsList className="flex space-x-1">
-            <TabsTrigger value="newest" className="px-4 py-4">Newest</TabsTrigger>
-            <TabsTrigger value="oldest" className="px-4 py-4">Oldest</TabsTrigger>
-          </TabsList>
-        </Tabs>
+<Tabs
+  value={sortOrder}
+  onValueChange={(v) => onSortChange(v as "newest" | "oldest")}
+  className="w-full"
+>
+  <TabsList className="flex space-x-1">
+    <TabsTrigger value="newest" className="px-1 py-3 text-sm">
+      Newest
+    </TabsTrigger>
+    <TabsTrigger value="oldest" className="px-1 py-3 text-sm">
+      Oldest
+    </TabsTrigger>
+  </TabsList>
+</Tabs>
+
       </div>
 
       <div className="flex items-center gap-x-2">

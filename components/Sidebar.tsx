@@ -9,7 +9,7 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/component
 import SubHeading from './content/SubHeading'
 
 const linkBase = "flex items-center gap-2 text-md px-3 py-2 rounded-lg transition-colors"
-const subLinkBase = "block text-sm px-3 py-1.5 font-light rounded-lg transition-colors"
+const subLinkBase = "block text-sm px-3 py-1.5 font-base rounded-lg transition-colors"
 const triggerBase = "w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors focus:outline-none"
 const subContentBase = "border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2"
 
@@ -30,7 +30,7 @@ function SidebarSubLink({ href, children }: { href: string; children: React.Reac
   const isActive = pathname === href
 
   return (
-    <Link href={href} className={`${subLinkBase} ${isActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-500 hover:bg-sky-100 hover:text-sky-700'}`}>
+    <Link href={href} className={`${subLinkBase} ${isActive ? 'text-sky-600' : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'}`}>
       {children}
     </Link>
   )
@@ -80,6 +80,8 @@ export function Sidebar() {
         <SubHeading title='Management'/>
         <SidebarCollapsible title="Users" open={userOpen} onOpenChange={setUserOpen} icon={Users}
           items={[
+            { label: 'Coordinator', href: '/admin/dashboard/coordinator' },
+            { label: 'Employee', href: '/admin/dashboard/employee' },
             { label: 'Users', href: '/admin/dashboard/users' },
             { label: 'Add Users', href: '/admin/dashboard/users/create' }
           ]}

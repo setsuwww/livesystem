@@ -1,0 +1,88 @@
+"use client";
+
+import { useState, useMemo, useCallback } from "react";
+import { handleUsers } from "@/function/handleUsers";
+import { User } from "@/static/interfaces/UsersTableProps";
+
+export function useUsersHooks(data: User[]) {
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [shiftFilter, setShiftFilter] = useState("all");
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const extractShiftType = useCallback((shiftString: string) => {
+    if (!shiftString || shiftString === "-" || shiftString.toLowerCase() === "normal shift") {
+      return "no_shift";
+    }
+    const match = shiftString.match(/^([A-Za-z]+)/);
+    return match ? match[1].toLowerCase() : "no_shift";
+  }, []);
+
+  const filteredData = useMemo(() => {
+    return data.filter(user => {
+      const matchSearch =
+        search === "" ||
+        Object.values(user).join(" ").toLowerCase().includes(search.toLowerCase());
+
+      const matchRole =
+        roleFilter === "all" ||
+        user.role.toLowerCase() === roleFilter.toLowerCase();
+
+      let matchShift = true;
+      if (shiftFilter !== "all") {
+        if (shiftFilter.toLowerCase() === "no_shift") {
+          matchShift =
+            user.shift === "-" || user.shift.toLowerCase() === "normal shift";
+        } else {
+          matchShift = extractShiftType(user.shift) === shiftFilter.toLowerCase();
+        }
+      }
+      return matchSearch && matchRole && matchShift;
+    });
+  }, [data, search, roleFilter, shiftFilter, extractShiftType]);
+
+  const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+
+  const {
+    toggleSelect,
+    selectAll,
+    deleteSelected,
+    deleteAll,
+    handleEditUser,
+    handleDeleteUser,
+    onExportPDF,
+  } = handleUsers(selectedIds, setSelectedIds, filteredData, () =>
+    location.reload()
+  );
+
+  const handleSearchChange = useCallback((value: string) => setSearch(value), []);
+  const handleRoleFilterChange = useCallback((value: string) => setRoleFilter(value), []);
+  const handleShiftFilterChange = useCallback((value: string) => setShiftFilter(value), []);
+
+  const isAllSelected = useMemo(
+    () => selectedIds.length === filteredData.length && filteredData.length > 0,
+    [selectedIds.length, filteredData.length]
+  );
+
+  return {
+    search,
+    roleFilter,
+    shiftFilter,
+    selectedIds,
+    filteredData,
+    selectedIdsSet,
+    isAllSelected,
+
+    // actions
+    handleSearchChange,
+    handleRoleFilterChange,
+    handleShiftFilterChange,
+    toggleSelect,
+    selectAll,
+    deleteSelected,
+    deleteAll,
+    handleEditUser,
+    handleDeleteUser,
+    onExportPDF,
+  };
+}

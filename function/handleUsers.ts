@@ -51,9 +51,10 @@ export const handleUsers = (selectedIds: number[], setSelectedIds: React.Dispatc
   };
 
   // Delete users
-  const handleDeleteUser = async (id: number) => {
-    try {
-      await api.delete(`/users/${id}`);
+  const handleDeleteUser = async (id: number) => { const confirmDelete = confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+    
+    try { await api.delete(`/users/${id}`);
       alert("Deleted successfully");
       reloadData();
     } catch {

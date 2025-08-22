@@ -45,7 +45,11 @@ export function ShiftsTable({ data }: ShiftsTableProps) {
     }
   };
 
-  const mainShifts = data.filter((s) => s.type === "MORNING" || s.type === "AFTERNOON" || s.type === "NIGHT");
+  const mainShifts = data.filter((s) => 
+    s.type === "MORNING" || 
+    s.type === "AFTERNOON" || 
+    s.type === "NIGHT" 
+  );
 
   return (
     <div className="space-y-10">

@@ -32,7 +32,8 @@ const LoginPage = () => {
 
       if (data.success) { if (data.role === "ADMIN") router.push("/admin/dashboard")
         else if (data.role === "USER") router.push("/user/dashboard")
-        else if (data.role === "MANAGER") router.push("/manager/dashboard")
+        else if (data.role === "COORDINATOR") router.push("/coordinator/dashboard")
+        else if (data.role === "EMPLOYEE") router.push("/employee/dashboard")
       }
     } 
     catch (err: any) {

@@ -1,8 +1,10 @@
 "use client";
 
+import { Globe } from 'lucide-react';
 import { useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 
+import { RadioButton } from "@/components/ui/RadioButton";      
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -76,14 +78,15 @@ export default function UsersEditForm({ userId, shifts, initialForm }: Props) {
 
   const roleOptions = [
     { label: "Admin", description: "Maintain and manage all contents", value: "ADMIN" },
-    { label: "Manager", description: "Manage shifts and schedules for users", value: "MANAGER" },
-    { label: "User", description: "Just for submitting helpdesk", value: "USER" },
+    { label: "Coordinator", description: "Manage shifts and schedules for users", value: "COORDINATOR" },
+    { label: "Employee", description: "Communicate with another person in office", value: "EMPLOYEE" },
+    { label: "User", description: "Register, login and manage task", value: "USER" },
   ];
 
   return (
     <section>
       <DashboardHeader
-        title="Edit User"
+        title={`Edit User : ${form.name}`}
         subtitle="Update name, email, password, role, and shift for this user"
       />
 
@@ -91,6 +94,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }: Props) {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Public Info */}
           <ContentInformation
+            icon={<Globe className="w-8 h-8" strokeWidth={1.5} />}
             heading="Public"
             subheading="Users public username & email"
           />
@@ -136,21 +140,12 @@ export default function UsersEditForm({ userId, shifts, initialForm }: Props) {
           {/* Role Radio */}
           <div className="space-y-2">
             <Label>Role</Label>
-            <RadioGroup value={form.role} onValueChange={(value) => handleCustomChange("role", value)}
-              className="flex flex-col gap-2">
-              {roleOptions.map((role) => (
-                <div key={role.value} className="flex flex-col rounded-md border border-zinc-300 p-3">
-                  <div className="mb-1">
-                    <RadioGroupItem value={role.value} id={role.value} />
-                  </div>
-
-                  <Label htmlFor={role.value} className="cursor-pointer flex flex-col text-left pl-0">
-                    <span className="font-medium text-zinc-800">{role.label}</span>
-                    <span className="text-xs text-zinc-500">{role.description}</span>
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
+            <RadioButton
+              name="role"
+              options={roleOptions}
+              value={form.role}
+              onChange={(value) => handleCustomChange("role", value)}
+            />
           </div>
 
           <div className="space-y-2">

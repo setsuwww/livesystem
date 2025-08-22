@@ -85,7 +85,6 @@ export default function CreateShiftForm({ users }: CreateShiftFormProps) {
                 <SelectItem value="MORNING">Morning</SelectItem>
                 <SelectItem value="AFTERNOON">Afternoon</SelectItem>
                 <SelectItem value="NIGHT">Night</SelectItem>
-                <SelectItem value="CUSTOM">Custom</SelectItem>
               </SelectContent>
             </Select>
           </div>

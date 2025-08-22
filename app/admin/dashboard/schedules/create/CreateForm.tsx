@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { DashboardHeader } from "../../DashboardHeader";
@@ -65,16 +66,21 @@ export default function CreateForm({ schedules, shifts }: { schedules: ScheduleW
         <ContentInformation heading="Information" subheading="Schedule public information"/>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
           {/* Tambahin label sebelum input */}
+          <Label className="text-sm font-medium text-zinc-600 mb-1">Title</Label>
           <Input value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
             required
           />
-          <Input  value={form.description}
+
+          <Label className="text-sm font-medium text-zinc-600 mb-1">Description</Label>
+          <Input value={form.description}
             onChange={(e) => handleChange("description", e.target.value)}
             required
           />
+
           <ContentInformation heading="Date & shift" subheading="Schedule's date & shift data"/>
 
+          <Label className="text-sm font-medium text-zinc-600 mb-1">Date</Label>
           <Input type="date"
             value={form.date}
             onChange={(e) => handleChange("date", e.target.value)}

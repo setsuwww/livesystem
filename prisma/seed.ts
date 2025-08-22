@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 
 async function main() {
   const adminPassword = await bcrypt.hash("admin123", 10);
-  const operatorPassword = await bcrypt.hash("operator123", 10);
+  const coordinatorPassword = await bcrypt.hash("coordinator123", 10);
+  const employeePassword = await bcrypt.hash("employee123", 10);
 
   // Admin
   await prisma.user.upsert({
@@ -20,15 +21,25 @@ async function main() {
     },
   });
 
-  // Operator
   await prisma.user.upsert({
-    where: { email: "operator@example.com" },
+    where: { email: "coordinator@example.com" },
     update: {},
     create: {
-      name: "Operator",
-      email: "operator@example.com",
-      password: operatorPassword,
-      role: Role.MANAGER,
+      name: "Coordinator",
+      email: "coordinator@example.com",
+      password: coordinatorPassword,
+      role: Role.COORDINATOR,
+    },
+  });
+
+  await prisma.user.upsert({
+    where: { email: "employee@example.com" },
+    update: {},
+    create: {
+      name: "Employee",
+      email: "employee@example.com",
+      password: employeePassword,
+      role: Role.EMPLOYEE,
     },
   });
 

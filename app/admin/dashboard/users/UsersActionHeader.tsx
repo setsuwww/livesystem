@@ -19,7 +19,8 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="Admin">Admin</SelectItem>
-            <SelectItem value="Manager">Manager</SelectItem>
+            <SelectItem value="Coordinator">Coordinator</SelectItem>
+            <SelectItem value="Employee">Employee</SelectItem>
             <SelectItem value="User">User</SelectItem>
           </SelectContent>
         </Select>

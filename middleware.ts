@@ -6,7 +6,8 @@ import { JWT_SECRET_STRING } from "./lib/jwt";
 
 const roleRoutes = {
   ADMIN: "/admin/dashboard",
-  MANAGER: "/manager/dashboard",
+  COORDINATOR: "/coordinator/dashboard",
+  EMPLOYEE: "/employee/dashboard",
   USER: "/user/dashboard",
 };
 
@@ -15,32 +16,24 @@ export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const publicPaths = ["/auth/login", "/auth/register"];
 
-  if (!token) {
-    if (!publicPaths.includes(path)) {
+  if (!token) { if (!publicPaths.includes(path)) {
       return NextResponse.redirect(new URL("/auth/login", req.url));
     }
     return NextResponse.next();
   }
 
   try {
-    const { payload } = await jwtVerify(
-      token,
+    const { payload } = await jwtVerify( token,
       new TextEncoder().encode(JWT_SECRET_STRING)
     );
 
-    if (publicPaths.includes(path)) {
-      return NextResponse.next();
-    }
+    if (publicPaths.includes(path)) return NextResponse.next();
 
-    if (path.startsWith("/admin") && payload.role !== "ADMIN") {
-      return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
-    }
-    if (path.startsWith("/manager") && payload.role !== "MANAGER") {
-      return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
-    }
-    if (path.startsWith("/user") && payload.role !== "USER") {
-      return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
-    }
+    if (path.startsWith("/admin") && payload.role !== "ADMIN") return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
+    if (path.startsWith("/coordinator") && payload.role !== "COORDINATOR") return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
+    if (path.startsWith("/employee") && payload.role !== "EMPLOYEE") return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
+    if (path.startsWith("/user") && payload.role !== "USER") return NextResponse.redirect(new URL(roleRoutes[payload.role as keyof typeof roleRoutes], req.url));
+    
 
     return NextResponse.next();
   } catch (err) {
@@ -50,5 +43,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/manager/:path*", "/user/:path*"],
+  matcher: ["/admin/:path*", "/coordinator/:path*", "/employee/:path*", "/user/:path*"],
 };

@@ -121,10 +121,10 @@ function DashboardDiagramComponent({
   }
 
   return (
-    <Card className="border border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl">
+    <Card className="border border-zinc-200 shadow-sm rounded-2xl">
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
-          <CardTitle className="text-zinc-700 dark:text-zinc-200 font-semibold">
+          <CardTitle className="text-zinc-700  font-semibold">
             {title}
           </CardTitle>
 

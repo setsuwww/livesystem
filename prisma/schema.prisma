@@ -16,7 +16,8 @@ enum ShiftType {
 
 enum Role {
   ADMIN
-  MANAGER
+  COORDINATOR
+  EMPLOYEE
   USER
 }
 
