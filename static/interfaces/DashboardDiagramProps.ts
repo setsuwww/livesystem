@@ -9,4 +9,9 @@ export interface DashboardDiagramProps {
   data: StatData[]
   type?: "bar" | "pie" | "area"
   color?: string
+  series?: {
+    key: string
+    color: string
+    label?: string
+  }[]
 }

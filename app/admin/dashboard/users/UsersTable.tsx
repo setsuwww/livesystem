@@ -4,6 +4,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import { UsersTableProps } from "@/static/interfaces/UsersTableProps";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
 
@@ -38,7 +39,11 @@ export default function UsersTable({ data }: UsersTableProps) {
 
   const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
-  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
+  const { 
+    toggleSelect, selectAll, deleteSelected, deleteAll, 
+    handleEditUser, handleDeleteUser, onExportPDF 
+  } = handleUsers(
+    selectedIds, setSelectedIds, filteredData, () => location.reload());
 
   const handleSearchChange = useCallback((value: string) => setSearch(value), []);
   const handleRoleFilterChange = useCallback((value: string) => setRoleFilter(value), []);
@@ -58,7 +63,9 @@ export default function UsersTable({ data }: UsersTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead><input type="checkbox" checked={isAllSelected} onChange={selectAll} /></TableHead>
+            <TableHead className="flex items-center">
+              <Checkbox checked={isAllSelected} onCheckedChange={selectAll} />
+            </TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Shift</TableHead>

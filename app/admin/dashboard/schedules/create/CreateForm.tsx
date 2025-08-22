@@ -14,7 +14,7 @@ import { Schedule, Shift } from "@prisma/client";
 import { fetch } from "@/function/helpers/fetch";
 
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select"; // path sesuai file kamu tadi
-import { capitalize } from '@/function/functionCapitalize';
+import { capitalize } from '@/function/functionFormatters';
 
 interface ScheduleWithShift extends Schedule {
   shift: Pick<Shift, "id" | "type" | "startTime" | "endTime"> | null;
@@ -64,24 +64,25 @@ export default function CreateForm({ schedules, shifts }: { schedules: ScheduleW
       <ContentForm>
         <ContentInformation heading="Information" subheading="Schedule public information"/>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-          <Input label="Title" value={form.title}
+          {/* Tambahin label sebelum input */}
+          <Input value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
             required
           />
-          <Input label="Description" value={form.description}
+          <Input  value={form.description}
             onChange={(e) => handleChange("description", e.target.value)}
             required
           />
           <ContentInformation heading="Date & shift" subheading="Schedule's date & shift data"/>
 
-          <Input label="Date" type="date"
+          <Input type="date"
             value={form.date}
             onChange={(e) => handleChange("date", e.target.value)}
             required
           />
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700 mb-1">Select Shift</label>
+            <label className="text-sm font-medium text-zinc-700 mb-1">Select Shift</label>
             <Select value={form.shiftId} onValueChange={(val) => handleChange("shiftId", val)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Choose a shift" />

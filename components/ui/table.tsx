@@ -11,7 +11,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm text-gray-800", className)}
+        className={cn("w-full caption-bottom text-sm text-zinc-800", className)}
         {...props}
       />
     </div>
@@ -21,7 +21,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
 function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead data-slot="table-header" className={cn(
-        "[&_tr]:border-b border-neutral-200 bg-gray-50",
+        "[&_tr]:border-b border-neutral-200 bg-zinc-50",
         className
       )}
       {...props}
@@ -44,7 +44,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "bg-gray-50 border-t border-neutral-200 font-medium [&>tr]:last:border-b-0 text-gray-600",
+        "bg-zinc-50 border-t border-neutral-200 font-medium [&>tr]:last:border-b-0 text-zinc-600",
         className
       )}
       {...props}
@@ -57,7 +57,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "data-[state=selected]:bg-gray-100 border-b border-neutral-200 transition-colors",
+        "data-[state=selected]:bg-zinc-100 border-b border-neutral-200 transition-colors",
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-3 text-left align-middle whitespace-nowrap tracking-wide text-gray-700 text-md font-bold",
+        "h-10 px-3 text-left align-middle whitespace-nowrap tracking-wide text-zinc-700 text-md font-bold",
         className
       )}
       {...props}
@@ -83,7 +83,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
     <td
       data-slot="table-cell"
       className={cn(
-        "p-3 align-middle whitespace-nowrap text-sm text-gray-700",
+        "p-3 align-middle whitespace-nowrap text-sm text-zinc-700",
         className
       )}
       {...props}
@@ -95,7 +95,7 @@ function TableCaption({ className, ...props }: React.ComponentProps<"caption">) 
   return (
     <caption
       data-slot="table-caption"
-      className={cn("text-gray-400 mt-4 text-sm", className)}
+      className={cn("text-zinc-400 mt-4 text-sm", className)}
       {...props}
     />
   )

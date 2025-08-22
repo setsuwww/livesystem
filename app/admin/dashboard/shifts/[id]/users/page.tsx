@@ -6,11 +6,11 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import UsersTable from "./ShiftUserTable";
 
-import { capitalize } from "@/function/functionCapitalize";
+import { capitalize } from "@/function/functionFormatters";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export const revalidate = 620;
+export const revalidate = 60;
 
 interface ShiftUsersPageProps {
   params: { id: string };

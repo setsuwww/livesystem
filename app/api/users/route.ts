@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { hash } from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcryptjs"; // atau bcrypt library yang Anda gunakan
+import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   try {
@@ -18,8 +17,7 @@ export async function POST(request: Request) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "User with this email already exists" },
+      return NextResponse.json( { error: "User with this email already exists" },
         { status: 409 }
       );
     }
@@ -57,36 +55,6 @@ export async function POST(request: Request) {
     console.error("Error creating user:", error);
     return NextResponse.json(
       { error: "Failed to create user" },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET() {
-  try {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        shift: {
-          select: {
-            id: true,
-            type: true,
-            startTime: true,
-            endTime: true
-          }
-        },
-        createdAt: true
-      }
-    });
-
-    return NextResponse.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch users" },
       { status: 500 }
     );
   }

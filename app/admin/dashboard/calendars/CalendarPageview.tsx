@@ -12,6 +12,7 @@ import { CalendarsModal } from "./CalendarsModal";
 import { api } from "@/lib/api";
 import { Schedule } from "@/static/types/Schedule";
 import { Clock } from 'lucide-react';
+import { ContentInformation } from "@/components/content/ContentInformation";
 
 export default function CalendarPageview({ initialEvents }: { initialEvents: any[] }) {
   const [events, setEvents] = useState(initialEvents);
@@ -78,11 +79,10 @@ export default function CalendarPageview({ initialEvents }: { initialEvents: any
     <div className="min-h-screen">
       <div className="container mx-auto space-y-6">
         <DashboardHeader title="Calendars" subtitle="List events or schedules in calendar grid" />
-        <Card>
+        <Card className="bg-white border-zinc-100">
           <CardHeader className="flex items-center justify-between">
             <div>
-              <CardTitle>Calendar grid</CardTitle>
-              <CardDescription>Click date to add new event or schedules</CardDescription>
+              <ContentInformation heading="Calendar" subheading="Calendar grid see a all users's" />
 
               <div className="flex items-center space-x-2 mt-4">
                 <div className="flex items-center space-x-2 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-full">

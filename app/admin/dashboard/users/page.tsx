@@ -3,7 +3,7 @@ import { DashboardHeader } from './../DashboardHeader';
 import ContentForm from '@/components/content/ContentForm';
 import { ContentInformation } from '@/components/content/ContentInformation';
 
-import { capitalize } from "../../../../function/functionCapitalize";
+import { capitalize } from "../../../../function/functionFormatters";
 import { prisma } from "@/lib/prisma"
 import { Pagination } from "../Pagination";
 

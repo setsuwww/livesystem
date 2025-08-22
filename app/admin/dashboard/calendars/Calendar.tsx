@@ -19,15 +19,24 @@ export function Calendar({ events, onDateClick, onEditEvent, onDeleteEvent }: Pr
       dateClick={onDateClick} events={events}
       dayMaxEvents={3}
       moreLinkClick="popover"
+      moreLinkContent={(args) => {
+        return {
+          html: `<div class="mt-0.5">
+            <span class="px-2 py-1 bg-zinc-800 text-white rounded-md text-xs transition">
+              +${args.num} more
+            </span>
+          </div>`
+        };
+      }}
       headerToolbar={{
         left: "prev,next today",
         center: "title",
         right: "dayGridYear,dayGridMonth,dayGridWeek",
       }} eventContent={(eventInfo) => (
-        <div className="flex items-center justify-between border border-gray-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-gray-300 transition">
+        <div className="flex items-center justify-between border border-zinc-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-zinc-300 transition">
           <p className="flex flex-col truncate font-medium">
-            <span className="text-sm text-gray-800">{eventInfo.event.title}</span>
-            <span className="text-xs text-gray-400">{eventInfo.event.extendedProps.description}</span>
+            <span className="text-sm text-zinc-800">{eventInfo.event.title}</span>
+            <span className="text-xs text-zinc-400">{eventInfo.event.extendedProps.description}</span>
           </p>
           <CalendarsActionButton
             onEdit={() => onEditEvent(eventInfo)}
@@ -35,13 +44,13 @@ export function Calendar({ events, onDateClick, onEditEvent, onDeleteEvent }: Pr
           />
         </div>
       )} eventClassNames="!bg-transparent !border-0 !p-0"
-      dayHeaderClassNames="text-sm text-gray-600 p-2"
+      dayHeaderClassNames="text-sm text-zinc-600 p-2"
       dayHeaderFormat={{ weekday: 'long' }}
       dayCellClassNames={(arg) => {
         if (dayjs(arg.date).isSame(dayjs(), "day")) {
           return "!bg-sky-200 today-highlight";
         }
-        return "border border-gray-200";
+        return "border border-zinc-200";
       }}
       eventDisplay="block"
     />

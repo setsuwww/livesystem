@@ -13,36 +13,35 @@ export default async function AdminDashboardPage() {
   const totalTicketsPositive = await prisma.ticket.count({ where: { status: "ACCEPTED" } });
   const totalTicketsNegative = await prisma.ticket.count({ where: { status: "REJECTED" } });
 
-  const ticketData = await prisma.ticket.groupBy({
-    by: ['createdAt', 'status'],
-    _count: { id: true },
-  });
-
-  const salesChartData = Array.from({ length: 12 }, (_, i) => {
-    const month = i + 1; const accepted = ticketData.filter(d => d.createdAt.getMonth() + 1 === month && d.status === "ACCEPTED")
-      .reduce((acc, curr) => acc + curr._count.id, 0);
-    const rejected = ticketData.filter(d => d.createdAt.getMonth() + 1 === month && d.status === "REJECTED")
-      .reduce((acc, curr) => acc + curr._count.id, 0);
-    return { name: month.toString(), value: accepted, negativeValue: rejected };
-  });
+  const salesChartData = [
+    { name: "1", value: 10, negativeValue: 2 },
+    { name: "2", value: 15, negativeValue: 5 },
+    { name: "3", value: 8, negativeValue: 3 },
+    { name: "4", value: 20, negativeValue: 7 },
+    { name: "5", value: 12, negativeValue: 4 },
+    { name: "6", value: 18, negativeValue: 6 },
+    { name: "7", value: 25, negativeValue: 9 },
+    { name: "8", value: 22, negativeValue: 8 },
+    { name: "9", value: 30, negativeValue: 10 },
+    { name: "10", value: 28, negativeValue: 12 },
+    { name: "11", value: 35, negativeValue: 15 },
+    { name: "12", value: 40, negativeValue: 18 },
+  ]
 
   const today = new Date();
   const dayStart = new Date(today);
   dayStart.setDate(today.getDate() - today.getDay());
   dayStart.setHours(0, 0, 0, 0);
 
-  const ticketWeekData = await prisma.ticket.findMany({ where: { createdAt: { gte: dayStart } }, select: { createdAt: true, status: true } });
-
-  const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const ticketChartData = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(dayStart);
-    date.setDate(dayStart.getDate() + i);
-
-    const accepted = ticketWeekData.filter(t => t.createdAt.getDate() === date.getDate() && t.status === "ACCEPTED").length;
-    const rejected = ticketWeekData.filter(t => t.createdAt.getDate() === date.getDate() && t.status === "REJECTED").length;
-
-    return { name: dayNames[i], value: accepted, negativeValue: rejected };
-  });
+  const ticketChartData = [
+    { name: "Minggu", accepted: 5, rejected: 2, late: 1, onTime: 3 },
+    { name: "Senin", accepted: 8, rejected: 1, late: 2, onTime: 4 },
+    { name: "Selasa", accepted: 6, rejected: 3, late: 2, onTime: 5 },
+    { name: "Rabu", accepted: 10, rejected: 2, late: 1, onTime: 6 },
+    { name: "Kamis", accepted: 7, rejected: 1, late: 3, onTime: 4 },
+    { name: "Jumat", accepted: 9, rejected: 4, late: 2, onTime: 5 },
+    { name: "Sabtu", accepted: 11, rejected: 3, late: 1, onTime: 7 },
+  ]
 
   return (
     <div className="space-y-6">
@@ -86,18 +85,29 @@ export default async function AdminDashboardPage() {
 
       <div className="grid gap-4 grid-cols-2">
         <DashboardDiagram
-          title="Ticket in/month"
-          description="Tickets growth in/month"
+          title="Employee performance"
+          description="Bad and Good performance from Employee"
           data={salesChartData}
           color="#1d293d"
           type="bar"
         />
+
         <DashboardDiagram
-          title="Ticket in/week"
-          description="Tickets growth in/week"
+          title="Shifts statistic"
           data={ticketChartData}
-          color="#00a6f4"
           type="area"
+          series={[
+            { key: "accepted", color: "#7bf1a8", label: "On Time" },
+            { key: "rejected", color: "#ffdf20", label: "Late" },
+            { key: "late", color: "#ffa2a2", label: "Absent" },
+            { key: "onTime", color: "#3b82f6", label: "Permission" },
+          ]}
+          select={true}
+          options={[
+            { text: "Google", url: "https://google.com" },
+            { text: "Bing", url: "https://bing.com" },
+            { text: "Yahoo", url: "https://yahoo.com" },
+          ]}
         />
       </div>
 

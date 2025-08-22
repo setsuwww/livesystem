@@ -1,12 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import ScheduleForm from "./CreateForm";
-import { getUserFromToken } from "@/app/api/schedules/route";
+import { getUserFromToken } from "@/lib/auth";
 
 export default async function Page() {
   const user = await getUserFromToken();
-  if (!user) {
-    return <div>Unauthorized</div>;
-  }
+  if (!user) return <div>Unauthorized</div>;
 
   const schedules = await prisma.schedule.findMany({
     where: { userId: user.id },
@@ -21,7 +19,9 @@ export default async function Page() {
       shiftId: true,
       shift: {
         select: {
+          id: true,
           type: true,
+          customType: true,
           startTime: true,
           endTime: true,
         },
@@ -34,6 +34,7 @@ export default async function Page() {
     select: {
       id: true,
       type: true,
+      customType: true,
       startTime: true,
       endTime: true,
     },

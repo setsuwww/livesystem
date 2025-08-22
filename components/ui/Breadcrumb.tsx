@@ -34,7 +34,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
   const breadcrumbItems = items ?? autoItems;
 
   return (
-    <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
+    <nav className="text-sm text-zinc-500" aria-label="Breadcrumb">
       <ol className="flex space-x-2">
         {breadcrumbItems.map((item, idx) => {
           const isLast = idx === breadcrumbItems.length - 1;
@@ -48,7 +48,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
                   <span className="mx-1 select-none">/</span>
                 </>
               ) : (
-                <span className="text-gray-700 font-semibold">{item.label}</span>
+                <span className="text-zinc-700 font-semibold">{item.label}</span>
               )}
             </li>
           );

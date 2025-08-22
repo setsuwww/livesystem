@@ -15,12 +15,12 @@ export const Pagination = React.memo(function ({ page, totalPages, basePath = "/
   return (
     <div className="flex gap-2 mt-4">
       {page > 1 && (
-        <Link href={`${basePath}?page=${page - 1}`} className="px-4 py-1.5 text-sm font-medium text-sky-600 border border-gray-300 bg-[#ffffff46] rounded-md shadow-sm hover:bg-gray-50">
+        <Link href={`${basePath}?page=${page - 1}`} className="px-4 py-1.5 text-sm font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-sm hover:bg-zinc-50">
           Prev Page
         </Link>
       )}
       {page < totalPages && (
-        <Link href={`${basePath}?page=${page + 1}`} className="px-4 py-1.5 text-sm font-medium text-sky-600 border border-gray-300 bg-[#ffffff46] rounded-md shadow-sm hover:bg-gray-50">
+        <Link href={`${basePath}?page=${page + 1}`} className="px-4 py-1.5 text-sm font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-sm hover:bg-zinc-50">
           Next Page
         </Link>
       )}
