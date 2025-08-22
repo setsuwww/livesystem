@@ -16,15 +16,16 @@ async function getSchedules() {
 }
 
 function formatDate(date: Date | string | null | undefined) {
-  if (!date) return ""; // kalau null/undefined langsung return ""
+  if (!date) return "";
   let d: Date;
-  try {
-    d = typeof date === "string" ? new Date(date) : date;
-  } catch {
+  try { d = typeof date === "string" ? new Date(date) : date;
+  } 
+  catch {
     return "";
   }
-  // cek validitas date
-  if (isNaN(d.getTime())) return "";
+
+  if (isNaN(d.getTime())) 
+    return "";
   return d.toISOString().split("T")[0];
 }
 

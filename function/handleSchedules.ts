@@ -9,22 +9,14 @@ export const handleSchedules = ( selectedIds: number[], setSelectedIds: React.Di
   const router = useRouter();
 
   // Toggle Select 1 item
-  const toggleSelect = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-    );
-  };
+  const toggleSelect = (id: number) => setSelectedIds((prev) => prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id])
 
   // Toggle Select All
-  const selectAll = () => {
-    setSelectedIds((prev) =>
-      prev.length === filteredData.length ? [] : filteredData.map((s) => s.id)
-    );
-  };
+  const selectAll = () => setSelectedIds((prev) => prev.length === filteredData.length ? [] : filteredData.map((s) => s.id))
+  
 
   // Delete Selected
-  const deleteSelected = async () => {
-    if (selectedIds.length === 0) return;
+  const deleteSelected = async () => { if (selectedIds.length === 0) return;
 
     const confirmDelete = confirm("Are you sure you want to delete selected schedules?");
     if (!confirmDelete) return;
@@ -40,8 +32,7 @@ export const handleSchedules = ( selectedIds: number[], setSelectedIds: React.Di
   };
 
   // Delete All
-  const deleteAll = async () => {
-    if (filteredData.length === 0) return;
+  const deleteAll = async () => { if (filteredData.length === 0) return;
 
     const confirmDelete = confirm("Are you sure you want to delete ALL schedules?");
     if (!confirmDelete) return;

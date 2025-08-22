@@ -8,20 +8,21 @@ import { ScheduleModalProps } from '@/static/types/Schedule';
 export function CalendarsModal({ open, loading, formData, selectedEvent, onClose, onChange, onSave }: ScheduleModalProps) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-white sm:max-w-[425px] border border-gray-300">
+      <DialogContent className="bg-white sm:max-w-[425px] border border-zinc-300">
         <DialogHeader>
           <DialogTitle>{selectedEvent ? "Edit Event" : "Add New Event"}</DialogTitle>
           <DialogDescription>{selectedEvent ? "Update the details of your event below." : "filling out the form below."}</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
-          <Input label="Agenda" id="title" placeholder="Enter agenda title..." value={formData.title}
+          {/* tambahin label sebelum input */}
+          <Input id="title" placeholder="Enter agenda title..." value={formData.title}
             onChange={(e) => onChange("title", e.target.value)}
           />
-          <Input label="Description" id="description" placeholder="Enter agenda description..." value={formData.description}
+          <Input id="description" placeholder="Enter agenda description..." value={formData.description}
             onChange={(e) => onChange("description", e.target.value)}
           />
-          <Input label="Due date" id="date" type="date" value={typeof formData.date === "string" ? formData.date : formData.date.toISOString().split("T")[0]}
+          <Input id="date" type="date" value={typeof formData.date === "string" ? formData.date : formData.date.toISOString().split("T")[0]}
             onChange={(e) => onChange("date", e.target.value)}
           />
 

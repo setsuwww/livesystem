@@ -1,71 +1,56 @@
+import { toDateFromTimeString } from "@/function/functionFormatters";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  try {
-    const shifts = await prisma.shift.findMany({
-      select: {
-        id: true,
-        type: true,
-        startTime: true,
-        endTime: true,
-        _count: {
-          select: {
-            users: true,
-            schedules: true,
-          },
-        },
-        users: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-        schedules: {
-          select: {
-            id: true,
-            title: true,
-            description: true,
-            date: true,
-          },
-        },
-      },
-      orderBy: {
-        type: "asc",
-      },
-    });
+  const shifts = await prisma.shift.findMany({
+    include: {
+      users: { select: { id: true, name: true, email: true } },
+      schedules: { select: { id: true, title: true } },
+    },
+    orderBy: { id: "desc" },
+  });
 
-    return NextResponse.json(shifts);
-  } catch (error) {
-    console.error("Error fetching shifts:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch shifts" },
-      { status: 500 }
-    );
-  }
+  return Response.json(shifts);
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { type, startTime, endTime } = body;
+    const { type, startTime, endTime, customType, userIds } = body;
 
     if (!type || !startTime || !endTime) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    if (type === "CUSTOM" && !customType) {
+      return NextResponse.json(
+        { error: "Custom shift must include customType" },
+        { status: 400 }
+      );
     }
 
     const shift = await prisma.shift.create({
       data: {
         type,
-        startTime: new Date(startTime),
-        endTime: new Date(endTime),
-      }
+        customType: type === "CUSTOM" ? customType : null,
+        startTime: toDateFromTimeString(startTime),
+        endTime: toDateFromTimeString(endTime),
+        users: {
+          connect: userIds.map((id: number) => ({ id }))
+        }
+      },
     });
 
     return NextResponse.json(shift, { status: 201 });
-  }
-  catch (error) {
-    return NextResponse.json({ error: "Failed to create shift" }, { status: 500 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to create shift" },
+      { status: 500 }
+    );
   }
 }

@@ -3,7 +3,7 @@ export interface Schedule {
   title: string;
   description: string;
   date: string | Date;
-  userId: number;
+  userId: number | null;
   shiftId: number | null;
   createdAt: string | Date;
   updatedAt: string | Date;
@@ -25,7 +25,7 @@ export interface ScheduleWithShift {
   title: string
   description: string
   date: string | Date
-  userId: number
+  userId: number | null
   shiftId: number | null
   createdAt: string | Date
   updatedAt: string | Date

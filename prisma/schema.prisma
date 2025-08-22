@@ -7,77 +7,134 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ENUMS
+enum Role {
+  ADMIN
+  COORDINATOR
+  EMPLOYEE
+  OPERATOR
+  USER
+}
+
 enum ShiftType {
   MORNING
   AFTERNOON
   NIGHT
+  OFF
 }
 
-enum Role {
-  ADMIN
-  MANAGER
-  USER
+enum AttendanceStatus {
+  ON_TIME
+  LATE
+  ABSENT
+  PERMISSION
 }
 
-enum TicketStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+  ONCE
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  name       String
-  email      String     @unique
-  password   String
-  role       Role       @default(USER)
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
 
-  tickets    Ticket[]
-  schedules  Schedule[]
+  shift     Shift?   @relation(fields: [shiftId], references: [id])
+  shiftId   Int?
 
-  shift      Shift?     @relation(fields: [shiftId], references: [id])
-  shiftId    Int?
+  schedulesCreated Schedule[] @relation("SchedulesCreatedBy")
+  schedules       Schedule[]
+  attendances     Attendance[]
+  todos           Todo[]
 
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([role])
+  @@index([shiftId])
 }
 
-model Ticket {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String?
-  status      TicketStatus @default(PENDING)
+model Shift {
+  id         Int       @id @default(autoincrement())
+  type       ShiftType @unique
+  startTime  DateTime  @db.Time
+  endTime    DateTime  @db.Time
 
-  user        User         @relation(fields: [userId], references: [id])
-  userId      Int
+  users       User[]
+  schedules   Schedule[]
+  attendances Attendance[]
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([type])
 }
 
 model Schedule {
   id          Int       @id @default(autoincrement())
   title       String
-  description String
-  date        DateTime
+  description String?
+  agenda      String?
+  dueDate     DateTime  @default(now())
+  frequency   Frequency @default(ONCE)
 
-  user        User      @relation(fields: [userId], references: [id])
-  userId      Int
+  createdBy   User      @relation("SchedulesCreatedBy", fields: [createdById], references: [id])
+  createdById Int       @default(1)
+
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      Int?
 
   shift       Shift?    @relation(fields: [shiftId], references: [id])
   shiftId     Int?
+  shiftType   ShiftType?
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([dueDate])
+  @@index([frequency])
+  @@index([userId, shiftId])
 }
 
-model Shift {
-  id        Int         @id @default(autoincrement())
-  type      ShiftType
-  startTime DateTime @db.Time
-  endTime   DateTime @db.Time
+model Attendance {
+  id        Int              @id @default(autoincrement())
+  date      DateTime
+  status    AttendanceStatus  @default(ABSENT)
+  reason    String?
+  approved  Boolean?          // <— tambahan, untuk izin/permission
 
-  users     User[]
-  schedules Schedule[]
+  checkInAt  DateTime?
+  checkOutAt DateTime?
+
+  user     User  @relation(fields: [userId], references: [id])
+  userId   Int
+
+  shift    Shift @relation(fields: [shiftId], references: [id])
+  shiftId  Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([status])
+  @@unique([userId, shiftId, date])
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  done      Boolean  @default(false)
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, done])
 }

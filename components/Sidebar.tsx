@@ -65,8 +65,8 @@ function SidebarCollapsible({ title, open, onOpenChange, items, icon: Icon}:
 
 export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
+  const [shiftOpen, setShiftOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
-  const [ticketOpen, setTicketOpen] = useState(false)
 
   return (
     <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-0 border-r-2 border-zinc-200">
@@ -76,27 +76,28 @@ export function Sidebar() {
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         <SubHeading title='Main'/>
         <SidebarLink href="/admin/dashboard" icon={LayoutDashboard}>Dashboard</SidebarLink>
-        <SidebarLink href="/admin/dashboard/shifts" icon={Clock}>Shifts</SidebarLink>
         
         <SubHeading title='Management'/>
         <SidebarCollapsible title="Users" open={userOpen} onOpenChange={setUserOpen} icon={Users}
           items={[
             { label: 'Users', href: '/admin/dashboard/users' },
+            { label: 'Employee', href: '/admin/dashboard/employee' },
             { label: 'Add Users', href: '/admin/dashboard/users/create' }
           ]}
         />
+        
+        <SidebarCollapsible title="Shift" open={shiftOpen} onOpenChange={setShiftOpen} icon={Clock}
+          items={[
+            { label: 'Shifts', href: '/admin/dashboard/shifts' },
+            { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' }
+          ]}
+        />
+
         <SidebarCollapsible title="Calendars" open={calendarOpen} onOpenChange={setCalendarOpen} icon={CalendarDays}
           items={[
-            //  Fungsi schedules adalah sebagai schedules, calendar adalah schedules dalam bentuk calendar grid
             { label: 'Calendars', href: '/admin/dashboard/calendars' },
             { label: 'Schedules', href: '/admin/dashboard/schedules' },
             { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },
-          ]}
-        />
-        <SidebarCollapsible title="Tickets" open={ticketOpen} onOpenChange={setTicketOpen} icon={Ticket}
-          items={[
-            { label: 'Tickets', href: '/admin/dashboard/tickets' },
-            { label: 'Add Tickets', href: '/admin/dashboard/tickets/create' }
           ]}
         />
 

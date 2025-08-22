@@ -1,44 +1,45 @@
-import React from "react";
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 
-type Variant = "primary" | "secondary" | "outline" | "ghost" | "destructive" | "custom";
-type Size = "icon" | "sm" | "md" | "lg";
+import { cn } from "@/lib/utils"
 
-interface ButtonProps {
-  onClick?: (() => void) | ((e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void);
-  children: React.ReactNode;
-  variant?: Variant;
-  size?: Size;
-  disabled?: boolean;
-  loading?: boolean;
-  className?: string;
-  type?: "button" | "submit" | "reset";
-}
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-zinc-800 text-white shadow-xs hover:bg-zinc-900",
+        destructive:"bg-red-500 text-white shadow-xs hover:bg-red-700 focus-visible:ring-red-300",
+        outline:"border border-zinc-300 bg-zinc-50 shadow-xs hover:bg-zinc-100 hover:text-zinc-900",
+        primary: "bg-sky-500 border border-sky-500 text-white hover:bg-sky-600 hover:border-sky-700",
+        secondary:"font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-xs hover:bg-zinc-50",
+        ghost:"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
 
-export const Button: React.FC<ButtonProps> = ({ onClick, children, variant = "primary", size = "md", disabled = false, loading = false, className = "", type = "submit" }) => {
-  const baseStyles = "inline-flex items-center justify-center whitespace-nowrap gap-1 rounded-md font-medium transition-all ease-in-out duration-150 active:scale-95 border";
-
-  const variantStyles: Record<Exclude<Variant, "custom">, string> = {
-    primary: "bg-sky-500 border-sky-500 text-white hover:bg-sky-400",
-    secondary: "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100",
-    outline: "bg-transparent border-gray-300 text-gray-800 hover:bg-gray-100",
-    ghost: "bg-transparent border-transparent text-gray-700 hover:bg-gray-100",
-    destructive: "bg-red-500 border-red-500 text-white hover:bg-red-400",
-  };
-
-  const sizeStyles: Record<Size, string> = {
-    icon: "p-1.5 w-7 h-7",
-    sm: "text-sm px-3 py-1.5",
-    md: "text-base px-4 py-2",
-    lg: "text-lg px-5 py-3",
-  };
-
-  const finalClassName =
-    variant === "custom" ? `${baseStyles} ${sizeStyles[size]} ${className} ${disabled || loading ? "opacity-50 cursor-not-allowed" : ""}`
-      : `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${disabled || loading ? "opacity-50 cursor-not-allowed" : ""} ${className}`;
+function Button({ className, variant, size, asChild = false, ...props }: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & { asChild?: boolean}) {
+  const Comp = asChild ? Slot : "button"
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled || loading} className={finalClassName}>
-      {loading ? <span className="animate-pulse">Loading...</span> : children}
-    </button>
-  );
-};
+    <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
+}
+
+export { Button, buttonVariants }

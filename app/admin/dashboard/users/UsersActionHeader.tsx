@@ -13,7 +13,7 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-gray-700 mr-1">Role:</span>
+            <span className="font-semibold text-zinc-700 mr-1">Role:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -26,7 +26,7 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
 
         <Select value={shiftFilter} onValueChange={onShiftFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-gray-700 mr-1">Shift:</span>
+            <span className="font-semibold text-zinc-700 mr-1">Shift:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -50,7 +50,7 @@ export const UsersActionHeader = ({ search, onSearchChange, roleFilter, onRoleFi
           Delete All
         </Button>
 
-        <Button variant="custom" size="sm" onClick={() => onExportPDF(filteredData)} className="bg-green-600 hover:bg-green-500 border-green-600 text-white">
+        <Button size="sm" onClick={() => onExportPDF(filteredData)} className="bg-green-600 hover:bg-green-500 border-green-600 text-white">
           <FolderInput size={16} /> Export PDF
         </Button>
       </div>

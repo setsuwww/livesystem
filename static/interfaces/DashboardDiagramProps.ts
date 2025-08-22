@@ -1,6 +1,13 @@
 interface StatData {
-  name: string
-  value: number
+  name: string;
+  value?: number;        // optional (used in salesChartData)
+  negativeValue?: number; // optional (used in salesChartData)
+
+  // fields for ticketChartData
+  accepted?: number;
+  rejected?: number;
+  late?: number;
+  onTime?: number;
 }
 
 export interface DashboardDiagramProps {
@@ -9,4 +16,9 @@ export interface DashboardDiagramProps {
   data: StatData[]
   type?: "bar" | "pie" | "area"
   color?: string
+  series?: {
+    key: string
+    color: string
+    label?: string
+  }[]
 }

@@ -6,42 +6,48 @@ import { DashboardDiagram } from "./DashboardDiagram";
 import { prisma } from "@/lib/prisma";
 
 export default async function AdminDashboardPage() {
+  // ========== Stats ==============
   const totalUsers = await prisma.user.count();
   const totalShifts = await prisma.shift.count();
   const totalSchedules = await prisma.schedule.count();
-
   const totalTicketsPositive = await prisma.ticket.count({ where: { status: "ACCEPTED" } });
   const totalTicketsNegative = await prisma.ticket.count({ where: { status: "REJECTED" } });
 
-  const ticketData = await prisma.ticket.groupBy({
-    by: ['createdAt', 'status'],
-    _count: { id: true },
+  // ========== Dummy employee performance (sementara) ==========
+  const salesChartData = [
+    { name: "Jan", value: 10, negativeValue: 2 },
+    { name: "Feb", value: 15, negativeValue: 5 },
+    { name: "Mar", value: 8, negativeValue: 3 },
+    { name: "Apr", value: 20, negativeValue: 7 },
+    { name: "Mei", value: 12, negativeValue: 4 },
+    { name: "Jun", value: 18, negativeValue: 6 },
+    { name: "Jul", value: 25, negativeValue: 9 },
+    { name: "Agu", value: 22, negativeValue: 8 },
+    { name: "Sep", value: 30, negativeValue: 10 },
+    { name: "Okt", value: 28, negativeValue: 12 },
+    { name: "Nov", value: 35, negativeValue: 15 },
+    { name: "Des", value: 40, negativeValue: 18 },
+  ];
+
+  // ========== Ticket statistic (dinamis) ==========
+  // Hitung berdasarkan hari dalam seminggu
+  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const tickets = await prisma.ticket.findMany({
+    select: {
+      status: true,
+      createdAt: true,
+    },
   });
 
-  const salesChartData = Array.from({ length: 12 }, (_, i) => {
-    const month = i + 1; const accepted = ticketData.filter(d => d.createdAt.getMonth() + 1 === month && d.status === "ACCEPTED")
-      .reduce((acc, curr) => acc + curr._count.id, 0);
-    const rejected = ticketData.filter(d => d.createdAt.getMonth() + 1 === month && d.status === "REJECTED")
-      .reduce((acc, curr) => acc + curr._count.id, 0);
-    return { name: month.toString(), value: accepted, negativeValue: rejected };
-  });
-
-  const today = new Date();
-  const dayStart = new Date(today);
-  dayStart.setDate(today.getDate() - today.getDay());
-  dayStart.setHours(0, 0, 0, 0);
-
-  const ticketWeekData = await prisma.ticket.findMany({ where: { createdAt: { gte: dayStart } }, select: { createdAt: true, status: true } });
-
-  const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-  const ticketChartData = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date(dayStart);
-    date.setDate(dayStart.getDate() + i);
-
-    const accepted = ticketWeekData.filter(t => t.createdAt.getDate() === date.getDate() && t.status === "ACCEPTED").length;
-    const rejected = ticketWeekData.filter(t => t.createdAt.getDate() === date.getDate() && t.status === "REJECTED").length;
-
-    return { name: dayNames[i], value: accepted, negativeValue: rejected };
+  const ticketByDay = days.map((day, idx) => {
+    const filtered = tickets.filter((t) => new Date(t.createdAt).getDay() === idx);
+    return {
+      name: day,
+      accepted: filtered.filter((t) => t.status === "ACCEPTED").length,
+      rejected: filtered.filter((t) => t.status === "REJECTED").length,
+      late: filtered.filter((t) => t.status === "LATE").length,
+      onTime: filtered.filter((t) => t.status === "ONTIME").length,
+    };
   });
 
   return (
@@ -49,6 +55,7 @@ export default async function AdminDashboardPage() {
       {/* Header */}
       <DashboardHeader title="Dashboard" />
 
+      {/* Stats pakai data asli dari DB */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats
           link="/admin/dashboard/users"
@@ -59,6 +66,7 @@ export default async function AdminDashboardPage() {
           color="bg-sky-100 text-sky-600"
         />
         <DashboardStats
+          link="/admin/dashboard/shifts"
           title="Total Shifts"
           value={totalShifts.toString()}
           negativeValue="0"
@@ -66,6 +74,7 @@ export default async function AdminDashboardPage() {
           color="bg-purple-100 text-purple-600"
         />
         <DashboardStats
+          link="/admin/dashboard/schedules"
           title="Total Schedules"
           value={totalSchedules.toString()}
           negativeValue="0"
@@ -73,6 +82,7 @@ export default async function AdminDashboardPage() {
           color="bg-green-100 text-green-600"
         />
         <DashboardStats
+          link="/admin/dashboard/tickets"
           title="Total Tickets"
           value={totalTicketsPositive.toString()}
           negativeValue={totalTicketsNegative.toString()}
@@ -81,23 +91,34 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
+      {/* Diagram */}
       <div className="grid gap-4 grid-cols-2">
+        {/* Dummy performance (sementara) */}
         <DashboardDiagram
-          title="Ticket in/month"
-          description="Tickets growth in/month"
+          title="Employee performance"
+          description="Bad and Good performance from Employee"
           data={salesChartData}
-          color="#1d293d"
           type="bar"
+          series={[
+            { key: "value", color: "#1d293d", label: "Good" },
+            { key: "negativeValue", color: "#ff4d4f", label: "Bad" },
+          ]}
         />
+
+        {/* Dinamis: ticket per hari */}
         <DashboardDiagram
-          title="Ticket in/week"
-          description="Tickets growth in/week"
-          data={ticketChartData}
-          color="#00a6f4"
+          title="Shifts statistic"
+          description="Statistic by ticket status each day"
+          data={ticketByDay}
           type="area"
+          series={[
+            { key: "accepted", color: "#7bf1a8", label: "Accepted" },
+            { key: "rejected", color: "#ff4d4f", label: "Rejected" },
+            { key: "late", color: "#ffdf20", label: "Late" },
+            { key: "onTime", color: "#3b82f6", label: "On Time" },
+          ]}
         />
       </div>
-
     </div>
   );
 }

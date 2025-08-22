@@ -1,0 +1,38 @@
+import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import EditForm from "./EditForm";
+import ContentForm from '@/components/content/ContentForm';
+import { ContentInformation } from '@/components/content/ContentInformation';
+import { DashboardHeader } from "../../../DashboardHeader"; 
+
+interface Props {
+  params: { id: string };
+}
+
+export const revalidate = 60;
+
+export default async function Page({ params }: Props) {
+  const shift = await prisma.shift.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!shift) return <div>Shift not found</div>;
+
+  const safeShift = {
+    ...shift,
+    startTime: shift.startTime.toISOString(),
+    endTime: shift.endTime.toISOString(),
+  };
+
+  return (
+    <section className="space-y-6">
+        <DashboardHeader title="Edit Shift" subtitle="Update shift type and time range" />
+    
+        <ContentForm>
+            <ContentInformation heading="Shift Information" subheading="Update shift type and time range" />
+            <EditForm shift={safeShift} />
+        </ContentForm>
+    </section>
+  );
+}
+

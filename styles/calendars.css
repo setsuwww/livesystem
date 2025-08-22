@@ -2,15 +2,15 @@
 
 /* 🎨 Background grid */
 .fc .fc-daygrid-day-frame {
-  @apply bg-gray-50; /* soft gray */
+  @apply bg-zinc-50; /* soft zinc */
 }
 
 .fc .fc-toolbar-chunk button {
-  @apply text-white bg-gray-700 px-4 py-1.5 rounded-md font-medium capitalize transition-colors duration-200;
+  @apply text-white bg-zinc-700 px-4 py-1.5 rounded-md font-medium capitalize transition-colors duration-200;
 }
 
 .fc .fc-toolbar-chunk button:hover {
-  @apply bg-gray-600;
+  @apply bg-zinc-600;
 }
 
 .fc .fc-toolbar-title {
@@ -22,13 +22,17 @@
 }
 
 .fc-daygrid-day-number {
-  @apply text-gray-800 text-sm font-bold;
+  @apply text-zinc-800 text-sm font-bold;
 }
 
 .fc-daygrid-day.today-highlight {
   background-color: #e0f2fe !important; 
 }
 .fc-day-today {
-  content: 'NOW';
   background-color: #e0f2fe !important;
 }
+
+.fc .fc-more-link {
+  @apply mt-1 block; /* kasih jarak ke atas */
+}
+

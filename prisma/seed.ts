@@ -1,62 +1,91 @@
 // prisma/seed.ts
 import { PrismaClient, Role, ShiftType } from "@prisma/client";
 import bcrypt from "bcryptjs";
-
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  const operatorPassword = await bcrypt.hash("operator123", 10);
+  const [morning, afternoon, night, off] = await Promise.all([
+    prisma.shift.upsert({
+      where: { name_type: { name: "Morning", type: ShiftType.MORNING } },
+      update: {},
+      create: {
+        name: "Morning",
+        type: "MORNING",
+        startTime: new Date("1970-01-01T08:00:00Z"),
+        endTime: new Date("1970-01-01T16:00:00Z"),
+      },
+    }),
+    prisma.shift.upsert({
+      where: { name_type: { name: "Afternoon", type: ShiftType.AFTERNOON } },
+      update: {},
+      create: {
+        name: "Afternoon",
+        type: "AFTERNOON",
+        startTime: new Date("1970-01-01T16:00:00Z"),
+        endTime: new Date("1970-01-01T00:00:00Z"),
+      },
+    }),
+    prisma.shift.upsert({
+      where: { name_type: { name: "Night", type: ShiftType.NIGHT } },
+      update: {},
+      create: {
+        name: "Night",
+        type: "NIGHT",
+        startTime: new Date("1970-01-01T00:00:00Z"),
+        endTime: new Date("1970-01-01T08:00:00Z"),
+      },
+    }),
+    prisma.shift.upsert({
+      where: { name_type: { name: "Off", type: ShiftType.OFF } },
+      update: {},
+      create: {
+        name: "Off",
+        type: "OFF",
+        startTime: new Date("1970-01-01T00:00:00Z"),
+        endTime: new Date("1970-01-02T00:00:00Z"),
+      },
+    }),
+  ]);
 
-  // Admin
+  const hash = (pwd: string) => bcrypt.hash(pwd, 10);
+
   await prisma.user.upsert({
-    where: { email: "admin@example.com" },
+    where: { email: "admin@next.com" },
     update: {},
     create: {
       name: "Admin",
-      email: "admin@example.com",
-      password: adminPassword,
+      email: "admin@next.com",
+      password: await hash("admin123"),
       role: Role.ADMIN,
+      shiftId: morning.id,
     },
   });
 
-  // Operator
   await prisma.user.upsert({
-    where: { email: "operator@example.com" },
+    where: { email: "coordinator@next.com" },
     update: {},
     create: {
-      name: "Operator",
-      email: "operator@example.com",
-      password: operatorPassword,
-      role: Role.MANAGER,
+      name: "Coordinator",
+      email: "coordinator@next.com",
+      password: await hash("coord123"),
+      role: Role.COORDINATOR,
+      shiftId: afternoon.id,
     },
   });
 
-  // Hapus shift lama
-  await prisma.shift.deleteMany();
-
-  const time = (hours: number, minutes: number = 0) =>
-    new Date(Date.UTC(1970, 0, 1, hours, minutes));
-
-  await prisma.shift.createMany({
-    data: [{
-        type: ShiftType.MORNING,
-        startTime: time(8, 0),
-        endTime: time(16, 0),
-      }, {
-        type: ShiftType.AFTERNOON,
-        startTime: time(16, 0),
-        endTime: time(0, 0),
-      }, {
-        type: ShiftType.NIGHT,
-        startTime: time(0, 0),
-        endTime: time(8, 0),
-      },
-    ],
+  await prisma.user.upsert({
+    where: { email: "employee@next.com" },
+    update: {},
+    create: {
+      name: "Employee",
+      email: "employee@next.com",
+      password: await hash("emp123"),
+      role: Role.EMPLOYEE,
+      shiftId: night.id,
+    },
   });
 
-  console.log("✅ Seeding selesai!");
+  console.log("Seed done.");
 }
 
-main().catch((e) => {console.error(e); process.exit(1);
-  }).finally(async () => { await prisma.$disconnect() });
+main().finally(() => prisma.$disconnect());

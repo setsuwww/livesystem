@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { capitalize } from "@/function/functionCapitalize";
+import { capitalize } from "@/function/functionFormatters";
 import { format } from "date-fns";
 
 import { roleStyles } from "@/constants/roleStyles";
@@ -23,8 +23,7 @@ export default function ShiftUserTable({ data }: UsersTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
-          <TableHead>Name</TableHead>
+          <TableHead>Username</TableHead>
           <TableHead>Email</TableHead>
           <TableHead>Role</TableHead>
           <TableHead>Created & Updated</TableHead>
@@ -37,7 +36,6 @@ export default function ShiftUserTable({ data }: UsersTableProps) {
 
           return (
             <TableRow key={user.id}>
-              <TableCell>{index + 1}</TableCell>
               <TableCell>
                 <span className="text-sm font-semibold">{user.name}</span>
               </TableCell>

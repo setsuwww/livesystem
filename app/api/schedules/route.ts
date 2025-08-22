@@ -1,42 +1,7 @@
 // app/api/schedules/route.ts
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
-
-const JWT_SECRET = process.env.JWT_SECRET || "secret";
-
-export async function getUserFromToken(): Promise<{ id: number } | null> {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-
-  if (!token) return null;
-
-  try {
-    const { payload } = await jwtVerify(token, new TextEncoder().encode(JWT_SECRET));
-    if (typeof payload === "object" && payload && "id" in payload) {
-      const id = Number((payload as any).id);
-      if (isNaN(id)) return null;
-      return { id };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-export async function GET() {
-  const user = await getUserFromToken();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  const schedules = await prisma.schedule.findMany({
-    include: { shift: true, user: true },
-    where: { userId: user.id },
-    orderBy: { date: "asc" },
-  });
-
-  return NextResponse.json(schedules);
-}
+import { getUserFromToken } from "@/lib/auth";
 
 export async function POST(req: Request) {
   const user = await getUserFromToken();
@@ -53,6 +18,7 @@ export async function POST(req: Request) {
       description: String(body.description),
       date: new Date(body.date),
       userId: user.id,
+      shiftId: body.shiftId ? Number(body.shiftId) : null,
     },
   });
 

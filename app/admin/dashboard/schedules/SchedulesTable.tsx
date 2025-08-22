@@ -51,7 +51,6 @@ export default function ScheduleTable({ data }: ScheduleTableProps) {
                 onChange={selectAll} disabled={filteredData.length === 0}
               />
             </TableHead>
-            <TableHead>ID</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Date</TableHead>

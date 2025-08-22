@@ -20,7 +20,6 @@ export default function ShiftUserTable({ data }: ScheduleTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>ID</TableHead>
           <TableHead>Title</TableHead>
           <TableHead>Description</TableHead>
           <TableHead>Date</TableHead>
@@ -35,7 +34,6 @@ export default function ShiftUserTable({ data }: ScheduleTableProps) {
 
           return (
             <TableRow key={schedule.id}>
-              <TableCell>{index + 1}</TableCell>
               <TableCell>
                 <span className="text-sm font-semibold">{schedule.title}</span>
               </TableCell>

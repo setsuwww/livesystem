@@ -10,34 +10,33 @@ export const handleUsers = (selectedIds: number[], setSelectedIds: React.Dispatc
   const router = useRouter()
 
   // Toggle Select combobox
-  const toggleSelect = (id: number) => {
-    setSelectedIds(prev => prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]);
-  };
+  const toggleSelect = (id: number) => setSelectedIds(prev => prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]);
 
   // Toggle Selectall combobox
-  const selectAll = () => {
-    setSelectedIds(prev => prev.length === filteredData.length ? [] : filteredData.map(u => u.id));
-  };
+  const selectAll = () => setSelectedIds(prev => prev.length === filteredData.length ? [] : filteredData.map(u => u.id));
 
   // Menghapus semua yang di select
-  const deleteSelected = async () => {
+  const deleteSelected = async () => { const setConfirm = confirm("Apakah kamu yakin ingin menghapus ini?") 
+    if (!setConfirm) return;
+    
     if (selectedIds.length === 0) return;
 
-    try {
-      await api.delete("/users", { data: { ids: selectedIds } });
+    try { await api.delete("/users", { data: { ids: selectedIds } });
       alert("Deleted successfully");
       reloadData();
-    } catch {
+    } 
+    catch {
       alert("Failed to delete selected");
     }
   };
 
   // Menghapus semua
-  const deleteAll = async () => {
+  const deleteAll = async () => { const setConfirm = confirm("Apakah kamu yakin ingin menghapus semua ini?") 
+    if (!setConfirm) return;
+
     if (filteredData.length === 0) return;
 
-    try {
-      await api.delete("/users", { data: { ids: filteredData.map(u => u.id) } });
+    try { await api.delete("/users", { data: { ids: filteredData.map(u => u.id) } });
       alert("All deleted");
       reloadData();
     } catch {
@@ -46,23 +45,20 @@ export const handleUsers = (selectedIds: number[], setSelectedIds: React.Dispatc
   };
 
   // Edit users
-  const handleEditUser = (id: number) => {
-    router.push(`/admin/dashboard/users/${id}/edit`);
-  };
+  const handleEditUser = (id: number) => router.push(`/admin/dashboard/users/${id}/edit`);
 
   // Delete users
   const handleDeleteUser = async (id: number) => {
-    try {
-      await api.delete(`/users/${id}`);
+    try { await api.delete(`/users/${id}`);
       alert("Deleted successfully");
       reloadData();
-    } catch {
+    } 
+    catch {
       alert("Failed to delete");
     }
   };
 
-  const onExportPDF = (filteredData: User[]) => {
-    const doc = new jsPDF();
+  const onExportPDF = (filteredData: User[]) => { const doc = new jsPDF();
 
     doc.setFontSize(18);
     doc.text("Schedule Report", 14, 22);
@@ -70,15 +66,12 @@ export const handleUsers = (selectedIds: number[], setSelectedIds: React.Dispatc
     doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
 
     const tableData = filteredData.map((item) => [
-      item.id,
-      item.name,
-      item.email,
+      item.id, item.name, item.email,
       new Date(item.createdAt).toLocaleDateString(),
       new Date(item.updatedAt).toLocaleDateString(),
     ]);
 
-    autoTable(doc, {
-      head: [["ID", "Title", "Description", "Date", "Created At"]],
+    autoTable(doc, { head: [["ID", "Title", "Description", "Date", "Created At"]],
       body: tableData,
       startY: 40,
     });
