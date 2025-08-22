@@ -140,25 +140,4 @@ function SelectScrollDownButton({ className, ...props }: React.ComponentProps<ty
   )
 }
 
-<<<<<<< HEAD
-const SelectValue = SelectPrimitive.Value
-const SelectGroup = SelectPrimitive.Group
-const SelectLabel = SelectPrimitive.Label
-const SelectSeparator = SelectPrimitive.Separator
-
-export {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectValue,
-  SelectGroup,
-  SelectLabel,
-  SelectSeparator,
-}
-  
-=======
 export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue }
->>>>>>> 5b7f1d172a947b13de0d9364abcdb481d4905d2c
