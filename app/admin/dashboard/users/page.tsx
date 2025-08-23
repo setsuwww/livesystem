@@ -6,6 +6,7 @@ import { ContentInformation } from '@/components/content/ContentInformation';
 import { capitalize } from "../../../../function/functionFormatters";
 import { prisma } from "@/lib/prisma"
 import { Pagination } from "../Pagination";
+import { UserTable } from "@/static/types/User";
 
 const PAGE_SIZE = 5;
 
@@ -47,25 +48,13 @@ export default async function Page({ searchParams }: { searchParams?: { page?: s
     getUserCount(),
   ]);
 
-  const tableData = users.map(u => ({
+  const tableData: UserTable[] = users.map(u => ({
     id: u.id,
     name: u.name,
     email: u.email,
     role: capitalize(u.role),
     shift: u.shift
-      ? (() => {
-          const start = u.shift.startTime.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            timeZone: "UTC",
-          });
-          const end = u.shift.endTime.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            timeZone: "UTC",
-          });
-          return `${capitalize(u.shift.type)} (${start} - ${end})`;
-        })()
+      ? `${capitalize(u.shift.type)} (${u.shift.startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} - ${u.shift.endTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })})`
       : "-",
     createdAt: u.createdAt.toISOString(),
     updatedAt: u.updatedAt.toISOString(),

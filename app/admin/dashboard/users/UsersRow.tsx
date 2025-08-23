@@ -9,16 +9,18 @@ import { Checkbox } from "@/components/ui/Checkbox"
 import { Badge } from "@/components/ui/Badge"
 
 import { UsersActionButton } from "./UsersActionButton"
-import { UsersRowProps } from '@/static/interfaces/UserRowProps'
+import { UsersRowProps } from "@/static/interfaces/UserRowProps"
 
-export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }: UsersRowProps) {
+export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, onSwitchUser, roleStyles }: UsersRowProps) {
   const handleToggle = () => onToggleSelect(user.id)
 
-  const formatedCreatedDate = useMemo(() => format(new Date(user.createdAt), "dd-MM-yyyy"),
+  const formatedCreatedDate = useMemo(
+    () => format(new Date(user.createdAt), "dd-MM-yyyy"),
     [user.createdAt]
   )
 
-  const formatedUpdatedDate = useMemo(() => format(new Date(user.updatedAt), "dd-MM-yyyy"),
+  const formatedUpdatedDate = useMemo(
+    () => format(new Date(user.updatedAt), "dd-MM-yyyy"),
     [user.updatedAt]
   )
 
@@ -31,7 +33,7 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       <TableCell>
         <div className="flex items-center gap-3">
           <div className="bg-zinc-200 p-2 rounded-full">
-            <CircleUserRound className="h-5 w-5 text-zinc-600" strokeWidth={1}/>
+            <CircleUserRound className="h-5 w-5 text-zinc-600" strokeWidth={1} />
           </div>
           <div>
             <p className="text-sm font-medium text-zinc-700">{user.name}</p>
@@ -41,15 +43,19 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       </TableCell>
 
       <TableCell>
-        <Badge variant="outline" className={`${roleStyles[user.role] || ""} px-2 py-0.5 text-xs font-semibold`}>
+        <Badge
+          variant="outline"
+          className={`${roleStyles[user.role] || ""} px-2 py-0.5 text-xs font-semibold`}
+        >
           {user.role}
         </Badge>
       </TableCell>
 
       <TableCell>
-        <span className="text-xs font-semibold">
-          {user.shift || "No Shift"}
+        <span>
+          {user.shift?.type ?? "OFF"}
         </span>
+
       </TableCell>
 
       <TableCell className="flex flex-col">
@@ -58,7 +64,12 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       </TableCell>
 
       <TableCell>
-        <UsersActionButton userId={user.id} onEdit={onEdit} onDelete={onDelete}/>
+        <UsersActionButton
+          userId={user.id}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onSwitchUser={onSwitchUser}
+        />
       </TableCell>
     </TableRow>
   )
