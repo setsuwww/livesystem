@@ -2,6 +2,28 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
+export async function GET(req: Request) {
+  try {
+    const users = await prisma.user.findMany({
+      select: { id: true, name: true, email: true, role: true, updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    const latestUpdate = users[0]?.updatedAt? new Date(users[0].updatedAt).getTime() : 0;
+    const ifModifiedSince = req.headers.get("if-modified-since");
+
+    if (ifModifiedSince && parseInt(ifModifiedSince) >= latestUpdate) return new NextResponse(null, { status: 304 });
+
+    return NextResponse.json(users, {headers: { "Last-Modified": latestUpdate.toString() }});
+  } 
+  catch (error) { console.error("Error fetching users:", error);
+    return NextResponse.json({ error: "Failed to fetch users" },
+      { status: 500 }
+    );
+  }
+}
+
+
 export async function POST(request: Request) {
   try {
     const { name, email, password, role, shiftId } = await request.json();

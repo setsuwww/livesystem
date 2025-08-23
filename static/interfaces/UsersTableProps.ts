@@ -1,5 +1,5 @@
-import { User } from "../types/User";
+import { UserTable } from "../types/User";
 
 export interface UsersTableProps {
-  data: User[];
+  data: UserTable[];
 }

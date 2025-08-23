@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { handleUsers } from "@/function/handleUsers";
-import { User } from "@/static/interfaces/UsersTableProps";
+import { User } from "@/static/types/User";
 
 export function useUsersHooks(data: User[]) {
   const [search, setSearch] = useState("");
@@ -10,29 +10,30 @@ export function useUsersHooks(data: User[]) {
   const [shiftFilter, setShiftFilter] = useState("all");
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  const extractShiftType = useCallback((shiftString: string) => {
-    if (!shiftString || shiftString === "-" || shiftString.toLowerCase() === "normal shift") {
-      return "no_shift";
-    }
-    const match = shiftString.match(/^([A-Za-z]+)/);
-    return match ? match[1].toLowerCase() : "no_shift";
+  const extractShiftType = useCallback((shift: User["shift"]) => {
+    if (!shift) return "no_shift";
+
+    const type = shift.type?.toLowerCase();
+    if (!type || type === "normal shift") return "no_shift";
+
+    return type;
   }, []);
 
   const filteredData = useMemo(() => {
-    return data.filter(user => {
-      const matchSearch =
-        search === "" ||
-        Object.values(user).join(" ").toLowerCase().includes(search.toLowerCase());
+    return data.filter(user => { const matchSearch =
+        search === "" || Object.values(user)
+          .map(v => (typeof v === "string" ? v : ""))
+          .join(" ")
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
-      const matchRole =
-        roleFilter === "all" ||
+      const matchRole = roleFilter === "all" ||
         user.role.toLowerCase() === roleFilter.toLowerCase();
 
       let matchShift = true;
       if (shiftFilter !== "all") {
         if (shiftFilter.toLowerCase() === "no_shift") {
-          matchShift =
-            user.shift === "-" || user.shift.toLowerCase() === "normal shift";
+          matchShift = !user.shift;
         } else {
           matchShift = extractShiftType(user.shift) === shiftFilter.toLowerCase();
         }

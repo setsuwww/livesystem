@@ -62,6 +62,10 @@ export const handleUsers = (selectedIds: number[], setSelectedIds: React.Dispatc
     }
   };
 
+  const handleSwitchUser = (id: number) => {
+    
+  }
+
   const onExportPDF = (filteredData: User[]) => {
     const doc = new jsPDF();
 
