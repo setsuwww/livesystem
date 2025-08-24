@@ -6,34 +6,35 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import UsersTable from "./ShiftUserTable";
 
-import { capitalize } from "@/function/functionFormatters";
+import { capitalize } from "@/function/handleTime";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 export const revalidate = 60;
 
-export default async function ShiftUsersPage({
-  params,
-  searchParams
-}) {
+export default async function ShiftUsersPage({ params, searchParams }) {
   const shiftId = parseInt(params.id);
   const page = Number(searchParams?.page) || 1;
   const PAGE_SIZE = 10;
 
+  // Ambil shift sekaligus count user EMPLOYEE
   const [shift, totalUsers] = await Promise.all([
     prisma.shift.findUnique({
       where: { id: shiftId },
-      include: { users: true },
+      include: {
+        users: { where: { role: "EMPLOYEE" } }, // filter role EMPLOYEE
+      },
     }),
     prisma.user.count({
-      where: { shiftId },
+      where: { shiftId, role: "EMPLOYEE" }, // filter role EMPLOYEE
     }),
   ]);
 
   if (!shift) return <div className="p-4">Shift not found</div>;
 
+  // Ambil halaman user EMPLOYEE
   const usersData = await prisma.user.findMany({
-    where: { shiftId },
+    where: { shiftId, role: "EMPLOYEE" }, // filter role EMPLOYEE
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
   });
@@ -50,13 +51,13 @@ export default async function ShiftUsersPage({
 
   const totalPages = Math.ceil(totalUsers / PAGE_SIZE);
 
-  const title = capitalize(shift.type)
+  const title = capitalize(shift.type);
 
   return (
     <section>
-      <DashboardHeader title={`${title} users`} subtitle="Manage shift users" />
+      <DashboardHeader title={`${title} shifts`} subtitle="Manage shift employees" />
       <ContentForm>
-        <ContentInformation heading={`${title} shift users`} subheading={`View all users in this shift`} />
+        <ContentInformation heading={`${title} shift employees`} subheading={`View all users in this shift`} />
 
         <Link href="/admin/dashboard/users" className="flex items-center text-sm font-semibold text-blue-500 my-2">
           Users detail <ChevronRight strokeWidth={2} size={20} />

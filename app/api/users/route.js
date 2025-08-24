@@ -21,6 +21,9 @@ export async function GET(req) {
         },
       },
       orderBy: { updatedAt: "desc" },
+      where: {
+        role: "EMPLOYEE",
+      },
     });
 
     const latestUpdate = users[0]?.updatedAt ? new Date(users[0].updatedAt).getTime() : 0;
@@ -54,7 +57,7 @@ export async function POST(request) {
     });
 
     if (existingUser) {
-      return NextResponse.json( { error: "User with this email already exists" },
+      return NextResponse.json({ error: "User with this email already exists" },
         { status: 409 }
       );
     }

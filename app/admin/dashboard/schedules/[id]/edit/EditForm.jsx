@@ -12,7 +12,7 @@ import { Schedule, Shift } from "@prisma/client";
 import { fetch } from "@/function/helpers/fetch";
 
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select";
-import { capitalize } from "@/function/functionFormatters";
+import { capitalize } from "@/function/handleTime";
 import { DashboardHeader } from './../../../DashboardHeader';
 
 export default function EditForm({

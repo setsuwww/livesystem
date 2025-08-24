@@ -1,12 +1,11 @@
-"use client";;
+"use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { capitalize } from "@/function/functionFormatters";
-import { ShiftType } from "@prisma/client";
+import { capitalize } from "@/function/handleTime";
 
 export function ShiftsTable({
   data

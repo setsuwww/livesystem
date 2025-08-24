@@ -33,7 +33,7 @@ export function Calendar({
       }} eventContent={(eventInfo) => (
         <div className="flex items-center justify-between border border-zinc-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-zinc-300 transition">
           <p className="flex flex-col truncate font-medium">
-            <span className="text-sm text-zinc-800">{eventInfo.event.title}</span>
+            <span className="text-sm text-zinc-700">{eventInfo.event.title}</span>
             <span className="text-xs text-zinc-400">{eventInfo.event.extendedProps.description}</span>
           </p>
           <CalendarsActionButton

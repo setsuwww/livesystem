@@ -21,7 +21,6 @@ export default async function Page() {
         select: {
           id: true,
           type: true,
-          customType: true,
           startTime: true,
           endTime: true,
         },
@@ -34,7 +33,6 @@ export default async function Page() {
     select: {
       id: true,
       type: true,
-      customType: true,
       startTime: true,
       endTime: true,
     },

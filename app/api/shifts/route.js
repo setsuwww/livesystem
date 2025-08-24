@@ -1,11 +1,11 @@
-import { toDateFromTimeString } from "@/function/functionFormatters";
+import { toDateFromTimeString } from "@/function/handleTime";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { type, startTime, endTime, customType, userIds } = body;
+    const { type, startTime, endTime, userIds } = body;
 
     if (!type || !startTime || !endTime) {
       return NextResponse.json(
@@ -14,17 +14,9 @@ export async function POST(req) {
       );
     }
 
-    if (type === "CUSTOM" && !customType) {
-      return NextResponse.json(
-        { error: "Custom shift must include customType" },
-        { status: 400 }
-      );
-    }
-
     const shift = await prisma.shift.create({
       data: {
         type,
-        customType: type === "CUSTOM" ? customType : null,
         startTime: toDateFromTimeString(startTime),
         endTime: toDateFromTimeString(endTime),
         users: {

@@ -9,9 +9,9 @@ import { fetch } from "@/function/helpers/fetch"
 import { CircleUserRound, Search } from "lucide-react"
 import { Label } from "@/components/ui/Label"
 import { shiftStyles } from "@/constants/shiftStyles"
-import { capitalize } from "@/function/functionFormatters";
+import { capitalize } from "@/function/handleTime";
 
-export const UsersSwitchModal = ({
+export const EmployeesSwitchModal = ({
   open,
   onOpenChange,
   currentUserId
@@ -86,7 +86,7 @@ export const UsersSwitchModal = ({
                 <CircleUserRound strokeWidth={1.5} />
               </div>
               <div>
-                <p className="text-sm font-semibold text-zinc-800">{currentUser.name}</p>
+                <p className="text-sm font-semibold text-zinc-700">{currentUser.name}</p>
                 <p className="text-xs">{currentUser.email}</p>
               </div>
             </div>

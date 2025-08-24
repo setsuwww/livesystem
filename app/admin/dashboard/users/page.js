@@ -1,9 +1,9 @@
 import UsersTable from "./UsersTable"
-import { DashboardHeader } from './../DashboardHeader';
+import { DashboardHeader } from '../DashboardHeader';
 import ContentForm from '@/components/content/ContentForm';
 import { ContentInformation } from '@/components/content/ContentInformation';
 
-import { capitalize } from "@/function/functionFormatters";
+import { capitalize } from "@/function/handleTime";
 import { prisma } from "@/lib/prisma"
 import { Pagination } from "../Pagination";
 

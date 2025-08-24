@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { CircleUserRound, Repeat, Trash2, FolderInput } from "lucide-react";
 import { roleStyles } from "@/constants/roleStyles";
-import { capitalize } from "@/function/functionFormatters";
+import { capitalize } from "@/function/handleTime";
 import { format } from "date-fns";
-import { UsersSwitchModal } from "../../../users/UsersSwitchModal";
+import { EmployeesSwitchModal } from "../../../users/employees/EmployeesSwitchModal";
 
 export default function UserShiftTable({ data }) {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -181,7 +181,7 @@ export default function UserShiftTable({ data }) {
       </Table>
 
       {/* Swap Shift Modal */}
-      <UsersSwitchModal
+      <EmployeesSwitchModal
         open={modalOpen}
         onOpenChange={setModalOpen}
         currentUserId={currentUserId}

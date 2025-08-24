@@ -22,7 +22,7 @@
 }
 
 .fc-daygrid-day-number {
-  @apply text-zinc-800 text-sm font-bold;
+  @apply text-zinc-700 text-sm font-bold;
 }
 
 .fc-daygrid-day.today-highlight {

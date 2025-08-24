@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/Label";
 
 export default function CreateShiftForm({ users }) {
   const [type, setType] = useState("MORNING");
-  const [customType, setCustomType] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
@@ -37,7 +36,6 @@ export default function CreateShiftForm({ users }) {
 
     const payload = {
       type,
-      customType: type === "CUSTOM" ? customType : null,
       startTime,
       endTime,
       userIds: selectedUsers,
@@ -94,22 +92,6 @@ export default function CreateShiftForm({ users }) {
             />
           </div>
         </div>
-
-        {type === "CUSTOM" && (
-          <div className="bg-zinc-100 border border-zinc-300 rounded-lg p-3 space-y-2">
-            <div className="flex items-center space-x-1">
-              <CircleHelp strokeWidth={1.5} className="text-zinc-500" />
-              <Label htmlFor="custom-type" className="text-zinc-500">Custom Shift Type</Label>
-            </div>
-            <Input id="custom-type" type="text" placeholder="Custom shift name" className="bg-zinc-100/40 focus:ring-zinc-500 focus:border-zinc-500"
-              value={customType}
-              onChange={(e) => setCustomType(e.target.value)}
-            />
-            <p className="text-xs text-zinc-500">
-              This will be used to identify your custom shift.
-            </p>
-          </div>
-        )}
 
         <div>
           <Label htmlFor="search-user">Search User</Label>

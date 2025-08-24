@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useMemo } from "react"
 import { format } from "date-fns"
 import { CircleUserRound } from "lucide-react"
 
@@ -9,11 +9,8 @@ import { Checkbox } from "@/components/ui/Checkbox"
 import { Badge } from "@/components/ui/Badge"
 
 import { UsersActionButton } from "./UsersActionButton"
-import { UsersSwitchModal } from "./UsersSwitchModal"
 
 export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles}) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-
   const handleToggle = () => onToggleSelect(user.id)
 
   const formatedCreatedDate = useMemo(
@@ -38,8 +35,8 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
             <CircleUserRound className="h-5 w-5 text-zinc-600" strokeWidth={1} />
           </div>
           <div>
-            <p className="text-sm font-medium text-zinc-700">{user.name}</p>
-            <p className="text-xs text-zinc-500">{user.email}</p>
+            <p className="text-sm font-semibold text-zinc-600">{user.name}</p>
+            <p className="text-xs text-zinc-400">{user.email}</p>
           </div>
         </div>
       </TableCell>
@@ -70,13 +67,6 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
           userId={user.id}
           onEdit={onEdit}
           onDelete={onDelete}
-          onSwitchUser={() => setIsDialogOpen(true)}
-        />
-
-        <UsersSwitchModal
-          open={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-          currentUserId={user.id}
         />
       </TableCell>
     </TableRow>

@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `attendance` MODIFY `status` ENUM('PRESENT', 'ABSENT', 'LATE', 'PERMISSION') NOT NULL DEFAULT 'ABSENT';
+
+-- AlterTable
+ALTER TABLE `shift` MODIFY `startTime` VARCHAR(191) NOT NULL,
+    MODIFY `endTime` VARCHAR(191) NOT NULL;

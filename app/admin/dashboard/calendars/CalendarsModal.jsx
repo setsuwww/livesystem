@@ -2,16 +2,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import { Label } from "@/components/ui/Label";
 
-export function CalendarsModal({
-  open,
-  loading,
-  formData,
-  selectedEvent,
-  onClose,
-  onChange,
-  onSave
-}) {
+export function CalendarsModal({ open, loading, formData, selectedEvent, onClose, onChange, onSave }) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-white sm:max-w-[425px] border border-zinc-300">
@@ -22,12 +15,15 @@ export function CalendarsModal({
 
         <div className="grid gap-4 py-4">
           {/* tambahin label sebelum input */}
+          <Label htmlFor="title">Title</Label>
           <Input id="title" placeholder="Enter agenda title..." value={formData.title}
             onChange={(e) => onChange("title", e.target.value)}
           />
+          <Label htmlFor="description">Description</Label>
           <Input id="description" placeholder="Enter agenda description..." value={formData.description}
             onChange={(e) => onChange("description", e.target.value)}
           />
+          <Label htmlFor="duedate">Due Date</Label>
           <Input id="date" type="date" value={typeof formData.date === "string" ? formData.date : formData.date.toISOString().split("T")[0]}
             onChange={(e) => onChange("date", e.target.value)}
           />

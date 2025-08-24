@@ -6,7 +6,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import ScheduleTable from "./ShiftScheduleTable";
 
-import { capitalize } from "@/function/functionFormatters";
+import { capitalize } from "@/function/handleTime";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 

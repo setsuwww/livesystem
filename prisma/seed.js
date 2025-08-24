@@ -43,31 +43,34 @@ async function main() {
     },
   });
 
-  // Hapus shift lama
   await prisma.shift.deleteMany();
 
-  const time = (hours, minutes = 0) =>
-    new Date(Date.UTC(1970, 0, 1, hours, minutes));
+  function time(hours, minutes = 0) {
+    return new Date(1970, 0, 1, hours, minutes, 0);
+  }
 
   await prisma.shift.createMany({
     data: [{
-        type: ShiftType.MORNING,
-        startTime: time(8, 0),
-        endTime: time(16, 0),
-      }, {
-        type: ShiftType.AFTERNOON,
-        startTime: time(16, 0),
-        endTime: time(0, 0),
-      }, {
-        type: ShiftType.NIGHT,
-        startTime: time(0, 0),
-        endTime: time(8, 0),
-      },
-    ],
+      // dari jam 08:00 sampai 16:00
+      type: ShiftType.MORNING,
+      startTime: time(8, 0),
+      endTime: time(16, 0),
+    }, {
+      // dari jam 16:00 sampai 00:00
+      type: ShiftType.AFTERNOON,
+      startTime: time(16, 0),
+      endTime: time(0, 0),
+    }, {
+      // dari jam 00:00 sampai 08:00
+      type: ShiftType.NIGHT,
+      startTime: time(0, 0),
+      endTime: time(8, 0),
+    }],
   });
 
   console.log("✅ Seeding selesai!");
 }
 
-main().catch((e) => {console.error(e); process.exit(1);
-  }).finally(async () => { await prisma.$disconnect() });
+main().catch((e) => {
+  console.error(e); process.exit(1);
+}).finally(async () => { await prisma.$disconnect() });
