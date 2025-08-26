@@ -56,23 +56,39 @@ export default function CalendarPageview({initialEvents}) {
       return;
     }
     try { setIsLoading(true);
-      if (selectedEvent) { await api.put(`/schedules/${selectedEvent.id}`, formData);
-      } else {
-        await api.post("/schedules", formData) 
-      }
-      await fetchSchedules();
-      setIsModalOpen(false);
-      setFormData({ title: "", description: "", date: "" });
-      setSelectedEvent(null);
-      toast.success(selectedEvent ? "Updated" : "Created");
+
+    if (selectedEvent) { await api.put(`/schedules/${selectedEvent.id}`, formData);
+      setEvents((prev) =>
+        prev.map((ev) =>
+          ev.id === selectedEvent.id ? { ...ev, ...formData } : ev
+        )
+      );
+    } 
+    else { const { data: newEvent } = await api.post("/schedules", formData);
+      setEvents((prev) => [...prev, {
+        id: newEvent.id.toString(),
+        title: newEvent.title,
+        description: newEvent.description,
+        date: newEvent.date.split("T")[0],
+        backgroundColor: "#0070f3",
+        borderColor: "#0070f3",
+        textColor: "#ffffff",
+      }]);
     }
-    catch {
-      toast.error("Failed to save schedule");
-    }
-    finally {
-      setIsLoading(false);
-    }
-  };
+
+    setIsModalOpen(false);
+    setFormData({ title: "", description: "", date: "" });
+    setSelectedEvent(null);
+    toast.success(selectedEvent ? "Updated" : "Created");
+  } 
+  catch {
+    toast.error("Failed to save schedule");
+  } 
+  finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen">

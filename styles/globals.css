@@ -52,6 +52,12 @@
 }
 
 @layer components {
+  .vertical-space {
+    @apply flex items-center space-x-1
+  }
+  .horizontal-space {
+    @apply flex flex-col gap-3
+  }
   .text-title {
     @apply text-[var(--text-title)];
   }

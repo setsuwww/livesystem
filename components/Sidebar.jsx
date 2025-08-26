@@ -92,17 +92,18 @@ export function Sidebar() {
         <SubHeading title='Management'/>
         <SidebarCollapsible title="Users" open={userOpen} onOpenChange={setUserOpen} icon={Users}
           items={[
-            { label: 'Coordinator', href: '/admin/dashboard/users/coordinator' },
-            { label: 'Employee', href: '/admin/dashboard/users/employees' },
             { label: 'Users', href: '/admin/dashboard/users' },
-            { label: 'Add Users', href: '/admin/dashboard/users/create' }
+            { label: 'Add Users', href: '/admin/dashboard/users/create' },
+            { label: 'Employees', href: '/admin/dashboard/users/employees' },
+            { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
           ]}
         />
         
         <SidebarCollapsible title="Shift" open={shiftOpen} onOpenChange={setShiftOpen} icon={Clock}
           items={[
-            { label: 'Employee Shifts', href: '/admin/dashboard/shifts' },
-            { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' }
+            { label: 'Shifts', href: '/admin/dashboard/shifts' },
+            { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' },
+            { label: 'Shifts History', href: '/admin/dashboard/shifts/history' }
           ]}
         />
 

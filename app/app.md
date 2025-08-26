@@ -1,69 +1,48 @@
-fitur -> Auth -> :: Role(ADMIN, TEKNISI, MANAGER, USER) 
-
-ADMIN(
-  - Manage content secara keseluruhan dan efisien
-
-  CRUD Akun User({
-    Filter( Manager: Teknisi: User:) -> Tampilkan Akun sesuai role beserta Status(
-        ACTIVE, HANDLING, UNACTIVE
-    )
-  }) 
-
-  CRUD Schedule 2View::(Calendar | Table) {
-    Calendar Grid(
-      Tampilkan Shift + User yang active pada tanggal yang di click di grid(
-        -> MORNING, AFTERNOON, NIGHT + username
-    )
-  )}
-
-  CRUD Ticket(
-    -> tiket dikirim dari teknisi
-    -> punya Status_Pengerjaan(PENDING, PROCESS, DONE)
-    -> punya Status_Seleseai(SUCCESS, FAILED)
-    -> history daftar tiket + teknisi yang mengerjakan
-  )
-
-  Fitur(
-    -> Delete selected item
-    -> Delete All
-    -> Filter
-    -> Sort
-    -> Export(PDF, Word, Excel)
-    -> Paginate
-    -> CRUD
-  )
+ada Grid Calender yang kalo kotak nya dipencet munculin Modal(
+  => 3 Shifts[MORNING, AFTERNOON, NIGHT]
+  => tampilin user user dari masing masing shift dengan status(
+    -> Absent(merah)
+    -> Late(kuning)
+    -> Izin + acc(biru)
+    -> Izin + ga di acc(merah)
+    -> Present(hijau)
+  ) ->tampilkan(User && Status != Present) 
 )
 
-TEKNISI(
-  Input ticket kendala / keluhan user -> tiket(
-    Catch informasi
-  ) -> PENDING
+User {      
+  id                  
+  nama                        
+  email                       
+  password                    
+  role(USER, EMPLOYEE, ADMIN) 
+  jabatan
 
-  Jadikan bentuk Tiket(
-    Solving, & Komunikasi
-  ) -> PROCESS
+  shifts[]
+  offices[]
+  schedules[]
+  attendances[]
+}
 
-  Done (
-    Berikan Solusi -> SUCCESS
-    Berikan Alasan -> FAILED
-  )
-)
+Shift {
+  id
+  type
+  categories[]
+  startTime
+  endTime
+  periode
+  dueDate @default("FOREVER")
 
-MANAGER(
-  Mengatur User untuk schedule & shift
-)
+  users[]
+  schedules[]
+  attendances[]
+  offices
+}
 
-USER(
-  Register -> Login -> Mengajukan kendala()
-  Melihat history 
-)
+Office {
+  name
+  location
 
-Theme Color(
-  Night -> Violet
-  Afternoon -> Sky
-  Morning -> Yellow
-
-  Another -> Gray
-)
-
-
+  divisions[]
+  users[]
+  shifts[]
+}

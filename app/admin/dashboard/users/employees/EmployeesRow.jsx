@@ -57,8 +57,8 @@ export default function EmployeesRow({ user, selected, toggleSelect, onSwitch, o
       <TableCell>
         <EmployeesActionButton
           onSwitch={() => setSwitchOpen(true)}
-          onEdit={() => onEdit(user.id)}
-          onDelete={() => onDelete(user.id)}
+          onEdit={onEdit}
+          onDelete={onDelete}
         />
 
         <EmployeesSwitchModal 

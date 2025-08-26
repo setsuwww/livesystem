@@ -1,18 +1,17 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { api } from '@/lib/api';
 
 export function useEmployeesHooks(users) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
 
-  // ambil hanya employee
   useEffect(() => {
     setData((users || []).filter((u) => u.role === "EMPLOYEE"));
   }, [users]);
 
-  // filtering pake useMemo (hanya re-compute kalau search/data berubah)
   const filteredData = useMemo(() => {
     return data.filter(
       (u) =>
@@ -21,7 +20,6 @@ export function useEmployeesHooks(users) {
     );
   }, [data, search]);
 
-  // --- ACTIONS ---
   const toggleSelect = useCallback((id) => {
     setSelected((prev) =>
       prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
@@ -56,9 +54,26 @@ export function useEmployeesHooks(users) {
     a.click();
   }, [filteredData]);
 
-  const onSwitch = useCallback((id) => console.log("switch", id), []);
-  const onEdit = useCallback((id) => console.log("edit", id), []);
-  const onDelete = useCallback((id) => console.log("delete", id), []);
+  const onSwitch = useCallback((id) => {
+    const u = data.find((usr) => usr.id === id);
+    setEditUser(u);
+  }, []);
+
+  const onEdit = useCallback((id) => {
+    const u = data.find((usr) => usr.id === id);
+    setEditUser(u);
+  }, []);
+
+  const onDelete = useCallback(async (id) => {
+    if (!confirm("Are you sure to delete this user?")) return;
+    try { await api.delete(`/users/${id}`);
+      setData((prev) => prev.filter((u) => u.id !== id));
+    }  
+    catch (err) {
+      alert("Failed to delete user");
+    }
+  }, []);
+
 
   return {
     search, setSearch, 

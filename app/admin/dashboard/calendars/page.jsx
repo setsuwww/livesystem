@@ -3,32 +3,33 @@ import CalendarPageview from "./CalendarPageview";
 
 async function getSchedules() {
   return await prisma.schedule.findMany({
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      date: true,
-      userId: true,
-      createdAt: true,
-      updatedAt: true
+    include: {
+      shift: {
+        select: {
+          id: true,
+          type: true,
+          startTime: true,
+          endTime: true,
+          attendances: {
+            select: {
+              id: true,
+              status: true,
+              user: { select: { id: true, name: true } }
+            }
+          }
+        }
+      },
+      user: { select: { id: true, name: true } }
     }
   });
 }
 
 function formatDate(date) {
   if (!date) return "";
-  let d;
-  try { d = typeof date === "string" ? new Date(date) : date;
-  } 
-  catch {
-    return "";
-  }
-
-  if (isNaN(d.getTime())) 
-    return "";
+  let d = typeof date === "string" ? new Date(date) : date;
+  if (isNaN(d.getTime())) return "";
   return d.toISOString().split("T")[0];
 }
-
 
 export default async function Page() {
   const schedules = await getSchedules();
@@ -38,11 +39,9 @@ export default async function Page() {
     title: s.title,
     description: s.description,
     date: formatDate(s.date),
-    backgroundColor: "#0070f3",
-    borderColor: "#0070f3",
-    textColor: "#ffffff"
+    shift: s.shift, // << penting buat dialog
+    user: s.user,
   }));
-
 
   return <CalendarPageview initialEvents={initialEvents} />;
 }

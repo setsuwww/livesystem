@@ -5,15 +5,7 @@ import React, { useState } from "react"
 
 import Link from "next/link";
 
-function DashboardStatsComponent({
-  title,
-  link,
-  textlink,
-  value,
-  negativeValue,
-  icon,
-  color = "bg-zinc-100 text-zinc-600"
-}) {
+function DashboardStatsComponent({ title, link, textlink, value, negativeValue, icon, color = "bg-zinc-100 text-zinc-600" }) {
   const [showNegative, setShowNegative] = useState(false);
 
   const toggleValue = () => setShowNegative(prev => !prev);

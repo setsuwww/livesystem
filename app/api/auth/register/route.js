@@ -27,7 +27,7 @@ export async function POST(req) {
       data: { name, email, password: hashedPassword, role },
     });
 
-    const token = signToken({
+    const token = await signToken({
       id: user.id,
       name: user.name,
       email: user.email,
@@ -36,10 +36,7 @@ export async function POST(req) {
 
     await setAuthCookie(token);
 
-    return new Response(
-      JSON.stringify({ message: "Registered successfully", user }),
-      { status: 201 }
-    );
+    return new Response(JSON.stringify({ message: "Registered successfully", user }), { status: 201 });
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ message: "Server error" }), { status: 500 });

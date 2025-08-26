@@ -29,7 +29,7 @@ export function Calendar({
       headerToolbar={{
         left: "prev,next today",
         center: "title",
-        right: "dayGridYear,dayGridMonth,dayGridWeek",
+        right: "dayGridYear,dayGridMonth,dayGridWeek,dayGridDay",
       }} eventContent={(eventInfo) => (
         <div className="flex items-center justify-between border border-zinc-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-zinc-300 transition">
           <p className="flex flex-col truncate font-medium">

@@ -1,7 +1,7 @@
 // app/admin/dashboard/page.tsx
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { DashboardStats } from "@/app/admin/dashboard/DashboardStats";
-import { Users, CalendarClock, Ticket, Clock } from "lucide-react";
+import { Clock, Sun, SunMoon, Moon } from "lucide-react";
 import { DashboardDiagram } from "./DashboardDiagram";
 import { prisma } from "@/lib/prisma";
 
@@ -9,9 +9,6 @@ export default async function AdminDashboardPage() {
   const totalUsers = await prisma.user.count();
   const totalShifts = await prisma.shift.count();
   const totalSchedules = await prisma.schedule.count();
-
-  const totalTicketsPositive = await prisma.ticket.count({ where: { status: "ACCEPTED" } });
-  const totalTicketsNegative = await prisma.ticket.count({ where: { status: "REJECTED" } });
 
   const salesChartData = [
     { name: "1", value: 10, negativeValue: 2 },
@@ -50,36 +47,36 @@ export default async function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats
-          link="/admin/dashboard/users"
-          title="Total Users"
-          value={totalUsers.toString()}
-          negativeValue="0"
-          icon={<Users strokeWidth={2} />}
-          color="bg-sky-100 text-sky-600"
-        />
-        <DashboardStats
           link="/admin/dashboard/shifts"
           title="Total Shifts"
-          value={totalShifts.toString()}
+          value={totalUsers.toString()}
           negativeValue="0"
           icon={<Clock strokeWidth={2} />}
-          color="bg-purple-100 text-purple-600"
+          color="bg-sky-100 text-sky-600"
         />
+        
         <DashboardStats
-          link="/admin/dashboard/schedules"
-          title="Total Schedules"
+          title="Morning Shifts"
           value={totalSchedules.toString()}
           negativeValue="0"
-          icon={<CalendarClock strokeWidth={2} />}
-          color="bg-green-100 text-green-600"
-        />
-        <DashboardStats
-          link="/admin/dashboard/tickets"
-          title="Total Tickets"
-          value={totalTicketsPositive.toString()}
-          negativeValue={totalTicketsNegative.toString()}
-          icon={<Ticket strokeWidth={2} />}
+          icon={<Sun strokeWidth={2} />}
           color="bg-yellow-100 text-yellow-600"
+        />
+
+        <DashboardStats
+          title="Afternoon Shifts"
+          value={totalSchedules.toString()}
+          negativeValue="0"
+          icon={<SunMoon strokeWidth={1.25} />}
+          color="bg-orange-100 text-orange-600"
+        />
+
+        <DashboardStats
+          title="Night Shifts"
+          value={totalShifts.toString()}
+          negativeValue="0"
+          icon={<Moon strokeWidth={2} />}
+          color="bg-purple-100 text-purple-600"
         />
       </div>
 

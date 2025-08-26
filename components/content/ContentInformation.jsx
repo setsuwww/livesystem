@@ -10,7 +10,7 @@ export const ContentInformation = React.memo(function ContentInformation({
   if (!hasHeader) return null;
 
   return (
-    <header className="flex items-center gap-3 mb-4">
+    <header className="flex items-center gap-2 mb-3">
       {icon && (
         <div className="p-2 bg-sky-100 rounded-xl flex items-center justify-center">
           <span className="text-sky-600">{icon}</span>
@@ -18,10 +18,10 @@ export const ContentInformation = React.memo(function ContentInformation({
       )}
       <div className="flex flex-col">
         {heading && (
-          <h2 className="text-lg font-bold text-zinc-700">{heading}</h2>
+          <h2 className="text-xl font-bold text-head">{heading}</h2>
         )}
         {subheading && (
-          <p className="text-xs text-zinc-500">{subheading}</p>
+          <p className="text-sm text-subhead">{subheading}</p>
         )}
       </div>
     </header>

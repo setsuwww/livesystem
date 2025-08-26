@@ -1,8 +1,15 @@
-import { Trash2, FolderInput } from "lucide-react"
+"use client";
 
-import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
+import { Trash2, FolderInput } from "lucide-react";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/Select";
 
 export const UsersActionHeader = ({
   search,
@@ -15,11 +22,11 @@ export const UsersActionHeader = ({
   onDeleteSelected,
   onDeleteAll,
   onExportPDF,
-  filteredData
+  filteredData,
+  searchInputRef,
 }) => {
   return (
     <div className="flex items-center justify-between gap-2 flex-wrap">
-
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
@@ -28,10 +35,10 @@ export const UsersActionHeader = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
-            <SelectItem value="Admin">Admin</SelectItem>
-            <SelectItem value="Coordinator">Coordinator</SelectItem>
-            <SelectItem value="Employee">Employee</SelectItem>
-            <SelectItem value="User">User</SelectItem>
+            <SelectItem value="ADMIN">Admin</SelectItem>
+            <SelectItem value="COORDINATOR">Coordinator</SelectItem>
+            <SelectItem value="EMPLOYEE">Employee</SelectItem>
+            <SelectItem value="USER">User</SelectItem>
           </SelectContent>
         </Select>
 
@@ -42,18 +49,32 @@ export const UsersActionHeader = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
-            <SelectItem value="Morning">Morning</SelectItem>
-            <SelectItem value="Afternoon">Afternoon</SelectItem>
-            <SelectItem value="Night">Night</SelectItem>
+            <SelectItem value="MORNING">Morning</SelectItem>
+            <SelectItem value="AFTERNOON">Afternoon</SelectItem>
+            <SelectItem value="NIGHT">Night</SelectItem>
           </SelectContent>
         </Select>
 
-        <Input placeholder="Search..." value={search} onChange={e => onSearchChange(e.target.value)} className="w-full sm:w-64 bg-white py-2"/>
+        <Input
+          ref={searchInputRef}
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          className="w-full sm:w-64 bg-white py-2"
+        />
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="destructive" size="sm" onClick={onDeleteSelected} disabled={selectedCount === 0}>
-          Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">{selectedCount}</span>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={onDeleteSelected}
+          disabled={selectedCount === 0}
+        >
+          Delete Selected{" "}
+          <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">
+            {selectedCount}
+          </span>
         </Button>
 
         <Button variant="destructive" size="sm" onClick={onDeleteAll}>
@@ -61,10 +82,15 @@ export const UsersActionHeader = ({
           Delete All
         </Button>
 
-        <Button size="sm" onClick={() => onExportPDF(filteredData)} className="bg-green-600 hover:bg-green-500 border-green-600 text-white">
-          <FolderInput size={16} /> Export
+        <Button
+          size="sm"
+          onClick={() => onExportPDF(filteredData)}
+          className="bg-green-600 hover:bg-green-500 border-green-600 text-white"
+        >
+          <FolderInput size={16} />
+          Export
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};

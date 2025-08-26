@@ -3,7 +3,7 @@ import ContentForm from "@/components/content/ContentForm";
 import { DashboardHeader } from "../DashboardHeader";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { ShiftsTable } from "./ShiftsTable";
-import { ShiftCards } from "./ShiftsCard";
+import ShiftCards from "./ShiftsCard";
 import { prisma } from "@/lib/prisma";
 import { formatTimeRange, toDateFromTimeString } from "@/function/handleTime";
 

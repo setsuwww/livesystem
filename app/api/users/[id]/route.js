@@ -81,19 +81,19 @@ export async function PUT(req) {
   }
 }
 
+export async function DELETE(req, { params }) {
+  try {
+    const id = parseInt(params.id, 10);
 
-export async function DELETE(req, {
-  params
-}) {
-  try { const id = parseInt(params.id, 10);
-    await prisma.user.delete({
-      where: { id },
-    });
+    if (isNaN(id)) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
+
+    await prisma.user.delete({ where: { id } });
 
     return NextResponse.json({ success: true });
-  } 
-  catch (error) {
-    console.error(error);
+  } catch (error) {
+    console.error("DELETE /users/[id] error:", error);
     return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
   }
 }

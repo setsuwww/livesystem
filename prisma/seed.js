@@ -46,31 +46,31 @@ async function main() {
   await prisma.shift.deleteMany();
 
   function time(hours, minutes = 0) {
-    return new Date(1970, 0, 1, hours, minutes, 0);
+    return new Date(Date.UTC(1970, 0, 1, hours, minutes, 0));
   }
 
   await prisma.shift.createMany({
-    data: [{
-      // dari jam 08:00 sampai 16:00
-      type: ShiftType.MORNING,
-      startTime: time(8, 0),
-      endTime: time(16, 0),
-    }, {
-      // dari jam 16:00 sampai 00:00
-      type: ShiftType.AFTERNOON,
-      startTime: time(16, 0),
-      endTime: time(0, 0),
-    }, {
-      // dari jam 00:00 sampai 08:00
-      type: ShiftType.NIGHT,
-      startTime: time(0, 0),
-      endTime: time(8, 0),
-    }],
+    data: [
+      {
+        type: "MORNING",
+        startTime: new Date("1970-01-01T08:00:00Z"),
+        endTime: new Date("1970-01-01T16:00:00Z"),
+      },
+      {
+        type: "AFTERNOON",
+        startTime: new Date("1970-01-01T16:00:00Z"),
+        endTime: new Date("1970-01-01T00:00:00Z"),
+      },
+      {
+        type: "NIGHT",
+        startTime: new Date("1970-01-01T03:00:00Z"),
+        endTime: new Date("1970-01-02T08:00:00Z"),
+      },
+    ],
   });
-
   console.log("✅ Seeding selesai!");
 }
 
-main().catch((e) => {
+main().catch((e) => { 
   console.error(e); process.exit(1);
 }).finally(async () => { await prisma.$disconnect() });

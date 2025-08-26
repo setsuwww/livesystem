@@ -41,9 +41,7 @@ export async function getScheduleCount() {
 
 export const revalidate = 60;
 
-export default async function Page({
-  searchParams
-}) {
+export default async function Page({ searchParams }) {
   const page = Number(searchParams?.page) || 1;
 
   const [schedulesRaw, total] = await Promise.all([

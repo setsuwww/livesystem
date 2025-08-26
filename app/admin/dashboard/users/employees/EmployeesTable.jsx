@@ -1,18 +1,26 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 import EmployeesActionHeader from "./EmployeesActionHeader";
 import EmployeesRow from "./EmployeesRow";
+
 import { useEmployeesHooks } from "@/function/hooks/useEmployeesHooks";
 
-export default function EmployeeTable({ users }) {
-  const { search, setSearch,
+export default function EmployeeTable({ users, shifts }) {
+  const {
+    search, setSearch,
     selected, setSelected,
     data, filteredData,
-    toggleSelect, deleteSelected, deleteAll,
-    exportCSV, onSwitch, onEdit, onDelete,
-  } = useEmployeesHooks(users);
+    toggleSelect,
+    deleteSelected, deleteAll,
+    exportCSV, onSwitch, onDelete,
+    editUser, setEditUser,
+  } = useEmployeesHooks(users, shifts);
+
+  const router = useRouter();
 
   return (
     <div className="space-y-4">
@@ -52,8 +60,8 @@ export default function EmployeeTable({ users }) {
               selected={selected}
               toggleSelect={toggleSelect}
               onSwitch={onSwitch}
-              onEdit={onEdit}
-              onDelete={onDelete}
+              onEdit={() => router.push("/admin/dashboard/users/" + user.id + "/edit")}
+              onDelete={() => onDelete(user.id)}
             />
           ))}
         </TableBody>

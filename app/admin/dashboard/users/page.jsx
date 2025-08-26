@@ -69,10 +69,14 @@ export default async function Page({ searchParams }) {
     <section>
       <DashboardHeader title="Users" subtitle="Users data detail" />
       <ContentForm>
-        <ContentInformation heading="List users" subheading="Manage all users data in this table" />
-        <UsersTable data={tableData} />
+        <ContentForm.Header>
+          <ContentInformation heading="List users" subheading="Manage all users data in this table" />
+        </ContentForm.Header>
 
-        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/users" />
+        <ContentForm.Body>
+          <UsersTable data={tableData} />
+          <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/users" />
+        </ContentForm.Body>
       </ContentForm>
     </section>
   )

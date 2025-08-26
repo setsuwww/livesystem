@@ -21,7 +21,7 @@ enum Role {
   USER
 }
 
-enum TicketStatus {
+enum permissionStatus {
   PENDING
   ACCEPTED
   REJECTED
@@ -31,12 +31,13 @@ model Office {
   id        Int       @id @default(autoincrement())
   name      String
   location  String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 
   users     User[]
   shifts    Shift[]
   schedules Schedule[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model User {
@@ -46,7 +47,6 @@ model User {
   password String
   role     Role   @default(USER)
 
-  tickets     Ticket[]
   schedules   Schedule[]
   attendances Attendance[]
 
@@ -55,19 +55,6 @@ model User {
 
   office   Office? @relation(fields: [officeId], references: [id])
   officeId Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Ticket {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String?
-  status      TicketStatus @default(PENDING)
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -95,8 +82,8 @@ model Schedule {
 model Shift { 
   id         Int       @id @default(autoincrement()) 
   type       ShiftType 
-  startTime  DateTime  // ubah dari String ke DateTime
-  endTime    DateTime  // ubah dari String ke DateTime
+  startTime  DateTime 
+  endTime    DateTime 
  
   users       User[] 
   schedules   Schedule[] 
