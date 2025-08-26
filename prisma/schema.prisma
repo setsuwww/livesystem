@@ -114,4 +114,6 @@ enum AttendanceStatus {
   ABSENT
   LATE
   PERMISSION
+  CHECKIN
+  CHECKOUT
 }

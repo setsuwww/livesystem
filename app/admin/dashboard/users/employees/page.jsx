@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
+
 import { ContentInformation } from "@/components/content/ContentInformation";
-import EmployeesTable from "./EmployeesTable";
 import ContentForm from "@/components/content/ContentForm";
+import EmployeesTable from "./EmployeesTable";
 import { DashboardHeader } from "../../DashboardHeader";
 import { Pagination } from "../../Pagination";
-import { capitalize } from "@/function/handleTime";
 
 const PAGE_SIZE = 5;
 
@@ -59,17 +59,15 @@ export default async function EmployeesPage({ searchParams }) {
     <section>
       <DashboardHeader title="Employees" subtitle="Employees management" />
       <ContentForm>
-        <ContentInformation
-          heading="List Employees"
-          subheading="Manage all employees here"
-        />
-        <EmployeesTable users={serializedUsers} />
+        <ContentForm.Header>
+          <ContentInformation heading="List Employees" subheading="Manage all employees here" />
+        </ContentForm.Header>
 
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          basePath="/admin/dashboard/employees"
-        />
+        <ContentForm.Body>
+          <EmployeesTable users={serializedUsers} />
+        </ContentForm.Body>
+
+        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/employees" />
       </ContentForm>
     </section>
   );

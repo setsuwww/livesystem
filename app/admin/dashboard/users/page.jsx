@@ -2,10 +2,10 @@ import UsersTable from "./UsersTable"
 import { DashboardHeader } from '../DashboardHeader';
 import ContentForm from '@/components/content/ContentForm';
 import { ContentInformation } from '@/components/content/ContentInformation';
-
-import { capitalize } from "@/function/handleTime";
+import { capitalize } from "@/function/helpers/timeHelpers";
 import { prisma } from "@/lib/prisma"
 import { Pagination } from "../Pagination";
+import { rapihinWaktu } from "@/lib/time";
 
 const PAGE_SIZE = 5;
 
@@ -47,13 +47,15 @@ export default async function Page({ searchParams }) {
     getUserCount(),
   ]);
 
+
+
   const tableData = users.map(u => ({
     id: u.id,
     name: u.name,
     email: u.email,
     role: capitalize(u.role),
     shift: u.shift
-      ? `${capitalize(u.shift.type)} (${u.shift.startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })} - ${u.shift.endTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", timeZone: "UTC" })})`
+      ? `${capitalize(u.shift.type)} (${rapihinWaktu(u.shift.startTime)} - ${rapihinWaktu(u.shift.endTime)})`
       : "-",
     createdAt: u.createdAt.toISOString(),
     updatedAt: u.updatedAt.toISOString(),
@@ -75,9 +77,13 @@ export default async function Page({ searchParams }) {
 
         <ContentForm.Body>
           <UsersTable data={tableData} />
-          <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/users" />
+          <Pagination
+            page={page}
+            totalPages={totalPages}
+            basePath="/admin/dashboard/users"
+          />
         </ContentForm.Body>
       </ContentForm>
     </section>
-  )
+  );
 }

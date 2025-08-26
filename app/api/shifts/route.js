@@ -1,4 +1,4 @@
-import { toDateFromTimeString } from "@/function/handleTime";
+import { toDateFromTimeString } from "@/function/helpers/timeHelpers";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 

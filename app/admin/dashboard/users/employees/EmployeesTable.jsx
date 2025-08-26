@@ -17,7 +17,6 @@ export default function EmployeeTable({ users, shifts }) {
     toggleSelect,
     deleteSelected, deleteAll,
     exportCSV, onSwitch, onDelete,
-    editUser, setEditUser,
   } = useEmployeesHooks(users, shifts);
 
   const router = useRouter();

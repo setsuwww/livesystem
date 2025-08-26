@@ -9,7 +9,7 @@ import { fetch } from "@/function/helpers/fetch"
 import { CircleUserRound, Search } from "lucide-react"
 import { Label } from "@/components/ui/Label"
 import { shiftStyles } from "@/constants/shiftStyles"
-import { capitalize } from "@/function/handleTime";
+import { capitalize } from "@/function/helpers/timeHelpers";
 
 export const EmployeesSwitchModal = ({
   open,

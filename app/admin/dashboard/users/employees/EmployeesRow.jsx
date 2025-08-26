@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { Badge } from "@/components/ui/Badge";
 import { CircleUserRound } from "lucide-react";
 import { format } from "date-fns";
-import { capitalize } from "@/function/handleTime";
+import { capitalize } from "@/function/helpers/timeHelpers";
 import { shiftStyles } from "@/constants/shiftStyles";
 import EmployeesActionButton from "./EmployeesActionButton";
 import { EmployeesSwitchModal } from "./EmployeesSwitchModal";

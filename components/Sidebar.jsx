@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Users, CalendarDays, Clock, LayoutDashboard, User, Settings, CalendarClock, Ticket } from 'lucide-react'
+import { ChevronDown, Users, CalendarDays, Clock, LayoutDashboard, User, Settings } from 'lucide-react'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
 import SubHeading from './content/SubHeading'
 

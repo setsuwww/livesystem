@@ -3,26 +3,14 @@
 import { Trash2, FolderInput } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/Select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 
 export const UsersActionHeader = ({
-  search,
-  onSearchChange,
-  roleFilter,
-  onRoleFilterChange,
-  shiftFilter,
-  onShiftFilterChange,
-  selectedCount,
-  onDeleteSelected,
-  onDeleteAll,
-  onExportPDF,
-  filteredData,
+  search, onSearchChange,
+  roleFilter, onRoleFilterChange,
+  shiftFilter, onShiftFilterChange,
+  selectedCount, onDeleteSelected, onDeleteAll,
+  onExportPDF, filteredData,
   searchInputRef,
 }) => {
   return (
@@ -55,8 +43,7 @@ export const UsersActionHeader = ({
           </SelectContent>
         </Select>
 
-        <Input
-          ref={searchInputRef}
+        <Input ref={searchInputRef}
           placeholder="Search..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}

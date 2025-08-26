@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `shift` ADD COLUMN `customType` VARCHAR(191) NULL,
-    MODIFY `type` ENUM('CUSTOM', 'MORNING', 'AFTERNOON', 'NIGHT') NOT NULL;

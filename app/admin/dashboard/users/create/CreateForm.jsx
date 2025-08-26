@@ -1,7 +1,9 @@
 "use client";
+
 import { useState } from "react";
-import { Globe } from "lucide-react";
 import { useRouter } from "next/navigation";
+
+import { Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -14,6 +16,7 @@ import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
+import { rapihinWaktu } from "@/lib/time";
 
 export default function UsersForm({ shifts }) {
   const router = useRouter();
@@ -45,12 +48,14 @@ export default function UsersForm({ shifts }) {
     };
 
     try {
-      await fetch({ url: "/users", method: "post", data: payload,
+      await fetch({
+        url: "/users", method: "post", data: payload,
         successMessage: "User created successfully ✅",
         errorMessage: "Failed to create user ❌",
         onSuccess: () => router.push("/admin/dashboard/users"),
       });
-    } finally {
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -69,14 +74,10 @@ export default function UsersForm({ shifts }) {
 
   return (
     <section>
-      <DashboardHeader
-        title="Create Users"
-        subtitle="Insert name, email, password, select role and shift for users data"
-      />
+      <DashboardHeader title="Create Users" subtitle="Insert name, email, password, select role and shift for users data" />
 
       <ContentForm>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* HEADER */}
+        <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
             <ContentInformation icon={<Globe className="w-8 h-8" strokeWidth={1.5} />}
               heading="Public"
@@ -86,7 +87,7 @@ export default function UsersForm({ shifts }) {
 
           {/* BODY */}
           <ContentForm.Body>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="username" className="text-head">Username <span className="text-red-500">*</span></Label>
                 <Input placeholder="Username" name="name"
@@ -98,18 +99,16 @@ export default function UsersForm({ shifts }) {
 
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-head">Email <span className="text-red-500">*</span></Label>
-                <Input placeholder="Users Email" type="email" name="email"
+                <Input placeholder="Users email" type="email" name="email"
                   value={form.email}
                   onChange={handleChange}
                   required
                 />
               </div>
 
-              <ContentInformation heading="Private" subheading="Users role, password and shift assignment"/>
-
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-head">Password <span className="text-red-500">*</span></Label>
-                <Input placeholder="Users Password" type="password" name="password"
+                <Input placeholder="Users password" type="password" name="password"
                   value={form.password}
                   onChange={handleChange}
                   required
@@ -123,7 +122,7 @@ export default function UsersForm({ shifts }) {
                   value={form.role}
                   onChange={(value) => handleCustomChange("role", value)}
                 />
-                <p className="text-xs text-subhead">(Optional)</p>
+                
               </div>
 
               <div className="space-y-2">
@@ -138,21 +137,22 @@ export default function UsersForm({ shifts }) {
                     <SelectItem value="NONE">No Shift Assigned</SelectItem>
                     {shifts.map((shift) => (
                       <SelectItem key={shift.id} value={String(shift.id)}>
-                        {shift.type} ({formatTime(shift.startTime)} -{" "}
-                        {formatTime(shift.endTime)})
+                        {shift.type} ({rapihinWaktu(shift.startTime)} -{" "}
+                        {rapihinWaktu(shift.endTime)})
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                <p className="text-xs text-subhead">Optional</p>
               </div>
             </div>
           </ContentForm.Body>
 
-          {/* FOOTER */}
           <ContentForm.Footer>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create User"}
-            </Button>
+            <footer className="vertical-space space-x-2">
+              <Button type="submit" variant="outline">Cancel</Button>
+              <Button type="submit" disabled={loading}>{loading ? "Creating..." : "Create User"}</Button>
+            </footer>
           </ContentForm.Footer>
         </form>
       </ContentForm>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { capitalize } from "@/function/handleTime";
+import { capitalize } from "@/function/helpers/timeHelpers";
 
 export function ShiftsTable({
   data

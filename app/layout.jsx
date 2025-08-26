@@ -1,5 +1,4 @@
 import "@/styles/globals.css"
-import { Provider } from "./provider"
 
 export const metadata = {
   title: "Lintasarta",
@@ -15,7 +14,7 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body>
-        <Provider>{children}</Provider>
+        {children}
       </body>
     </html>
   )

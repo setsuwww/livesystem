@@ -6,7 +6,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import UsersTable from "./ShiftUserTable";
 
-import { capitalize } from "@/function/handleTime";
+import { capitalize } from "@/function/helpers/timeHelpers";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 

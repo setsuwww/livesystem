@@ -67,7 +67,7 @@ export default async function AdminDashboardPage() {
           title="Afternoon Shifts"
           value={totalSchedules.toString()}
           negativeValue="0"
-          icon={<SunMoon strokeWidth={1.25} />}
+          icon={<SunMoon strokeWidth={2} />}
           color="bg-orange-100 text-orange-600"
         />
 

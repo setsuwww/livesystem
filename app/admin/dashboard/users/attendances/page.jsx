@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { capitalize, formatTimeRange } from "@/function/handleTime";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import ContentForm from "@/components/content/ContentForm";
-import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import { Pagination } from "@/app/admin/dashboard/Pagination";
-import ShiftCards from "../../shifts/ShiftsCard";
+import { DashboardHeader } from "../../DashboardHeader";
+import { Pagination } from "../../Pagination";
+import { ShiftCards } from "../../shifts/ShiftsCard";
 import AttendancesTable from './AttendancesTable';
 
 const PAGE_SIZE = 5;
@@ -17,9 +16,7 @@ async function getAttendances(page = 1) {
       user: {
         select: { id: true, name: true, email: true },
       },
-      shift: {
-        select: { id: true, type: true, startTime: true, endTime: true },
-      },
+      shift: { select: { id: true, type: true, startTime: true, endTime: true } },
     },
     orderBy: { date: "desc" },
   });
@@ -34,19 +31,15 @@ async function getShifts() {
     include: {
       users: {
         select: {
-          id: true,
-          name: true,
-          email: true,
+          id: true, name: true, email: true,
           attendances: {
             where: {
               date: {
                 gte: new Date(new Date().setHours(0, 0, 0, 0)), // Hari ini
               },
             },
-            select: {
-              status: true,
-            },
-            take: 1, // Ambil kehadiran terbaru
+            select: { status: true },
+            take: 1,
           },
         },
       },
@@ -85,10 +78,10 @@ export default async function AttendancesPage({ searchParams }) {
     updatedAt: a.updatedAt.toISOString(),
     shift: a.shift
       ? {
-          ...a.shift,
-          startTime: a.shift.startTime.toISOString(),
-          endTime: a.shift.endTime.toISOString(),
-        }
+        ...a.shift,
+        startTime: a.shift.startTime.toISOString(),
+        endTime: a.shift.endTime.toISOString(),
+      }
       : null,
   }));
 
@@ -102,16 +95,20 @@ export default async function AttendancesPage({ searchParams }) {
     <section>
       <DashboardHeader title="Attendances" subtitle="Employees attendance records" />
       <ContentForm>
-        <ContentInformation
-          heading="Shift Overview"
-          subheading="View attendance by shift"
-        />
-        <ShiftCards shifts={shifts} />
-        <ContentInformation
-          heading="List Attendances"
-          subheading="Manage and review all attendance records"
-        />
-        <AttendancesTable data={serializedAttendances} />
+        <ContentForm.Header>
+          <ContentInformation heading="Shift Overview" subheading="View attendance by shift" />
+        </ContentForm.Header>
+
+        <ContentForm.Body>
+          <ShiftCards shifts={shifts} />
+
+          <div className="my-8">
+            <ContentInformation heading="List Attendances" subheading="Manage and review all attendance records" />
+          </div>
+
+          <AttendancesTable data={serializedAttendances} />
+        </ContentForm.Body>
+
         <Pagination
           page={page}
           totalPages={totalPages}

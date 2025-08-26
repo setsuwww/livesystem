@@ -6,7 +6,7 @@ import ScheduleActionsButtons from "./SchedulesActionButton";
 import { TableRow, TableCell } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 
-import { capitalize } from "@/function/handleTime";
+import { capitalize } from "@/function/helpers/timeHelpers";
 
 
 export const SchedulesRow = React.memo(function ({

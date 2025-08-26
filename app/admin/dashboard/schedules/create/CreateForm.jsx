@@ -14,7 +14,7 @@ import { Schedule, Shift } from "@prisma/client";
 import { fetch } from "@/function/helpers/fetch";
 
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select"; // path sesuai file kamu tadi
-import { capitalize } from '@/function/handleTime';
+import { capitalize } from '@/function/helpers/timeHelpers';
 
 export default function CreateForm({
   schedules,
