@@ -11,9 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
+import { DashboardHeader } from "../../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
-import { DashboardHeader } from "../../../DashboardHeader";
+import { capitalize } from '@/function/helpers/timeHelpers';
 import { rapihinWaktu } from "@/lib/time";
 
 export default function UsersEditForm({ userId, shifts, initialForm }) {
@@ -129,10 +130,10 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
                     <SelectValue placeholder="No Shift Assigned" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="NONE">No Shift Assigned</SelectItem>
+                    <SelectItem value="NONE">-</SelectItem>
                     {shifts.map((shift) => (
                       <SelectItem key={shift.id} value={String(shift.id)}>
-                        {shift.type} ({rapihinWaktu(shift.startTime)} - {rapihinWaktu(shift.endTime)})
+                        {capitalize(shift.type)}
                       </SelectItem>
                     ))}
                   </SelectContent>

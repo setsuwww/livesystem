@@ -56,7 +56,17 @@ export function ShiftCards({ shifts }) {
         <Dialog open={true} onOpenChange={handleClose}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>{selectedShift.type} Shift - Attendance Detail</DialogTitle>
+              <DialogTitle className="vertical-space">
+                  <div>
+                    <span>Detail attendance</span>
+                    <div className="vertical-space mt-4">
+                      <h1 className="text-sm text-zinc-500">Reviewed shift</h1>
+                      <Badge className={shiftStyles[selectedShift.type]}>
+                        {capitalize(selectedShift.type)}
+                      </Badge>
+                    </div>
+                  </div>
+              </DialogTitle>
             </DialogHeader>
             <div className="mt-4 space-y-4">
               {["ABSENT", "LATE", "PERMISSION", "PRESENT"].map((status) => {
@@ -66,9 +76,8 @@ export function ShiftCards({ shifts }) {
                 return (
                   <div key={status}>
                     <div className="vertical-space gap-1 mb-2">
-                      <Badge className={`w-3 h-3 rounded-full bg-${statusColors[status]}-500`} />
                       <span className={`font-semibold text-${statusColors[status]}-600`}>
-                        {status} ({users.length})
+                        {capitalize(status)} ({users.length})
                       </span>
                     </div>
                     <div className="space-y-1">

@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
+import { capitalize } from "@/function/helpers/timeHelpers";
 import { rapihinWaktu } from "@/lib/time";
 
 export default function UsersForm({ shifts }) {
@@ -134,11 +135,10 @@ export default function UsersForm({ shifts }) {
                     <SelectValue placeholder="No Shift Assigned" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="NONE">No Shift Assigned</SelectItem>
+                    <SelectItem value="NONE">-</SelectItem>
                     {shifts.map((shift) => (
                       <SelectItem key={shift.id} value={String(shift.id)}>
-                        {shift.type} ({rapihinWaktu(shift.startTime)} -{" "}
-                        {rapihinWaktu(shift.endTime)})
+                        {capitalize(shift.type)}
                       </SelectItem>
                     ))}
                   </SelectContent>

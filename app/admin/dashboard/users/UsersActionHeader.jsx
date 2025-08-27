@@ -39,7 +39,7 @@ export const UsersActionHeader = ({
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="MORNING">Morning</SelectItem>
             <SelectItem value="AFTERNOON">Afternoon</SelectItem>
-            <SelectItem value="NIGHT">Night</SelectItem>
+            <SelectItem value="EVENING">Evening</SelectItem>
           </SelectContent>
         </Select>
 

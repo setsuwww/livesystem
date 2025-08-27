@@ -54,9 +54,8 @@ export default async function Page({ searchParams }) {
     name: u.name,
     email: u.email,
     role: capitalize(u.role),
-    shift: u.shift
-      ? `${capitalize(u.shift.type)} (${rapihinWaktu(u.shift.startTime)} - ${rapihinWaktu(u.shift.endTime)})`
-      : "-",
+    shift: u.shift ? `${capitalize(u.shift.type)}` : "",
+    shiftTime: u.shift ? `${rapihinWaktu(u.shift.startTime)} - ${rapihinWaktu(u.shift.endTime)}` : "",
     createdAt: u.createdAt.toISOString(),
     updatedAt: u.updatedAt.toISOString(),
   }));

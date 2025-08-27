@@ -102,7 +102,7 @@ export default function CalendarPageview({initialEvents}) {
               <div className="flex items-center space-x-2 mt-4">
                 <div className="flex items-center space-x-2 bg-purple-50 border border-purple-100 px-2 py-0.5 rounded-full">
                   <Clock className="bg-purple-500/50 text-transparent p-[2px] rounded-md" size={13}/>
-                  <span className="text-purple-700 text-sm font-base">Night</span>
+                  <span className="text-purple-700 text-sm font-base">Evening</span>
                 </div>
                 <div className="flex items-center space-x-2 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-full">
                   <Clock className="bg-orange-500/50 text-transparent p-[2px] rounded-md" size={13}/>

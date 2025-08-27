@@ -25,15 +25,9 @@ export default async function EditUserPage({ params }) {
   });
 
   return (
-    <UsersEditForm
-      userId={user.id}
-      shifts={shifts}
-      initialForm={{
-        name: user.name,
-        email: user.email,
-        password: "",
-        role: user.role,
-        shiftId: user.shiftId ? String(user.shiftId) : "NONE",
+    <UsersEditForm userId={user.id} shifts={shifts}
+      initialForm={{ name: user.name, email: user.email, password: "",
+        role: user.role, shiftId: user.shiftId ? String(user.shiftId) : "NONE",
       }}
     />
   );

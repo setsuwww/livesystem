@@ -74,6 +74,8 @@ export default async function AttendancesPage({ searchParams }) {
   const serializedAttendances = attendances.map((a) => ({
     ...a,
     date: a.date.toISOString(),
+    checkOutTime: a.checkOutTime ? a.checkOutTime.toISOString() : null,
+    checkInTime: a.checkInTime ? a.checkInTime.toISOString() : null,
     createdAt: a.createdAt.toISOString(),
     updatedAt: a.updatedAt.toISOString(),
     shift: a.shift

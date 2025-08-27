@@ -29,7 +29,7 @@ export function ShiftsTable({
   const mainShifts = data.filter((s) => 
     s.type === "MORNING" || 
     s.type === "AFTERNOON" || 
-    s.type === "NIGHT" 
+    s.type === "EVENING" 
   );
 
   return (

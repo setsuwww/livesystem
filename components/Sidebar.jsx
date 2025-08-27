@@ -8,9 +8,9 @@ import { ChevronDown, Users, CalendarDays, Clock, LayoutDashboard, User, Setting
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
 import SubHeading from './content/SubHeading'
 
-const linkBase = "flex items-center gap-2 text-md px-3 py-2 rounded-lg transition-colors"
+const linkBase = "flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-colors"
 const subLinkBase = "block text-sm px-3 py-1.5 font-base rounded-lg transition-colors"
-const triggerBase = "w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors focus:outline-none"
+const triggerBase = "w-full flex items-center text-sm justify-between px-3 py-2 rounded-lg transition-colors focus:outline-none"
 const subContentBase = "border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2"
 
 function SidebarLink({

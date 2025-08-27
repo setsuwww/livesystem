@@ -62,8 +62,8 @@ async function main() {
         endTime: new Date("1970-01-01T00:00:00Z"),
       },
       {
-        type: "NIGHT",
-        startTime: new Date("1970-01-01T03:00:00Z"),
+        type: "EVENING",
+        startTime: new Date("1970-01-01T00:00:00Z"),
         endTime: new Date("1970-01-02T08:00:00Z"),
       },
     ],

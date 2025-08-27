@@ -57,13 +57,16 @@ export default async function ShiftUsersPage({ params, searchParams }) {
     <section>
       <DashboardHeader title={`${title} shifts`} subtitle="Manage shift employees" />
       <ContentForm>
-        <ContentInformation heading={`${title} shift employees`} subheading={`View all users in this shift`} />
+        <ContentForm.Header>
+          <ContentInformation heading={`${title} shift`} subheading={`View all employees in this shift`} />
+          <Link href="/admin/dashboard/users" className="flex items-center text-sm font-semibold text-blue-500 mb-2">
+            Users detail <ChevronRight strokeWidth={2} size={20} />
+          </Link>
+        </ContentForm.Header>
 
-        <Link href="/admin/dashboard/users" className="flex items-center text-sm font-semibold text-blue-500 my-2">
-          Users detail <ChevronRight strokeWidth={2} size={20} />
-        </Link>
-
-        <UsersTable data={usersDataMapped} />
+        <ContentForm.Body>
+          <UsersTable data={usersDataMapped} />
+        </ContentForm.Body>
 
         <Pagination page={page} totalPages={totalPages} basePath={`/admin/dashboard/shifts/${shiftId}`} />
       </ContentForm>

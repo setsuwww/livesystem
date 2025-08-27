@@ -20,7 +20,7 @@ export function CalendarsModal({ open, loading, formData, selectedEvent, onClose
             <span className="text-xs text-subhead">email@email.com</span>
           </div>
           <Badge htmlFor="description" className="bg-orange-100 border-orange-200 text-orange-700">Afternoon</Badge>
-          <Badge htmlFor="duedate" className="bg-purple-100 border-purple-200 text-purple-700"> Night</Badge>
+          <Badge htmlFor="duedate" className="bg-purple-100 border-purple-200 text-purple-700"> Evening</Badge>
 
           {selectedEvent && (
             <div className="flex items-center gap-2">

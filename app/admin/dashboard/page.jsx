@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
         />
 
         <DashboardStats
-          title="Night Shifts"
+          title="Evening Shifts"
           value={totalShifts.toString()}
           negativeValue="0"
           icon={<Moon strokeWidth={2} />}

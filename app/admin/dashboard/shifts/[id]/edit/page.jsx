@@ -4,7 +4,7 @@ import EditForm from "./EditForm";
 import ContentForm from '@/components/content/ContentForm';
 import { ContentInformation } from '@/components/content/ContentInformation';
 import { DashboardHeader } from "../../../DashboardHeader";
-
+  
 export const revalidate = 60;
 
 export default async function Page({
@@ -27,8 +27,13 @@ export default async function Page({
         <DashboardHeader title="Edit Shift" subtitle="Update shift type and time range" />
     
         <ContentForm>
+          <ContentForm.Header>
             <ContentInformation heading="Shift Information" subheading="Update shift type and time range" />
+          </ContentForm.Header>
+          
+          <ContentForm.Body>
             <EditForm shift={safeShift} />
+          </ContentForm.Body>
         </ContentForm>
     </section>
   );

@@ -11,7 +11,7 @@
 
     // Ambil semua shift utama
     const mainShifts = await prisma.shift.findMany({
-      where: { type: { in: ["MORNING", "AFTERNOON", "NIGHT"] } },
+      where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
       select: {
         id: true,
         type: true,
@@ -47,11 +47,15 @@
 
     return (
       <section className="space-y-6">
-        <DashboardHeader title="Shifts" subtitle="Manage shifts data" />
+          <DashboardHeader title="Shifts" subtitle="Manage shifts data" />
         <ContentForm>
-          <ContentInformation heading="List shifts" subheading="Manage all shift data in this table" />
-          <ShiftsTable data={tableData} />
-          <ShiftCards shifts={mainShifts} />
+          <ContentForm.Header>
+            <ContentInformation heading="List shifts" subheading="Manage all shift data in this table" />
+          </ContentForm.Header>
+
+          <ContentForm.Body>
+            <ShiftsTable data={tableData} />
+          </ContentForm.Body>
         </ContentForm>
       </section>
     );
