@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/auth";
-import CheckinButton from "./CheckinForm";
+import CheckinForm from "./CheckinForm";
 
 export default async function Page() {
   const user = await getCurrentUser();
@@ -24,7 +24,11 @@ export default async function Page() {
         {employee.shift.startTime.toLocaleTimeString()} -{" "}
         {employee.shift.endTime.toLocaleTimeString()}
       </p>
-      <CheckinButton shiftId={employee.shift.id} />
+      <CheckinForm
+        shiftId={employee.shift.id}
+        shiftStart={employee.shift.startTime}
+        shiftEnd={employee.shift.endTime}
+      />
     </div>
   );
 }

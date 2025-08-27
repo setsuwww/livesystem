@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import { Users, Clock } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { Users, Clock } from "lucide-react";
+
+import { format } from "date-fns";
 import { capitalize, formatTimeRange } from "@/function/helpers/timeHelpers";
 import { shiftStyles } from "@/constants/shiftStyles";
 
@@ -22,12 +24,13 @@ export function ShiftCards({ shifts }) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {shifts.map((shift) => { const worstStatus = shift.users
-            .map((u) => u.attendanceStatus)
-            .sort((a, b) =>
-                ["ABSENT", "LATE", "PERMISSION", "PRESENT"].indexOf(a) -
-                ["ABSENT", "LATE", "PERMISSION", "PRESENT"].indexOf(b)
-            )[0] || "PRESENT";
+      {shifts.map((shift) => {
+        const worstStatus = shift.users
+          .map((u) => u.attendanceStatus)
+          .sort((a, b) =>
+            ["ABSENT", "LATE", "PERMISSION", "PRESENT"].indexOf(a) -
+            ["ABSENT", "LATE", "PERMISSION", "PRESENT"].indexOf(b)
+          )[0] || "PRESENT";
 
         const presentCount = shift.users.filter((u) => u.attendanceStatus === "PRESENT").length;
 
@@ -39,7 +42,9 @@ export function ShiftCards({ shifts }) {
             <div className="vertical-space justify-between mb-6">
               <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-none ${shiftStyles[shift.type]}`}>{capitalize(shift.type)}</span>
               <Badge className="vertical-space space-x-2 bg-green-100 border-green-300 text-green-700">
-                <span className="text-xs">{formatTimeRange(shift.startTime, shift.endTime)}</span>
+                <span className="text-xs">
+                  {format(new Date(shift.startTime), "HH:mm")} - {format(new Date(shift.endTime), "HH:mm")}
+                </span>
               </Badge>
             </div>
             <div className="vertical-space gap-1 text-sm text-zinc-600">
@@ -57,15 +62,15 @@ export function ShiftCards({ shifts }) {
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle className="vertical-space">
-                  <div>
-                    <span>Detail attendance</span>
-                    <div className="vertical-space mt-4">
-                      <h1 className="text-sm text-zinc-500">Reviewed shift</h1>
-                      <Badge className={shiftStyles[selectedShift.type]}>
-                        {capitalize(selectedShift.type)}
-                      </Badge>
-                    </div>
+                <div>
+                  <span>Detail attendance</span>
+                  <div className="vertical-space mt-4">
+                    <h1 className="text-sm text-zinc-500">Reviewed shift</h1>
+                    <Badge className={shiftStyles[selectedShift.type]}>
+                      {capitalize(selectedShift.type)}
+                    </Badge>
                   </div>
+                </div>
               </DialogTitle>
             </DialogHeader>
             <div className="mt-4 space-y-4">

@@ -5,7 +5,7 @@ import { ContentInformation } from '@/components/content/ContentInformation';
 import { capitalize } from "@/function/helpers/timeHelpers";
 import { prisma } from "@/lib/prisma"
 import { Pagination } from "../Pagination";
-import { rapihinWaktu } from "@/lib/time";
+import { format } from "date-fns";
 
 const PAGE_SIZE = 5;
 
@@ -55,7 +55,9 @@ export default async function Page({ searchParams }) {
     email: u.email,
     role: capitalize(u.role),
     shift: u.shift ? `${capitalize(u.shift.type)}` : "",
-    shiftTime: u.shift ? `${rapihinWaktu(u.shift.startTime)} - ${rapihinWaktu(u.shift.endTime)}` : "",
+    shiftTime: u.shift
+      ? `${format(new Date(u.shift.startTime), "HH:mm")} - ${format(new Date(u.shift.endTime), "HH:mm")}`
+      : "",
     createdAt: u.createdAt.toISOString(),
     updatedAt: u.updatedAt.toISOString(),
   }));

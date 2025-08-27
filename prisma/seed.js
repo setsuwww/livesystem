@@ -45,26 +45,22 @@ async function main() {
 
   await prisma.shift.deleteMany();
 
-  function time(hours, minutes = 0) {
-    return new Date(Date.UTC(1970, 0, 1, hours, minutes, 0));
-  }
-
   await prisma.shift.createMany({
     data: [
       {
         type: "MORNING",
-        startTime: new Date("1970-01-01T08:00:00Z"),
-        endTime: new Date("1970-01-01T16:00:00Z"),
+        startTime: new Date("1970-01-01T08:00:00"),
+        endTime: new Date("1970-01-01T16:00:00"),
       },
       {
         type: "AFTERNOON",
-        startTime: new Date("1970-01-01T16:00:00Z"),
-        endTime: new Date("1970-01-01T00:00:00Z"),
+        startTime: new Date("1970-01-01T16:00:00"),
+        endTime: new Date("1970-01-01T00:00:00"),
       },
       {
         type: "EVENING",
-        startTime: new Date("1970-01-01T00:00:00Z"),
-        endTime: new Date("1970-01-02T08:00:00Z"),
+        startTime: new Date("1970-01-01T00:00:00"),
+        endTime: new Date("1970-01-02T08:00:00"),
       },
     ],
   });

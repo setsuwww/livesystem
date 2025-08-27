@@ -46,7 +46,7 @@ export default function AttendancesTable({ data }) {
 
             {/* Checkin */}
             <TableCell>
-              <span className="text-sm font-semibold text-green-500">
+              <span className="text-sm text-green-500">
                 {att.checkInTime
                   ? format(new Date(att.checkInTime), "HH:mm", { locale: id })
                   : "-"}
@@ -55,7 +55,7 @@ export default function AttendancesTable({ data }) {
 
             {/* Checkout */}
             <TableCell>
-              <span className="text-sm font-semibold text-red-500">
+              <span className="text-sm text-red-500">
                 {att.checkOutTime
                   ? format(new Date(att.checkOutTime), "HH:mm", { locale: id })
                   : "-"}

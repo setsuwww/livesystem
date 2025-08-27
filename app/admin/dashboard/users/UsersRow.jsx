@@ -27,7 +27,7 @@ export const shiftStyles = {
 
 
 
-export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles}) {
+export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }) {
   const handleToggle = () => onToggleSelect(user.id)
 
   const formatedCreatedDate = useMemo(
@@ -59,29 +59,26 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       </TableCell>
 
       <TableCell>
-        <Badge
-          variant="outline"
-          className={`${roleStyles[user.role] || ""} px-2 py-0.5 text-xs font-semibold`}
-        >
+        <Badge variant="outline" className={`${roleStyles[user.role] || ""} px-2 py-0.5 text-xs font-semibold`}>
           {user.role}
         </Badge>
       </TableCell>
 
-<TableCell>
-  <div className="flex items-center gap-2">
-    <div className={`flex items-center justify-center p-1.5 rounded-lg ${shiftStyles[capitalize(user.shift)] || shiftStyles.OFF}`}>
-      {shiftIcons[capitalize(user.shift)] || shiftIcons.OFF}
-    </div>
-    <div className="flex flex-col">
-      <span className="text-sm font-semibold text-zinc-600">
-        {user.shift ?? "OFF"}
-      </span>
-      <span className="text-xs text-zinc-400">
-        {user.shiftTime ?? "OFF"}
-      </span>
-    </div>
-  </div>
-</TableCell>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          <div className={`flex items-center justify-center p-1.5 rounded-lg ${shiftStyles[capitalize(user.shift)] || shiftStyles.OFF}`}>
+            {shiftIcons[capitalize(user.shift)] || shiftIcons.OFF}
+          </div>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold text-zinc-600">
+              {user.shift ?? "OFF"}
+            </span>
+            <span className="text-xs text-zinc-400">
+              {user.shiftTime ?? "OFF"}
+            </span>
+          </div>
+        </div>
+      </TableCell>
 
 
       <TableCell className="flex flex-col">

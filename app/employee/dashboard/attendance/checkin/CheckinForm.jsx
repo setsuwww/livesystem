@@ -1,12 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { shiftBridgeDay } from "@/function/services/shiftBridgeDay"
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/Card"
+import { Button } from "@/components/ui/Button"
+import { Textarea } from "@/components/ui/Textarea"
+import { Loader2 } from "lucide-react"
 
-export default function AttendanceForm({ shiftId }) {
+export default function CheckinForm({ shiftId, shiftStart, shiftEnd }) {
   const [loading, setLoading] = useState(false)
-  const [mode, setMode] = useState("PRESENT")
+  const [mode, setMode] = useState("ABSENT")
   const [reason, setReason] = useState("")
   const [message, setMessage] = useState("")
+
+  useEffect(() => {
+    const now = new Date()
+    if (shiftBridgeDay(now, new Date(shiftStart), new Date(shiftEnd))) {
+      setMode("PRESENT")
+    } else {
+      setMode("ABSENT")
+    }
+  }, [shiftStart, shiftEnd])
 
   const handleCheckin = async () => {
     setLoading(true)
@@ -16,8 +30,7 @@ export default function AttendanceForm({ shiftId }) {
       body: JSON.stringify({ shiftId }),
     })
     setLoading(false)
-    if (res.ok) setMessage("Check-in berhasil ✅")
-    else setMessage("Gagal check-in ❌")
+    setMessage(res.ok ? "Check-in berhasil ✅" : "Gagal check-in ❌")
   }
 
   const handleCheckout = async () => {
@@ -28,13 +41,11 @@ export default function AttendanceForm({ shiftId }) {
       body: JSON.stringify({ shiftId }),
     })
     setLoading(false)
-    if (res.ok) setMessage("Check-out berhasil ✅")
-    else setMessage("Gagal check-out ❌")
+    setMessage(res.ok ? "Check-out berhasil ✅" : "Gagal check-out ❌")
   }
 
   const handlePermission = async () => {
     if (!reason) return setMessage("Isi alasan izin terlebih dahulu ❌")
-
     setLoading(true)
     const res = await fetch("/api/attendance/permission", {
       method: "POST",
@@ -42,64 +53,59 @@ export default function AttendanceForm({ shiftId }) {
       body: JSON.stringify({ shiftId, reason }),
     })
     setLoading(false)
-    if (res.ok) setMessage("Permission diajukan ✅")
-    else setMessage("Gagal ajukan permission ❌")
+    setMessage(res.ok ? "Permission diajukan ✅" : "Gagal ajukan permission ❌")
   }
 
   return (
-    <div className="p-4 border rounded-lg w-full max-w-sm mx-auto text-center space-y-3">
-      <h2 className="text-lg font-bold">Absensi Shift #{shiftId}</h2>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle>Absensi Shift #{shiftId}</CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Status sekarang: <b>{mode}</b>
+        </p>
+      </CardHeader>
 
-      {/* Select mode */}
-      <select
-        value={mode}
-        onChange={(e) => setMode(e.target.value)}
-        className="w-full p-2 border rounded"
-      >
-        <option value="PRESENT">PRESENT</option>
-        <option value="PERMISSION">PERMISSION</option>
-      </select>
+      <CardContent className="space-y-3">
+        <Textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Isi alasan jika izin..."
+          disabled={mode !== "ABSENT" || loading}
+        />
+      </CardContent>
 
-      {/* Jika PRESENT → checkin & checkout */}
-      {mode === "PRESENT" && (
-        <div className="space-y-2">
-          <button
-            onClick={handleCheckin}
-            disabled={loading}
-            className="w-full px-4 py-2 bg-green-600 text-white rounded disabled:opacity-50"
-          >
-            {loading ? "Loading..." : "Check-in"}
-          </button>
-          <button
-            onClick={handleCheckout}
-            disabled={loading}
-            className="w-full px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
-          >
-            {loading ? "Loading..." : "Check-out"}
-          </button>
-        </div>
+      <CardFooter className="flex flex-col gap-2">
+        <Button
+          onClick={handleCheckin}
+          disabled={mode !== "PRESENT" || loading}
+          className="w-full"
+        >
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Check-in
+        </Button>
+        <Button
+          onClick={handleCheckout}
+          disabled={mode !== "PRESENT" || loading}
+          variant="secondary"
+          className="w-full"
+        >
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Check-out
+        </Button>
+        <Button
+          onClick={handlePermission}
+          disabled={mode !== "ABSENT" || loading}
+          variant="destructive"
+          className="w-full"
+        >
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Ajukan Permission
+        </Button>
+      </CardFooter>
+
+      {message && (
+        <p className="p-3 text-sm text-center text-muted-foreground">{message}</p>
       )}
-
-      {/* Jika PERMISSION → tampilkan alasan */}
-      {mode === "PERMISSION" && (
-        <div className="space-y-2">
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Masukkan alasan izin..."
-            className="w-full p-2 border rounded"
-          />
-          <button
-            onClick={handlePermission}
-            disabled={loading}
-            className="w-full px-4 py-2 bg-yellow-600 text-white rounded disabled:opacity-50"
-          >
-            {loading ? "Loading..." : "Ajukan Permission"}
-          </button>
-        </div>
-      )}
-
-      {message && <p className="mt-2 text-sm">{message}</p>}
-    </div>
+    </Card>
   )
 }

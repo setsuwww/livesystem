@@ -55,8 +55,10 @@ model User {
   password String
   role     Role   @default(USER)
 
-  schedules   Schedule[]
+  schedules Schedule[]
   attendances Attendance[]
+  permissionRequests PermissionRequest[]
+
   shift       Shift?  @relation(fields: [shiftId], references: [id])
   shiftId     Int?
 
@@ -95,6 +97,7 @@ model Shift {
   users       User[] 
   schedules   Schedule[] 
   attendances Attendance[] 
+  permissionRequests PermissionRequest[]
  
   office   Office? @relation(fields: [officeId], references: [id]) 
   officeId Int? 
