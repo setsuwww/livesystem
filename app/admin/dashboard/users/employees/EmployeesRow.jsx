@@ -11,7 +11,7 @@ import { shiftStyles } from "@/constants/shiftStyles";
 import EmployeesActionButton from "./EmployeesActionButton";
 import { EmployeesSwitchModal } from "./EmployeesSwitchModal";
 
-export default function EmployeesRow({ user, selected, toggleSelect, onSwitch, onEdit, onDelete }) {
+export default function EmployeesRow({ user, selected, toggleSelect, onHistory, onEdit, onDelete }) {
   const [switchOpen, setSwitchOpen] = useState(false);
   return (
     <TableRow key={user.id}>
@@ -56,6 +56,7 @@ export default function EmployeesRow({ user, selected, toggleSelect, onSwitch, o
       </TableCell>
       <TableCell>
         <EmployeesActionButton
+          onHistory={onHistory}
           onSwitch={() => setSwitchOpen(true)}
           onEdit={onEdit}
           onDelete={onDelete}

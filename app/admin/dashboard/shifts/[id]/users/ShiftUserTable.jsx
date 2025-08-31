@@ -155,7 +155,7 @@ export default function UserShiftTable({ data }) {
                     <span className="text-sm font-base text-zinc-600">
                       {created}
                     </span>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-zinc-400">
                       {updated}
                     </span>
                   </span>

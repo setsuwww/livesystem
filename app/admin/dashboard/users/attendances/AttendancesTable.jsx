@@ -1,10 +1,14 @@
 "use client"
 
-import { capitalize } from '@/function/helpers/timeHelpers';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { shiftStyles } from "@/constants/shiftStyles"
+import { Badge } from '@/components/ui/Badge';
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
+
+import { shiftStyles } from "@/constants/shiftStyles"
+import { attedancesStyles } from '@/constants/attedancesStyles';
+
+import { capitalize } from '@/function/helpers/timeHelpers';
 
 export default function AttendancesTable({ data }) {
   return (
@@ -12,24 +16,22 @@ export default function AttendancesTable({ data }) {
       <TableHeader>
         <TableRow>
           <TableHead>Date</TableHead>
-          <TableHead>Nama</TableHead>
+          <TableHead>Name</TableHead>
           <TableHead>Shift</TableHead>
           <TableHead>Checkin</TableHead>
           <TableHead>Checkout</TableHead>
-          <TableHead>Jam Kerja</TableHead>
+          <TableHead>Office hours</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Alasan</TableHead>
+          <TableHead>Reason</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.map((att) => (
           <TableRow key={att.id}>
-            {/* Tanggal absen */}
             <TableCell>
               {format(new Date(att.date), "dd MMMM yyyy", { locale: id })}
             </TableCell>
 
-            {/* User info */}
             <TableCell>
               <div className="flex flex-col">
                 <span className="text-sm text-zinc-700 font-semibold">{att.user?.name}</span>
@@ -37,56 +39,37 @@ export default function AttendancesTable({ data }) {
               </div>
             </TableCell>
 
-            {/* Shift type */}
             <TableCell>
-              <span className={`px-2 py-0.5 rounded-md ${shiftStyles[att.shift?.type]} `}>
+              <Badge className={`px-2 py-0.5 rounded-md ${shiftStyles[att.shift?.type]} `}>
                 {capitalize(att.shift?.type)}
-              </span>
+              </Badge>
             </TableCell>
 
-            {/* Checkin */}
             <TableCell>
               <span className="text-sm text-green-500">
-                {att.checkInTime
-                  ? format(new Date(att.checkInTime), "HH:mm", { locale: id })
+                {att.checkInTime ? format(new Date(att.checkInTime), "HH:mm", { locale: id })
                   : "-"}
               </span>
             </TableCell>
 
-            {/* Checkout */}
             <TableCell>
               <span className="text-sm text-red-500">
-                {att.checkOutTime
-                  ? format(new Date(att.checkOutTime), "HH:mm", { locale: id })
+                {att.checkOutTime ? format(new Date(att.checkOutTime), "HH:mm", { locale: id })
                   : "-"}
               </span>
             </TableCell>
 
-            {/* Jam kerja shift */}
             <TableCell>
-              {att.shift
-                ? `${format(new Date(att.shift.startTime), "HH:mm", { locale: id })} - ${format(new Date(att.shift.endTime), "HH:mm", { locale: id })}`
+              {att.shift ? `${format(new Date(att.shift.startTime), "HH:mm", { locale: id })} - ${format(new Date(att.shift.endTime), "HH:mm", { locale: id })}`
                 : "-"}
             </TableCell>
 
-            {/* Status */}
             <TableCell>
-              <span
-                className={
-                  att.status === "PRESENT"
-                    ? "text-green-600 bg-green-100 text-sm rounded-md px-3 py-0.5 font-base"
-                    : att.status === "LATE"
-                    ? "text-yellow-600 bg-yellow-100 text-sm rounded-md px-3 py-0.5 font-base"
-                    : att.status === "PERMISSION"
-                    ? "text-blue-600 bg-blue-100 text-sm rounded-md px-3 py-0.5 font-base"
-                    : "text-red-600 bg-red-100 text-sm rounded-md px-3 py-0.5 font-base"
-                }
-              >
+              <Badge className={attedancesStyles[capitalize(att.status)]}>
                 {capitalize(att.status)}
-              </span>
+              </Badge>
             </TableCell>
 
-            {/* Alasan izin */}
             <TableCell>{att.reason ?? "-"}</TableCell>
           </TableRow>
         ))}

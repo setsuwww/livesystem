@@ -10,7 +10,7 @@ function Table({
   return (
     <div
       data-slot="table-container"
-      className="rounded-lg bg-white relative w-full overflow-x-auto border border-neutral-200 shadow-sm"
+      className="rounded-lg bg-white relative w-full overflow-x-auto border-y border-neutral-200"
     >
       <table
         data-slot="table"

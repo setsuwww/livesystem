@@ -15,30 +15,24 @@ import { DashboardHeader } from "../../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
 import { capitalize } from '@/function/helpers/timeHelpers';
-import { rapihinWaktu } from "@/lib/time";
+import { roleOptions } from "@/constants/roleOptions";
 
 export default function UsersEditForm({ userId, shifts, initialForm }) {
   const router = useRouter();
   const [form, setForm] = useState({ ...initialForm, password: "" });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (e) => { const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCustomChange = (name, value) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleCustomChange = (name, value) => setForm((prev) => ({ ...prev, [name]: value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const payload = {
-      name: form.name,
-      email: form.email,
-      role: form.role,
+    const payload = { name: form.name, email: form.email, role: form.role,
       shiftId: form.shiftId && form.shiftId !== "NONE" ? parseInt(form.shiftId) : null,
     };
 
@@ -54,18 +48,6 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
       setLoading(false);
     }
   };
-
-  const formatTime = (time) => {
-    const dateObj = typeof time === "string" ? new Date(time) : time;
-    return dateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
-  const roleOptions = [
-    { label: "Admin", description: "Maintain and manage all contents", value: "ADMIN" },
-    { label: "Coordinator", description: "Manage shifts and schedules for users", value: "COORDINATOR" },
-    { label: "Employee", description: "Communicate with another person in office", value: "EMPLOYEE" },
-    { label: "User", description: "Register, login and manage task", value: "USER" },
-  ];
 
   return (
     <section>
@@ -84,7 +66,6 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
             />
           </ContentForm.Header>
 
-          {/* BODY */}
           <ContentForm.Body>
             <div className="space-y-6">
               <div className="space-y-2">

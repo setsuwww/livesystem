@@ -17,7 +17,7 @@ import { DashboardHeader } from "../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
 import { capitalize } from "@/function/helpers/timeHelpers";
-import { rapihinWaktu } from "@/lib/time";
+import { roleOptions } from "@/constants/roleOptions";
 
 export default function UsersForm({ shifts }) {
   const router = useRouter();
@@ -60,18 +60,6 @@ export default function UsersForm({ shifts }) {
       setLoading(false);
     }
   };
-
-  const formatTime = (time) => {
-    const dateObj = typeof time === "string" ? new Date(time) : time;
-    return dateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
-  const roleOptions = [
-    { label: "Admin", description: "Maintain and manage all contents", value: "ADMIN" },
-    { label: "Coordinator", description: "Manage shifts and schedules for users", value: "COORDINATOR" },
-    { label: "Employee", description: "Communicate with another person in office", value: "EMPLOYEE" },
-    { label: "User", description: "Register, login and manage task", value: "USER" },
-  ];
 
   return (
     <section>

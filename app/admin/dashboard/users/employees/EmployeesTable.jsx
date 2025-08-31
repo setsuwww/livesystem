@@ -58,6 +58,7 @@ export default function EmployeeTable({ users, shifts }) {
               user={user}
               selected={selected}
               toggleSelect={toggleSelect}
+              onHistory={() => router.push("/admin/dashboard/users/" + user.id + "/history")}
               onSwitch={onSwitch}
               onEdit={() => router.push("/admin/dashboard/users/" + user.id + "/edit")}
               onDelete={() => onDelete(user.id)}

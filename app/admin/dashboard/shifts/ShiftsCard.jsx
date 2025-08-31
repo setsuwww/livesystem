@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
-import { Users, Clock } from "lucide-react";
+import { Users } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 import { format } from "date-fns";
-import { capitalize, formatTimeRange } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/helpers/timeHelpers";
 import { shiftStyles } from "@/constants/shiftStyles";
 
 const statusColors = {
@@ -48,7 +48,7 @@ export function ShiftCards({ shifts }) {
               </Badge>
             </div>
             <div className="vertical-space gap-1 text-sm text-zinc-600">
-              <div className="p-2 bg-gray-200 rounded-lg">
+              <div className="p-2 bg-zinc-200 rounded-lg">
                 <Users className="w-4 h-4" strokeWidth={2} />
               </div>
               <span className="text-zinc-600 font-semibold">{presentCount}/{shift.users.length}</span>Present
@@ -87,9 +87,9 @@ export function ShiftCards({ shifts }) {
                     </div>
                     <div className="space-y-1">
                       {users.map((u) => (
-                        <div key={u.id} className="bg-gray-50 rounded p-2 flex justify-between">
+                        <div key={u.id} className="bg-zinc-50 rounded p-2 flex justify-between">
                           <span>{u.name}</span>
-                          <span className="text-xs text-gray-500">{u.email}</span>
+                          <span className="text-xs text-zinc-500">{u.email}</span>
                         </div>
                       ))}
                     </div>

@@ -1,21 +1,18 @@
 "use client";
 import { useEffect, useState, useMemo, useCallback, useDeferredValue } from "react"
+import { CircleUserRound, Search } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
 import { Checkbox } from "@/components/ui/Checkbox"
-import { Button } from "@/components/ui/Button"
+import { Label } from "@/components/ui/Label"
 import { Input } from "@/components/ui/Input"
+import { Button } from "@/components/ui/Button"
+
 import { fetch } from "@/function/helpers/fetch"
 
-import { CircleUserRound, Search } from "lucide-react"
-import { Label } from "@/components/ui/Label"
 import { shiftStyles } from "@/constants/shiftStyles"
 import { capitalize } from "@/function/helpers/timeHelpers";
 
-export const EmployeesSwitchModal = ({
-  open,
-  onOpenChange,
-  currentUserId
-}) => {
+export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
@@ -25,18 +22,12 @@ export const EmployeesSwitchModal = ({
   const deferredSearch = useDeferredValue(search)
 
   useEffect(() => {
-    if (open) {
-      fetch({
-        url: "/users",
-        method: "get",
+    if (open) { fetch({ url: "/users", method: "get",
         onSuccess: (data) => setUsers(data),
         errorMessage: "Failed to load users",
       })
 
-      if (currentUserId) {
-        fetch({
-          url: `/users/${currentUserId}`,
-          method: "get",
+      if (currentUserId) { fetch({ url: `/users/${currentUserId}`, method: "get",
           onSuccess: (data) => setCurrentUser(data),
           errorMessage: "Failed to load current user",
         })
@@ -48,10 +39,7 @@ export const EmployeesSwitchModal = ({
     if (!selectedId || !currentUserId) return
 
     setLoading(true)
-    try {
-      await fetch({
-        url: `/users/${currentUserId}/switch`,
-        method: "post",
+    try { await fetch({ url: `/users/${currentUserId}/switch`, method: "post",
         data: { otherUserId: selectedId },
         successMessage: "Shift swapped successfully",
         errorMessage: "Failed to swap shifts",
@@ -65,8 +53,7 @@ export const EmployeesSwitchModal = ({
   const filteredUsers = useMemo(() => {
     const query = deferredSearch.toLowerCase()
     return users.filter(
-      (u) =>
-        (u.id !== currentUserId && u.name.toLowerCase().includes(query)) ||
+      (u) => (u.id !== currentUserId && u.name.toLowerCase().includes(query)) ||
         u.email.toLowerCase().includes(query),
     )
   }, [users, currentUserId, deferredSearch])
@@ -120,7 +107,7 @@ export const EmployeesSwitchModal = ({
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-x-2">
                       <p className="text-sm font-semibold text-zinc-700">{user.name}</p>
-                      <p className={`px-2 py-0.5 rounded-md text-xs ${shiftStyles[user.shift?.type ?? "bg-gray-100"]}`}>
+                      <p className={`px-2 py-0.5 rounded-md text-xs ${shiftStyles[user.shift?.type ?? "bg-zinc-100"]}`}>
                         {capitalize(user.shift?.type ?? "OFF")}
                       </p>
                     </div>
