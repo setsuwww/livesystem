@@ -1,10 +1,6 @@
 import { Button } from "@/components/ui/Button"
 
-export const UsersActionButton = ({
-  userId,
-  onEdit,
-  onDelete
-}) => {
+export const UsersActionButton = ({ userId, onEdit, onDelete }) => {
   const handleEdit = () => onEdit(userId)
   const handleDelete = () => onDelete(userId)
 

@@ -9,12 +9,10 @@ import { Pagination } from "../../../Pagination"
 const PAGE_SIZE = 10
 
 async function getHistory(userId, page = 1) {
-  return await prisma.attendance.findMany({
-    where: { userId },
+  return await prisma.attendance.findMany({ where: { userId },
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
-    include: {
-      shift: true,
+    include: { shift: true,
       user: {
         select: { name: true, email: true },
       },
@@ -24,9 +22,7 @@ async function getHistory(userId, page = 1) {
 }
 
 async function getHistoryCount(userId) {
-  return await prisma.attendance.count({
-    where: { userId },
-  })
+  return await prisma.attendance.count({ where: { userId } })
 }
 
 export const revalidate = 60
@@ -65,10 +61,7 @@ export default async function UserHistoryPage({ params, searchParams }) {
 
   return (
     <section>
-      <DashboardHeader
-        title={`Attendance History`}
-        subtitle={user ? `${user.name} (${user.email})` : "User"}
-      />
+      <DashboardHeader title={`Attendance History`} subtitle={user ? `${user.name} (${user.email})` : "User"}/>
 
       <ContentForm>
         <ContentForm.Header>

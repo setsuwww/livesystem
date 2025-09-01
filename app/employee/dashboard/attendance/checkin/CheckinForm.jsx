@@ -1,60 +1,63 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { shiftBridgeDay } from "@/function/services/shiftBridgeDay"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/Card"
-import { Button } from "@/components/ui/Button"
-import { Textarea } from "@/components/ui/Textarea"
-import { Loader2 } from "lucide-react"
+import { useEffect, useState } from "react";
+import { shiftBridgeDay } from "@/function/services/shiftBridgeDay";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Textarea } from "@/components/ui/Textarea";
+import { Loader2 } from "lucide-react";
 
 export default function CheckinForm({ shiftId, shiftStart, shiftEnd }) {
-  const [loading, setLoading] = useState(false)
-  const [mode, setMode] = useState("ABSENT")
-  const [reason, setReason] = useState("")
-  const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState("ABSENT");
+  const [reason, setReason] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const now = new Date()
-    if (shiftBridgeDay(now, new Date(shiftStart), new Date(shiftEnd))) {
-      setMode("PRESENT")
+    const now = new Date();
+    const start = new Date(shiftStart); // ✅ parse ISO string ke Date
+    const end = new Date(shiftEnd);     // ✅ parse ISO string ke Date
+
+    if (shiftBridgeDay(now, start, end)) {
+      setMode("PRESENT");
     } else {
-      setMode("ABSENT")
+      setMode("ABSENT");
     }
-  }, [shiftStart, shiftEnd])
+  }, [shiftStart, shiftEnd]);
 
   const handleCheckin = async () => {
-    setLoading(true)
+    setLoading(true);
     const res = await fetch("/api/attendance/checkin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ shiftId }),
-    })
-    setLoading(false)
-    setMessage(res.ok ? "Check-in berhasil ✅" : "Gagal check-in ❌")
-  }
+    });
+    setLoading(false);
+    setMessage(res.ok ? "Check-in berhasil ✅" : "Gagal check-in ❌");
+  };
 
   const handleCheckout = async () => {
-    setLoading(true)
+    setLoading(true);
     const res = await fetch("/api/attendance/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ shiftId }),
-    })
-    setLoading(false)
-    setMessage(res.ok ? "Check-out berhasil ✅" : "Gagal check-out ❌")
-  }
+    });
+    setLoading(false);
+    setMessage(res.ok ? "Check-out berhasil ✅" : "Gagal check-out ❌");
+  };
 
   const handlePermission = async () => {
-    if (!reason) return setMessage("Isi alasan izin terlebih dahulu ❌")
-    setLoading(true)
+    if (!reason) return setMessage("Isi alasan izin terlebih dahulu ❌");
+    setLoading(true);
     const res = await fetch("/api/attendance/permission", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ shiftId, reason }),
-    })
-    setLoading(false)
-    setMessage(res.ok ? "Permission diajukan ✅" : "Gagal ajukan permission ❌")
-  }
+    });
+    setLoading(false);
+    setMessage(res.ok ? "Permission diajukan ✅" : "Gagal ajukan permission ❌");
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -107,5 +110,5 @@ export default function CheckinForm({ shiftId, shiftStart, shiftEnd }) {
         <p className="p-3 text-sm text-center text-muted-foreground">{message}</p>
       )}
     </Card>
-  )
+  );
 }

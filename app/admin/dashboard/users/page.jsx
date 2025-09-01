@@ -13,19 +13,12 @@ async function getUsers(page = 1) {
   return await prisma.user.findMany({
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
+    select: { id: true, name: true, email: true, role: true,
       createdAt: true,
       updatedAt: true,
       shift: {
         select: {
-          id: true,
-          type: true,
-          startTime: true,
-          endTime: true,
+          id: true, type: true, startTime: true, endTime: true,
         },
       },
     },
@@ -46,8 +39,6 @@ export default async function Page({ searchParams }) {
     getUsers(page),
     getUserCount(),
   ]);
-
-
 
   const tableData = users.map(u => ({
     id: u.id,

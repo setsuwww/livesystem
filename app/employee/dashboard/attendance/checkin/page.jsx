@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import CheckinForm from "./CheckinForm";
 
 export default async function Page() {
@@ -17,19 +18,20 @@ export default async function Page() {
     return <div>Belum ada shift untuk kamu 🚫</div>;
   }
 
+  const shiftStart = employee.shift.startTime.toISOString();
+  const shiftEnd = employee.shift.endTime.toISOString();
+
   return (
     <div>
       <h1>Halo {employee.name}, shift kamu: {employee.shift.type}</h1>
-      <p>
-        {employee.shift.startTime.toLocaleTimeString()} -{" "}
-        {employee.shift.endTime.toLocaleTimeString()}
-      </p>
+      <p>Shift Start: {new Date(shiftStart).toLocaleTimeString()}</p>
+      <p>Shift End: {new Date(shiftEnd).toLocaleTimeString()}</p>
+
       <CheckinForm
         shiftId={employee.shift.id}
-        shiftStart={employee.shift.startTime}
-        shiftEnd={employee.shift.endTime}
+        shiftStart={shiftStart}
+        shiftEnd={shiftEnd}
       />
     </div>
   );
 }
-

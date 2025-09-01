@@ -3,8 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Globe } from "lucide-react";
-
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { RadioButton } from "@/components/ui/RadioButton";
@@ -68,7 +66,7 @@ export default function UsersForm({ shifts }) {
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
-            <ContentInformation icon={<Globe className="w-8 h-8" strokeWidth={1.5} />}
+            <ContentInformation
               heading="Public"
               subheading="Users public username & email"
             />

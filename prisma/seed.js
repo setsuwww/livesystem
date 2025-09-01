@@ -1,5 +1,5 @@
 // prisma/seed.ts
-import { PrismaClient, Role, ShiftType } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -55,7 +55,7 @@ async function main() {
       {
         type: "AFTERNOON",
         startTime: new Date("1970-01-01T16:00:00"),
-        endTime: new Date("1970-01-01T00:00:00"),
+        endTime: new Date("1970-01-02T00:00:00"),
       },
       {
         type: "EVENING",

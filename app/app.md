@@ -1,48 +1,15 @@
-ada Grid Calender yang kalo kotak nya dipencet munculin Modal(
-  => 3 Shifts[MORNING, AFTERNOON, NIGHT]
-  => tampilin user user dari masing masing shift dengan status(
-    -> Absent(merah)
-    -> Late(kuning)
-    -> Izin + acc(biru)
-    -> Izin + ga di acc(merah)
-    -> Present(hijau)
-  ) ->tampilkan(User && Status != Present) 
-)
+shift ada 3
+MORNING 08:00 - 16:00
+AFTERNOON 16:00 - 00:00
+EVENING 00:00 - 08:00
 
-User {      
-  id                  
-  nama                        
-  email                       
-  password                    
-  role(USER, EMPLOYEE, ADMIN) 
-  jabatan
+employee yang checkin tepat waktu -> PRESENT
+employee yang checkin lewat dari waktu masuk shift -> LATE
+employee yang izin harus click permission : masukin alasan permission -> PERMISSION
+ga checkin + permission = ABSENT
 
-  shifts[]
-  offices[]
-  schedules[]
-  attendances[]
-}
-
-Shift {
-  id
-  type
-  categories[]
-  startTime
-  endTime
-  periode
-  dueDate @default("FOREVER")
-
-  users[]
-  schedules[]
-  attendances[]
-  offices
-}
-
-Office {
-  name
-  location
-
-  divisions[]
-  users[]
-  shifts[]
-}
+berikan saya form yang cukup menampilkan 3 button
+checkin, checkout, dan permission
+-> checkin -> set waktu + tanggal hari ini menjadi data kehadiran employee
+-> checkout -> set waktu + tanggal hari ini menjadi data pulang employee , dibuka 10 menit sebelum jam shift berakhir
+-> permission -> munculkan input untuk mengisi data reason

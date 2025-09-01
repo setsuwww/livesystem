@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -60,7 +59,6 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
             <ContentInformation
-              icon={<Globe className="w-8 h-8" strokeWidth={1.5} />}
               heading="Public"
               subheading="Users public username & email"
             />

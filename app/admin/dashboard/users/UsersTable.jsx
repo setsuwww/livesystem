@@ -9,8 +9,7 @@ import { useUsersHooks } from "@/function/hooks/useUsersHooks";
 
 export default function UsersTable({
   data
-}) {
-  const {
+}) { const {
     search, handleSearchChange,
     roleFilter, handleRoleFilterChange, shiftFilter, handleShiftFilterChange, filteredData,
     selectedIds, selectedIdsSet, isAllSelected,

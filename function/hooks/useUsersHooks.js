@@ -10,27 +10,25 @@ export function useUsersHooks(data) {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const deferredSearch = useDeferredValue(search);
-  const searchInputRef = useRef(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
-  const extractShiftType = useCallback((shift) => {
-    if (!shift || shift === "-") return "NO_SHIFT";
+  // Extract shift type untuk normalisasi
+  const extractShiftType = useCallback((shift) => { if (!shift || shift === "-") return "NO_SHIFT";
     const match = shift.match(/^(\w+)/);
     const type = match ? match[1].toUpperCase() : "NO_SHIFT";
     return type === "OFF" ? "NO_SHIFT" : type;
   }, []);
 
+  // Filtering data
   const filteredData = useMemo(() => {
     return data.filter((user) => {
       const matchSearch =
         deferredSearch === "" ||
-        Object.values(user)
-          .map((v) => (typeof v === "string" ? v : ""))
-          .join(" ")
-          .toUpperCase()
-          .includes(deferredSearch.toUpperCase());
+        [user.name, user.email, user.role, user.shift]
+          .filter(Boolean) .join(" ")
+          .toUpperCase() .includes(deferredSearch.toUpperCase());
 
-      const matchRole =
-        roleFilter === "all" ||
+      const matchRole = roleFilter === "all" ||
         user.role?.toUpperCase() === roleFilter.toUpperCase();
 
       let matchShift = true;
@@ -38,7 +36,8 @@ export function useUsersHooks(data) {
         if (shiftFilter.toUpperCase() === "NO_SHIFT") {
           matchShift = !user.shift || user.shift === "-";
         } else {
-          matchShift = extractShiftType(user.shift) === shiftFilter.toUpperCase();
+          matchShift =
+            extractShiftType(user.shift) === shiftFilter.toUpperCase();
         }
       }
 
@@ -48,23 +47,17 @@ export function useUsersHooks(data) {
 
   const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
-  const {
-    toggleSelect,
-    selectAll,
-    deleteSelected,
-    deleteAll,
-    handleEditUser,
-    handleDeleteUser,
-    onExportPDF,
-  } = handleUsers(selectedIds, setSelectedIds, filteredData, () =>
-    location.reload()
-  );
+  // Actions
+  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = 
+    handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
 
+  // Handlers
   const handleSearchChange = useCallback((value) => {
     setSearch(value);
-    if (searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
+    // Fokus opsional, tapi sebaiknya jangan tiap ketik
+    // if (value === "" && searchInputRef.current) {
+    //   searchInputRef.current.focus();
+    // }
   }, []);
 
   const handleRoleFilterChange = useCallback((value) => {
@@ -75,9 +68,10 @@ export function useUsersHooks(data) {
     setShiftFilter(value);
   }, []);
 
+  // Check apakah semua row sudah dipilih
   const isAllSelected = useMemo(
-    () => selectedIds.length === filteredData.length && filteredData.length > 0,
-    [selectedIds.length, filteredData.length]
+    () => selectedIds.length > 0 && selectedIds.length === filteredData.length,
+    [selectedIds, filteredData]
   );
 
   return {
