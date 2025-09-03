@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
-import EmployeesActionHeader from "./EmployeesActionHeader";
-import EmployeesRow from "./EmployeesRow";
+import { EmployeesActionHeader } from "./EmployeesActionHeader";
+import { EmployeesRow } from "./EmployeesRow";
 
 import { useEmployeesHooks } from "@/function/hooks/useEmployeesHooks";
 

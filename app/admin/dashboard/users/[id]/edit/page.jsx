@@ -6,13 +6,7 @@ export const revalidate = 60
 export default async function EditUserPage({ params }) {
   const user = await prisma.user.findUnique({
     where: { id: Number(params.id) },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      shiftId: true,
-    },
+    select: { id: true, name: true, email: true, role: true, shiftId: true },
   })
 
   if (!user) {
@@ -20,22 +14,12 @@ export default async function EditUserPage({ params }) {
   }
 
   const shifts = await prisma.shift.findMany({
-    select: {
-      id: true,
-      type: true,
-      startTime: true,
-      endTime: true,
-    },
+    select: { id: true, type: true, startTime: true, endTime: true },
   })
 
   return (
-    <UsersEditForm
-      userId={user.id}
-      shifts={shifts}
-      initialForm={{
-        name: user.name,
-        email: user.email,
-        password: "",
+    <UsersEditForm userId={user.id} shifts={shifts}
+      initialForm={{ name: user.name, email: user.email, password: "",
         role: user.role,
         shiftId: user.shiftId ? String(user.shiftId) : "NONE",
       }}

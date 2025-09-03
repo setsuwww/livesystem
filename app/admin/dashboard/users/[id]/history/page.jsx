@@ -39,10 +39,8 @@ export default async function UserHistoryPage({ params, searchParams }) {
   const serializedHistory = history.map((h) => ({
     ...h,
     date: h.date.toISOString(),
-    checkInTime: h.checkInTime ? h.checkInTime.toISOString() : null,
-    checkOutTime: h.checkOutTime ? h.checkOutTime.toISOString() : null,
-    createdAt: h.createdAt.toISOString(),
-    updatedAt: h.updatedAt.toISOString(),
+    checkInTime: h.checkInTime ? h.checkInTime.toISOString() : null, checkOutTime: h.checkOutTime ? h.checkOutTime.toISOString() : null,
+    createdAt: h.createdAt.toISOString(), updatedAt: h.updatedAt.toISOString(),
     shift: h.shift
       ? {
           ...h.shift,

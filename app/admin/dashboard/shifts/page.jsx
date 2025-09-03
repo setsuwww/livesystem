@@ -4,46 +4,54 @@
   import { ShiftsTable } from "./ShiftsTable";
   import { ShiftCards } from "./ShiftsCard";
   import { prisma } from "@/lib/prisma";
+
   import { formatTimeRange, parseTimeToDate } from "@/function/helpers/timeHelpers";
+  import { minutesToTime } from "@/function/services/shiftAttendance"
 
   export default async function ShiftsPage({ searchParams }) {
     const page = Number(searchParams?.page) || 1;
 
     // Ambil semua shift utama
     const mainShifts = await prisma.shift.findMany({
-      where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
+  where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
+  select: {
+    id: true,
+    type: true,
+    startTime: true,
+    endTime: true,
+    users: {
+      where: { role: "EMPLOYEE" },
       select: {
         id: true,
-        type: true,
-        startTime: true,
-        endTime: true,
-        users: {
-          where: { role: "EMPLOYEE" },
-          select: { id: true, name: true, email: true, 
-            attendances: {
-              where: { shiftId: undefined }, // nanti diisi shift.id
-              select: { status: true, reason: true }
-            }
-          },
+        name: true,
+        email: true,
+        attendances: {
+          select: { shiftId: true, status: true, reason: true },
         },
-        schedules: { select: { id: true, title: true } },
       },
-      orderBy: { type: "asc" },
-    });
+    },
+    schedules: { select: { id: true, title: true } },
+  },
+  orderBy: { type: "asc" },
+});
 
-    const tableData = mainShifts.map((s) => {
-      const start = parseTimeToDate(s.startTime);
-      const end = parseTimeToDate(s.endTime);
+const tableData = mainShifts.map((s) => {
+  const start = minutesToTime(s.startTime);
+  const end = minutesToTime(s.endTime);
 
-      return {
-        id: s.id,
-        type: s.type,
-        timeRange: formatTimeRange(start, end),
-        usersCount: s.users.length,
-        schedulesCount: s.schedules.length,
-        users: s.users,
-      };
-    });
+  return {
+    id: s.id,
+    type: s.type,
+    timeRange: `${start} - ${end}`,
+    usersCount: s.users.length,
+    schedulesCount: s.schedules.length,
+    users: s.users.map((u) => ({
+      ...u,
+      attendances: u.attendances.filter((a) => a.shiftId === s.id),
+    })),
+  };
+});
+
 
     return (
       <section className="space-y-6">

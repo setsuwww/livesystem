@@ -90,9 +90,9 @@ model Schedule {
 
 model Shift { 
   id         Int       @id @default(autoincrement()) 
-  type       ShiftType 
-  startTime  DateTime 
-  endTime    DateTime 
+  type       ShiftType @unique
+  startTime  Int 
+  endTime    Int 
  
   users       User[] 
   schedules   Schedule[] 

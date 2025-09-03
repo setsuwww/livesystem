@@ -1,43 +1,57 @@
-// app/api/attendance/permission/route.js
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { getCurrentUser } from "@/lib/auth"
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req) {
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    const userId = 1; // TODO: ambil dari session
+    const body = await req.json();
+    const { reason } = body;
+
+    const today = new Date();
+    const todayDate = new Date(today.toDateString());
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { shift: true },
+    });
+    if (!user || !user.shift) {
+      return NextResponse.json({ error: "No shift assigned" }, { status: 400 });
     }
 
-    const { shiftId, reason } = await req.json()
-    if (!shiftId || !reason) {
-      return NextResponse.json({ error: "shiftId & reason required" }, { status: 400 })
-    }
+    const shift = user.shift;
 
-    const today = new Date()
-    today.setHours(0, 0, 0, 0) // normalize tanggal hari ini
+    // Simpan permission
+    const permission = await prisma.permissionRequest.create({
+      data: {
+        userId,
+        shiftId: shift.id,
+        date: todayDate,
+        reason,
+      },
+    });
 
+    // Update attendance jadi PERMISSION
     const attendance = await prisma.attendance.upsert({
       where: {
-        userId_shiftId_date: { userId: user.id, shiftId, date: today },
+        userId_shiftId_date: {
+          userId,
+          shiftId: shift.id,
+          date: todayDate,
+        },
       },
-      update: {
-        status: "PERMISSION",
-        reason,
-      },
+      update: { status: "PERMISSION", reason },
       create: {
-        userId: user.id,
-        shiftId,
-        date: today,
+        userId,
+        shiftId: shift.id,
+        date: todayDate,
         status: "PERMISSION",
         reason,
       },
-    })
+    });
 
-    return NextResponse.json({ success: true, attendance })
+    return NextResponse.json({ success: true, permission, attendance });
   } catch (err) {
-    console.error(err)
-    return NextResponse.json({ error: "Server error" }, { status: 500 })
+    console.error(err);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

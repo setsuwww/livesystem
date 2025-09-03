@@ -6,11 +6,14 @@ import { Pagination } from "../../Pagination";
 import { ShiftCards } from "../../shifts/ShiftsCard";
 import AttendancesTable from "./AttendancesTable";
 
+import { minutesToTime } from "@/function/services/shiftAttendance";
+
 const PAGE_SIZE = 5;
 
 async function getAttendanceData(page = 1) {
   const [attendances, total] = await prisma.$transaction([
-    prisma.attendance.findMany({ skip: (page - 1) * PAGE_SIZE,
+    prisma.attendance.findMany({
+      skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true } },
@@ -28,9 +31,14 @@ async function getShifts() {
   const today = new Date(new Date().setHours(0, 0, 0, 0));
 
   const shifts = await prisma.shift.findMany({
-    include: { users: { select: {
-          id: true, name: true, email: true,
-          attendances: { where: { date: { gte: today } },
+    include: {
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          attendances: {
+            where: { date: { gte: today } },
             select: { status: true },
             take: 1,
           },
@@ -39,8 +47,11 @@ async function getShifts() {
     },
   });
 
-  return shifts.map((shift) => ({ id: shift.id,
-    type: shift.type, startTime: shift.startTime.toISOString(), endTime: shift.endTime.toISOString(),
+  return shifts.map((shift) => ({
+    id: shift.id,
+    type: shift.type,
+    startTime: minutesToTime(shift.startTime), // ✅ gunakan helper
+    endTime: minutesToTime(shift.endTime),     // ✅ gunakan helper
     users: shift.users.map((user) => ({
       id: user.id,
       name: user.name,
@@ -70,8 +81,8 @@ export default async function AttendancesPage({ searchParams }) {
     shift: a.shift
       ? {
           ...a.shift,
-          startTime: a.shift.startTime.toISOString(),
-          endTime: a.shift.endTime.toISOString(),
+          startTime: minutesToTime(a.shift.startTime), // ✅ ganti ke helper
+          endTime: minutesToTime(a.shift.endTime),     // ✅ ganti ke helper
         }
       : null,
   }));

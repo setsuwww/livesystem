@@ -28,27 +28,20 @@ export default function UsersForm({ shifts }) {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const handleChange = (e) => { const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCustomChange = (name, value) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const handleCustomChange = (name, value) => { setForm((prev) => ({ ...prev, [name]: value })); };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => { e.preventDefault();
     setLoading(true);
 
-    const payload = {
-      ...form,
+    const payload = { ...form,
       shiftId: form.shiftId && form.shiftId !== "NONE" ? parseInt(form.shiftId) : null,
     };
 
-    try {
-      await fetch({
-        url: "/users", method: "post", data: payload,
+    try { await fetch({ url: "/users", method: "post", data: payload,
         successMessage: "User created successfully ✅",
         errorMessage: "Failed to create user ❌",
         onSuccess: () => router.push("/admin/dashboard/users"),

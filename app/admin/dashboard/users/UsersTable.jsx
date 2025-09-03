@@ -7,9 +7,7 @@ import { UsersRow } from "./UsersRow";
 import { roleStyles } from "@/constants/roleStyles";
 import { useUsersHooks } from "@/function/hooks/useUsersHooks";
 
-export default function UsersTable({
-  data
-}) { const {
+export default function UsersTable({ data }) { const {
     search, handleSearchChange,
     roleFilter, handleRoleFilterChange, shiftFilter, handleShiftFilterChange, filteredData,
     selectedIds, selectedIdsSet, isAllSelected,
@@ -22,10 +20,8 @@ export default function UsersTable({
   return (
     <div className="rounded-md space-y-4">
       <UsersActionHeader selectedCount={selectedIds.length}
-        onDeleteSelected={deleteSelected}
-        onDeleteAll={deleteAll}
-        search={search}
-        onSearchChange={handleSearchChange}
+        onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
+        search={search} onSearchChange={handleSearchChange}
         roleFilter={roleFilter} onRoleFilterChange={handleRoleFilterChange}
         shiftFilter={shiftFilter} onShiftFilterChange={handleShiftFilterChange}
         filteredData={filteredData}
@@ -54,11 +50,8 @@ export default function UsersTable({
             </TableRow>
           ) : (
             filteredData.map(user => (
-              <UsersRow
-                key={user.id}
-                user={user}
-                isSelected={selectedIdsSet.has(user.id)}
-                onToggleSelect={toggleSelect}
+              <UsersRow key={user.id} user={user}
+                isSelected={selectedIdsSet.has(user.id)} onToggleSelect={toggleSelect}
                 onEdit={handleEditUser} onDelete={handleDeleteUser}
                 roleStyles={roleStyles}
               />

@@ -1,17 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { CircleUserRound } from "lucide-react";
+
 import { TableRow, TableCell } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Badge } from "@/components/ui/Badge";
-import { CircleUserRound } from "lucide-react";
-import { format } from "date-fns";
-import { capitalize } from "@/function/helpers/timeHelpers";
-import { shiftStyles } from "@/constants/shiftStyles";
-import EmployeesActionButton from "./EmployeesActionButton";
+import { EmployeesActionButton } from "./EmployeesActionButton";
 import { EmployeesSwitchModal } from "./EmployeesSwitchModal";
 
-export default function EmployeesRow({ user, selected, toggleSelect, onHistory, onEdit, onDelete }) {
+import { shiftStyles } from "@/constants/shiftStyles";
+
+import { format } from "date-fns";
+import { capitalize } from "@/function/helpers/timeHelpers";
+
+export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, toggleSelect, onHistory, onEdit, onDelete }) {
   const [switchOpen, setSwitchOpen] = useState(false);
   return (
     <TableRow key={user.id}>
@@ -70,4 +73,4 @@ export default function EmployeesRow({ user, selected, toggleSelect, onHistory, 
       </TableCell>
     </TableRow>
   );
-}
+})
