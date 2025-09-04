@@ -1,4 +1,5 @@
-"use client";;
+"use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -6,14 +7,11 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export type {};
-
 export function Breadcrumb({
   items
 }) {
   const pathname = usePathname();
 
-  // Generate breadcrumb dari path kalau items gak dikirim
   const segments = pathname?.split("/").filter(Boolean) || [];
 
   const autoItems = segments.map((seg, i) => {
@@ -24,7 +22,6 @@ export function Breadcrumb({
     };
   });
 
-  // Jika items props ada, pakai itu, kalau enggak pakai autoItems
   const breadcrumbItems = items ?? autoItems;
 
   return (

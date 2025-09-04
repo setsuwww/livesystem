@@ -5,8 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
-import { format } from "date-fns";
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import { shiftStyles } from "@/constants/shiftStyles";
 
 const statusColors = {
@@ -39,15 +38,15 @@ export function ShiftCards({ shifts }) {
             {worstStatus !== "PRESENT" && (
               <div className={`absolute top-3 right-3 w-3 h-3 rounded-full bg-${statusColors[worstStatus]}-500`}></div>
             )}
-            <div className="vertical-space justify-between mb-6">
+            <div className="flex items-center justify-between mb-6">
               <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-none ${shiftStyles[shift.type]}`}>{capitalize(shift.type)}</span>
-              <Badge className="vertical-space space-x-2 bg-green-100 border-green-300 text-green-700">
+              <Badge className="flex items-center space-x-2 bg-green-100 border-green-300 text-green-700">
                 <span className="text-xs">
                   {shift.startTime} - {shift.endTime}
                 </span>
               </Badge>
             </div>
-            <div className="vertical-space gap-1 text-sm text-zinc-600">
+            <div className="flex items-center gap-1 text-sm text-zinc-600">
               <div className="p-2 bg-zinc-200 rounded-lg">
                 <Users className="w-4 h-4" strokeWidth={2} />
               </div>
@@ -61,10 +60,10 @@ export function ShiftCards({ shifts }) {
         <Dialog open={true} onOpenChange={handleClose}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle className="vertical-space">
+              <DialogTitle className="flex items-center">
                 <div>
                   <span>Detail attendance</span>
-                  <div className="vertical-space mt-4">
+                  <div className="flex items-center mt-4">
                     <h1 className="text-sm text-zinc-500">Reviewed shift</h1>
                     <Badge className={shiftStyles[selectedShift.type]}>
                       {capitalize(selectedShift.type)}
@@ -80,7 +79,7 @@ export function ShiftCards({ shifts }) {
 
                 return (
                   <div key={status}>
-                    <div className="vertical-space gap-1 mb-2">
+                    <div className="flex items-center gap-1 mb-2">
                       <span className={`font-semibold text-${statusColors[status]}-600`}>
                         {capitalize(status)} ({users.length})
                       </span>

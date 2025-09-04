@@ -10,11 +10,10 @@ import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { toast } from "sonner";
 
-import { Schedule, Shift } from "@prisma/client";
 import { fetch } from "@/function/helpers/fetch";
 
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select"; // path sesuai file kamu tadi
-import { capitalize } from '@/function/helpers/timeHelpers';
+import { capitalize } from "@/function/globalFunction";
 
 export default function CreateForm({
   schedules,

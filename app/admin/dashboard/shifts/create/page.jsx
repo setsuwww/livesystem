@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { DashboardHeader } from "../../DashboardHeader";
-import ContentForm from "@/components/content/ContentForm";
 import CreateForm from "./CreateForm";
 
 export const revalidate = 60;

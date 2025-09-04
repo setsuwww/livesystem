@@ -2,13 +2,11 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { Badge } from '@/components/ui/Badge';
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
 
 import { shiftStyles } from "@/constants/shiftStyles"
 import { attedancesStyles } from '@/constants/attedancesStyles';
 
-import { capitalize } from '@/function/helpers/timeHelpers';
+import { safeFormat, capitalize } from "@/function/globalFunction";
 
 export default function AttendancesTable({ data }) {
   return (
@@ -29,7 +27,7 @@ export default function AttendancesTable({ data }) {
         {data.map((att) => (
           <TableRow key={att.id}>
             <TableCell>
-              {format(new Date(att.date), "dd MMMM yyyy", { locale: id })}
+              {safeFormat(att.date, "dd MMMM yyyy")}
             </TableCell>
 
             <TableCell>
@@ -47,21 +45,18 @@ export default function AttendancesTable({ data }) {
 
             <TableCell>
               <span className="text-sm text-green-500">
-                {att.checkInTime ? format(new Date(att.checkInTime), "HH:mm", { locale: id })
-                  : "-"}
+                {safeFormat(att.checkInTime, "HH:mm")}
               </span>
             </TableCell>
 
             <TableCell>
               <span className="text-sm text-red-500">
-                {att.checkOutTime ? format(new Date(att.checkOutTime), "HH:mm", { locale: id })
-                  : "-"}
+                {safeFormat(att.checkOutTime, "HH:mm")}
               </span>
             </TableCell>
 
             <TableCell>
-              {att.shift ? `${format(new Date(att.shift.startTime), "HH:mm", { locale: id })} - ${format(new Date(att.shift.endTime), "HH:mm", { locale: id })}`
-                : "-"}
+              {att.shift ? `${att.shift.startTime} - ${att.shift.endTime}` : "-"}
             </TableCell>
 
             <TableCell>

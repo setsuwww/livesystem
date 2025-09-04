@@ -1,36 +1,36 @@
 "use client";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { ChevronRight } from "lucide-react";
+
 import { Button } from "@/components/ui/Button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { ChevronRight } from "lucide-react";
-import { toast } from "sonner";
-import { capitalize } from "@/function/helpers/timeHelpers";
 
-export function ShiftsTable({
-  data
-}) {
+import { capitalize } from "@/function/globalFunction";
+import { Badge } from "@/components/ui/Badge";
+
+import { fetch } from "@/function/helpers/fetch";
+import { shiftStyles } from "@/constants/shiftStyles";
+
+export function ShiftsTable({ data }) {
   const router = useRouter();
 
   const handleEdit = (id) => router.push(`/admin/dashboard/shifts/${id}/edit`);
 
   const handleDelete = async (id) => {
-    try {
-      const res = await fetch(`/api/shifts/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete");
-      toast.success("Shift deleted successfully");
+    try { await fetch({ url: `/shifts/${id}`, method: "delete",
+        successMessage: "Shift deleted successfully",
+        errorMessage: "Failed to delete shift",
+      });
       router.refresh();
-    }
+    } 
     catch (err) {
-      toast.error("Failed to delete shift");
+      console.error(err);
     }
   };
 
-  const mainShifts = data.filter((s) => 
-    s.type === "MORNING" || 
-    s.type === "AFTERNOON" || 
-    s.type === "EVENING" 
-  );
+  const mainShifts = data.filter((s) => s.type === "MORNING" || s.type === "AFTERNOON" || s.type === "EVENING" );
 
   return (
     <div className="space-y-10">
@@ -49,31 +49,31 @@ export function ShiftsTable({
           <TableBody>
             {mainShifts.map((shift) => (
               <TableRow key={shift.id}>
-                <TableCell className="font-medium">{capitalize(shift.type)}</TableCell>
+                <TableCell className="font-bold text-zinc-600">{capitalize(shift.type)}</TableCell>
                 <TableCell>
-                  <span className="text-xs font-semibold bg-green-100 text-green-600 px-2 py-1 rounded-lg">
+                  <Badge className={shiftStyles[shift.type]}>
                     {shift.timeRange}
-                  </span>
+                  </Badge>
                 </TableCell>
                 <TableCell>
-                  <span className="bg-zinc-800 text-xs font-semibold text-white px-2 py-0.5 rounded-md">
+                  <Badge>
                     Total : {shift.usersCount}
-                  </span>
+                  </Badge>
                 </TableCell>
                 <TableCell>
-                  <span className="bg-zinc-800 text-xs font-semibold text-white px-2 py-0.5 rounded-md">
+                  <Badge>
                     Total : {shift.schedulesCount}
-                  </span>
+                  </Badge>
                 </TableCell>
                 <TableCell className="space-x-2">
                   <Link href={`/admin/dashboard/shifts/${shift.id}/users`}>
-                    <Button size="sm" className="bg-zinc-50 border border-zinc-200 text-sky-600 px-2 py-0.5 text-xs font-medium hover:bg-sky-50">
+                    <Button size="sm" variant="secondary">
                       See Users
                       <ChevronRight size={16} />
                     </Button>
                   </Link>
                   <Link href={`/admin/dashboard/shifts/${shift.id}/schedules`}>
-                    <Button size="sm" className="bg-zinc-50 border border-zinc-200 text-sky-600 px-2 py-0.5 text-xs font-medium hover:bg-sky-50">
+                    <Button size="sm" variant="secondary">
                       See Schedules
                       <ChevronRight size={16} />
                     </Button>

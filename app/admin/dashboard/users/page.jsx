@@ -6,8 +6,7 @@ import ContentForm from '@/components/content/ContentForm';
 import { ContentInformation } from '@/components/content/ContentInformation';
 import { Pagination } from "../Pagination";
 
-import { format } from "date-fns";
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import { minutesToTime } from '@/function/services/shiftAttendance';
 
 const PAGE_SIZE = 5;

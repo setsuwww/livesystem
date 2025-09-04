@@ -52,22 +52,22 @@ export const UsersActionHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="destructive" size="sm"
+        <Button size="sm"
           onClick={onDeleteSelected}
           disabled={selectedCount === 0}
         >
           Delete Selected{" "}
-          <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">
+          <span className="bg-white text-xs font-semibold px-1 rounded-md text-zinc-500">
             {selectedCount}
           </span>
         </Button>
 
-        <Button variant="destructive" size="sm" onClick={onDeleteAll}>
+        <Button size="sm" onClick={onDeleteAll}>
           <Trash2 size={18} strokeWidth={2} />
           Delete All
         </Button>
 
-        <Button size="sm" variant="positive" onClick={() => onExportPDF(filteredData)}>
+        <Button size="sm" onClick={() => onExportPDF(filteredData)}>
           <FolderInput size={16} />
           Export
         </Button>

@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useMemo, useCallback } from "react";
 import { CircleUser } from "lucide-react";
 
@@ -10,6 +11,8 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { ScrollArea } from "@/components/ui/Scroll-area";
 import { Label } from "@/components/ui/Label";
+
+import { fetch } from "@/function/helpers/fetch";
 
 export default function CreateShiftForm({ users }) {
   const [type, setType] = useState("MORNING");
@@ -26,36 +29,26 @@ export default function CreateShiftForm({ users }) {
     );
   }, [users, search]);
 
-  const toggleUser = useCallback((id) => {
-    setSelectedUsers((prev) =>
-      prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
-    );
-  }, []);
+  const toggleUser = useCallback((id) => { setSelectedUsers((prev) => prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]) }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const payload = {
-      type,
-      startTime,
-      endTime,
+  const handleSubmit = async (e) => { e.preventDefault();
+    const payload = { type,
+      startTime, endTime,
       userIds: selectedUsers,
     };
 
-    try {
-      const res = await fetch("/api/shifts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+    try { await fetch({ url: "/shifts", method: "post", data: payload,
+        successMessage: "Shift created successfully!",
+        errorMessage: "Failed to create shift",
+        onSuccess: () => {
+          setType("MORNING");
+          setStartTime(""); setEndTime("");
+          setSelectedUsers([]);
+          router.refresh();
+        },
       });
-
-      if (!res.ok) throw new Error("Failed to create shift");
-
-      alert("Shift created!");
-    } catch (err) {
-      console.error(err);
-      alert("Error creating shift");
-    }
+    } 
+    catch (err) { console.error(err) }
   };
 
   return (
@@ -140,18 +133,18 @@ export default function CreateShiftForm({ users }) {
                 </div>
               </ScrollArea>
             </div>
-        </ContentForm.Body>
+          </ContentForm.Body>
 
-        <ContentForm.Footer>
-          <div className="space-x-2">
-            <Button type="button" variant="outline">
-              Cancel
-            </Button>
-            <Button type="submit">
-              Create Shift
-            </Button>
-          </div>
-        </ContentForm.Footer>
+          <ContentForm.Footer>
+            <div className="space-x-2">
+              <Button type="button" variant="outline">
+                Cancel
+              </Button>
+              <Button type="submit">
+                Create Shift
+              </Button>
+            </div>
+          </ContentForm.Footer>
         </form>
       </ContentForm>
     </section>

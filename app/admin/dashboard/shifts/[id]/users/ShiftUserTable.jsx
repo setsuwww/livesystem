@@ -7,10 +7,11 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { CircleUserRound, Repeat, Trash2, FolderInput } from "lucide-react";
-import { roleStyles } from "@/constants/roleStyles";
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import { format } from "date-fns";
 import { EmployeesSwitchModal } from "../../../users/employees/EmployeesSwitchModal";
+
+import { roleStyles } from "@/constants/roleStyles";
 
 export default function UserShiftTable({ data }) {
   const [selectedIds, setSelectedIds] = useState([]);

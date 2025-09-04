@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
-import { capitalize } from '@/function/helpers/timeHelpers';
+import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
 
 export default function UsersEditForm({ userId, shifts, initialForm }) {
@@ -119,7 +119,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <footer className="vertical-space space-x-2">
+            <footer className="flex items-center space-x-2">
               <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
               <Button type="submit" disabled={loading}>
                 {loading ? "Updating..." : "Update User"}

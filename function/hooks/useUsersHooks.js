@@ -64,7 +64,6 @@ export function useUsersHooks(data) {
     setShiftFilter(value);
   }, []);
 
-  // Check apakah semua row sudah dipilih
   const isAllSelected = useMemo(() => selectedIds.length > 0 && selectedIds.length === filteredData.length,
     [selectedIds, filteredData]
   );

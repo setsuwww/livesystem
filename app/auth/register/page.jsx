@@ -81,7 +81,7 @@ const RegisterPage = () => {
           />
         </div>
 
-        <Button type="submit" className="w-full text-base font-semibold bg-sky-600 hover:bg-sky-700" disabled={isSubmitting}>
+        <Button type="submit" className="w-full text-base font-semibold inset-shadow-sky-200 from-sky-600 to-sky-500 hover:inset-shadow-sky-300 hover:from-sky-700 hover:to-sky-600" disabled={isSubmitting}>
           {isSubmitting ? "Registering..." : "Register"}
         </Button>
       </form>

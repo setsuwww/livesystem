@@ -1,16 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function POST(
-  req,
-  {
-    params
-  } // id = user A
-) {
-  try {
-    const userAId = parseInt(params.id);
+export async function POST( req, { params }) {
+  try { const userAId = parseInt(params.id);
     const body = await req.json();
-    const { otherUserId } = body; // user B
+    const { otherUserId } = body;
 
     if (!userAId || !otherUserId) {
       return NextResponse.json(

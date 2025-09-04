@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/Button"
 
 import { fetch } from "@/function/helpers/fetch"
 
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import { shiftStyles } from "@/constants/shiftStyles"
 
 export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ open, onOpenChange, currentUserId }) {

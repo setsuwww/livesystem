@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import EditForm from "./EditForm";
 import ContentForm from '@/components/content/ContentForm';

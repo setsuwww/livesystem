@@ -1,19 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
-#nprogress .bar {
-  background: #4f46e5 !important;
-  height: 3px;
-}
-
-#nprogress .peg {
-  box-shadow: 0 0 10px #4f46e5, 0 0 5px #4f46e5;
-}
-
 :root {
-  --text-title: oklch(27.4% 0.006 286.033);
-  --text-subtitle: oklch(55.2% 0.016 285.938);
   --text-head: oklch(37% 0.013 285.805);
   --text-subhead: oklch(70.5% 0.015 286.067);
 
@@ -52,18 +40,6 @@
 }
 
 @layer components {
-  .vertical-space {
-    @apply flex items-center space-x-1
-  }
-  .horizontal-space {
-    @apply flex flex-col gap-3
-  }
-  .text-title {
-    @apply text-[var(--text-title)];
-  }
-  .text-subtitle {
-    @apply text-[var(--text-subtitle)];
-  }
   .text-head {
     @apply text-[var(--text-head)];
   }
@@ -71,7 +47,6 @@
     @apply text-[var(--text-subhead)];
   }
 }
-
 
 @font-face {
   font-family: 'Geist';

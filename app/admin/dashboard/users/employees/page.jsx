@@ -6,6 +6,8 @@ import EmployeesTable from "./EmployeesTable";
 import { DashboardHeader } from "../../DashboardHeader";
 import { Pagination } from "../../Pagination";
 
+import { minutesToTime } from "@/function/services/shiftAttendance";
+
 const PAGE_SIZE = 5;
 
 async function getEmployees(page = 1) {
@@ -38,11 +40,13 @@ export default async function EmployeesPage({ searchParams }) {
 
   const serializedUsers = users.map((u) => ({
     ...u,
-    createdAt: u.createdAt.toISOString(), updatedAt: u.updatedAt.toISOString(),
+    createdAt: u.createdAt.toISOString(),
+    updatedAt: u.updatedAt.toISOString(),
     shift: u.shift
       ? {
         ...u.shift,
-        startTime: u.shift.startTime.toISOString(), endTime: u.shift.endTime.toISOString(),
+        startTime: minutesToTime(u.shift.startTime),
+        endTime: minutesToTime(u.shift.endTime),
       }
       : null,
   }));
