@@ -20,7 +20,7 @@ export default function EmployeesActionHeader({
         onChange={(e) => setSearch(e.target.value)}
         className="w-1/3"
       />
-      <div className="flex gap-2">
+      <div className="flex items-center gap-x-2">
         <Button size="sm" variant="destructive" onClick={onDeleteSelected} disabled={!selected.length}>
           Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">{selected.length}</span>
         </Button>
@@ -28,7 +28,7 @@ export default function EmployeesActionHeader({
           <Trash2 />
           Delete All
         </Button>
-        <Button size="sm" onClick={onExport} className="bg-green-500 border-green-500 hover:bg-green-600 hover:border-green-600">
+        <Button size="sm" variant="positive" onClick={onExport}>
           <FolderInput />
           Export
         </Button>

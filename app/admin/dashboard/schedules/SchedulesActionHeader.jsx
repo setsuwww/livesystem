@@ -36,7 +36,7 @@ export default function SchedulesActionHeader({
           <Trash2 size={16} /> Delete All
         </Button>
 
-        <Button variant="custom" size="sm" onClick={onExportPDF} disabled={totalCount === 0} className="bg-green-600 hover:bg-green-500 border-green-600 text-white">
+        <Button variant="positive" size="sm" onClick={onExportPDF} disabled={totalCount === 0}>
           <FolderInput size={16} /> Export
         </Button>
       </div>

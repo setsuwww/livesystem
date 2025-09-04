@@ -46,11 +46,11 @@ export default function EmployeesRow({ user, selected, toggleSelect, onHistory, 
       </TableCell>
       <TableCell>
         <div className="flex flex-col">
-          <span className="text-sm font-medium">
-            {user.createdAt ? format(new Date(user.createdAt), "dd-MM-yyyy") : "-"}
+          <span className="text-sm font-semibold text-zinc-600">
+            {user.createdAt ? format(new Date(user.createdAt), "dd MMMM yyyy") : "-"}
           </span>
-          <span className="text-xs text-zinc-500">
-            {user.updatedAt ? format(new Date(user.updatedAt), "dd-MM-yyyy") : "-"}
+          <span className="text-xs text-zinc-400">
+            {user.updatedAt ? format(new Date(user.updatedAt), "dd MMMM yyyy") : "-"}
           </span>
         </div>
       </TableCell>

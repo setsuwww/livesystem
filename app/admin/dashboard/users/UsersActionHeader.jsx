@@ -70,9 +70,8 @@ export const UsersActionHeader = ({
         </Button>
 
         <Button
-          size="sm"
+          size="sm" variant="positive"
           onClick={() => onExportPDF(filteredData)}
-          className="bg-green-600 hover:bg-green-500 border-green-600 text-white"
         >
           <FolderInput size={16} />
           Export
