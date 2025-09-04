@@ -1,6 +1,8 @@
 "use client";
-import { useEffect, useState, useMemo, useCallback, useDeferredValue } from "react"
+
+import React, { useEffect, useState, useMemo, useCallback, useDeferredValue } from "react"
 import { CircleUserRound, Search } from "lucide-react"
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
 import { Checkbox } from "@/components/ui/Checkbox"
 import { Label } from "@/components/ui/Label"
@@ -9,10 +11,10 @@ import { Button } from "@/components/ui/Button"
 
 import { fetch } from "@/function/helpers/fetch"
 
-import { shiftStyles } from "@/constants/shiftStyles"
 import { capitalize } from "@/function/helpers/timeHelpers";
+import { shiftStyles } from "@/constants/shiftStyles"
 
-export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
+export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ open, onOpenChange, currentUserId }) {
   const [users, setUsers] = useState([])
   const [currentUser, setCurrentUser] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
@@ -21,8 +23,7 @@ export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
 
   const deferredSearch = useDeferredValue(search)
 
-  useEffect(() => {
-    if (open) { fetch({ url: "/users", method: "get",
+  useEffect(() => { if (open) { fetch({ url: "/users", method: "get",
         onSuccess: (data) => setUsers(data),
         errorMessage: "Failed to load users",
       })
@@ -35,8 +36,7 @@ export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
     }
   }, [open, currentUserId])
 
-  const handleConfirm = useCallback(async () => {
-    if (!selectedId || !currentUserId) return
+  const handleConfirm = useCallback(async () => { if (!selectedId || !currentUserId) return
 
     setLoading(true)
     try { await fetch({ url: `/users/${currentUserId}/switch`, method: "post",
@@ -45,16 +45,15 @@ export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
         errorMessage: "Failed to swap shifts",
       })
       onOpenChange(false)
-    } finally {
+    } 
+    finally {
       setLoading(false)
     }
   }, [selectedId, currentUserId, onOpenChange])
 
-  const filteredUsers = useMemo(() => {
-    const query = deferredSearch.toLowerCase()
-    return users.filter(
-      (u) => (u.id !== currentUserId && u.name.toLowerCase().includes(query)) ||
-        u.email.toLowerCase().includes(query),
+  const filteredUsers = useMemo(() => { const query = deferredSearch.toLowerCase()
+    return users.filter((u) => (u.id !== currentUserId && u.name.toLowerCase().includes(query)) ||
+      u.email.toLowerCase().includes(query),
     )
   }, [users, currentUserId, deferredSearch])
 
@@ -83,10 +82,7 @@ export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
         <Label htmlFor="search">Search & switch user</Label>
         <div className="relative mb-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-zinc-400" />
-          <Input
-            placeholder="Search user..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+          <Input placeholder="Search user..." value={search} onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
           />
         </div>
@@ -129,4 +125,4 @@ export const EmployeesSwitchModal = ({ open, onOpenChange, currentUserId }) => {
       </DialogContent>
     </Dialog>
   )
-}
+})

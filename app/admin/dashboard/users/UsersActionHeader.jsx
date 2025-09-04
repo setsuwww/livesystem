@@ -52,9 +52,7 @@ export const UsersActionHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <Button
-          variant="destructive"
-          size="sm"
+        <Button variant="destructive" size="sm"
           onClick={onDeleteSelected}
           disabled={selectedCount === 0}
         >
@@ -69,10 +67,7 @@ export const UsersActionHeader = ({
           Delete All
         </Button>
 
-        <Button
-          size="sm" variant="positive"
-          onClick={() => onExportPDF(filteredData)}
-        >
+        <Button size="sm" variant="positive" onClick={() => onExportPDF(filteredData)}>
           <FolderInput size={16} />
           Export
         </Button>

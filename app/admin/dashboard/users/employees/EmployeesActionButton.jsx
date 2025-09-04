@@ -1,9 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/Button";
 import { RefreshCcw, Eye } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
-export default function EmployeesActionButton({ onHistory, onSwitch, onEdit, onDelete }) {
+export const EmployeesActionButton = ({ onHistory, onSwitch, onEdit, onDelete }) => {
   return (
     <div className="flex items-center space-x-2">
       <Button size="icon" variant="outline" onClick={onHistory}>

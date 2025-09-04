@@ -10,7 +10,7 @@ export function useUsersHooks(data) {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const deferredSearch = useDeferredValue(search);
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const searchInputRef = useRef(null);
 
   // Extract shift type untuk normalisasi
   const extractShiftType = useCallback((shift) => { if (!shift || shift === "-") return "NO_SHIFT";
@@ -54,10 +54,6 @@ export function useUsersHooks(data) {
   // Handlers
   const handleSearchChange = useCallback((value) => {
     setSearch(value);
-    // Fokus opsional, tapi sebaiknya jangan tiap ketik
-    // if (value === "" && searchInputRef.current) {
-    //   searchInputRef.current.focus();
-    // }
   }, []);
 
   const handleRoleFilterChange = useCallback((value) => {
@@ -69,29 +65,16 @@ export function useUsersHooks(data) {
   }, []);
 
   // Check apakah semua row sudah dipilih
-  const isAllSelected = useMemo(
-    () => selectedIds.length > 0 && selectedIds.length === filteredData.length,
+  const isAllSelected = useMemo(() => selectedIds.length > 0 && selectedIds.length === filteredData.length,
     [selectedIds, filteredData]
   );
 
   return {
-    search,
-    roleFilter,
-    shiftFilter,
-    selectedIds,
-    filteredData,
-    selectedIdsSet,
-    isAllSelected,
-    searchInputRef,
-    handleSearchChange,
-    handleRoleFilterChange,
-    handleShiftFilterChange,
-    toggleSelect,
-    selectAll,
-    deleteSelected,
-    deleteAll,
-    handleEditUser,
-    handleDeleteUser,
+    search, roleFilter, shiftFilter,
+    selectedIds, filteredData, selectedIdsSet, isAllSelected,
+    searchInputRef, handleSearchChange, handleRoleFilterChange, handleShiftFilterChange,
+    toggleSelect, selectAll, deleteSelected, deleteAll,
+    handleEditUser, handleDeleteUser,
     onExportPDF,
   };
 }

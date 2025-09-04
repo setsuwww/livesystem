@@ -27,8 +27,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
 
   const handleCustomChange = (name, value) => setForm((prev) => ({ ...prev, [name]: value }));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => { e.preventDefault();
     setLoading(true);
 
     const payload = { name: form.name, email: form.email, role: form.role,
@@ -50,10 +49,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
 
   return (
     <section>
-      <DashboardHeader
-        title={`Edit User : ${form.name}`}
-        subtitle="Update name, email, password, role, and shift for this user"
-      />
+      <DashboardHeader title={`Edit User : ${form.name}`} subtitle="Update name, email, password, role, and shift for this user"/>
 
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">

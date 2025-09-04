@@ -38,22 +38,18 @@ export default async function EmployeesPage({ searchParams }) {
 
   const serializedUsers = users.map((u) => ({
     ...u,
-    createdAt: u.createdAt.toISOString(),
-    updatedAt: u.updatedAt.toISOString(),
+    createdAt: u.createdAt.toISOString(), updatedAt: u.updatedAt.toISOString(),
     shift: u.shift
       ? {
         ...u.shift,
-        startTime: u.shift.startTime.toISOString(),
-        endTime: u.shift.endTime.toISOString(),
+        startTime: u.shift.startTime.toISOString(), endTime: u.shift.endTime.toISOString(),
       }
       : null,
   }));
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  if (page > totalPages && totalPages > 0) {
-    return <div className="p-4">Page not found</div>;
-  }
+  if (page > totalPages && totalPages > 0) { return <div className="p-4">Page not found</div> }
 
   return (
     <section>

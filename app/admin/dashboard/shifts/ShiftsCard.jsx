@@ -43,7 +43,7 @@ export function ShiftCards({ shifts }) {
               <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-none ${shiftStyles[shift.type]}`}>{capitalize(shift.type)}</span>
               <Badge className="vertical-space space-x-2 bg-green-100 border-green-300 text-green-700">
                 <span className="text-xs">
-                  {format(new Date(shift.startTime), "HH:mm")} - {format(new Date(shift.endTime), "HH:mm")}
+                  {shift.startTime} - {shift.endTime}
                 </span>
               </Badge>
             </div>

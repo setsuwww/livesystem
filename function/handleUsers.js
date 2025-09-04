@@ -22,8 +22,7 @@ export const handleUsers = (selectedIds, setSelectedIds, filteredData, reloadDat
   const deleteSelected = async () => {
     if (selectedIds.length === 0) return;
 
-    try {
-      await api.delete("/users", { data: { ids: selectedIds } });
+    try { await api.delete("/users", { data: { ids: selectedIds } });
       alert("Deleted successfully");
       reloadData();
     } catch {

@@ -2,6 +2,7 @@
   "name": "helpdesk",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "prisma:seed": "node prisma/seed.js",
     "dev": "next dev --turbopack",
@@ -16,7 +17,7 @@
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/list": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
-    "@prisma/client": "^6.14.0",
+    "@prisma/client": "^6.15.0",
     "@radix-ui/react-avatar": "^1.1.10",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-collapsible": "^1.1.11",

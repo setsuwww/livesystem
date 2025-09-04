@@ -1,11 +1,14 @@
+import { prisma } from "@/lib/prisma"
+
+import { DashboardHeader } from '../DashboardHeader'; 
 import UsersTable from "./UsersTable"
-import { DashboardHeader } from '../DashboardHeader';
 import ContentForm from '@/components/content/ContentForm';
 import { ContentInformation } from '@/components/content/ContentInformation';
-import { capitalize } from "@/function/helpers/timeHelpers";
-import { prisma } from "@/lib/prisma"
 import { Pagination } from "../Pagination";
+
 import { format } from "date-fns";
+import { capitalize } from "@/function/helpers/timeHelpers";
+import { minutesToTime } from '@/function/services/shiftAttendance';
 
 const PAGE_SIZE = 5;
 
@@ -14,8 +17,7 @@ async function getUsers(page = 1) {
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
     select: { id: true, name: true, email: true, role: true,
-      createdAt: true,
-      updatedAt: true,
+      createdAt: true, updatedAt: true,
       shift: {
         select: {
           id: true, type: true, startTime: true, endTime: true,
@@ -26,9 +28,7 @@ async function getUsers(page = 1) {
   });
 }
 
-async function getUserCount() {
-  return await prisma.user.count();
-}
+async function getUserCount() { return await prisma.user.count() }
 
 export const revalidate = 60;
 
@@ -41,23 +41,17 @@ export default async function Page({ searchParams }) {
   ]);
 
   const tableData = users.map(u => ({
-    id: u.id,
-    name: u.name,
-    email: u.email,
-    role: capitalize(u.role),
-    shift: u.shift ? `${capitalize(u.shift.type)}` : "",
+    id: u.id, name: u.name, email: u.email,
+    role: capitalize(u.role), shift: u.shift ? `${capitalize(u.shift.type)}` : "",
     shiftTime: u.shift
-      ? `${format(new Date(u.shift.startTime), "HH:mm")} - ${format(new Date(u.shift.endTime), "HH:mm")}`
+      ? `${minutesToTime(u.shift.startTime)} - ${minutesToTime(u.shift.endTime)}`
       : "",
-    createdAt: u.createdAt.toISOString(),
-    updatedAt: u.updatedAt.toISOString(),
+    createdAt: u.createdAt.toISOString(), updatedAt: u.updatedAt.toISOString(),
   }));
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  if (page > totalPages && totalPages > 0) {
-    return <div className="p-4">Page not found</div>;
-  }
+  if (page > totalPages && totalPages > 0) { return <div className="p-4">Page not found</div> }
 
   return (
     <section>
