@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Button } from '@/components/ui/Button';
-import AuthForm from '@/app/auth/AuthForm';
+import AuthForm from '../AuthForm';
 import AuthLink from '../AuthLink';
 
 import { api } from '@/lib/api';

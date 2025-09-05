@@ -78,8 +78,7 @@ export default function CreateForm({
           <ContentInformation heading="Date & shift" subheading="Schedule's date & shift data"/>
 
           <Label className="text-sm font-medium text-zinc-600 mb-1">Date</Label>
-          <Input type="date"
-            value={form.date}
+          <Input type="date" value={form.date}
             onChange={(e) => handleChange("date", e.target.value)}
             required
           />

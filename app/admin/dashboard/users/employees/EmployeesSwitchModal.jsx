@@ -23,16 +23,33 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
 
   const deferredSearch = useDeferredValue(search)
 
-  useEffect(() => { if (open) { fetch({ url: "/users", method: "get",
+  const resetState = () => {
+    setUsers([])
+    setCurrentUser(null)
+    setSelectedId(null)
+    setSearch("")
+  }
+
+  useEffect(() => { 
+    if (open && currentUserId) {
+      fetch({ 
+        url: `/users/${currentUserId}/switch`,
+        method: "get",
         onSuccess: (data) => setUsers(data),
         errorMessage: "Failed to load users",
       })
+    } else {
+      resetState()
+    }
+  }, [open, currentUserId])
 
-      if (currentUserId) { fetch({ url: `/users/${currentUserId}`, method: "get",
-          onSuccess: (data) => setCurrentUser(data),
-          errorMessage: "Failed to load current user",
-        })
-      }
+  useEffect(() => {
+    if (open && currentUserId) { fetch({ url: `/users/${currentUserId}`, method: "get",
+        onSuccess: (data) => setCurrentUser(data),
+        errorMessage: "Failed to load current user",
+      })
+    } else {
+      resetState()
     }
   }, [open, currentUserId])
 
@@ -52,9 +69,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
   }, [selectedId, currentUserId, onOpenChange])
 
   const filteredUsers = useMemo(() => { const query = deferredSearch.toLowerCase()
-    return users.filter((u) => (u.id !== currentUserId && u.name.toLowerCase().includes(query)) ||
-      u.email.toLowerCase().includes(query),
-    )
+    return users.filter((u) => u.id !== currentUserId && (u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query)))
   }, [users, currentUserId, deferredSearch])
 
   return (

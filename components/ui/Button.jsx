@@ -8,10 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-b from-zinc-800 to-zinc-600 inset-shadow-xs inset-shadow-zinc-500 text-white shadow-xs hover:from-zinc-900 hover:to-zinc-700 hover:inset-shadow-zinc-600 focus:ring-zinc-400",
+        default: "bg-gradient-to-b from-zinc-800 to-zinc-600 inset-shadow-xs inset-shadow-zinc-400 text-white shadow-xs hover:from-zinc-900 hover:to-zinc-700 hover:inset-shadow-zinc-600 focus:ring-zinc-400",
         destructive:"bg-red-500 text-white shadow-xs hover:bg-red-700 focus:ring-red-300",
         positive:"bg-green-500 text-white shadow-xs hover:bg-green-700 focus:ring-green-400",
-        outline:"border border-zinc-300 text-zinc-600 bg-zinc-50 shadow-xs hover:bg-zinc-100 hover:text-zinc-900 hover:inset-shadow-xs focus:ring-zinc-200",
+        outline:"border border-zinc-300 text-zinc-600 bg-zinc-50 shadow-xs hover:bg-zinc-100 hover:text-zinc-900 hover:inset-shadow-xs hover:border-zinc-400 focus:ring-zinc-200",
         primary: "bg-sky-500 border border-sky-500 text-white hover:bg-sky-600 hover:border-sky-700",
         secondary:"font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-xs hover:bg-zinc-50",
         ghost:"hover:bg-zinc-100 hover:text-zinc-700",

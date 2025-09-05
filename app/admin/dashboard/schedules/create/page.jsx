@@ -9,20 +9,14 @@ export default async function Page() {
   const schedules = await prisma.schedule.findMany({
     where: { userId: user.id },
     select: {
-      id: true,
-      title: true,
-      description: true,
-      date: true,
-      createdAt: true,
-      updatedAt: true,
-      userId: true,
-      shiftId: true,
+      id: true, title: true, description: true,
+      date: true, createdAt: true, updatedAt: true,
+      userId: true, shiftId: true,
       shift: {
         select: {
           id: true,
           type: true,
-          startTime: true,
-          endTime: true,
+          startTime: true, endTime: true,
         },
       },
     },
@@ -33,8 +27,7 @@ export default async function Page() {
     select: {
       id: true,
       type: true,
-      startTime: true,
-      endTime: true,
+      startTime: true, endTime: true,
     },
     orderBy: { id: "asc" },
   });

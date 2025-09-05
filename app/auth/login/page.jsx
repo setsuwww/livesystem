@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/Label"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
 import { Checkbox } from "@/components/ui/Checkbox"
-import AuthForm from "@/auth/AuthForm"
-import AuthLink from "@/auth/AuthLink"
+import AuthForm from "../AuthForm"
+import AuthLink from "../AuthLink"
 import { api } from "@/lib/api"
 
 const LoginPage = () => {

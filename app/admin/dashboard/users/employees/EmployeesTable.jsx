@@ -8,6 +8,7 @@ import { EmployeesActionHeader } from "./EmployeesActionHeader";
 import { EmployeesRow } from "./EmployeesRow";
 
 import { useEmployeesHooks } from "@/function/hooks/useEmployeesHooks";
+// import ShiftScheduleTable from "./LintasartaTable";
 
 export default function EmployeeTable({ users, shifts }) {
   const {
@@ -66,6 +67,9 @@ export default function EmployeeTable({ users, shifts }) {
           ))}
         </TableBody>
       </Table>
+
+
+      {/* <ShiftScheduleTable /> */}
     </div>
   );
 }

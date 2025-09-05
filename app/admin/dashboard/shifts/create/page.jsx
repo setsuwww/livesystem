@@ -6,7 +6,8 @@ export const revalidate = 60;
 
 export default async function CreateShiftPage() {
   const users = await prisma.user.findMany({
-    select: { id: true, name: true, email: true },
+    select: { id: true, name: true, email: true }, 
+    where: { role: "EMPLOYEE" },
     orderBy: { name: "asc" },
   });
 

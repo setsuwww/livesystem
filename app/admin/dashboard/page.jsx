@@ -45,6 +45,8 @@ export default async function AdminDashboardPage() {
       {/* Header */}
       <DashboardHeader title="Dashboard" />
 
+      <h1 className="text-8xl font-extrabold text-zinc-600 text-shadow-sm text-shadow-zinc-200">ISRAEL ANJING</h1>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats
           link="/admin/dashboard/shifts"

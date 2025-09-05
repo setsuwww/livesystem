@@ -67,7 +67,8 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
           onDelete={onDelete}
         />
 
-        <EmployeesSwitchModal 
+        <EmployeesSwitchModal
+          key={user.id}
           open={switchOpen}
           onOpenChange={setSwitchOpen}
           currentUserId={user.id}

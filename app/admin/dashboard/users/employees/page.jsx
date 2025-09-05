@@ -22,13 +22,23 @@ async function getEmployees(page = 1) {
   });
 }
 
+async function getSwapEmployee(currentUserId) {
+  return await prisma.user.findMany({
+    where: { role: "EMPLOYEE", NOT: { id: currentUserId }},
+    include: {
+      shift: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 async function getEmployeeCount() {
   return await prisma.user.count({
     where: { role: "EMPLOYEE" },
   });
 }
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function EmployeesPage({ searchParams }) {
   const page = Number(searchParams?.page) || 1;
@@ -65,9 +75,9 @@ export default async function EmployeesPage({ searchParams }) {
 
         <ContentForm.Body>
           <EmployeesTable users={serializedUsers} />
+          <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/employees" />
         </ContentForm.Body>
-
-        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/employees" />
+        
       </ContentForm>
     </section>
   );
