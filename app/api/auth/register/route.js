@@ -27,7 +27,7 @@ export async function POST(req) {
       data: { name, email, password: hashedPassword, role },
     });
 
-    const token = await signToken({
+    const token = signToken({
       id: user.id,
       name: user.name,
       email: user.email,

@@ -9,10 +9,8 @@ import { Badge } from "@/components/ui/Badge";
 import { EmployeesActionButton } from "./EmployeesActionButton";
 import { EmployeesSwitchModal } from "./EmployeesSwitchModal";
 
-import { shiftStyles } from "@/constants/shiftStyles";
-
 import { format } from "date-fns";
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 
 export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, toggleSelect, onHistory, onEdit, onDelete }) {
   const [switchOpen, setSwitchOpen] = useState(false);
@@ -38,9 +36,13 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
         </div>
       </TableCell>
       <TableCell>
-        <Badge className={`px-2 py-0.5 text-xs font-semibold ${shiftStyles[user.shift?.type]}`}>
-          {capitalize(user.shift?.type)}
-        </Badge>
+        <div className="flex flex-col text-sm text-zinc-600">
+          <p className="font-semibold">{capitalize(user.shift?.type)}</p>
+
+          <p className="text-xs text-zinc-400">
+            <span>{user.shift?.startTime}</span> - <span>{user.shift?.endTime}</span>
+          </p>
+        </div>
       </TableCell>
       <TableCell>
         <Badge className="px-2 py-0.5 text-xs font-semibold text-green-600 bg-green-100 border-green-300">
@@ -49,10 +51,17 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
       </TableCell>
       <TableCell>
         <div className="flex flex-col">
+<<<<<<< HEAD
           <span className="text-sm font-medium">
             {user.createdAt ? format(new Date(user.createdAt), "dd MMMM yyyy") : "-"}
           </span>
           <span className="text-xs text-zinc-500">
+=======
+          <span className="text-sm font-semibold text-zinc-600">
+            {user.createdAt ? format(new Date(user.createdAt), "dd MMMM yyyy") : "-"}
+          </span>
+          <span className="text-xs text-zinc-400">
+>>>>>>> 4370506050f620c9ebf3276e9ee9229098b88c4e
             {user.updatedAt ? format(new Date(user.updatedAt), "dd MMMM yyyy") : "-"}
           </span>
         </div>
@@ -65,7 +74,8 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
           onDelete={onDelete}
         />
 
-        <EmployeesSwitchModal 
+        <EmployeesSwitchModal
+          key={user.id}
           open={switchOpen}
           onOpenChange={setSwitchOpen}
           currentUserId={user.id}

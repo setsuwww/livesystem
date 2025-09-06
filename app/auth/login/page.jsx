@@ -1,4 +1,3 @@
-// /app/(auth)/login/page.tsx
 "use client"
 
 import { useState } from "react"
@@ -8,8 +7,8 @@ import { Label } from "@/components/ui/Label"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
 import { Checkbox } from "@/components/ui/Checkbox"
-import AuthForm from "@/app/auth/AuthForm"
-import AuthLink from "@/app/auth/AuthLink"
+import AuthForm from "../AuthForm"
+import AuthLink from "../AuthLink"
 import { api } from "@/lib/api"
 
 const LoginPage = () => {
@@ -85,7 +84,7 @@ const LoginPage = () => {
         </div>
 
         {/* Button */}
-        <Button type="submit" className="w-full text-base font-semibold bg-sky-600 hover:bg-sky-700" disabled={isSubmitting}>
+        <Button type="submit" className="w-full text-base font-semibold inset-shadow-sky-200 from-sky-600 to-sky-500 hover:inset-shadow-sky-300 hover:from-sky-700 hover:to-sky-600" disabled={isSubmitting}>
           {isSubmitting ? "Logging in..." : "Login"}
         </Button>
       </form>

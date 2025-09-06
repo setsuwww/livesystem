@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
 import { Button } from '@/components/ui/Button';
-import AuthForm from '@/app/auth/AuthForm';
+import AuthForm from '../AuthForm';
 import AuthLink from '../AuthLink';
 
 import { api } from '@/lib/api';
@@ -81,7 +81,7 @@ const RegisterPage = () => {
           />
         </div>
 
-        <Button type="submit" className="w-full text-base font-semibold bg-sky-600 hover:bg-sky-700" disabled={isSubmitting}>
+        <Button type="submit" className="w-full text-base font-semibold inset-shadow-sky-200 from-sky-600 to-sky-500 hover:inset-shadow-sky-300 hover:from-sky-700 hover:to-sky-600" disabled={isSubmitting}>
           {isSubmitting ? "Registering..." : "Register"}
         </Button>
       </form>

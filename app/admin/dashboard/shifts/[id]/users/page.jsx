@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
 
-import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
+import { DashboardHeader } from "../../../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
-import { Pagination } from "@/app/admin/dashboard/Pagination";
+import { Pagination } from "../../../Pagination";
 import UsersTable from "./ShiftUserTable";
 
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
@@ -17,40 +17,29 @@ export default async function ShiftUsersPage({ params, searchParams }) {
   const page = Number(searchParams?.page) || 1;
   const PAGE_SIZE = 10;
 
-  // Ambil shift sekaligus count user EMPLOYEE
   const [shift, totalUsers] = await Promise.all([
     prisma.shift.findUnique({
       where: { id: shiftId },
-      include: {
-        users: { where: { role: "EMPLOYEE" } }, // filter role EMPLOYEE
-      },
+      include: { users: { where: { role: "EMPLOYEE" } }},
     }),
-    prisma.user.count({
-      where: { shiftId, role: "EMPLOYEE" }, // filter role EMPLOYEE
-    }),
+    prisma.user.count({ where: { shiftId, role: "EMPLOYEE" } }),
   ]);
 
   if (!shift) return <div className="p-4">Shift not found</div>;
 
-  // Ambil halaman user EMPLOYEE
-  const usersData = await prisma.user.findMany({
-    where: { shiftId, role: "EMPLOYEE" }, // filter role EMPLOYEE
+  const usersData = await prisma.user.findMany({ where: { shiftId, role: "EMPLOYEE" },
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
   });
 
   const usersDataMapped = usersData.map(u => ({
-    id: u.id,
-    name: u.name,
-    email: u.email,
-    role: u.role,
+    id: u.id, name: u.name, email: u.email, 
+    role: u.role, 
     shift: shift.type,
-    createdAt: u.createdAt,
-    updatedAt: u.updatedAt,
+    createdAt: u.createdAt, updatedAt: u.updatedAt,
   }));
 
   const totalPages = Math.ceil(totalUsers / PAGE_SIZE);
-
   const title = capitalize(shift.type);
 
   return (

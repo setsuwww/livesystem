@@ -1,4 +1,4 @@
-export function toMinutes(date) { return date.getHours() * 60 + date.getMinutes() }
+export const toMinutes = (date) => date.getHours() * 60 + date.getMinutes();
 
 export function minutesToTime(minutes) {
   const hours = String(Math.floor(minutes / 60)).padStart(2, "0");
@@ -6,7 +6,7 @@ export function minutesToTime(minutes) {
   return `${hours}:${mins}`;
 }
 
-export function isCrossDayShift(shift) { return shift.endMinutes <= shift.startMinutes }
+export const isCrossDayShift = (shift) => shift.endMinutes <= shift.startMinutes
 
 export function getAttendanceStatus({ checkIn, permissionReason, shift }) {
   if (permissionReason && permissionReason.trim().length > 0) { return "PERMISSION"}
@@ -30,4 +30,3 @@ export function canCheckout(now, shift) { const nowMinutes = toMinutes(now);
   }
   return false;
 }
-

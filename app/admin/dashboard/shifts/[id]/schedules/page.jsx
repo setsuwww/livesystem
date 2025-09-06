@@ -1,15 +1,15 @@
 import { prisma } from "@/lib/prisma";
 
-import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
+import { DashboardHeader } from "../../../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
-import { Pagination } from "@/app/admin/dashboard/Pagination";
+import { Pagination } from "../../../Pagination";
 import ScheduleTable from "./ShiftScheduleTable";
 
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import ContentForm from './../../../../../../components/content/ContentForm';
+import ContentForm from '@/components/content/ContentForm';
 
 export const revalidate = 60;
 

@@ -6,4 +6,9 @@ export const attedancesStyles = {
   Alpha: "text-zinc-600 bg-zinc-100 border-zinc-300"
 };
 
-
+const statusColorsClass = {
+  PRESENT: { bgPing: "bg-green-400", bgDot: "bg-green-500" },
+  ABSENT: { bgPing: "bg-red-400", bgDot: "bg-red-500" },
+  LATE: { bgPing: "bg-yellow-400", bgDot: "bg-yellow-500" },
+  // dst
+};

@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { attedancesStyles } from "@/constants/attedancesStyles"
 import { shiftStyles } from "@/constants/shiftStyles"
 
-import { capitalize } from "@/function/helpers/timeHelpers"
+import { capitalize } from "@/function/globalFunction";
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 

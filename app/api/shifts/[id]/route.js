@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req, {
-  params
-}) {
+export async function GET(req, { params }) {
   try { const shift = await prisma.shift.findUnique({
       where: { id: parseInt(params.id) },
       include: { users: true, schedules: true },

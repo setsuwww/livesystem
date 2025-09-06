@@ -15,15 +15,15 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader (
       <Input placeholder="Search employees..." value={search} onChange={(e) => setSearch(e.target.value)}
         className="w-1/3"
       />
-      <div className="flex gap-2">
-        <Button size="sm" variant="destructive" onClick={onDeleteSelected} disabled={!selected.length}>
-          Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">{selected.length}</span>
+      <div className="flex items-center gap-x-2">
+        <Button size="sm" onClick={onDeleteSelected} disabled={!selected.length}>
+          Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-zinc-500">{selected.length}</span>
         </Button>
-        <Button size="sm" variant="destructive" onClick={onDeleteAll}>
+        <Button size="sm" onClick={onDeleteAll}>
           <Trash2 />
           Delete All
         </Button>
-        <Button size="sm" onClick={onExport} className="bg-green-500 border-green-500 hover:bg-green-600 hover:border-green-600">
+        <Button size="sm" onClick={onExport}>
           <FolderInput />
           Export
         </Button>

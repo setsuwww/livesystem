@@ -6,6 +6,8 @@ import EmployeesTable from "./EmployeesTable";
 import { DashboardHeader } from "../../DashboardHeader";
 import { Pagination } from "../../Pagination";
 
+import { minutesToTime } from "@/function/services/shiftAttendance";
+
 const PAGE_SIZE = 5;
 
 async function getEmployees(page = 1) {
@@ -20,13 +22,23 @@ async function getEmployees(page = 1) {
   });
 }
 
+async function getSwapEmployee(currentUserId) {
+  return await prisma.user.findMany({
+    where: { role: "EMPLOYEE", NOT: { id: currentUserId }},
+    include: {
+      shift: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 async function getEmployeeCount() {
   return await prisma.user.count({
     where: { role: "EMPLOYEE" },
   });
 }
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function EmployeesPage({ searchParams }) {
   const page = Number(searchParams?.page) || 1;
@@ -38,11 +50,17 @@ export default async function EmployeesPage({ searchParams }) {
 
   const serializedUsers = users.map((u) => ({
     ...u,
-    createdAt: u.createdAt.toISOString(), updatedAt: u.updatedAt.toISOString(),
+    createdAt: u.createdAt.toISOString(),
+    updatedAt: u.updatedAt.toISOString(),
     shift: u.shift
       ? {
         ...u.shift,
+<<<<<<< HEAD
         startTime: u.shift.startTime, endTime: u.shift.endTime,
+=======
+        startTime: minutesToTime(u.shift.startTime),
+        endTime: minutesToTime(u.shift.endTime),
+>>>>>>> 4370506050f620c9ebf3276e9ee9229098b88c4e
       }
       : null,
   }));
@@ -61,9 +79,9 @@ export default async function EmployeesPage({ searchParams }) {
 
         <ContentForm.Body>
           <EmployeesTable users={serializedUsers} />
+          <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/employees" />
         </ContentForm.Body>
-
-        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/employees" />
+        
       </ContentForm>
     </section>
   );

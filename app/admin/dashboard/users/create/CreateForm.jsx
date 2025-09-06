@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
-import { capitalize } from "@/function/helpers/timeHelpers";
+import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
 
 export default function UsersForm({ shifts }) {
@@ -128,8 +128,8 @@ export default function UsersForm({ shifts }) {
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <footer className="vertical-space space-x-2">
-              <Button variant="outline" onClick={() => router.push("/admin/dashboard/users")}>Cancel</Button>
+            <footer className="flex items-center space-x-2">
+              <Button type="submit" variant="outline">Cancel</Button>
               <Button type="submit" disabled={loading}>{loading ? "Creating..." : "Create User"}</Button>
             </footer>
           </ContentForm.Footer>

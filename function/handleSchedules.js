@@ -8,22 +8,13 @@ export const handleSchedules = ( selectedIds, setSelectedIds, filteredData, relo
   const router = useRouter();
 
   // Toggle Select 1 item
-  const toggleSelect = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-    );
-  };
+  const toggleSelect = (id) => setSelectedIds((prev) => prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]);
 
   // Toggle Select All
-  const selectAll = () => {
-    setSelectedIds((prev) =>
-      prev.length === filteredData.length ? [] : filteredData.map((s) => s.id)
-    );
-  };
+  const selectAll = () => setSelectedIds((prev) => prev.length === filteredData.length ? [] : filteredData.map((s) => s.id));
 
   // Delete Selected
-  const deleteSelected = async () => {
-    if (selectedIds.length === 0) return;
+  const deleteSelected = async () => { if (selectedIds.length === 0) return;
 
     const confirmDelete = confirm("Are you sure you want to delete selected schedules?");
     if (!confirmDelete) return;
@@ -39,8 +30,7 @@ export const handleSchedules = ( selectedIds, setSelectedIds, filteredData, relo
   };
 
   // Delete All
-  const deleteAll = async () => {
-    if (filteredData.length === 0) return;
+  const deleteAll = async () => { if (filteredData.length === 0) return;
 
     const confirmDelete = confirm("Are you sure you want to delete ALL schedules?");
     if (!confirmDelete) return;
@@ -58,9 +48,7 @@ export const handleSchedules = ( selectedIds, setSelectedIds, filteredData, relo
   };
 
   // ✅ Edit
-  const handleEditSchedule = (id) => {
-    router.push(`/admin/dashboard/schedules/${id}/edit`);
-  };
+  const handleEditSchedule = (id) => router.push(`/admin/dashboard/schedules/${id}/edit`);
 
   // ✅ Delete single schedule
   const handleDeleteSchedule = async (id) => {
@@ -87,15 +75,12 @@ export const handleSchedules = ( selectedIds, setSelectedIds, filteredData, relo
     doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
 
     const tableData = filteredData.map((item) => [
-      item.id,
-      item.title,
-      item.description,
+      item.id, item.title, item.description,
       new Date(item.date).toLocaleDateString(),
       new Date(item.createdAt).toLocaleDateString(),
     ]);
 
-    autoTable(doc, {
-      head: [["ID", "Title", "Description", "Date", "Created At"]],
+    autoTable(doc, { head: [["ID", "Title", "Description", "Date", "Created At"]],
       body: tableData,
       startY: 40,
     });

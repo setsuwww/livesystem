@@ -7,6 +7,7 @@ import { ShiftCards } from "../../shifts/ShiftsCard";
 import AttendancesTable from "./AttendancesTable";
 
 import { minutesToTime } from "@/function/services/shiftAttendance";
+import { safeToISOString } from "@/function/globalFunction";
 
 const PAGE_SIZE = 5;
 
@@ -73,11 +74,11 @@ export default async function AttendancesPage({ searchParams }) {
 
   const serializedAttendances = attendances.map((a) => ({
     ...a,
-    date: a.date.toISOString(),
-    checkOutTime: a.checkOutTime?.toISOString() ?? null,
-    checkInTime: a.checkInTime?.toISOString() ?? null,
-    createdAt: a.createdAt.toISOString(),
-    updatedAt: a.updatedAt.toISOString(),
+    date: safeToISOString(a.date),
+    checkOutTime: safeToISOString(a.checkOutTime),
+    checkInTime: safeToISOString(a.checkInTime),
+    createdAt: safeToISOString(a.createdAt),
+    updatedAt: safeToISOString(a.updatedAt),
     shift: a.shift
       ? {
           ...a.shift,

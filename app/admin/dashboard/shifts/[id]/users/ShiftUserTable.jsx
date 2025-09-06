@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { CircleUserRound, Trash2, FolderInput, RefreshCcw } from "lucide-react";
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/Table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { CircleUserRound, Repeat, Trash2, FolderInput } from "lucide-react";
+
+import { capitalize } from "@/function/globalFunction";
 import { roleStyles } from "@/constants/roleStyles";
-import { capitalize } from "@/function/helpers/timeHelpers";
 import { format } from "date-fns";
+
 import { EmployeesSwitchModal } from "../../../users/employees/EmployeesSwitchModal";
 
 export default function UserShiftTable({ data }) {
@@ -91,8 +94,6 @@ export default function UserShiftTable({ data }) {
         </div>
       </div>
 
-
-      {/* Table */}
       <Table>
         <TableHeader>
           <TableRow>
@@ -114,21 +115,19 @@ export default function UserShiftTable({ data }) {
 
         <TableBody>
           {filteredData.map((user) => {
-            const created = format(new Date(user.createdAt), "dd-MM-yyyy");
-            const updated = format(new Date(user.updatedAt), "dd-MM-yyyy");
+            const created = format(new Date(user.createdAt), "dd MMMM yyyy");
+            const updated = format(new Date(user.updatedAt), "dd MMMM yyyy");
 
             return (
               <TableRow key={user.id}>
                 <TableCell>
-                  <Checkbox
-                    checked={selectedIds.includes(user.id)}
-                    onCheckedChange={() => {
-                      if (selectedIds.includes(user.id)) {
-                        setSelectedIds(selectedIds.filter((id) => id !== user.id));
-                      } else {
-                        setSelectedIds([...selectedIds, user.id]);
-                      }
-                    }}
+                  <Checkbox checked={selectedIds.includes(user.id)}
+                    onCheckedChange={() =>
+                      setSelectedIds(selectedIds.includes(user.id)
+                        ? selectedIds.filter((id) => id !== user.id)
+                        : [...selectedIds, user.id]
+                      )
+                    }
                   />
                 </TableCell>
 
@@ -138,21 +137,21 @@ export default function UserShiftTable({ data }) {
                       <CircleUserRound strokeWidth={1.5} className="text-zinc-500" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-semibold">{user.name}</span>
-                      <span className="text-xs text-zinc-500">{user.email}</span>
+                      <span className="font-semibold text-zinc-600">{user.name}</span>
+                      <span className="text-xs text-zinc-400">{user.email}</span>
                     </div>
                   </div>
                 </TableCell>
 
                 <TableCell>
-                  <span className={`px-2 py-0.5 text-xs font-semibold border rounded-md ${roleStyles[capitalize(user.role)] ?? ""}`}>
+                  <span className={`${roleStyles[capitalize(user.role)] ?? ""}`}>
                     {capitalize(user.role)}
                   </span>
                 </TableCell>
 
                 <TableCell>
-                  <span className="flex flex-col text-xs space-y-1">
-                    <span className="text-sm font-base text-zinc-600">
+                  <span className="flex flex-col">
+                    <span className="text-sm font-semibold text-zinc-600">
                       {created}
                     </span>
                     <span className="text-xs text-zinc-400">
@@ -164,7 +163,7 @@ export default function UserShiftTable({ data }) {
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button size="sm" variant="outline" onClick={() => handleSwapShift(user.id)}>
-                      <Repeat />
+                      <RefreshCcw />
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => handleEditUser(user.id)}>
                       Edit
@@ -180,10 +179,11 @@ export default function UserShiftTable({ data }) {
         </TableBody>
       </Table>
 
-      {/* Swap Shift Modal */}
       <EmployeesSwitchModal
         open={modalOpen}
-        onOpenChange={setModalOpen}
+        onOpenChange={(isOpen) => { setModalOpen(isOpen)
+          if (!isOpen) setCurrentUserId(null)
+        }}
         currentUserId={currentUserId}
       />
     </div>

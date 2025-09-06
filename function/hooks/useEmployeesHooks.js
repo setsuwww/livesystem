@@ -8,9 +8,7 @@ export function useEmployeesHooks(users) {
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    setData((users || []).filter((u) => u.role === "EMPLOYEE"));
-  }, [users]);
+  useEffect(() => { setData((users || []).filter((u) => u.role === "EMPLOYEE")) }, [users]);
 
   const filteredData = useMemo(() => {
     return data.filter(
@@ -20,31 +18,23 @@ export function useEmployeesHooks(users) {
     );
   }, [data, search]);
 
-  const toggleSelect = useCallback((id) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
-    );
-  }, []);
+  const toggleSelect = useCallback((id) => setSelected((prev) => prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]), []);
 
-  const deleteSelected = useCallback(() => {
-    alert("Delete selected: " + selected.join(", "));
+  const deleteSelected = useCallback(() => { alert("Delete selected: " + selected.join(", "));
     setData((prev) => prev.filter((u) => !selected.includes(u.id)));
     setSelected([]);
   }, [selected]);
 
-  const deleteAll = useCallback(() => {
-    alert("Delete all employees!");
+  const deleteAll = useCallback(() => { alert("Delete all employees!");
     setData([]);
     setSelected([]);
   }, []);
 
   const exportCSV = useCallback(() => {
-    const csv = [
-      ["ID", "Name", "Email", "Role"],
+    const csv = [["ID", "Name", "Email", "Role"],
       ...filteredData.map((u) => [u.id, u.name, u.email, u.role]),
     ]
-      .map((row) => row.join(","))
-      .join("\n");
+      .map((row) => row.join(",")).join("\n");
 
     const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -54,18 +44,11 @@ export function useEmployeesHooks(users) {
     a.click();
   }, [filteredData]);
 
-  const onSwitch = useCallback((id) => {
-    const u = data.find((usr) => usr.id === id);
-    setEditUser(u);
-  }, []);
+  const onSwitch = useCallback((id) => setEditUser(data.find((usr) => usr.id === id)), [data]);
 
-  const onEdit = useCallback((id) => {
-    const u = data.find((usr) => usr.id === id);
-    setEditUser(u);
-  }, []);
-
-  const onDelete = useCallback(async (id) => {
-    if (!confirm("Are you sure to delete this user?")) return;
+  const onEdit = useCallback((id) => setEditUser(data.find((usr) => usr.id === id)), [data]);
+  
+  const onDelete = useCallback(async (id) => { if (!confirm("Are you sure to delete this user?")) return;
     try { await api.delete(`/users/${id}`);
       setData((prev) => prev.filter((u) => u.id !== id));
     }  
