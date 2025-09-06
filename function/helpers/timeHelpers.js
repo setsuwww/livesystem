@@ -9,6 +9,14 @@ export function parseTimeToDate(timeString) {
  return dayjs(timeString).toDate();
 }
 
+export function safeFormatDate(value, pattern = "dd MMM yyyy") {
+  if (!value) return "-";
+  try {
+    return format(new Date(value), pattern, { locale: id });
+  } catch {
+    return "-";
+  }
+}
 
 export function normalizeTimeString(time) {
   if (!time) return "";

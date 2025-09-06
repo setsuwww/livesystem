@@ -50,10 +50,10 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
       <TableCell>
         <div className="flex flex-col">
           <span className="text-sm font-medium">
-            {user.createdAt ? format(new Date(user.createdAt), "dd-MM-yyyy") : "-"}
+            {user.createdAt ? format(new Date(user.createdAt), "dd MMMM yyyy") : "-"}
           </span>
           <span className="text-xs text-zinc-500">
-            {user.updatedAt ? format(new Date(user.updatedAt), "dd-MM-yyyy") : "-"}
+            {user.updatedAt ? format(new Date(user.updatedAt), "dd MMMM yyyy") : "-"}
           </span>
         </div>
       </TableCell>

@@ -42,7 +42,7 @@ export default async function EmployeesPage({ searchParams }) {
     shift: u.shift
       ? {
         ...u.shift,
-        startTime: u.shift.startTime.toISOString(), endTime: u.shift.endTime.toISOString(),
+        startTime: u.shift.startTime, endTime: u.shift.endTime,
       }
       : null,
   }));

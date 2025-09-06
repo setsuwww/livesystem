@@ -129,7 +129,7 @@ export default function UsersForm({ shifts }) {
 
           <ContentForm.Footer>
             <footer className="vertical-space space-x-2">
-              <Button type="submit" variant="outline">Cancel</Button>
+              <Button variant="outline" onClick={() => router.push("/admin/dashboard/users")}>Cancel</Button>
               <Button type="submit" disabled={loading}>{loading ? "Creating..." : "Create User"}</Button>
             </footer>
           </ContentForm.Footer>
