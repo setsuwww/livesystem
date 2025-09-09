@@ -30,32 +30,26 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
     setSearch("")
   }
 
-  useEffect(() => { 
-    if (open && currentUserId) {
-      fetch({ 
-        url: `/users/${currentUserId}/switch`,
+  useEffect(() => { if (open && currentUserId) {
+    fetch({ url: `/users/${currentUserId}/switch`,
         method: "get",
         onSuccess: (data) => setUsers(data),
         errorMessage: "Failed to load users",
       })
-    } else {
-      resetState()
-    }
+    } else {resetState()}
   }, [open, currentUserId])
 
-  useEffect(() => {
-    if (open && currentUserId) { fetch({ url: `/users/${currentUserId}`, method: "get",
+  useEffect(() => { if (open && currentUserId) { 
+    fetch({ url: `/users/${currentUserId}`, method: "get",
         onSuccess: (data) => setCurrentUser(data),
         errorMessage: "Failed to load current user",
       })
-    } else {
-      resetState()
-    }
+    } else {resetState()}
   }, [open, currentUserId])
 
   const handleConfirm = useCallback(async () => { if (!selectedId || !currentUserId) return
 
-    setLoading(true)
+    setLoading(true) 
     try { await fetch({ url: `/users/${currentUserId}/switch`, method: "post",
         data: { otherUserId: selectedId },
         successMessage: "Shift swapped successfully",
@@ -63,9 +57,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
       })
       onOpenChange(false)
     } 
-    finally {
-      setLoading(false)
-    }
+    finally { setLoading(false)}
   }, [selectedId, currentUserId, onOpenChange])
 
   const filteredUsers = useMemo(() => { const query = deferredSearch.toLowerCase()
@@ -83,7 +75,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
           <header>
             <Label htmlFor="past" className="mb-4">Current user</Label>
             <div className="flex items-center border border-zinc-300 rounded p-2 space-x-2 bg-zinc-100 text-zinc-600">
-              <div className="p-2 rounded-lg bg-zinc-300">
+              <div className="p-2 rounded-full bg-zinc-300">
                 <CircleUserRound strokeWidth={1.5} />
               </div>
               <div>
@@ -107,23 +99,23 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
             <p className="text-xs text-center text-zinc-400">No users found</p>
           ) : (
             filteredUsers.map((user) => (
-              <label key={user.id} className="flex items-center gap-x-3 cursor-pointer border border-zinc-200 p-2 rounded hover:bg-zinc-50 transition">
+              <label key={user.id} className="group flex items-center gap-x-3 cursor-pointer border border-zinc-200 px-4 py-2 rounded transition">
                 <Checkbox checked={selectedId === user.id} onCheckedChange={() => setSelectedId(user.id)}/>
 
                 <div className="flex items-center gap-x-3 flex-1">
-                  <div className="p-2 bg-zinc-100 rounded-lg flex items-center justify-center">
-                    <CircleUserRound strokeWidth={1.5} className="text-zinc-400" />
+                  <div className="p-2 bg-zinc-100 group-hover:bg-sky-100 rounded-lg flex items-center justify-center transition">
+                    <CircleUserRound strokeWidth={1.5} className="text-zinc-400 group-hover:text-sky-600 transition" />
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-x-2">
+                    <div className="flex flex-col gap-x-2">
                       <p className="text-sm font-semibold text-zinc-700">{user.name}</p>
+                      <p className="text-xs text-zinc-400 mt-1 sm:mt-0">{user.email}</p>
+                    </div>
+
                       <p className={`px-2 py-0.5 rounded-md text-xs ${shiftStyles[user.shift?.type ?? "bg-zinc-100"]}`}>
                         {capitalize(user.shift?.type ?? "OFF")}
                       </p>
-                    </div>
-
-                    <p className="text-xs text-zinc-400 mt-1 sm:mt-0">{user.email}</p>
                   </div>
                 </div>
               </label>
@@ -133,9 +125,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button disabled={!selectedId || loading} onClick={handleConfirm}>
-            {loading ? "Swapping..." : "Confirm"}
-          </Button>
+          <Button disabled={!selectedId || loading} onClick={handleConfirm}>{loading ? "Swapping..." : "Confirm"}</Button>
         </div>
       </DialogContent>
     </Dialog>

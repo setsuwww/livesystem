@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/Input";
 import { RadioButton } from "@/components/ui/RadioButton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
+import { ContentList } from "@/components/content/ContentList";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
 
@@ -93,6 +94,10 @@ export default function UsersForm({ shifts }) {
                   onChange={handleChange}
                   required
                 />
+                <ContentList items={[
+                  "Minimum 8 characters",
+                  "At least one uppercase letter",
+                ]} />
               </div>
 
               <div className="space-y-2">

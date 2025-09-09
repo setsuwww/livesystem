@@ -1,4 +1,3 @@
-// app/admin/dashboard/page.tsx
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { DashboardStats } from "@/app/admin/dashboard/DashboardStats";
 import { Clock, Sun, SunMoon, Moon } from "lucide-react";
@@ -44,8 +43,6 @@ export default async function AdminDashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <DashboardHeader title="Dashboard" />
-
-      <h1 className="text-8xl font-extrabold text-zinc-600 text-shadow-sm text-shadow-zinc-200">ISRAEL ANJING</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats

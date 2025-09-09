@@ -110,7 +110,8 @@ export function ShiftCards({ shifts }) {
               })}
             </div>
             <DialogFooter className="mt-6 flex justify-end">
-              <Button onClick={handleClose}>Close</Button>
+              <Button variant="outline" onClick={handleClose}>Close</Button>
+              <Button onClick={handleClose}>View Details</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

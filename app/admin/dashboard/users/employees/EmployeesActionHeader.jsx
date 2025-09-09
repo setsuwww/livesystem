@@ -16,14 +16,14 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader (
         className="w-1/3"
       />
       <div className="flex items-center gap-x-2">
-        <Button size="sm" onClick={onDeleteSelected} disabled={!selected.length}>
-          Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-zinc-500">{selected.length}</span>
+        <Button variant="ghost" className="text-red-500" size="sm" onClick={onDeleteSelected} disabled={!selected.length}>
+          Delete Selected
         </Button>
-        <Button size="sm" onClick={onDeleteAll}>
+        <Button variant="ghost" className="bg-red-50 text-red-500 hover:bg-red-100" size="sm" onClick={onDeleteAll}>
           <Trash2 />
           Delete All
         </Button>
-        <Button size="sm" onClick={onExport}>
+        <Button variant="ghost" className="bg-green-100 text-green-600 hover:bg-green-200" size="sm" onClick={onExport}>
           <FolderInput />
           Export
         </Button>

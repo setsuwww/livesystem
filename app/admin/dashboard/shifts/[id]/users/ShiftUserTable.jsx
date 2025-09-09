@@ -81,14 +81,14 @@ export default function UserShiftTable({ data }) {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="destructive" disabled={selectedIds.length === 0} onClick={handleDeleteSelected}>
-            Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">{selectedIds.length}</span>
+          <Button size="sm" variant="ghost" className="text-red-500" disabled={selectedIds.length === 0} onClick={handleDeleteSelected}>
+            Delete Selected
           </Button>
-          <Button size="sm" variant="destructive" onClick={handleDeleteAll}>
+          <Button size="sm" variant="ghost" className="bg-red-50 text-red-500 hover:bg-red-100" onClick={handleDeleteAll}>
             <Trash2 size={18} strokeWidth={2} />
             Delete All
           </Button>
-          <Button size="sm" variant="secondary" onClick={() => console.log("Export CSV")} className="bg-green-600 hover:bg-green-500 border-green-600 hover:border-green-600 text-white">
+          <Button size="sm" variant="ghost" onClick={() => console.log("Export CSV")} className="bg-green-100 text-green-600 hover:bg-green-200">
             <FolderInput size={16} /> Export
           </Button>
         </div>
@@ -144,7 +144,7 @@ export default function UserShiftTable({ data }) {
                 </TableCell>
 
                 <TableCell>
-                  <span className={`${roleStyles[capitalize(user.role)] ?? ""}`}>
+                  <span className={`bg-transparent text-base ${roleStyles[capitalize(user.role)] ?? ""}`}>
                     {capitalize(user.role)}
                   </span>
                 </TableCell>
