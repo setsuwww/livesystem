@@ -55,12 +55,8 @@ export default async function EmployeesPage({ searchParams }) {
     shift: u.shift
       ? {
         ...u.shift,
-<<<<<<< HEAD
-        startTime: u.shift.startTime, endTime: u.shift.endTime,
-=======
         startTime: minutesToTime(u.shift.startTime),
         endTime: minutesToTime(u.shift.endTime),
->>>>>>> 4370506050f620c9ebf3276e9ee9229098b88c4e
       }
       : null,
   }));

@@ -29,7 +29,7 @@ export default function SchedulesActionHeader({
       </div>
       <div className="flex items-center gap-x-2">
         <Button variant="destructive" size="sm" onClick={onDeleteSelected} disabled={selectedCount === 0}>
-          Delete Selected <span className="bg-white text-xs font-semibold px-1 rounded-md text-red-500">{selectedCount}</span>
+          Delete Selected
         </Button>
 
         <Button size="sm" variant="destructive" onClick={onDeleteAll} disabled={totalCount === 0}>

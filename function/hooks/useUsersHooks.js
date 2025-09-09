@@ -22,8 +22,7 @@ export function useUsersHooks(data) {
   // Filtering data
   const filteredData = useMemo(() => {
     return data.filter((user) => {
-      const matchSearch =
-        deferredSearch === "" ||
+      const matchSearch = deferredSearch === "" ||
         [user.name, user.email, user.role, user.shift]
           .filter(Boolean) .join(" ")
           .toUpperCase() .includes(deferredSearch.toUpperCase());
@@ -33,12 +32,8 @@ export function useUsersHooks(data) {
 
       let matchShift = true;
       if (shiftFilter !== "all") {
-        if (shiftFilter.toUpperCase() === "NO_SHIFT") {
-          matchShift = !user.shift || user.shift === "-";
-        } else {
-          matchShift =
-            extractShiftType(user.shift) === shiftFilter.toUpperCase();
-        }
+        if (shiftFilter.toUpperCase() === "NO_SHIFT") { matchShift = !user.shift || user.shift === "-";} 
+        else { matchShift = extractShiftType(user.shift) === shiftFilter.toUpperCase() }
       }
 
       return matchSearch && matchRole && matchShift;
@@ -77,3 +72,27 @@ export function useUsersHooks(data) {
     onExportPDF,
   };
 }
+
+/**
+ * Custom hook untuk search users
+ * @param {Array} users - list users
+ * @param {string} query - kata kunci pencarian
+ * @param {Array} fields - field yang ingin dicari (default: ["name", "email"])
+ * @returns {Array} - hasil filter
+ */
+export function useSearchUsers(users, query, fields = ["name", "email"]) {
+  const filteredUsers = useMemo(() => {
+    if (!query) return users;
+
+    const lowerQuery = query.toLowerCase();
+
+    return users.filter((user) =>
+      fields.some((field) =>
+        String(user[field] ?? "").toLowerCase().includes(lowerQuery)
+      )
+    );
+  }, [users, query, fields]);
+
+  return filteredUsers;
+}
+

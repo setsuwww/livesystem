@@ -27,11 +27,7 @@ export default function AttendancesTable({ data }) {
         {data.map((att) => (
           <TableRow key={att.id}>
             <TableCell>
-<<<<<<< HEAD
-              {safeFormatDate(att.date, "dd MMMM yyyy")}
-=======
               {safeFormat(att.date, "dd MMMM yyyy")}
->>>>>>> 4370506050f620c9ebf3276e9ee9229098b88c4e
             </TableCell>
 
             <TableCell>
@@ -49,21 +45,13 @@ export default function AttendancesTable({ data }) {
 
             <TableCell>
               <span className="text-sm text-green-500">
-<<<<<<< HEAD
-                {safeFormatDate(att.checkInTime, "HH:mm")}
-=======
                 {safeFormat(att.checkInTime, "HH:mm")}
->>>>>>> 4370506050f620c9ebf3276e9ee9229098b88c4e
               </span>
             </TableCell>
 
             <TableCell>
               <span className="text-sm text-red-500">
-<<<<<<< HEAD
-                {safeFormatDate(att.checkOutTime, "HH:mm")}
-=======
                 {safeFormat(att.checkOutTime, "HH:mm")}
->>>>>>> 4370506050f620c9ebf3276e9ee9229098b88c4e
               </span>
             </TableCell>
 

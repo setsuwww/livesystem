@@ -1,4 +1,5 @@
 import { EmployeeSidebar } from "@/components/EmployeeSidebar"
+import { Toaster } from "sonner"
 import '@/styles/globals.css'
 
 export const metadata = {
@@ -13,7 +14,18 @@ export default function DashboardLayout({
     <div className="flex h-screen">
       <EmployeeSidebar />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col"> 
+        <Toaster
+          position="top-right"
+          richColors
+          expand
+          duration={3000}
+          closeButton
+          toastOptions={{
+            className: "rounded-xl shadow-lg border border-zinc-200",
+            style: { fontSize: "14px", padding: "12px 16px" },
+          }}
+        />
         <main className="flex-1 overflow-y-auto p-6 bg-zinc-50">
           {children}
         </main>
