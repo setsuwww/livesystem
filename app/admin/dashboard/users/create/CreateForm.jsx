@@ -95,9 +95,9 @@ export default function UsersForm({ shifts }) {
                   required
                 />
                 <ContentList items={[
-                  "Minimum 8 characters",
-                  "At least one uppercase letter",
-                ]} />
+                  "Minimum 8 characters with uppercase & lowercase", 
+                  "Contain numeric & symbol",
+                ]}/>
               </div>
 
               <div className="space-y-2">

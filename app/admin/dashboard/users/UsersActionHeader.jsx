@@ -18,7 +18,7 @@ export const UsersActionHeader = ({
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-zinc-700 mr-1">Role:</span>
+            <span className="font-semibold text-zinc-600 mr-1">Role:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -32,7 +32,7 @@ export const UsersActionHeader = ({
 
         <Select value={shiftFilter} onValueChange={onShiftFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-zinc-700 mr-1">Shift:</span>
+            <span className="font-semibold text-zinc-600 mr-1">Shift:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -65,7 +65,7 @@ export const UsersActionHeader = ({
           Delete All
         </Button>
 
-        <Button variant="ghost" size="sm" className="bg-green-100 hover:bg-green-200 text-green-600"
+        <Button variant="ghost" size="sm" className="bg-green-100 hover:bg-green-200 text-green-700"
           onClick={() => onExportPDF(filteredData)}>
           <FolderInput size={16} />
           Export

@@ -1,17 +1,12 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { CircleUser } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { CircleUserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/Select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Checkbox } from "@/components/ui/Checkbox";
@@ -19,20 +14,23 @@ import { ScrollArea } from "@/components/ui/Scroll-area";
 import { Label } from "@/components/ui/Label";
 
 import { fetch } from "@/function/helpers/fetch";
+import { ContentList } from "@/components/content/ContentList";
 
 export default function CreateShiftForm({ users }) {
   const [type, setType] = useState("MORNING");
+  const [shiftName, setShiftName] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+
   const [sortOrder, setSortOrder] = useState("newest");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
 
-  // 🔍 Search + Sort
+  const router = useRouter();
+
   const processedUsers = useMemo(() => {
     let result = [...users];
 
-    // filter by search
     if (search) {
       result = result.filter(
         (u) =>
@@ -41,7 +39,6 @@ export default function CreateShiftForm({ users }) {
       );
     }
 
-    // sort newest / oldest
     result.sort((a, b) => {
       const aDate = new Date(a.createdAt);
       const bDate = new Date(b.createdAt);
@@ -64,20 +61,16 @@ export default function CreateShiftForm({ users }) {
     []
   );
 
-  // submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { type, startTime, endTime, userIds: selectedUsers };
+    const payload = { type, shiftName, startTime, endTime, userIds: selectedUsers };
 
-    try {
-      await fetch({
-        url: "/shifts",
-        method: "post",
-        data: payload,
+    try { await fetch({ url: "/shifts", method: "post", data: payload,
         successMessage: "Shift created successfully!",
         errorMessage: "Failed to create shift",
         onSuccess: () => {
           setType("MORNING");
+          setShiftName("")
           setStartTime("");
           setEndTime("");
           setSelectedUsers([]);
@@ -102,7 +95,7 @@ export default function CreateShiftForm({ users }) {
 
           <ContentForm.Body>
             {/* Shift form inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-4">
               <div>
                 <Label htmlFor="shift-type">Shift Type</Label>
                 <Select value={type} onValueChange={(v) => setType(v)}>
@@ -116,9 +109,17 @@ export default function CreateShiftForm({ users }) {
                   </SelectContent>
                 </Select>
               </div>
+              <div>
+                <Label htmlFor="shift-type">Shift Name<span className="text-red-500">*</span></Label>
+                <Input id="shiftName"
+                  type="text"
+                  className="mt-1"
+                  value={shiftName}
+                  onChange={(e) => setShiftName(e.target.value)} />
+              </div>
 
               <div>
-                <Label htmlFor="start-time">Start Time</Label>
+                <Label htmlFor="start-time">Start Time<span className="text-red-500">*</span></Label>
                 <Input
                   id="start-time"
                   type="time"
@@ -129,7 +130,7 @@ export default function CreateShiftForm({ users }) {
               </div>
 
               <div>
-                <Label htmlFor="end-time">End Time</Label>
+                <Label htmlFor="end-time">End Time<span className="text-red-500">*</span></Label>
                 <Input
                   id="end-time"
                   type="time"
@@ -158,21 +159,17 @@ export default function CreateShiftForm({ users }) {
                   <div className="flex items-center space-x-2">
                     {/* Tabs */}
                     <div className="flex bg-zinc-100 rounded-lg p-1 ">
-                      <Button
-                        type="button"
-                        size="sm"
+                      <Button type="button" size="sm"
                         variant={sortOrder === "newest" ? "secondary" : "ghost"}
                         onClick={() => setSortOrder("newest")}
-                        className="rounded-l-lg px-3 py-1 font-medium focus:ring-0 focus:outline-none"
+                        className="rounded-l-lg text-sm px-3 py-1 font-medium focus:ring-0 focus:outline-none"
                       >
                         Newest
                       </Button>
-                      <Button
-                        type="button"
-                        size="sm"
+                      <Button type="button" size="sm"
                         variant={sortOrder === "oldest" ? "secondary" : "ghost"}
                         onClick={() => setSortOrder("oldest")}
-                        className="rounded-r-lg px-3 py-1 font-medium focus:ring-0 focus:outline-none"
+                        className="rounded-r-lg text-sm px-3 py-1 font-medium focus:ring-0 focus:outline-none"
                       >
                         Oldest
                       </Button>
@@ -180,8 +177,9 @@ export default function CreateShiftForm({ users }) {
 
                     {/* Filter - nanti diisi */}
                     <Select>
-                      <SelectTrigger className="w-[120px]">
-                        <SelectValue placeholder="Filter" />
+                      <SelectTrigger>
+                        <span className="font-semibold text-zinc-600 mr-1">Status:</span>
+                        <SelectValue placeholder="All" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All</SelectItem>
@@ -202,13 +200,13 @@ export default function CreateShiftForm({ users }) {
 
                   {processedUsers.map((user) => (
                     <Label key={user.id} htmlFor={`user-${user.id}`}
-                      className="group flex items-center space-x-2 border border-zinc-200 shadow-xs rounded-lg p-2 cursor-pointer hover:bg-zinc-50 transition"
+                      className="group flex items-center space-x-2 border border-zinc-200 shadow-xs rounded-lg p-2 cursor-pointer hover:bg-zinc-50 transition-colors ease-in-out"
                     >
                       <Checkbox id={`user-${user.id}`} checked={selectedUsers.includes(user.id)} onCheckedChange={() => toggleUser(user.id)}
                         className="size-4 rounded-md border-zinc-300"
                       />
-                      <div className="bg-zinc-100 group-hover:bg-sky-100 text-zinc-400 group-hover:text-sky-400 p-2 rounded-full shrink-0">
-                        <CircleUser strokeWidth={1} />
+                      <div className="bg-zinc-100 group-hover:bg-sky-100 text-zinc-400 group-hover:text-sky-600 p-2 rounded-full shrink-0">
+                        <CircleUserRound strokeWidth={1} />
                       </div>
 
                       <div className="flex flex-col">
@@ -223,6 +221,12 @@ export default function CreateShiftForm({ users }) {
                   ))}
                 </div>
               </ScrollArea>
+            </div>
+
+            <div className="mt-2">
+              <ContentList items={[
+                "Users in this selection will assigned with their schedule"
+              ]} />
             </div>
           </ContentForm.Body>
 
