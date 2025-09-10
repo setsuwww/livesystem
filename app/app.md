@@ -1,71 +1,25 @@
-fitur -> Auth -> :: Role(ADMIN, TEKNISI, MANAGER, USER) 
+shift ada 3
+MORNING 08:00 - 16:00
+AFTERNOON 16:00 - 00:00
+EVENING 00:00 - 08:00
 
-ADMIN(
-  - Manage content secara keseluruhan dan efisien
+employee yang checkin tepat waktu -> PRESENT
+employee yang checkin lewat dari waktu masuk shift -> LATE
+employee yang izin harus click permission : masukin alasan permission -> PERMISSION
+ga checkin + permission = ABSENT
 
-  CRUD Akun User({
-    Filter( Manager: Teknisi: User:) -> Tampilkan Akun sesuai role beserta Status(
-        ACTIVE, HANDLING, UNACTIVE
-    )
-  }) 
+berikan saya form yang cukup menampilkan 3 button
+checkin, checkout, dan permission
+-> checkin -> set waktu + tanggal hari ini menjadi data kehadiran employee
+-> checkout -> set waktu + tanggal hari ini menjadi data pulang employee , dibuka 10 menit sebelum jam shift berakhir
+-> permission -> munculkan input untuk mengisi data reason
 
-  CRUD Schedule 2View::(Calendar | Table) {
-    Calendar Grid(
-      Tampilkan Shift + User yang active pada tanggal yang di click di grid(
-        -> MORNING, AFTERNOON, NIGHT + username
-    )
-  )}
+User A -> Shift A
+ - di hari 1 User A === Shift Morning
+ - di hari 2 User A === Shift Afternoon
+ - di hari 3 User A === Shift Evening
 
-  CRUD Ticket(
-    -> tiket dikirim dari teknisi
-    -> punya Status_Pengerjaan(PENDING, PROCESS, DONE)
-    -> punya Status_Seleseai(SUCCESS, FAILED)
-    -> history daftar tiket + teknisi yang mengerjakan
-  )
-
-  Fitur(
-    -> Delete selected item
-    -> Delete All
-    -> Filter
-    -> Sort
-    -> Export(PDF, Word, Excel)
-    -> Paginate
-    -> CRUD
-  )
-)
-
-TEKNISI(
-  Input ticket kendala / keluhan user -> tiket(
-    Catch informasi
-  ) -> PENDING
-
-  Jadikan bentuk Tiket(
-    Solving, & Komunikasi
-  ) -> PROCESS
-
-  Done (
-    Berikan Solusi -> SUCCESS
-    Berikan Alasan -> FAILED
-  )
-)
-
-MANAGER(
-  Mengatur User untuk schedule & shift
-)
-
-USER(
-  Register -> Login -> Mengajukan kendala()
-  Melihat history 
-)
-
-Theme Color(
-  Night -> Violet
-  Afternoon -> Sky
-  Morning -> Yellow
-
-  Another -> Gray
-)
-
-Morning, Afternoon, Night = Category(
-  -> name
-)
+Masalah {
+ - Semisal User A diedit shiftnya / tukeran shift, 
+ maka cukup ubah data berikutnya dan biarkan data sebelumnya
+}

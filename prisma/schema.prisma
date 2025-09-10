@@ -7,134 +7,137 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ShiftType {
+  OFF
+  MORNING
+  AFTERNOON
+  EVENING
+}
+
 enum Role {
   ADMIN
   COORDINATOR
   EMPLOYEE
-  OPERATOR
   USER
 }
 
-enum ShiftType {
-  MORNING
-  AFTERNOON
-  NIGHT
-  OFF
+enum permissionStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 enum AttendanceStatus {
-  ON_TIME
-  LATE
+  PRESENT
   ABSENT
+  LATE
   PERMISSION
+  ALPHA
 }
 
-enum Frequency {
-  DAILY
-  WEEKLY
-  MONTHLY
-  YEARLY
-  ONCE
+model Office {
+  id        Int       @id @default(autoincrement())
+  name      String
+  location  String?
+
+  users     User[]
+  shifts    Shift[]
+  schedules Schedule[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+  role     Role   @default(USER)
 
-  shift     Shift?   @relation(fields: [shiftId], references: [id])
-  shiftId   Int?
+  schedules Schedule[]
+  attendances Attendance[]
+  permissionRequests PermissionRequest[]
 
-  schedulesCreated Schedule[] @relation("SchedulesCreatedBy")
-  schedules       Schedule[]
-  attendances     Attendance[]
-  todos           Todo[]
+  shift       Shift?  @relation(fields: [shiftId], references: [id])
+  shiftId     Int?
+
+  office      Office? @relation(fields: [officeId], references: [id])
+  officeId    Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([role])
-  @@index([shiftId])
-}
-
-model Shift {
-  id         Int       @id @default(autoincrement())
-  type       ShiftType @unique
-  startTime  DateTime  @db.Time
-  endTime    DateTime  @db.Time
-
-  users       User[]
-  schedules   Schedule[]
-  attendances Attendance[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([type])
 }
 
 model Schedule {
-  id          Int       @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
-  description String?
-  agenda      String?
-  dueDate     DateTime  @default(now())
-  frequency   Frequency @default(ONCE)
+  description String
+  date        DateTime
 
-  createdBy   User      @relation("SchedulesCreatedBy", fields: [createdById], references: [id])
-  createdById Int       @default(1)
+  user    User?   @relation(fields: [userId], references: [id])
+  userId  Int?
 
-  user        User?     @relation(fields: [userId], references: [id])
-  userId      Int?
+  shift   Shift?  @relation(fields: [shiftId], references: [id])
+  shiftId Int?
 
-  shift       Shift?    @relation(fields: [shiftId], references: [id])
-  shiftId     Int?
-  shiftType   ShiftType?
+  office   Office? @relation(fields: [officeId], references: [id])
+  officeId Int?
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  @@index([dueDate])
-  @@index([frequency])
-  @@index([userId, shiftId])
+model Shift { 
+  id         Int       @id @default(autoincrement()) 
+  type       ShiftType @unique
+  shiftName  String?
+  startTime  Int 
+  endTime    Int 
+ 
+  users       User[] 
+  schedules   Schedule[] 
+  attendances Attendance[] 
+  permissionRequests PermissionRequest[]
+ 
+  office   Office? @relation(fields: [officeId], references: [id]) 
+  officeId Int? 
 }
 
 model Attendance {
-  id        Int              @id @default(autoincrement())
-  date      DateTime
-  status    AttendanceStatus  @default(ABSENT)
-  reason    String?
-  approved  Boolean?          // <— tambahan, untuk izin/permission
+  id     Int              @id @default(autoincrement())
+  date   DateTime
+  status AttendanceStatus @default(ABSENT)
+  reason String?
 
-  checkInAt  DateTime?
-  checkOutAt DateTime?
+  checkInTime   DateTime?
+  checkOutTime  DateTime?
 
-  user     User  @relation(fields: [userId], references: [id])
-  userId   Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 
-  shift    Shift @relation(fields: [shiftId], references: [id])
-  shiftId  Int
+  shift   Shift @relation(fields: [shiftId], references: [id])
+  shiftId Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([date])
-  @@index([status])
   @@unique([userId, shiftId, date])
 }
 
-model Todo {
-  id        Int      @id @default(autoincrement())
-  title     String
-  done      Boolean  @default(false)
+model PermissionRequest {
+  id        Int              @id @default(autoincrement())
+  reason    String
+  status    permissionStatus @default(PENDING)
 
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  shift   Shift? @relation(fields: [shiftId], references: [id])
+  shiftId Int?
+
+  date DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([userId, done])
 }
