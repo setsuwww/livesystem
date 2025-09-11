@@ -17,6 +17,7 @@ export default async function ShiftsPage({ searchParams }) {
     select: {
       id: true,
       type: true,
+      shiftName: true,
       startTime: true,
       endTime: true,
       users: {
@@ -53,6 +54,7 @@ export default async function ShiftsPage({ searchParams }) {
     return {
       id: s.id,
       type: s.type,
+      shiftName: s.shiftName,
       startTime: start,          
       endTime: end,              
       timeRange: `${start} - ${end}`, 

@@ -1,5 +1,11 @@
 export const toMinutes = (date) => date.getHours() * 60 + date.getMinutes();
 
+
+export function timeToInt(time) {
+  const [hours, minutes] = time.split(":").map(Number);
+  return hours * 60 + minutes;
+}
+
 export function minutesToTime(minutes) {
   const hours = String(Math.floor(minutes / 60)).padStart(2, "0");
   const mins = String(minutes % 60).padStart(2, "0");
@@ -20,7 +26,6 @@ export function getAttendanceStatus({ checkIn, permissionReason, shift }) {
   else if (checkInMinutes > lateThreshold) { return "LATE" }
   return "PRESENT";
 }
-
 
 export function canCheckout(now, shift) { const nowMinutes = toMinutes(now);
   const checkoutOpenMinutes = shift.endMinutes - 10;

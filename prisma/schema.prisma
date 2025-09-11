@@ -90,7 +90,7 @@ model Schedule {
 
 model Shift { 
   id         Int       @id @default(autoincrement()) 
-  type       ShiftType @unique
+  type       ShiftType 
   shiftName  String?
   startTime  Int 
   endTime    Int 

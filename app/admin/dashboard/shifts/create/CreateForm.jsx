@@ -14,6 +14,7 @@ import { ScrollArea } from "@/components/ui/Scroll-area";
 import { Label } from "@/components/ui/Label";
 
 import { fetch } from "@/function/helpers/fetch";
+import { timeToInt } from "@/function/services/shiftAttendance";
 import { ContentList } from "@/components/content/ContentList";
 
 export default function CreateShiftForm({ users }) {
@@ -63,7 +64,12 @@ export default function CreateShiftForm({ users }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { type, shiftName, startTime, endTime, userIds: selectedUsers };
+    const payload = { 
+      type, shiftName, 
+      startTime: timeToInt(startTime), 
+      endTime: timeToInt(endTime), 
+      userIds: selectedUsers 
+    };
 
     try { await fetch({ url: "/shifts", method: "post", data: payload,
         successMessage: "Shift created successfully!",
@@ -74,7 +80,7 @@ export default function CreateShiftForm({ users }) {
           setStartTime("");
           setEndTime("");
           setSelectedUsers([]);
-          router.refresh();
+          router.push("/admin/dashboard/shifts");
         },
       });
     } catch (err) {
@@ -88,8 +94,8 @@ export default function CreateShiftForm({ users }) {
         <form onSubmit={handleSubmit}>
           <ContentForm.Header>
             <ContentInformation
-              heading="Create Shift"
-              subheading="Insert shift data and assigned users in the shift"
+              heading="Create Custom Shift"
+              subheading="Create a new shift and assign users without changing their default shift"
             />
           </ContentForm.Header>
 
@@ -191,7 +197,7 @@ export default function CreateShiftForm({ users }) {
                 </div>
 
                 {/* Users list */}
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {processedUsers.length === 0 && (
                     <p className="text-sm text-center text-zinc-600">
                       No users found

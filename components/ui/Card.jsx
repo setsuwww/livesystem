@@ -88,14 +88,14 @@ function CardContent({
   )
 }
 
-function CardFooter({
-  className,
-  ...props
-}) {
+function CardFooter({ className, ...props }) {
   return (
     <div
       data-slot="card-footer"
-      className={cn("flex items-center px-6 [.border-t]:pt-6", className)}
+      className={cn(
+        "flex items-center justify-end gap-2 border-t border-zinc-300 px-6 py-4",
+        className
+      )}
       {...props}
     />
   )
