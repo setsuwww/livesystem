@@ -86,10 +86,10 @@ export function Sidebar() {
         <Image src="/images/lintasarta.webp" width={150} height={150} alt='Lintasarta' />
       </picture>
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-        <SubHeading title='Main'/>
+        <SubHeading title='Main' />
         <SidebarLink href="/admin/dashboard" icon={LayoutDashboard}>Dashboard</SidebarLink>
-        
-        <SubHeading title='Management'/>
+
+        <SubHeading title='Management' />
         <SidebarCollapsible title="Users" open={userOpen} onOpenChange={setUserOpen} icon={Users}
           items={[
             { label: 'Users', href: '/admin/dashboard/users' },
@@ -98,24 +98,23 @@ export function Sidebar() {
             { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
           ]}
         />
-        
-        <SidebarCollapsible title="Shift" open={shiftOpen} onOpenChange={setShiftOpen} icon={Clock}
+
+        <SidebarCollapsible
+          title="Shift"
+          open={shiftOpen}
+          onOpenChange={setShiftOpen}
+          icon={Clock}
           items={[
             { label: 'Shifts', href: '/admin/dashboard/shifts' },
             { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' },
-            { label: 'Shifts History', href: '/admin/dashboard/shifts/history' }
+            { label: 'Assign Shifts', href: '/admin/dashboard/shifts/assign' },
+            { label: 'Shift Schedule', href: '/admin/dashboard/shifts/schedule' },
+            { label: 'Shifts History', href: '/admin/dashboard/shifts/history' },
+            { label: 'Conflict Check', href: '/admin/dashboard/shifts/conflicts' }
           ]}
         />
 
-        <SidebarCollapsible title="Calendars" open={calendarOpen} onOpenChange={setCalendarOpen} icon={CalendarDays}
-          items={[
-            { label: 'Calendars', href: '/admin/dashboard/calendars' },
-            { label: 'Schedules', href: '/admin/dashboard/schedules' },
-            { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },
-          ]}
-        />
-
-        <SubHeading title='Account'/>
+        <SubHeading title='Account' />
         <SidebarLink href="/admin/dashboard/profile" icon={User}>Profile</SidebarLink>
         <SidebarLink href="/admin/dashboard/setting" icon={Settings}>Settings</SidebarLink>
       </nav>

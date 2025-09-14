@@ -31,10 +31,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.13",
     "@radix-ui/react-tooltip": "^1.2.8",
-<<<<<<< HEAD
-=======
     "@tanstack/react-query": "^5.87.1",
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",

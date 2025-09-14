@@ -19,15 +19,12 @@ const typeStyles = {
     border: "border-blue-200",
     icon: Info
   },
-<<<<<<< HEAD
-=======
   w: {
     text: "text-yellow-600",
     bg: "bg-yellow-50",
     border: "border-yellow-200",
     icon: Info
   }
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
 };
 
 export function IconListItem({ children, type = "i" }) {

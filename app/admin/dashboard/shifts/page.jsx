@@ -4,11 +4,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { ShiftsTable } from "./ShiftsTable";
 import { prisma } from "@/lib/prisma";
 
-<<<<<<< HEAD
-import { minutesToTime } from "@/function/services/shiftAttendance"
-=======
 import { minutesToTime } from "@/function/services/shiftAttendance";
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
 
 export const revalidate = 60;
 
@@ -21,10 +17,7 @@ export default async function ShiftsPage({ searchParams }) {
     select: {
       id: true,
       type: true,
-<<<<<<< HEAD
-=======
       shiftName: true,
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
       startTime: true,
       endTime: true,
       users: {
@@ -43,26 +36,11 @@ export default async function ShiftsPage({ searchParams }) {
     orderBy: { type: "asc" },
   });
 
-<<<<<<< HEAD
-=======
   // Mapping agar setiap user punya status default ABSENT
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
   const tableData = mainShifts.map((s) => {
     const start = minutesToTime(s.startTime);
     const end = minutesToTime(s.endTime);
 
-<<<<<<< HEAD
-    return {
-      id: s.id,
-      type: s.type,
-      timeRange: `${start} - ${end}`,
-      usersCount: s.users.length,
-      schedulesCount: s.schedules.length,
-      users: s.users.map((u) => ({
-        ...u,
-        attendances: u.attendances.filter((a) => a.shiftId === s.id),
-      })),
-=======
     const usersWithStatus = s.users.map((u) => {
       // cek attendance untuk shift ini
       const attendance = u.attendances.find((a) => a.shiftId === s.id);
@@ -83,7 +61,6 @@ export default async function ShiftsPage({ searchParams }) {
       usersCount: usersWithStatus.length,
       schedulesCount: s.schedules.length,
       users: usersWithStatus,
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
     };
   });
 

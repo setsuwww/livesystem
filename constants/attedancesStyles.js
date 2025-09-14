@@ -6,13 +6,6 @@ export const attedancesStyles = {
   Alpha: "text-zinc-600 bg-zinc-100 border-zinc-300"
 };
 
-<<<<<<< HEAD
-const statusColorsClass = {
-  PRESENT: { bgPing: "bg-green-400", bgDot: "bg-green-500" },
-  ABSENT: { bgPing: "bg-red-400", bgDot: "bg-red-500" },
-  LATE: { bgPing: "bg-yellow-400", bgDot: "bg-yellow-500" },
-  // dst
-=======
 export const statusColorsClass = {
   PRESENT: { 
     bgPing: "bg-green-400", 
@@ -50,5 +43,4 @@ export const statusColorsClass = {
     subtext: "text-blue-400", 
     border: "bg-blue-50 border-blue-600"  
   },
->>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
 };
