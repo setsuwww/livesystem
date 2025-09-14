@@ -11,8 +11,12 @@ export default function UsersTable({ data }) { const {
     search, handleSearchChange,
     roleFilter, handleRoleFilterChange, shiftFilter, handleShiftFilterChange, filteredData,
     selectedIds, selectedIdsSet, isAllSelected,
+<<<<<<< HEAD
     toggleSelect, selectAll,
     deleteSelected, deleteAll,
+=======
+    toggleSelect, selectAll, deleteSelected, deleteAll,
+>>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
     handleEditUser, handleDeleteUser,
     onExportPDF,
   } = useUsersHooks(data);

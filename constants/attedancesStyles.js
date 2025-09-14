@@ -6,9 +6,49 @@ export const attedancesStyles = {
   Alpha: "text-zinc-600 bg-zinc-100 border-zinc-300"
 };
 
+<<<<<<< HEAD
 const statusColorsClass = {
   PRESENT: { bgPing: "bg-green-400", bgDot: "bg-green-500" },
   ABSENT: { bgPing: "bg-red-400", bgDot: "bg-red-500" },
   LATE: { bgPing: "bg-yellow-400", bgDot: "bg-yellow-500" },
   // dst
+=======
+export const statusColorsClass = {
+  PRESENT: { 
+    bgPing: "bg-green-400", 
+    bgDot: "bg-radial from-green-400 to-green-500", 
+
+    head: "text-green-800",
+    text: "text-green-600", 
+    subtext: "text-green-400", 
+    border: "bg-green-100 border-green-600" 
+  },
+  ABSENT: { 
+    bgPing: "bg-red-400", 
+    bgDot: "bg-radial from-red-400 to-red-500", 
+    
+    head: "text-red-800",
+    text: "text-red-600", 
+    subtext: "text-red-400", 
+    border: "bg-red-50 border-red-600" 
+  },
+  LATE: { 
+    bgPing: "bg-yellow-400", 
+    bgDot: "bg-radial from-yellow-400 to-yellow-500", 
+    
+    head: "text-yellow-800",
+    text: "text-yellow-600", 
+    subtext: "text-yellow-400", 
+    border: "bg-yellow-50 border-yellow-600" 
+  },
+  PERMISSION: { 
+    bgPing: "bg-blue-400", 
+    bgDot: "bg-radial from-blue-400 to-blue-500", 
+    
+    head: "text-blue-800",
+    text: "text-blue-600", 
+    subtext: "text-blue-400", 
+    border: "bg-blue-50 border-blue-600"  
+  },
+>>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
 };

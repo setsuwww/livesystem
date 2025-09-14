@@ -9,6 +9,7 @@ function isEqual(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+<<<<<<< HEAD
 export async function fetch({
   url,
   method = "get",
@@ -19,6 +20,9 @@ export async function fetch({
   errorMessage,
   useCache = true,
 }) {
+=======
+export async function fetch({ url, method = "get", data, onSuccess, onError, successMessage, errorMessage, useCache = true }) {
+>>>>>>> c510f67eeba6b8b8fa93313c365581c9c47f3ccf
   try {
     const now = Date.now();
     const lastFetch = cacheTimestamps[url] || 0;
