@@ -33,5 +33,9 @@ export default async function Page() {
     orderBy: { id: "asc" },
   });
 
-  return <ScheduleForm schedules={schedules} shifts={shifts} />;
+  const users = await prisma.user.findMany({
+    select: { id: true, name: true, email: true, role: true },
+  });
+
+  return <ScheduleForm users={users} schedules={schedules} shifts={shifts} />;
 }

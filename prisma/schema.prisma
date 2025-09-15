@@ -21,6 +21,14 @@ enum Role {
   USER
 }
 
+enmu FrequencyType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+  ONCE
+}
+
 enum PermissionStatus {
   PENDING
   ACCEPTED
@@ -75,6 +83,7 @@ model Schedule {
   id          Int      @id @default(autoincrement())
   title       String
   description String?
+  frequency   FrequencyType @default(ONCE)
   date        DateTime?
   startDate   DateTime?
   endDate     DateTime?

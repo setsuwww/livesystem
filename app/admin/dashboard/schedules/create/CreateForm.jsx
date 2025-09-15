@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/Select";
 import { capitalize } from "@/function/globalFunction";
 
-export default function CreateForm({ schedules, shifts }) {
+export default function CreateForm({ users, shifts, schedules }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -29,6 +29,7 @@ export default function CreateForm({ schedules, shifts }) {
     startDate: "",
     endDate: "",
     shiftId: "",
+    userId: "", // baru
   });
 
   const handleChange = (field, value) => {
@@ -37,7 +38,7 @@ export default function CreateForm({ schedules, shifts }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim() || !form.description.trim() || !form.date.trim()) {
+    if (!form.title.trim() || !form.description.trim() || !form.date.trim() || !form.userId) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -51,7 +52,7 @@ export default function CreateForm({ schedules, shifts }) {
         successMessage: "Schedule created successfully",
         errorMessage: "Failed to create schedule",
         onSuccess: () => {
-          setForm({ title: "", description: "", date: "", shiftId: "" });
+          setForm({ title: "", description: "", date: "", startDate: "", endDate: "", shiftId: "", userId: "" });
           router.push("/admin/dashboard/schedules");
         },
       });
@@ -64,7 +65,7 @@ export default function CreateForm({ schedules, shifts }) {
     <section className="space-y-6">
       <DashboardHeader
         title="Create Schedule"
-        subtitle="Insert title, description, date, and select shift"
+        subtitle="Insert title, description, date, select shift, and assign user"
       />
 
       <ContentForm>
@@ -78,27 +79,27 @@ export default function CreateForm({ schedules, shifts }) {
 
           <ContentForm.Body>
             <section className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                value={form.title}
-                onChange={(e) => handleChange("title", e.target.value)}
-                placeholder="Enter schedule title"
-                required
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  value={form.title}
+                  onChange={(e) => handleChange("title", e.target.value)}
+                  placeholder="Enter schedule title"
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Input
-                id="description"
-                value={form.description}
-                onChange={(e) => handleChange("description", e.target.value)}
-                placeholder="Enter schedule description"
-                required
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Input
+                  id="description"
+                  value={form.description}
+                  onChange={(e) => handleChange("description", e.target.value)}
+                  placeholder="Enter schedule description"
+                  required
+                />
+              </div>
 
               <div className="space-y-1">
                 <Label htmlFor="date">Date</Label>
@@ -121,6 +122,7 @@ export default function CreateForm({ schedules, shifts }) {
                   required
                 />
               </div>
+
               <div className="space-y-1">
                 <Label htmlFor="endDate">End Date</Label>
                 <Input
@@ -150,7 +152,27 @@ export default function CreateForm({ schedules, shifts }) {
                   </SelectContent>
                 </Select>
               </div>
-              </section>
+
+              <div className="space-y-1">
+                <Label htmlFor="user">Assign User</Label>
+                <Select
+                  value={form.userId}
+                  onValueChange={(val) => handleChange("userId", val)}
+                >
+                  <SelectTrigger id="user" className="w-full mt-1">
+                    <SelectValue placeholder="Choose a user" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {users.map((user) => (
+                      <SelectItem key={user.id} value={user.id.toString()}>
+                        {user.name} ({user.email}) - {capitalize(user.role)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+            </section>
           </ContentForm.Body>
 
           <ContentForm.Footer>

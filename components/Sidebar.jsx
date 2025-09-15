@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect, useRef  } from 'react'
 import { usePathname } from 'next/navigation'
 import { ChevronDown, Users, CalendarDays, Clock, LayoutDashboard, User, Settings } from 'lucide-react'
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
@@ -43,35 +43,55 @@ function SidebarSubLink({
   )
 }
 
-function SidebarCollapsible({
-  title,
-  open,
-  onOpenChange,
-  items,
-  icon: Icon
-}) {
-
+function SidebarCollapsible({ title, items, icon: Icon }) {
   const pathname = usePathname()
   const isParentActive = items.some(item => pathname === item.href)
+  const [open, setOpen] = useState(isParentActive)
+  const contentRef = useRef(null)
+  const [height, setHeight] = useState(0)
+
+  useEffect(() => {
+    setOpen(isParentActive)
+  }, [pathname])
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(open ? contentRef.current.scrollHeight : 0)
+    }
+  }, [open])
 
   return (
-    <Collapsible open={open || isParentActive} onOpenChange={onOpenChange}>
-      <CollapsibleTrigger className={`${triggerBase} ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'}`}>
+    <div className="flex flex-col">
+      {/* Trigger */}
+      <button
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
+          ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'}`}
+        onClick={() => setOpen(!open)}
+      >
         <div className="flex items-center gap-x-2">
           <Icon size={18} />
           <span>{title}</span>
         </div>
-        <ChevronDown size={20} className={`transition-transform duration-200 ${open || isParentActive ? 'rotate-180' : ''}`} />
-      </CollapsibleTrigger>
+        <ChevronDown
+          size={20}
+          className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
 
-      <CollapsibleContent className={subContentBase}>
-        {items.map((item) => (
-          <SidebarSubLink key={item.href} href={item.href}>
-            {item.label}
-          </SidebarSubLink>
-        ))}
-      </CollapsibleContent>
-    </Collapsible>
+      {/* Collapsible content */}
+      <div
+        className="overflow-hidden transition-all duration-300"
+        style={{ height: `${height}px` }}
+      >
+        <div ref={contentRef} className="border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2">
+          {items.map(item => (
+            <SidebarSubLink key={item.href} href={item.href}>
+              {item.label}
+            </SidebarSubLink>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
