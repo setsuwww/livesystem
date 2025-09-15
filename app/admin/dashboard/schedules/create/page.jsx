@@ -10,7 +10,8 @@ export default async function Page() {
     where: { userId: user.id },
     select: {
       id: true, title: true, description: true,
-      date: true, createdAt: true, updatedAt: true,
+      date: true, startDate: true, endDate: true,
+      createdAt: true, updatedAt: true,
       userId: true, shiftId: true,
       shift: {
         select: {

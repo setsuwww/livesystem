@@ -16,9 +16,8 @@ export default function AttendancesTable({ data }) {
           <TableHead>Date</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Shift</TableHead>
-          <TableHead>Checkin</TableHead>
-          <TableHead>Checkout</TableHead>
-          <TableHead>Office hours</TableHead>
+          <TableHead>Check In & Out</TableHead>
+          <TableHead>Total Hours</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Reason</TableHead>
         </TableRow>
@@ -44,15 +43,14 @@ export default function AttendancesTable({ data }) {
             </TableCell>
 
             <TableCell>
-              <span className="text-sm text-green-500">
-                {safeFormat(att.checkInTime, "HH:mm")}
-              </span>
-            </TableCell>
-
-            <TableCell>
-              <span className="text-sm text-red-500">
-                {safeFormat(att.checkOutTime, "HH:mm")}
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-green-500">
+                  {safeFormat(att.checkInTime, "HH:mm")}
+                </span>
+                <span className="text-sm text-red-500">
+                  {safeFormat(att.checkOutTime, "HH:mm")}
+                </span>
+              </div>
             </TableCell>
 
             <TableCell>

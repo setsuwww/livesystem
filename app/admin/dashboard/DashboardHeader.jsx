@@ -17,7 +17,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({
   return (
     <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
       <div>
-        <h1 className="text-xl font-bold  bg-clip-text text-transparent bg-gradient-to-r from-zinc-800 to-sky-600">
+        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-zinc-800 to-sky-600">
           {title || formatLabel(segments[segments.length - 1] || "Home")}
         </h1>
         <p className="text-sm text-zinc-500 tracking-tight">

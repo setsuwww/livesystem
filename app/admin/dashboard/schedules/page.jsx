@@ -17,6 +17,8 @@ export async function getSchedules(page = 1) {
       title: true,
       description: true,
       date: true,
+      startDate: true,
+      endDate: true,
       userId: true,
       shiftId: true,
       createdAt: true,
@@ -51,14 +53,16 @@ export default async function Page({ searchParams }) {
 
   const schedules = schedulesRaw.map(s => ({
     ...s,
-    date: s.date.toISOString(),
-    createdAt: s.createdAt.toISOString(),
-    updatedAt: s.updatedAt.toISOString(),
+    date: s.date?.toISOString() ?? null,
+    startDate: s.startDate?.toISOString() ?? null,
+    endDate: s.endDate?.toISOString() ?? null,
+    createdAt: s.createdAt?.toISOString() ?? null,
+    updatedAt: s.updatedAt?.toISOString() ?? null,
     shift: s.shift
     ? {
         ...s.shift,
-        startTime: s.shift.startTime.toISOString(),
-        endTime: s.shift.endTime.toISOString(),
+        startTime: s.shift.startTime,
+        endTime: s.shift.endTime,
       }
     : null,
   }));
@@ -73,8 +77,13 @@ export default async function Page({ searchParams }) {
     <section>
       <DashboardHeader title="Schedules" subtitle="List of your schedules" />
       <ContentForm>
-        <ContentInformation heading="Schedule table" subheading="Manage schedule more detail than calendar view" />
-        <ScheduleTable data={schedules}/>
+        <ContentForm.Header>
+          <ContentInformation heading="Schedule table" subheading="Manage schedule more detail than calendar view" />
+        </ContentForm.Header>
+
+        <ContentForm.Body>
+          <ScheduleTable data={schedules}/>
+        </ContentForm.Body>
 
         <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/schedules" />
       </ContentForm>

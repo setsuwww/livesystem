@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronRight, MoreVertical } from "lucide-react";
+import { ChevronRight, MoreVertical, Sun, Moon, SunMoon, CircleOff } from "lucide-react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown-menu";
@@ -40,17 +40,23 @@ export function ShiftsTable({ data }) {
   }, {});
 
   // ambil 3 shift utama
-  const mainTypes = ["MORNING", "AFTERNOON", "EVENING"];
+  const mainTypes = ["MORNING", "AFTERNOON", "EVENING", "OFF"];
   const mainShifts = mainTypes
     .map((type) => grouped[type]?.[0])
     .filter(Boolean);
 
-  // shift duplicate → jadi card
   const duplicateShifts = mainTypes
     .flatMap((type) => grouped[type]?.slice(1) || [])
     .filter(Boolean);
 
+  const shiftIcons = {
+    MORNING: <Sun className="w-4 h-4 text-yellow-500" />,
+    AFTERNOON: <SunMoon className="w-4 h-4 text-orange-500" />,
+    EVENING: <Moon className="w-4 h-4 text-blue-500" />,
+    OFF: <CircleOff className="w-4 h-4 text-gray-500" />,
+  };
   return (
+
     <div className="space-y-8">
       <ContentList items={["Shifts will be randomized every 3 weeks"]} />
 
@@ -70,7 +76,12 @@ export function ShiftsTable({ data }) {
             {mainShifts.map((shift) => (
               <TableRow key={shift.id}>
                 <TableCell className="font-bold text-zinc-600">
-                  {capitalize(shift.type)}
+                  <div className="flex items-center space-x-2">
+                    <div className={`p-2 rounded-xl ${shiftStyles[shift.type]}`}>
+                      {shiftIcons[shift.type]}
+                    </div>
+                    <span>{capitalize(shift.type)}</span>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Badge className={shiftStyles[shift.type]}>
@@ -148,37 +159,44 @@ export function ShiftsTable({ data }) {
               </CardHeader>
 
               <CardContent className="space-y-3">
-                <div>
-                  <p className="text-base font-semibold text-zinc-600 mb-4">
-                    Assigned users:
-                  </p>
-                  <ul className="space-y-1">
-                    {shift.users?.slice(0, 3).map((user) => (
-                      <li key={user.id} className="flex items-center justify-between border-b border-zinc-200 pb-2 text-sm">
-                        <span className="font-semibold text-zinc-500">
-                          {user.name}
-                        </span>
-                        <span className="text-zinc-400">
-                          {user.email}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  {shift.users?.length > 3 && (
-                    <Link  href={`/admin/dashboard/shifts/${shift.id}/users`} className="text-xs text-blue-600 hover:underline">
-                      View details ({shift.users.length - 3} more)
-                    </Link>
-                  )}
-                </div>
+  <div>
+    <p className="text-base font-semibold text-zinc-600 mb-4">
+      Assigned users:
+    </p>
+    <ul className="space-y-2">
+      {shift.users?.slice(0, 3).map((user) => (
+        <li
+          key={user.id}
+          className="flex items-center gap-3 border-b border-zinc-200 pb-2"
+        >
+          {/* Avatar bulat (pakai inisial) */}
+          <div className="w-7 h-7 rounded-full bg-zinc-200 flex items-center justify-center text-xs font-bold text-zinc-600">
+            {user.name.charAt(0).toUpperCase()}
+          </div>
+          <div className="flex items-center justify-between w-full">
+            <span className="font-semibold text-zinc-700 text-sm">{user.name}</span>
+            <span className="text-xs text-sky-500">{user.email}</span>
+          </div>
+        </li>
+      ))}
+    </ul>
+    {shift.users?.length > 3 && (
+      <Link
+        href={`/admin/dashboard/shifts/${shift.id}/users`}
+        className="text-xs text-blue-600 hover:underline"
+      >
+        View details ({shift.users.length - 3} more)
+      </Link>
+    )}
+  </div>
 
-                {/* Schedules */}
-                <p className="text-sm text-zinc-600">
-                  Schedules:{" "}
-                  <span className="font-semibold">
-                    {shift.schedulesCount}
-                  </span>
-                </p>
-              </CardContent>
+  {/* Schedules count */}
+  <p className="text-sm text-zinc-600">
+    Schedules:{" "}
+    <span className="font-semibold">{shift.schedulesCount}</span>
+  </p>
+</CardContent>
+
             </Card>
           ))}
         </div>

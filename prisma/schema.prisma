@@ -43,7 +43,6 @@ model Office {
   users     User[]
   shifts    Shift[]
   schedules Schedule[]
-  events    Event[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -56,14 +55,16 @@ model User {
   password String
   role     Role   @default(USER)
 
+  shift    Shift?  @relation("DefaultShift", fields: [shiftId], references: [id])
+  shiftId  Int?
+
+  customShifts UserShiftAssignment[]
+
   schedules          Schedule[]
   attendances        Attendance[]
   permissionRequests PermissionRequest[]
 
-  shift    Shift?  @relation(fields: [shiftId], references: [id])
-  shiftId  Int?
-
-  office   Office? @relation(fields: [officeId], references: [id])
+  office   Office? @relation(fields: [officeId], references: [id], onDelete: SetNull)
   officeId Int?
 
   createdAt DateTime @default(now())
@@ -75,15 +76,14 @@ model Schedule {
   title       String
   description String?
   date        DateTime?
+  startDate   DateTime?
+  endDate     DateTime?
 
   user    User?   @relation(fields: [userId], references: [id])
   userId  Int?
 
-  shift   Shift?  @relation(fields: [shiftId], references: [id])
+  shift   Shift?  @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   shiftId Int?
-
-  event   Event?  @relation(fields: [eventId], references: [id])
-  eventId Int?
 
   office   Office? @relation(fields: [officeId], references: [id])
   officeId Int?
@@ -98,29 +98,27 @@ model Shift {
   shiftName String?
   startTime Int 
   endTime   Int 
- 
-  users              User[] 
+
+  users              User[] @relation("DefaultShift")
+  assignments        UserShiftAssignment[]
   schedules          Schedule[] 
   attendances        Attendance[] 
   permissionRequests PermissionRequest[]
- 
+
   office   Office? @relation(fields: [officeId], references: [id]) 
   officeId Int? 
 }
 
-model Event {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String?
-  startTime   DateTime
-  endTime     DateTime
+model UserShiftAssignment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  shiftId   Int
+  assignedAt DateTime @default(now())
 
-  schedules   Schedule[]
-  office      Office? @relation(fields: [officeId], references: [id])
-  officeId    Int?
+  user  User  @relation(fields: [userId], references: [id])
+  shift Shift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([userId, shiftId])
 }
 
 model Attendance {
@@ -135,7 +133,7 @@ model Attendance {
   user   User  @relation(fields: [userId], references: [id])
   userId Int
 
-  shift   Shift @relation(fields: [shiftId], references: [id])
+  shift   Shift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   shiftId Int
 
   createdAt DateTime @default(now())
@@ -152,7 +150,7 @@ model PermissionRequest {
   user   User  @relation(fields: [userId], references: [id])
   userId Int
 
-  shift   Shift? @relation(fields: [shiftId], references: [id])
+  shift   Shift? @relation(fields: [shiftId], references: [id], onDelete: Cascade)
   shiftId Int?
 
   date DateTime

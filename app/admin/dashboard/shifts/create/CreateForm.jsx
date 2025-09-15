@@ -64,29 +64,34 @@ export default function CreateShiftForm({ users }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { 
-      type, shiftName, 
+
+    const payload = {
+      type, 
+      shiftName,
       startTime: timeToInt(startTime), 
-      endTime: timeToInt(endTime), 
-      userIds: selectedUsers 
+      endTime: timeToInt(endTime),
+      userIds: selectedUsers,
     };
 
-    try { await fetch({ url: "/shifts", method: "post", data: payload,
-        successMessage: "Shift created successfully!",
-        errorMessage: "Failed to create shift",
-        onSuccess: () => {
-          setType("MORNING");
-          setShiftName("")
-          setStartTime("");
-          setEndTime("");
-          setSelectedUsers([]);
-          router.push("/admin/dashboard/shifts");
-        },
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    try { await fetch({ url: "/shifts", method: "post",
+      data: payload,
+      successMessage: "Shift created successfully!",
+      errorMessage: "Failed to create shift",
+      onSuccess: () => {
+        setType("MORNING");
+        setShiftName("");
+        setStartTime("");
+        setEndTime("");
+        setSelectedUsers([]);
+        router.push("/admin/dashboard/shifts");
+      },
+    });
+  } 
+  catch (err) {
+    console.error("Shift creation error:", err);
+  }
+};
+
 
   return (
     <section>
@@ -238,10 +243,10 @@ export default function CreateShiftForm({ users }) {
 
           <ContentForm.Footer>
             <div className="space-x-2">
-              <Button type="button" variant="outline">
+              <Button size="lg" type="button" variant="outline">
                 Cancel
               </Button>
-              <Button type="submit">Create Shift</Button>
+              <Button size="lg" type="submit">Create Shift</Button>
             </div>
           </ContentForm.Footer>
         </form>

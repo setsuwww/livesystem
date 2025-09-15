@@ -28,15 +28,18 @@ export default function SchedulesActionHeader({
         </Tabs>
       </div>
       <div className="flex items-center gap-x-2">
-        <Button variant="destructive" size="sm" onClick={onDeleteSelected} disabled={selectedCount === 0}>
+        <Button variant="ghost" size="sm" className="text-red-500" 
+          onClick={onDeleteSelected} disabled={selectedCount === 0}>
           Delete Selected
         </Button>
 
-        <Button size="sm" variant="destructive" onClick={onDeleteAll} disabled={totalCount === 0}>
+        <Button variant="ghost" size="sm" className="bg-red-50 hover:bg-red-100 text-red-500" 
+          onClick={onDeleteAll}>
           <Trash2 size={16} /> Delete All
         </Button>
 
-        <Button variant="positive" size="sm" onClick={onExportPDF} disabled={totalCount === 0}>
+        <Button variant="ghost" size="sm" className="bg-green-100 hover:bg-green-200 text-green-700" 
+          onClick={onExportPDF}>
           <FolderInput size={16} /> Export
         </Button>
       </div>

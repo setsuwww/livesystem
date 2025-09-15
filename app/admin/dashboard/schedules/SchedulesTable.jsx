@@ -87,8 +87,8 @@ export default function ScheduleTable({ data }) {
             </TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Description</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Created</TableHead>
+            <TableHead>Due Date</TableHead>
+            <TableHead>Created & Updated</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>

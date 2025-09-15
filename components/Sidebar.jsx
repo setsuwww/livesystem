@@ -77,6 +77,7 @@ function SidebarCollapsible({
 
 export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
+  const [employeesOpen, setEmployeesOpen] = useState(false)
   const [shiftOpen, setShiftOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
 
@@ -94,6 +95,11 @@ export function Sidebar() {
           items={[
             { label: 'Users', href: '/admin/dashboard/users' },
             { label: 'Add Users', href: '/admin/dashboard/users/create' },
+          ]}
+        />
+
+        <SidebarCollapsible title="Employees" open={employeesOpen} onOpenChange={setEmployeesOpen} icon={Users}
+          items={[
             { label: 'Employees', href: '/admin/dashboard/users/employees' },
             { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
           ]}
@@ -107,10 +113,11 @@ export function Sidebar() {
           items={[
             { label: 'Shifts', href: '/admin/dashboard/shifts' },
             { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' },
-            { label: 'Assign Shifts', href: '/admin/dashboard/shifts/assign' },
-            { label: 'Shift Schedule', href: '/admin/dashboard/shifts/schedule' },
-            { label: 'Shifts History', href: '/admin/dashboard/shifts/history' },
-            { label: 'Conflict Check', href: '/admin/dashboard/shifts/conflicts' }
+            { label: 'Schedules', href: '/admin/dashboard/schedules' },
+            { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },
+            { label: 'Shifts Schedule', href: '/admin/dashboard/shifts_schedule' },
+            { label: 'Relation', href: '/admin/dashboard/realtion' },
+            { label: 'Conflict', href: '/admin/dashboard/conflict' },
           ]}
         />
 

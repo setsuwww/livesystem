@@ -1,80 +1,104 @@
-// prisma/seed.ts
-import { PrismaClient, Role } from "@prisma/client";
+// prisma/seed.js
+import { PrismaClient, Role, ShiftType } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminPassword = await bcrypt.hash("admin123", 10);
-  const coordinatorPassword = await bcrypt.hash("coordinator123", 10);
-  const employeePassword = await bcrypt.hash("employee123", 10);
-
-  await prisma.user.upsert({
-    where: { email: "admin@example.com" },
-    update: {},
-    create: {
-      name: "Admin",
-      email: "admin@example.com",
-      password: adminPassword,
-      role: Role.ADMIN,
-    },
-  });
-
-  await prisma.user.upsert({
-    where: { email: "coordinator@example.com" },
-    update: {},
-    create: {
-      name: "Coordinator",
-      email: "coordinator@example.com",
-      password: coordinatorPassword,
-      role: Role.COORDINATOR,
-    },
-  });
-
-  await prisma.user.upsert({
-    where: { email: "employee@example.com" },
-    update: {},
-    create: {
-      name: "Employee",
-      email: "employee@example.com",
-      password: employeePassword,
-      role: Role.EMPLOYEE,
-    },
-  });
-
+  // Bersihin data lama
+  await prisma.user.deleteMany();
   await prisma.shift.deleteMany();
 
+  // Seed Shifts
   const shifts = [
     {
-      type: "MORNING",      // 08:00 - 16:00
+      type: ShiftType.MORNING,
+      shiftName: "Morning",
       startTime: 8 * 60,
       endTime: 16 * 60,
     },
     {
-      type: "AFTERNOON",    // 16:00 - 00:00
+      type: ShiftType.AFTERNOON,
+      shiftName: "Afternoon",
       startTime: 16 * 60,
-      endTime: 24 * 60,     // 24:00 alias midnight
+      endTime: 24 * 60,
     },
     {
-      type: "EVENING",      // 00:00 - 08:00
+      type: ShiftType.EVENING,
+      shiftName: "Evening",
       startTime: 0,
       endTime: 8 * 60,
     },
-  ]
+    {
+      type: ShiftType.OFF,
+      shiftName: "Off",
+      startTime: 0,
+      endTime: 0,
+    },
+  ];
 
+  const seededShifts = {};
   for (const shift of shifts) {
-    await prisma.shift.upsert({
-      where: { type: shift.type },
-      update: shift,
-      create: shift,
-    })
+    let s = await prisma.shift.findFirst({
+      where: { type: shift.type, shiftName: shift.shiftName },
+    });
+
+    if (s) {
+      s = await prisma.shift.update({
+        where: { id: s.id },
+        data: shift,
+      });
+    } else {
+      s = await prisma.shift.create({ data: shift });
+    }
+
+    seededShifts[shift.type] = s;
   }
 
-  console.log("---------------------")
-  console.log("✅ Seeding Done der");
-  console.log("---------------------")
+  // Seed Users
+  const users = [
+    { name: "Admin", email: "admin@example.com", password: "admin123", role: Role.ADMIN },
+    { name: "Coordinator", email: "coordinator@example.com", password: "coordinator123", role: Role.COORDINATOR },
+
+    { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.MORNING] },
+    { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.AFTERNOON] },
+    { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.EVENING] },
+    { name: "Mursidi", email: "mursidi@example.com", password: "mursidi123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.MORNING] },
+    { name: "Surya", email: "surya@example.com", password: "surya123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.AFTERNOON] },
+    { name: "Agus", email: "agus@example.com", password: "agus123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.EVENING] },
+  ];
+
+  for (const u of users) {
+    const hashed = await bcrypt.hash(u.password, 10);
+
+    let user = await prisma.user.findUnique({ where: { email: u.email } });
+
+    if (user) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { shiftId: u.shift?.id ?? null },
+      });
+    } else {
+      await prisma.user.create({
+        data: {
+          name: u.name,
+          email: u.email,
+          password: hashed,
+          role: u.role,
+          shiftId: u.shift?.id ?? null,
+        },
+      });
+    }
+  }
+
+  console.log("✅ Seeding Done!");
 }
 
-main().catch((e) => { 
-  console.error(e); process.exit(1);
-}).finally(async () => { await prisma.$disconnect() });
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

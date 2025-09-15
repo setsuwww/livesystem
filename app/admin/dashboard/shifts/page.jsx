@@ -13,56 +13,83 @@ export default async function ShiftsPage({ searchParams }) {
 
   // Ambil semua shift utama
   const mainShifts = await prisma.shift.findMany({
-    where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
-    select: {
-      id: true,
-      type: true,
-      shiftName: true,
-      startTime: true,
-      endTime: true,
-      users: {
-        where: { role: "EMPLOYEE" },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          attendances: {
-            select: { shiftId: true, status: true, reason: true },
+  where: { type: { in: ["MORNING", "AFTERNOON", "EVENING", "OFF"] } },
+  select: {
+    id: true,
+    type: true,
+    shiftName: true,
+    startTime: true,
+    endTime: true,
+    // ambil user default
+    users: {
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        attendances: {
+          select: { shiftId: true, status: true, reason: true },
+        },
+      },
+    },
+    // ambil user dari pivot
+    assignments: {
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            attendances: {
+              select: { shiftId: true, status: true, reason: true },
+            },
           },
         },
       },
-      schedules: { select: { id: true, title: true } },
     },
-    orderBy: { type: "asc" },
-  });
+    schedules: { select: { id: true, title: true } },
+  },
+  orderBy: { type: "asc" },
+});
+
+
 
   // Mapping agar setiap user punya status default ABSENT
   const tableData = mainShifts.map((s) => {
-    const start = minutesToTime(s.startTime);
-    const end = minutesToTime(s.endTime);
+  const start = minutesToTime(s.startTime);
+  const end = minutesToTime(s.endTime);
 
-    const usersWithStatus = s.users.map((u) => {
-      // cek attendance untuk shift ini
-      const attendance = u.attendances.find((a) => a.shiftId === s.id);
-      return {
-        ...u,
-        attendanceStatus: attendance ? attendance.status : "ABSENT", // default ABSENT
-        reason: attendance?.reason || null,
-      };
-    });
+  // gabung default + pivot
+  const allUsers = [
+    ...s.users,
+    ...s.assignments.map((a) => a.user),
+  ];
 
+  // hapus duplikat (jaga2 kalau 1 user ada di dua relasi)
+  const uniqueUsers = Array.from(
+    new Map(allUsers.map((u) => [u.id, u])).values()
+  );
+
+  const usersWithStatus = uniqueUsers.map((u) => {
+    const attendance = u.attendances.find((at) => at.shiftId === s.id);
     return {
-      id: s.id,
-      type: s.type,
-      shiftName: s.shiftName,
-      startTime: start,          
-      endTime: end,              
-      timeRange: `${start} - ${end}`, 
-      usersCount: usersWithStatus.length,
-      schedulesCount: s.schedules.length,
-      users: usersWithStatus,
+      ...u,
+      attendanceStatus: attendance ? attendance.status : "ABSENT",
+      reason: attendance?.reason || null,
     };
   });
+
+  return {
+    id: s.id,
+    type: s.type,
+    shiftName: s.shiftName,
+    startTime: start,
+    endTime: end,
+    timeRange: `${start} - ${end}`,
+    usersCount: usersWithStatus.length,
+    schedulesCount: s.schedules.length,
+    users: usersWithStatus,
+  };
+});
 
   return (
     <section className="space-y-6">

@@ -1,38 +1,59 @@
 "use client"
 
-import { ArrowDown, ArrowUp, EllipsisVertical } from "lucide-react"
-import React, { useState } from "react"
+import { EllipsisVertical } from "lucide-react"
+import React from "react"
+import Link from "next/link"
 
-import Link from "next/link";
+function DashboardStatsComponent({
+  title,
+  link,
+  textlink,
+  caption,
+  value,
+  valueColor = "",
+  icon,
+  color,
+  dark = false, // default light mode
+}) {
+  const base =
+    "p-5 rounded-2xl border shadow-sm flex items-center gap-4 transition-colors"
 
-function DashboardStatsComponent({ title, link, textlink, value, negativeValue, icon, color = "bg-zinc-100 text-zinc-600" }) {
-  const [showNegative, setShowNegative] = useState(false);
+  // default theme styles
+  const theme = dark
+    ? "border-gray-500 bg-gray-600 text-gray-100 hover:border-zinc-600"
+    : "border-zinc-200 bg-white text-zinc-700 hover:border-zinc-300"
 
-  const toggleValue = () => setShowNegative(prev => !prev);
+  const defaultIcon =
+    dark ? "bg-zinc-800 text-zinc-300" : "bg-zinc-100 text-zinc-600"
 
   return (
-    <div className="p-5 rounded-2xl border border-zinc-200 shadow-sm bg-white flex items-center gap-4 hover:border-zinc-300 transition-colors">
-      <div className={`flex items-center justify-center w-14 h-14 rounded-full ${color} shadow-inner`}>
+    <div className={`${base} ${theme}`}>
+      <div
+        className={`flex items-center justify-center w-14 h-14 rounded-full ${
+          color || defaultIcon
+        }`}
+      >
         {icon}
       </div>
 
       <div className="flex flex-col flex-1">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium text-zinc-700">{title}</h2>
-          {link && ((
+          <h2 className="text-sm font-medium">{title}</h2>
+          {link && (
             <Link href={link}>
-              <EllipsisVertical strokeWidth={2} size={15} className="text-zinc-500" />
+              <EllipsisVertical
+                strokeWidth={2}
+                size={15}
+                className={dark ? "text-zinc-400" : "text-zinc-500"}
+              />
               {textlink}
             </Link>
-          ))}
+          )}
         </div>
-        <div className="flex items-center space-x-2">
-          <p className="text-2xl font-semibold">{showNegative ? negativeValue : value}</p>
-          {/* Icon switch */}
-          <button onClick={toggleValue} className={`${showNegative ? "hover:bg-red-200 bg-red-100" : "hover:bg-green-200 bg-green-100"} p-1 rounded-full text-zinc-500 transition-colors`} title={showNegative ? "Show Positive" : "Show Negative"}>
-            {showNegative ? <ArrowDown className="w-4 h-4 text-red-500" /> : <ArrowUp className="w-4 h-4 text-green-500" />}
-          </button>
-        </div>
+        <p className="flex items-center text-xl font-semibold">
+          {caption && (<span className="mr-2">{caption}</span>)}
+          <span className={valueColor}>{value}</span>
+        </p>
       </div>
     </div>
   )

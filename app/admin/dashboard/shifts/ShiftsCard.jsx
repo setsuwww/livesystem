@@ -1,7 +1,13 @@
 "use client";
 import { useState } from "react";
 import { Users } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
@@ -18,31 +24,52 @@ export function ShiftCards({ shifts }) {
   const handleOpen = (shift) => setSelectedShift(shift);
   const handleClose = () => setSelectedShift(null);
 
+  const mainTypes = ["MORNING", "AFTERNOON", "EVENING"];
+  const uniqueShifts = mainTypes
+    .map((type) => shifts.find((s) => s.type === type))
+    .filter(Boolean);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {shifts.map((shift) => { const worstStatus =
-        shift.users
-          .map((u) => u.attendanceStatus)
-          .filter((s) => s !== "PRESENT")
-          .sort((a, b) => statusPriority.indexOf(a) - statusPriority.indexOf(b))[0] || "PRESENT";
-        const presentCount = shift.users.filter((u) => u.attendanceStatus === "PRESENT").length;
+      {uniqueShifts.map((shift) => {
+        const worstStatus =
+          shift.users
+            .map((u) => u.attendanceStatus)
+            .filter((s) => s !== "PRESENT")
+            .sort(
+              (a, b) => statusPriority.indexOf(a) - statusPriority.indexOf(b)
+            )[0] || "PRESENT";
+
+        const presentCount = shift.users.filter(
+          (u) => u.attendanceStatus === "PRESENT"
+        ).length;
 
         return (
-          <div key={shift.id} onClick={() => handleOpen(shift)}
+          <div
+            key={shift.id}
+            onClick={() => handleOpen(shift)}
             className="relative bg-white border border-zinc-200 p-4 rounded-xl shadow-xs cursor-pointer transition"
           >
             <div className="flex items-center justify-between mb-6 relative">
-              <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-zinc-100 border border-zinc-300 text-zinc-600 relative`}>
+              <span
+                className={`font-semibold text-sm px-2 py-1 rounded-lg bg-zinc-100 border border-zinc-300 text-zinc-600 relative`}
+              >
                 {capitalize(shift.type)}
                 {worstStatus !== "PRESENT" && (
                   <span className="absolute -top-1 -right-1 w-3 h-3 flex items-center justify-center">
-                    <span className={`absolute w-full h-full rounded-full animate-ping opacity-75 ${statusColorsClass[worstStatus].bgPing}`}></span>
-                    <span className={`relative w-3 h-3 rounded-full ${statusColorsClass[worstStatus].bgDot}`}></span>
+                    <span
+                      className={`absolute w-full h-full rounded-full animate-ping opacity-75 ${statusColorsClass[worstStatus].bgPing}`}
+                    ></span>
+                    <span
+                      className={`relative w-3 h-3 rounded-full ${statusColorsClass[worstStatus].bgDot}`}
+                    ></span>
                   </span>
                 )}
               </span>
               <Badge className={shiftStyles[shift.type]}>
-                <span className="text-xs">{shift.startTime} - {shift.endTime}</span>
+                <span className="text-xs">
+                  {shift.startTime} - {shift.endTime}
+                </span>
               </Badge>
             </div>
             <div className="flex items-center gap-2 text-sm text-zinc-600">
@@ -76,13 +103,17 @@ export function ShiftCards({ shifts }) {
             </DialogHeader>
             <div className="mt-4 space-y-4">
               {statusPriority.map((status) => {
-                const users = selectedShift.users.filter((u) => u.attendanceStatus === status);
+                const users = selectedShift.users.filter(
+                  (u) => u.attendanceStatus === status
+                );
                 if (!users.length) return null;
 
                 return (
                   <div key={status}>
                     <div className="flex items-center gap-1 mb-2">
-                      <span className={`${statusColorsClass[status].head} font-semibold`}>
+                      <span
+                        className={`${statusColorsClass[status].head} font-semibold`}
+                      >
                         {capitalize(status)} ({users.length})
                       </span>
                     </div>
@@ -92,8 +123,16 @@ export function ShiftCards({ shifts }) {
                           key={u.id}
                           className={`${statusColorsClass[status].border} rounded-r-md p-2 flex flex-col border-0 border-l-3`}
                         >
-                          <span className={`${statusColorsClass[status].text} text-sm font-semibold`}>{u.name}</span>
-                          <span className={`${statusColorsClass[status].subtext} text-xs`}>{u.email}</span>
+                          <span
+                            className={`${statusColorsClass[status].text} text-sm font-semibold`}
+                          >
+                            {u.name}
+                          </span>
+                          <span
+                            className={`${statusColorsClass[status].subtext} text-xs`}
+                          >
+                            {u.email}
+                          </span>
                         </div>
                       ))}
                     </div>
