@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
+import { Clock } from "lucide-react";
 import ScheduleTable from "./SchedulesTable";
 import { DashboardHeader } from "../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
@@ -60,12 +61,12 @@ export default async function Page({ searchParams }) {
     createdAt: s.createdAt?.toISOString() ?? null,
     updatedAt: s.updatedAt?.toISOString() ?? null,
     shift: s.shift
-    ? {
+      ? {
         ...s.shift,
         startTime: s.shift.startTime,
         endTime: s.shift.endTime,
       }
-    : null,
+      : null,
   }));
 
   const totalPages = Math.ceil(total / 5);
@@ -80,10 +81,27 @@ export default async function Page({ searchParams }) {
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation heading="Schedule table" subheading="Manage schedule more detail than calendar view" />
+          <div className="flex items-center space-x-2 mt-4">
+            <div className="flex items-center space-x-2 bg-green-100 border border-green-200 px-2 py-0.5 rounded-md">
+              <span className="text-green-700 text-sm font-base">Daily</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-md">
+              <span className="text-yellow-700 text-sm font-base">Weekly</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-orange-100 border border-orange-200 px-2 py-0.5 rounded-md">
+              <span className="text-orange-700 text-sm font-base">Monthly</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-purple-100 border border-purple-200 px-2 py-0.5 rounded-md">
+              <span className="text-purple-700 text-sm font-base">Yearly</span>
+            </div>
+            <div className="flex items-center space-x-2 bg-red-100 border border-red-200 px-2 py-0.5 rounded-md">
+              <span className="text-red-700 text-sm font-base">Once</span>
+            </div>
+          </div>
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <ScheduleTable data={schedules}/>
+          <ScheduleTable data={schedules} />
         </ContentForm.Body>
 
         <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/schedules" />

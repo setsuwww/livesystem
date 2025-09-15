@@ -25,6 +25,7 @@ export default function CreateForm({ users, shifts, schedules }) {
   const [form, setForm] = useState({
     title: "",
     description: "",
+    frequency: "ONCE",
     date: "",
     startDate: "",
     endDate: "",
@@ -52,7 +53,7 @@ export default function CreateForm({ users, shifts, schedules }) {
         successMessage: "Schedule created successfully",
         errorMessage: "Failed to create schedule",
         onSuccess: () => {
-          setForm({ title: "", description: "", date: "", startDate: "", endDate: "", shiftId: "", userId: "" });
+          setForm({ title: "", description: "", date: "", startDate: "", endDate: "", shiftId: "", userId: "", frequency: "ONCE" });
           router.push("/admin/dashboard/schedules");
         },
       });
@@ -103,7 +104,7 @@ export default function CreateForm({ users, shifts, schedules }) {
 
               <div className="space-y-1">
                 <Label htmlFor="status">Select Frequency</Label>
-                <Select value={form.frequency} onValueChange={(e) => handleChange("status", e.target.value)}>
+                <Select value={form.frequency} onValueChange={(value) => handleChange("frequency", value)}>
                   <SelectTrigger id="frequency" className="w-full mt-1">
                     <SelectValue placeholder="Select Frequency" />
                   </SelectTrigger>

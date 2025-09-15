@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronRight, MoreVertical, Sun, Moon, SunMoon, CircleOff } from "lucide-react";
+import { ChevronRight, MoreVertical, Sun, Moon, SunMoon, CircleOff, CalendarDays } from "lucide-react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown-menu";
@@ -22,19 +22,22 @@ export function ShiftsTable({ data }) {
     router.push(`/admin/dashboard/shifts/${id}/edit`);
 
   const handleDelete = async (id) => {
-    try { await fetch({ url: `/shifts/${id}`, method: "delete",
+    try {
+      await fetch({
+        url: `/shifts/${id}`, method: "delete",
         successMessage: "Shift deleted successfully",
         errorMessage: "Failed to delete shift",
       });
       router.refresh();
-    } 
+    }
     catch (err) {
       console.error(err);
     }
   };
 
   // group by type
-  const grouped = data.reduce((acc, shift) => { if (!acc[shift.type]) acc[shift.type] = [];
+  const grouped = data.reduce((acc, shift) => {
+    if (!acc[shift.type]) acc[shift.type] = [];
     acc[shift.type].push(shift);
     return acc;
   }, {});
@@ -124,7 +127,6 @@ export function ShiftsTable({ data }) {
         </Table>
       )}
 
-      {/* Duplicate shifts → Card */}
       {duplicateShifts.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {duplicateShifts.map((shift) => (
@@ -140,7 +142,6 @@ export function ShiftsTable({ data }) {
                   </div>
                 </CardTitle>
 
-                {/* Ellipsis menu */}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="p-0.5 bg-zinc-50 hover:bg-sky-50 text-zinc-600 hover:text-sky-600">
@@ -159,43 +160,39 @@ export function ShiftsTable({ data }) {
               </CardHeader>
 
               <CardContent className="space-y-3">
-  <div>
-    <p className="text-base font-semibold text-zinc-600 mb-4">
-      Assigned users:
-    </p>
-    <ul className="space-y-2">
-      {shift.users?.slice(0, 3).map((user) => (
-        <li
-          key={user.id}
-          className="flex items-center gap-3 border-b border-zinc-200 pb-2"
-        >
-          {/* Avatar bulat (pakai inisial) */}
-          <div className="w-7 h-7 rounded-full bg-zinc-200 flex items-center justify-center text-xs font-bold text-zinc-600">
-            {user.name.charAt(0).toUpperCase()}
-          </div>
-          <div className="flex items-center justify-between w-full">
-            <span className="font-semibold text-zinc-700 text-sm">{user.name}</span>
-            <span className="text-xs text-sky-500">{user.email}</span>
-          </div>
-        </li>
-      ))}
-    </ul>
-    {shift.users?.length > 3 && (
-      <Link
-        href={`/admin/dashboard/shifts/${shift.id}/users`}
-        className="text-xs text-blue-600 hover:underline"
-      >
-        View details ({shift.users.length - 3} more)
-      </Link>
-    )}
-  </div>
+                <div>
+                  <p className="text-base font-semibold text-zinc-600 mb-4">
+                    Assigned users:
+                  </p>
+                  <ul className="space-y-2">
+                    {shift.users?.slice(0, 3).map((user) => (
+                      <li key={user.id} className="flex items-center gap-x-2 justify-between border-b border-zinc-200 pb-2">
+                        <span className="font-semibold text-zinc-600 text-sm">{user.name}</span>
+                        <span className="text-xs text-sky-500">{user.email}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-  {/* Schedules count */}
-  <p className="text-sm text-zinc-600">
-    Schedules:{" "}
-    <span className="font-semibold">{shift.schedulesCount}</span>
-  </p>
-</CardContent>
+                {/* Schedules count */}
+                <div className="flex items-center justify-between space-x-2">
+                  <div className="flex items-center justify-between space-x-2">
+                    <div className="p-2 bg-zinc-200 text-zinc-600 rounded-lg">
+                      <CalendarDays size={16} strokeWidth={2} />
+                    </div>
+                    <div className="text-sm flex items-center">
+                      <span>Schedules : {shift.schedulesCount}</span>
+                    </div>
+                  </div>
+                  <p>
+                    {shift.users?.length > 3 && (
+                      <Link href={`/admin/dashboard/shifts/${shift.id}/users`} className="text-sm text-blue-600 hover:text-blue-400">
+                        View details
+                      </Link>
+                    )}
+                  </p>
+                </div>
+              </CardContent>
 
             </Card>
           ))}

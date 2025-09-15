@@ -7,6 +7,7 @@ import { TableRow, TableCell } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 
 import { capitalize } from "@/function/globalFunction";
+import { frequencyStyles } from "@/constants/frequencyStyles";
 
 export const SchedulesRow = React.memo(function ({
   schedule,
@@ -16,13 +17,13 @@ export const SchedulesRow = React.memo(function ({
   onDelete
 }) {
 
-  const formatedUpdatedDate = useMemo(() => 
+  const formatedUpdatedDate = useMemo(() =>
     format(new Date(schedule.updatedAt), "dd-MMMM-yyyy"),
-  [schedule.updatedAt])
+    [schedule.updatedAt])
 
-  const formatedCreatedDate = useMemo(() => 
+  const formatedCreatedDate = useMemo(() =>
     format(new Date(schedule.createdAt), "dd-MMMM-yyyy"),
-  [schedule.createdAt])
+    [schedule.createdAt])
 
   return (
     <TableRow>
@@ -31,16 +32,16 @@ export const SchedulesRow = React.memo(function ({
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-x-2">
-          <div className="p-2 bg-zinc-200 rounded-full">
-            <CalendarClock strokeWidth={1.5} className="text-zinc-600" />
+          <div className={`p-2 rounded-md ${frequencyStyles[capitalize(schedule.frequency)]}`}>
+            <CalendarClock strokeWidth={1.5} />
           </div>
           <div className="flex flex-col gap-x-2">
-          <h1 className="text-sm font-semibold text-zinc-600">
-            {capitalize(schedule.title)}
-          </h1>
-          <p className="text-xs text-zinc-400">
-            {capitalize(schedule.shift ? schedule.shift.type : "-")}
-          </p>
+            <h1 className="text-sm font-semibold text-zinc-600">
+              {capitalize(schedule.title)}
+            </h1>
+            <p className="text-xs text-zinc-400">
+              {capitalize(schedule.shift ? schedule.shift.type : "-")}
+            </p>
           </div>
         </div>
       </TableCell>
@@ -50,9 +51,10 @@ export const SchedulesRow = React.memo(function ({
         </p>
       </TableCell>
       <TableCell>
-        {schedule.date && format(new Date(schedule.date), "dd-MMMM-yyyy HH:mm")}
-        {schedule.startDate && ` - ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm")}`}
-        {schedule.endDate && ` - ${format(new Date(schedule.endDate), "dd-MMMM-yyyy HH:mm")}`}
+        <div className="text-sm font-semibold flex flex-col">
+          <span className="text-green-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
+          <span className="text-red-500">{schedule.endDate && ` ${format(new Date(schedule.endDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
+        </div>
       </TableCell>
       <TableCell>
         <div>
