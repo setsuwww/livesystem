@@ -19,6 +19,7 @@ export async function getSchedules(page = 1) {
       date: true,
       startDate: true,
       endDate: true,
+      frequency: true,
       userId: true,
       shiftId: true,
       createdAt: true,

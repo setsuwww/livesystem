@@ -102,6 +102,22 @@ export default function CreateForm({ users, shifts, schedules }) {
               </div>
 
               <div className="space-y-1">
+                <Label htmlFor="status">Select Frequency</Label>
+                <Select value={form.frequency} onValueChange={(e) => handleChange("status", e.target.value)}>
+                  <SelectTrigger id="frequency" className="w-full mt-1">
+                    <SelectValue placeholder="Select Frequency" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DAILY">Daily</SelectItem>
+                    <SelectItem value="WEEKLY">Weekly</SelectItem>
+                    <SelectItem value="MONTHLY">Monthly</SelectItem>
+                    <SelectItem value="YEARLY">Yearly</SelectItem>
+                    <SelectItem value="ONCE">Once</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-1">
                 <Label htmlFor="date">Date</Label>
                 <Input
                   id="date"
