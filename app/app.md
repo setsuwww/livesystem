@@ -14,3 +14,10 @@ nama shift model
 - end
 
 di export di csv jadiin model shift bentuk shift
+
+{
+    refactor ssr dengan isr + prisma query ke data yang akan ditampilkan
+    refactor csr dengan react hooks
+    refactor file & folder
+    refactor schema
+}
