@@ -27,13 +27,10 @@ export default function CreateForm({ users, shifts }) {
   const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
-    title: "",
-    description: "",
+    title: "", description: "",
     frequency: "ONCE",
-    startDate: "",
-    endDate: "",
-    shiftId: "",
-    userIds: [],
+    startDate: "", endDate: "",
+    shiftId: "", userIds: [],
   });
 
   const handleChange = useCallback((field, value) => {
@@ -45,8 +42,7 @@ export default function CreateForm({ users, shifts }) {
       const exists = prev.userIds.includes(id);
       return {
         ...prev,
-        userIds: exists
-          ? prev.userIds.filter((u) => u !== id)
+        userIds: exists ? prev.userIds.filter((u) => u !== id)
           : [...prev.userIds, id],
       };
     });
@@ -70,19 +66,14 @@ export default function CreateForm({ users, shifts }) {
     setLoading(true);
     try {
       await fetch({
-        url: "/schedules",
-        method: "post",
-        data: form,
+        url: "/schedules", method: "post", data: form,
         successMessage: "Schedule created successfully",
         errorMessage: "Failed to create schedule",
         onSuccess: () => {
           setForm({
-            title: "",
-            description: "",
-            startDate: "",
-            endDate: "",
-            shiftId: "",
-            userIds: [],
+            title: "", description: "",
+            startDate: "", endDate: "",
+            shiftId: "", userIds: [],
             frequency: "ONCE",
           });
           router.push("/admin/dashboard/schedules");
@@ -94,10 +85,23 @@ export default function CreateForm({ users, shifts }) {
   };
 
   const uniqueShifts = useMemo(() => {
-    return defaultShifts
-      .map((type) => shifts.find((s) => s.type === type))
-      .filter(Boolean);
+    const seenTypes = new Set();
+    const result = [];
+
+    shifts.forEach((shift) => {
+      if (!seenTypes.has(shift.type) && ["MORNING", "AFTERNOON", "EVENING", "OFF"].includes(shift.type)) {
+        seenTypes.add(shift.type);
+        result.push(shift);
+      } else {
+        // sisanya dianggap custom → pakai shiftName
+        result.push({ ...shift, isCustom: true });
+      }
+    });
+
+    return result;
   }, [shifts]);
+
+
 
   const memoizedUsers = useMemo(() => users, [users]);
 
@@ -105,28 +109,24 @@ export default function CreateForm({ users, shifts }) {
     <section className="space-y-6">
       <DashboardHeader
         title="Create Schedule"
-        subtitle="Insert title, description, date, select shift, and assign user"
+        subtitle="Insert Schedule data on this field below"
       />
 
       <ContentForm>
         <form onSubmit={handleSubmit}>
           <ContentForm.Header>
             <ContentInformation
-              heading="Schedule Details"
+              heading="Schedule Form"
               subheading="Fill in all required fields below"
             />
           </ContentForm.Header>
 
           <ContentForm.Body>
             <section className="space-y-4">
-              {/* Title + Description */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    value={form.title}
-                    onChange={(e) => handleChange("title", e.target.value)}
+                  <Input id="title" value={form.title} onChange={(e) => handleChange("title", e.target.value)}
                     placeholder="Enter schedule title"
                     required
                   />
@@ -134,23 +134,16 @@ export default function CreateForm({ users, shifts }) {
 
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Input
-                    id="description"
-                    value={form.description}
-                    onChange={(e) => handleChange("description", e.target.value)}
+                  <Input id="description" value={form.description} onChange={(e) => handleChange("description", e.target.value)}
                     placeholder="Enter schedule description"
                     required
                   />
                 </div>
               </div>
 
-              {/* Frequency */}
-              <div className="space-y-1">
+              <div className="space-y-2">
                 <Label htmlFor="frequency">Select Frequency</Label>
-                <Select
-                  value={form.frequency}
-                  onValueChange={(value) => handleChange("frequency", value)}
-                >
+                <Select value={form.frequency} onValueChange={(value) => handleChange("frequency", value)}>
                   <SelectTrigger id="frequency" className="w-full mt-1">
                     <SelectValue placeholder="Select Frequency" />
                   </SelectTrigger>
@@ -168,9 +161,7 @@ export default function CreateForm({ users, shifts }) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <Label htmlFor="startDate">Start Date</Label>
-                  <Input
-                    id="startDate"
-                    type="datetime-local"
+                  <Input id="startDate" type="datetime-local"
                     value={form.startDate}
                     onChange={(e) => handleChange("startDate", e.target.value)}
                     required
@@ -179,9 +170,7 @@ export default function CreateForm({ users, shifts }) {
 
                 <div className="space-y-1">
                   <Label htmlFor="endDate">End Date</Label>
-                  <Input
-                    id="endDate"
-                    type="datetime-local"
+                  <Input id="endDate" type="datetime-local"
                     value={form.endDate}
                     onChange={(e) => handleChange("endDate", e.target.value)}
                     required
@@ -189,25 +178,21 @@ export default function CreateForm({ users, shifts }) {
                 </div>
               </div>
 
-              {/* Shifts */}
               <div className="space-y-1">
                 <Label htmlFor="shift">Select Shift</Label>
-                <Select
-                  value={form.shiftId}
-                  onValueChange={(val) => handleChange("shiftId", val)}
-                >
+                <Select value={form.shiftId} onValueChange={(val) => handleChange("shiftId", val)}>
                   <SelectTrigger id="shift" className="w-full mt-1">
                     <SelectValue placeholder="Choose a shift" />
                   </SelectTrigger>
                   <SelectContent>
-                    <div className="grid grid-cols-3 gap-2 p-2">
+                    <div className="grid grid-cols-4 gap-2 p-2">
                       {uniqueShifts.map((shift) => (
-                        <SelectItem
-                          key={shift.id}
-                          value={shift.id.toString()}
-                          className="flex items-center justify-start rounded-md p-2 cursor-pointer hover:bg-zinc-100"
-                        >
-                          {capitalize(shift.type)}
+                        <SelectItem key={shift.id} value={shift.id.toString()}
+                          className="flex items-center justify-start 
+                            border-1 border-dashed border-zinc-200 hover:border-sky-300 hover:border-solid rounded-lg
+                            px-2 py-1.5 focus:text-sky-700 focus:bg-sky-100 "
+                          >
+                          {shift.isCustom ? shift.shiftName : capitalize(shift.type)}
                         </SelectItem>
                       ))}
                     </div>
@@ -218,11 +203,9 @@ export default function CreateForm({ users, shifts }) {
               <ContentList
                 items={[
                   "If no shift selected, users will keep their default shift",
-                  "You can create custom shifts in the shifts menu",
                 ]}
               />
 
-              {/* Users */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label>Assign Users</Label>
@@ -236,26 +219,20 @@ export default function CreateForm({ users, shifts }) {
                   </div>
                 </div>
 
-                <ScrollArea className="h-64 w-full border border-zinc-100 rounded-md p-2">
+                <ScrollArea className="h-64 w-full border border-zinc-100 rounded-lg p-2">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {memoizedUsers.map((user) => {
                       const isSelected = form.userIds.includes(user.id);
                       return (
-                        <Card
-                          key={user.id}
-                          className={`p-3 cursor-pointer transition border shadow-xs ${
-                            isSelected
-                              ? "border-green-500 bg-green-100"
-                              : "hover:border-zinc-200 border-zinc-100"
-                          }`}
-                          onClick={() => toggleUser(user.id)}
+                        <Card key={user.id}
+                          className={`p-3 cursor-pointer transition border shadow-xs ${isSelected ? "border-zinc-300"
+                            : "hover:border-zinc-200 border-zinc-100"
+                            }`} onClick={() => toggleUser(user.id)}
                         >
                           <div>
                             <div className="flex items-center space-x-2">
                               <p className="text-sm font-medium text-zinc-600">{user.name}</p>
-                              <Badge
-                                className={`text-xs text-zinc-400 bg-none border-none ${roleStyles[capitalize(user.role)]}`}
-                              >
+                              <Badge className={`text-xs text-zinc-400 bg-none border-none ${roleStyles[capitalize(user.role)]}`}>
                                 {capitalize(user.role)}
                               </Badge>
                             </div>
@@ -272,9 +249,7 @@ export default function CreateForm({ users, shifts }) {
 
           <ContentForm.Footer>
             <div className="flex items-center space-x-2">
-              <Button
-                type="button"
-                variant="outline"
+              <Button type="button" variant="outline"
                 onClick={() => router.back()}
                 disabled={loading}
               >

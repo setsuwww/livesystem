@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
-import { Clock } from "lucide-react";
+import { Tag } from "lucide-react";
 import ScheduleTable from "./SchedulesTable";
 import { DashboardHeader } from "../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
@@ -78,8 +78,9 @@ export default async function Page({ searchParams }) {
           <ContentInformation heading="Schedule table" subheading="Manage schedule more detail than calendar view" />
           <div className="flex items-center space-x-2 mt-4 mb-4">
             {frequenciesLabel.map((f) => (
-              <div key={f.label} className={`flex items-center space-x-2 bg-${f.color}-100 border border-${f.color}-200 px-2 py-0.5 rounded-md`}> 
-                <span className={`text-${f.color}-700 text-sm font-base`}>
+              <div key={f.label} className={`flex items-center space-x-2 bg-${f.color}-100 border border-${f.color}-200 px-2 py-0.5 rounded-md`}>
+                <Tag strokeWidth={2} className={`w-3 h-3 text-${f.color}-600`} />
+                <span className={`text-${f.color}-600 text-sm font-base`}>
                   {f.label}
                 </span>
               </div>

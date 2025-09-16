@@ -23,11 +23,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
   const [search, setSearch] = useState("")
   const queryClient = useQueryClient()
 
-  // 🔹 Query current user
-  const {
-    data: currentUser,
-    isLoading: loadingCurrent,
-  } = useQuery({
+  const { data: currentUser, isLoading: loadingCurrent } = useQuery({
     queryKey: ["currentUser", currentUserId],
     queryFn: () =>
       fetch({
@@ -35,67 +31,51 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
         method: "get",
         errorMessage: "Failed to load current user",
       }),
-    enabled: open && !!currentUserId, // hanya jalan kalau modal open
+    enabled: open && !!currentUserId,
   })
 
-  // 🔹 Query calon user lain
-  const {
-    data: users = [],
-    isLoading: loadingUsers,
-  } = useQuery({
+  const { data: users = [], isLoading: loadingUsers } = useQuery({
     queryKey: ["usersToSwitch", currentUserId],
     queryFn: () =>
-      fetch({
-        url: `/users/${currentUserId}/switch`,
+      fetch({ url: `/users/${currentUserId}/switch`,
         method: "get",
         errorMessage: "Failed to load users",
       }),
     enabled: open && !!currentUserId,
   })
 
-  // 🔹 Mutation untuk swap shift
   const swapMutation = useMutation({
     mutationFn: () =>
-      fetch({
-        url: `/users/${currentUserId}/switch`,
-        method: "post",
-        data: { otherUserId: selectedId },
+      fetch({ url: `/users/${currentUserId}/switch`, method: "post", data: { otherUserId: selectedId },
         successMessage: "Shift swapped successfully",
         errorMessage: "Failed to swap shifts",
       }),
     onSuccess: async () => {
-      // invalidate biar data ke-refresh otomatis
       await queryClient.invalidateQueries({ queryKey: ["currentUser", currentUserId] })
       await queryClient.invalidateQueries({ queryKey: ["usersToSwitch", currentUserId] })
       onOpenChange(false)
     },
   })
 
-  const filteredUsers =
-    users?.filter(
-      (u) =>
-        u.id !== currentUserId &&
-        (u.name.toLowerCase().includes(search.toLowerCase()) ||
-          u.email.toLowerCase().includes(search.toLowerCase()))
+  const filteredUsers = users?.filter(
+      (u) => u.id !== currentUserId &&
+        (u.name.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase()))
     ) ?? []
 
   return (
-    <Dialog
-      open={open}
+    <Dialog open={open}
       onOpenChange={(val) => {
-        if (!val) {
-          setSelectedId(null)
+        if (!val) { setSelectedId(null)
           setSearch("")
         }
         onOpenChange(val)
       }}
     >
-      <DialogContent>
+      <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>Swap shift</DialogTitle>
         </DialogHeader>
 
-        {/* Current user */}
         {loadingCurrent ? (
           <p className="text-xs text-zinc-400">Loading current user...</p>
         ) : (
@@ -117,7 +97,6 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
           )
         )}
 
-        {/* Search */}
         <Label htmlFor="search">Search & switch user</Label>
         <div className="relative mb-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-zinc-400" />
@@ -129,7 +108,6 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
           />
         </div>
 
-        {/* List users */}
         <section className="max-h-60 overflow-y-auto space-y-2 border border-zinc-100 shadow-xs rounded-lg p-2">
           {loadingUsers ? (
             <p className="text-xs text-center text-zinc-400">Loading users...</p>
@@ -137,10 +115,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
             <p className="text-xs text-center text-zinc-400">No users found</p>
           ) : (
             filteredUsers.map((user) => (
-              <label
-                key={user.id}
-                className="group flex items-center gap-x-3 cursor-pointer border border-zinc-200 px-4 py-2 rounded transition"
-              >
+              <label key={user.id} className="group flex items-center gap-x-3 cursor-pointer border border-zinc-200 px-4 py-2 rounded transition">
                 <Checkbox checked={selectedId === user.id} onCheckedChange={() => setSelectedId(user.id)} />
 
                 <div className="flex items-center gap-x-3 flex-1">
@@ -157,8 +132,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
                       <p className="text-xs text-zinc-400 mt-1 sm:mt-0">{user.email}</p>
                     </div>
 
-                    <p
-                      className={`px-2 py-0.5 rounded-md text-xs ${
+                    <p className={`px-2 py-0.5 rounded-md text-xs ${
                         shiftStyles[user.shift?.type ?? "bg-zinc-100"]
                       }`}
                     >
@@ -171,7 +145,6 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
           )}
         </section>
 
-        {/* Footer */}
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel

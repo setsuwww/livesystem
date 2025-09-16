@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { DashboardHeader } from "../../DashboardHeader";
 import CreateForm from "./CreateForm";
 
 export const revalidate = 60;
@@ -11,10 +10,5 @@ export default async function CreateShiftPage() {
     orderBy: { name: "asc" },
   });
 
-  return (
-    <section>
-      <DashboardHeader title="Shifts" subtitle="Manage shifts data" />
-      <CreateForm users={users} />
-    </section>
-  );
+  return <CreateForm users={users} />
 }

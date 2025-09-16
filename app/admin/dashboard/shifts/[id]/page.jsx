@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { OfficeShiftsCards } from "../ShiftsCard";
+import { OfficeShiftsCards } from "../../users/attendances/AttendancesCard";
 
 export default async function OfficePage({ params }) {
   const officeId = parseInt(params.id);

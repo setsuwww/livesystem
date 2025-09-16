@@ -3,7 +3,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import ContentForm from "@/components/content/ContentForm";
 import { DashboardHeader } from "../../DashboardHeader";
 import { Pagination } from "../../Pagination";
-import { ShiftsCard } from "../../shifts/ShiftsCard";
+import { ShiftsCard } from "./AttendancesCard";
 import AttendancesTable from "./AttendancesTable";
 
 import { minutesToTime } from "@/function/services/shiftAttendance";
@@ -114,11 +114,7 @@ export default async function AttendancesPage({ searchParams }) {
           <AttendancesTable data={serializedAttendances} />
         </ContentForm.Body>
 
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          basePath="/admin/dashboard/attendances"
-        />
+        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/attendances"/>
       </ContentForm>
     </section>
   );

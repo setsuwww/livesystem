@@ -2,20 +2,18 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { CircleUserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
-import { Checkbox } from "@/components/ui/Checkbox";
 import { ScrollArea } from "@/components/ui/Scroll-area";
 import { Label } from "@/components/ui/Label";
 
 import { fetch } from "@/function/helpers/fetch";
 import { timeToInt } from "@/function/services/shiftAttendance";
-import { ContentList } from "@/components/content/ContentList";
+import { DashboardHeader } from "../../DashboardHeader";
 
 export default function CreateShiftForm({ users }) {
   const [type, setType] = useState("MORNING");
@@ -32,10 +30,11 @@ export default function CreateShiftForm({ users }) {
   const processedUsers = useMemo(() => {
     let result = [...users];
 
-    if (search) { result = result.filter(
-      (u) =>
-        u.name.toLowerCase().includes(search.toLowerCase()) ||
-        u.email.toLowerCase().includes(search.toLowerCase())
+    if (search) {
+      result = result.filter(
+        (u) =>
+          u.name.toLowerCase().includes(search.toLowerCase()) ||
+          u.email.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -52,7 +51,8 @@ export default function CreateShiftForm({ users }) {
   }, [users, search, sortOrder]);
 
   const toggleUser = useCallback(
-    (id) => { setSelectedUsers((prev) =>
+    (id) => {
+      setSelectedUsers((prev) =>
         prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
       );
     },
@@ -63,46 +63,49 @@ export default function CreateShiftForm({ users }) {
     e.preventDefault();
 
     const payload = {
-      type, 
+      type,
       shiftName,
       startTime: timeToInt(startTime), endTime: timeToInt(endTime),
       userIds: selectedUsers,
     };
 
-    try { await fetch({ url: "/shifts", method: "post",
-      data: payload,
-      successMessage: "Shift created successfully!",
-      errorMessage: "Failed to create shift",
-      onSuccess: () => {
-        setType("MORNING");
-        setShiftName("");
-        setStartTime("");
-        setEndTime("");
-        setSelectedUsers([]);
-        router.push("/admin/dashboard/shifts");
-      },
-    });
-  } 
-  catch (err) {
-    console.error("Shift creation error:", err);
-  }
-};
+    try {
+      await fetch({
+        url: "/shifts", method: "post",
+        data: payload,
+        successMessage: "Shift created successfully!",
+        errorMessage: "Failed to create shift",
+        onSuccess: () => {
+          setType("MORNING");
+          setShiftName("");
+          setStartTime("");
+          setEndTime("");
+          setSelectedUsers([]);
+          router.push("/admin/dashboard/shifts");
+        },
+      });
+    }
+    catch (err) {
+      console.error("Shift creation error:", err);
+    }
+  };
 
 
   return (
     <section>
+      <DashboardHeader title="Create Shifts" subtitle="Manage shifts data" />
+
       <ContentForm>
         <form onSubmit={handleSubmit}>
           <ContentForm.Header>
             <ContentInformation
-              heading="Create Shift"
-              subheading="Create a new shift and assign users without changing their default shift"
+              heading="Shift Form"
+              subheading="Create a new shift and assign users"
             />
           </ContentForm.Header>
 
           <ContentForm.Body>
-            {/* Shift form inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2">
               <div>
                 <Label htmlFor="shift-type">Shift Type</Label>
                 <Select value={type} onValueChange={(v) => setType(v)}>
@@ -118,13 +121,13 @@ export default function CreateShiftForm({ users }) {
               </div>
               <div>
                 <Label htmlFor="shift-type">Shift Name<span className="text-red-500">*</span></Label>
-                <Input id="shiftName" value={shiftName} onChange={(e) => setShiftName(e.target.value)} 
+                <Input id="shiftName" value={shiftName} onChange={(e) => setShiftName(e.target.value)}
                   type="text"
                   className="mt-1"
                 />
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="start-time">Start Time<span className="text-red-500">*</span></Label>
                 <Input id="start-time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                   type="time"
@@ -132,7 +135,7 @@ export default function CreateShiftForm({ users }) {
                 />
               </div>
 
-              <div>
+              <div className="space-y-2">
                 <Label htmlFor="end-time">End Time<span className="text-red-500">*</span></Label>
                 <Input id="end-time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                   type="time"
@@ -181,42 +184,37 @@ export default function CreateShiftForm({ users }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                  {processedUsers.length === 0 && (
-                    <p className="text-sm text-center text-zinc-600">
-                      No users found
-                    </p>
-                  )}
+                  {processedUsers.map((user) => {
+                    const isSelected = selectedUsers.includes(user.id);
 
-                  {processedUsers.map((user) => (
-                    <Label key={user.id} htmlFor={`user-${user.id}`} className="group flex items-center space-x-2 border border-zinc-200 shadow-xs rounded-lg p-2 cursor-pointer hover:bg-zinc-50 transition-colors ease-in-out">
-                      <Checkbox id={`user-${user.id}`} checked={selectedUsers.includes(user.id)} onCheckedChange={() => toggleUser(user.id)}
-                        className="size-4 rounded-md border-zinc-300"
-                      />
-                      <div className="bg-zinc-100 group-hover:bg-sky-100 text-zinc-400 group-hover:text-sky-600 p-2 rounded-full shrink-0">
-                        <CircleUserRound strokeWidth={1} />
+                    return (
+                      <div key={user.id} onClick={() => toggleUser(user.id)} 
+                        className={`group flex items-center space-x-2 border rounded-lg p-3 cursor-pointer transition-colors ease-in-out shadow-xs
+                          ${isSelected ? "border-zinc-300" : "hover:border-zinc-200 border-zinc-100"}`
+                        }>
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-zinc-600">
+                            {user.name}
+                          </span>
+                          <span className="text-xs text-zinc-400">
+                            {user.email}
+                          </span>
+                        </div>
                       </div>
-
-                      <div className="flex flex-col">
-                        <span className="text-sm font-medium text-zinc-700">
-                          {user.name}
-                        </span>
-                        <span className="text-xs text-zinc-500">
-                          {user.email}
-                        </span>
-                      </div>
-                    </Label>
-                  ))}
+                    );
+                  })}
                 </div>
+
               </ScrollArea>
             </div>
           </ContentForm.Body>
 
           <ContentForm.Footer>
             <div className="space-x-2">
-              <Button size="lg" type="button" variant="outline">
+              <Button type="button" variant="outline">
                 Cancel
               </Button>
-              <Button size="lg" type="submit">Create Shift</Button>
+              <Button type="submit">Create Shift</Button>
             </div>
           </ContentForm.Footer>
         </form>

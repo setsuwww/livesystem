@@ -4,14 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState, useEffect, useRef  } from 'react'
 import { usePathname } from 'next/navigation'
-import { ChevronDown, Users, CalendarDays, Clock, LayoutDashboard, User, Settings } from 'lucide-react'
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/Collapsible'
+import { ChevronDown, Users, Clock, LayoutDashboard, User, Settings } from 'lucide-react'
 import SubHeading from './content/SubHeading'
 
 const linkBase = "flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-colors"
 const subLinkBase = "block text-sm px-3 py-1.5 font-base rounded-lg transition-colors"
-const triggerBase = "w-full flex items-center text-sm justify-between px-3 py-2 rounded-lg transition-colors focus:outline-none"
-const subContentBase = "border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2"
 
 function SidebarLink({
   href,
@@ -62,7 +59,6 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
 
   return (
     <div className="flex flex-col">
-      {/* Trigger */}
       <button
         className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
           ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'}`}
@@ -99,7 +95,6 @@ export function Sidebar() {
   const [userOpen, setUserOpen] = useState(false)
   const [employeesOpen, setEmployeesOpen] = useState(false)
   const [shiftOpen, setShiftOpen] = useState(false)
-  const [calendarOpen, setCalendarOpen] = useState(false)
 
   return (
     <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-0 border-r-2 border-zinc-200">
@@ -110,7 +105,6 @@ export function Sidebar() {
         <SubHeading title='Main' />
         <SidebarLink href="/admin/dashboard" icon={LayoutDashboard}>Dashboard</SidebarLink>
 
-        <SubHeading title='Management' />
         <SidebarCollapsible title="Users" open={userOpen} onOpenChange={setUserOpen} icon={Users}
           items={[
             { label: 'Users', href: '/admin/dashboard/users' },

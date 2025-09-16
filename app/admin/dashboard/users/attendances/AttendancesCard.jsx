@@ -54,18 +54,20 @@ export function ShiftsCard({ shifts }) {
                 </span>
               </Badge>
             </div>
-            <div className="flex items-center gap-2 text-sm text-zinc-600">
-              <div className="p-2 bg-zinc-200 rounded-full">
-                <Users className="w-4 h-4" strokeWidth={2} />
+            <footer className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-zinc-600">
+                <div className="p-2 bg-zinc-200 rounded-full">
+                  <Users className="w-4 h-4" strokeWidth={2} />
+                </div>
+                <span className="text-zinc-600 font-semibold">
+                  {presentCount}/{shift.users.length}
+                </span>{" "}
+                Present
               </div>
-              <span className="text-zinc-600 font-semibold">
-                {presentCount}/{shift.users.length}
-              </span>{" "}
-              Present
-            </div>
-            <Link className="text-blue-500" href={`/admin/dashboard/shifts/${shift.id}/users`}>
-               See Employees
-            </Link>
+              <Link className="text-sm text-blue-400 hover:text-blue-600" href={`/admin/dashboard/shifts/${shift.id}/users`}>
+                See Employees
+              </Link>
+            </footer>
           </div>
         );
       })}

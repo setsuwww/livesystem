@@ -9,7 +9,6 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
   const [value, setValue] = useState("")
   const [filter, setFilter] = useState("all")
 
-  // filter pake useMemo
   const filteredUsers = useMemo(() => {
     return users.filter((u) => {
       const matchesSearch =
@@ -21,9 +20,7 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
     })
   }, [users, value, filter])
 
-  // update ke parent (gunakan effect biar aman, gak trigger saat render)
-  useEffect(() => {
-    if (onFilter) onFilter(filteredUsers)
+  useEffect(() => { if (onFilter) onFilter(filteredUsers)
   }, [filteredUsers, onFilter])
 
   return (
@@ -34,13 +31,13 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Search..."
-          className="group pl-12 caret-sky-500" // kasih padding kiri lebih gede biar ga mepet
+          className="group pl-14 caret-sky-500 focus-visible:ring-transparent focus-visible:border-sky-400 focus-visible:outline-none" // kasih padding kiri lebih gede biar ga mepet
         />
 
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center space-x-2">
+        <div className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
           <Popover>
             <PopoverTrigger asChild>
-              <button type="button" className="text-zinc-400 hover:text-sky-600 group-focus:text-sky-600">
+              <button type="button" className="text-zinc-400 p-1 rounded-md hover:text-sky-600 hover:bg-sky-100 group-focus:text-sky-600">
                 <Filter size={16} />
               </button>
             </PopoverTrigger>
@@ -70,7 +67,6 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
             </PopoverContent>
           </Popover>
 
-          {/* Divider */}
           <div className="h-4 border-l border-zinc-300" />
         </div>
       </div>

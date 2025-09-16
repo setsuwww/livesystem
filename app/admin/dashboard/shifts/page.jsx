@@ -14,14 +14,16 @@ export default async function ShiftsPage({ searchParams }) {
   const mainShifts = await prisma.shift.findMany({
     where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
     select: {
-      id: true,
-      type: true, shiftName: true,
+      id: true, type: true, shiftName: true,
       startTime: true, endTime: true,
+      schedules: {
+        select: {
+          id: true, title: true, startDate: true, endDate: true,
+        }
+      },
       users: {
         select: {
-          id: true,
-          name: true,
-          email: true,
+          id: true, name: true, email: true,
           attendances: {
             select: { shiftId: true, status: true, reason: true },
           },
@@ -31,8 +33,7 @@ export default async function ShiftsPage({ searchParams }) {
         include: {
           user: {
             select: {
-              id: true,
-              name: true, email: true,
+              id: true, name: true, email: true,
               attendances: {
                 select: { shiftId: true, status: true, reason: true },
               },
@@ -40,39 +41,41 @@ export default async function ShiftsPage({ searchParams }) {
           },
         },
       },
-      schedules: { select: { id: true, title: true } },
     },
     orderBy: { type: "asc" },
   });
 
   const tableData = mainShifts.map((s) => {
-  const start = minutesToTime(s.startTime);
-  const end = minutesToTime(s.endTime);
+    const start = minutesToTime(s.startTime);
+    const end = minutesToTime(s.endTime);
 
-  const allUsers = [...s.users, ...s.assignments.map((a) => a.user)];
+    const allUsers = [...s.users, ...s.assignments.map((a) => a.user)];
 
-  const uniqueUsers = Array.from(
-    new Map(allUsers.map((u) => [u.id, u])).values()
-  );
+    const uniqueUsers = Array.from(
+      new Map(allUsers.map((u) => [u.id, u])).values()
+    );
 
-  const usersWithStatus = uniqueUsers.map((u) => {
-    const attendance = u.attendances.find((at) => at.shiftId === s.id);
-    return {...u,
-      attendanceStatus: attendance ? attendance.status : "ABSENT",
-      reason: attendance?.reason || null,
+    const usersWithStatus = uniqueUsers.map((u) => { const attendance = u.attendances.find((at) => at.shiftId === s.id);
+      return { ...u,
+        attendanceStatus: attendance ? attendance.status : "ABSENT",
+        reason: attendance?.reason || null,
+      };
+    });
+
+    return {
+      id: s.id, type: s.type, shiftName: s.shiftName,
+      startTime: start, endTime: end,
+      timeRange: `${start} - ${end}`,
+      usersCount: usersWithStatus.length, schedulesCount: s.schedules.length,
+      users: usersWithStatus,
+      schedules: s.schedules.map((sch) => ({
+        id: sch.id,
+        title: sch.title,
+        startDate: sch.startDate,
+        endDate: sch.endDate,
+      })),
     };
   });
-
-  return {
-    id: s.id,
-    type: s.type,
-    shiftName: s.shiftName,
-    startTime: start, endTime: end,
-    timeRange: `${start} - ${end}`,
-    usersCount: usersWithStatus.length, schedulesCount: s.schedules.length,
-    users: usersWithStatus,
-  };
-});
 
   return (
     <section className="space-y-6">
