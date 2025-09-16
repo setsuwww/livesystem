@@ -23,7 +23,6 @@ export default function ScheduleTable({ data }) {
 
   const router = useRouter();
 
-  // ✅ selalu amanin data
   const filteredData = useMemo(() => {
     const safeData = Array.isArray(data) ? data : [];
 
