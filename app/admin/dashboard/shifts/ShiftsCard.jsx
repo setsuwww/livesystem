@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Link } from 'next/link';
+import Link from 'next/link';
 import { Users } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
