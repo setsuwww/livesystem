@@ -1,45 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select";
+import { ScrollArea } from "@/components/ui/Scroll-area";
+
 import { DashboardHeader } from "../../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
-import { toast } from "sonner";
-import { fetch } from "@/function/helpers/fetch";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/Select";
-import { capitalize } from "@/function/globalFunction";
+import { ContentList } from "@/components/content/ContentList";
 
-export default function CreateForm({ users, shifts, schedules }) {
+import { fetch } from "@/function/helpers/fetch";
+import { capitalize } from "@/function/globalFunction";
+import { defaultShifts } from "@/constants/shiftConstants";
+import { roleStyles } from "@/constants/roleStyles";
+
+export default function CreateForm({ users, shifts }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
     title: "",
     description: "",
     frequency: "ONCE",
-    date: "",
     startDate: "",
     endDate: "",
     shiftId: "",
-    userId: "", // baru
+    userIds: [],
   });
 
-  const handleChange = (field, value) => {
+  const handleChange = useCallback((field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
-  };
+  }, []);
+
+  const toggleUser = useCallback((id) => {
+    setForm((prev) => {
+      const exists = prev.userIds.includes(id);
+      return {
+        ...prev,
+        userIds: exists
+          ? prev.userIds.filter((u) => u !== id)
+          : [...prev.userIds, id],
+      };
+    });
+  }, []);
+
+  const setAllUsers = useCallback(() => {
+    setForm((prev) => ({ ...prev, userIds: users.map((u) => u.id) }));
+  }, [users]);
+
+  const clearUsers = useCallback(() => {
+    setForm((prev) => ({ ...prev, userIds: [] }));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim() || !form.description.trim() || !form.date.trim() || !form.userId) {
+    if (!form.title.trim() || !form.description.trim() || form.userIds.length === 0) {
       toast.error("Please fill all required fields");
       return;
     }
@@ -53,7 +76,15 @@ export default function CreateForm({ users, shifts, schedules }) {
         successMessage: "Schedule created successfully",
         errorMessage: "Failed to create schedule",
         onSuccess: () => {
-          setForm({ title: "", description: "", date: "", startDate: "", endDate: "", shiftId: "", userId: "", frequency: "ONCE" });
+          setForm({
+            title: "",
+            description: "",
+            startDate: "",
+            endDate: "",
+            shiftId: "",
+            userIds: [],
+            frequency: "ONCE",
+          });
           router.push("/admin/dashboard/schedules");
         },
       });
@@ -61,6 +92,14 @@ export default function CreateForm({ users, shifts, schedules }) {
       setLoading(false);
     }
   };
+
+  const uniqueShifts = useMemo(() => {
+    return defaultShifts
+      .map((type) => shifts.find((s) => s.type === type))
+      .filter(Boolean);
+  }, [shifts]);
+
+  const memoizedUsers = useMemo(() => users, [users]);
 
   return (
     <section className="space-y-6">
@@ -80,31 +119,38 @@ export default function CreateForm({ users, shifts, schedules }) {
 
           <ContentForm.Body>
             <section className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={form.title}
-                  onChange={(e) => handleChange("title", e.target.value)}
-                  placeholder="Enter schedule title"
-                  required
-                />
+              {/* Title + Description */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title">Title</Label>
+                  <Input
+                    id="title"
+                    value={form.title}
+                    onChange={(e) => handleChange("title", e.target.value)}
+                    placeholder="Enter schedule title"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Input
+                    id="description"
+                    value={form.description}
+                    onChange={(e) => handleChange("description", e.target.value)}
+                    placeholder="Enter schedule description"
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={form.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                  placeholder="Enter schedule description"
-                  required
-                />
-              </div>
-
+              {/* Frequency */}
               <div className="space-y-1">
-                <Label htmlFor="status">Select Frequency</Label>
-                <Select value={form.frequency} onValueChange={(value) => handleChange("frequency", value)}>
+                <Label htmlFor="frequency">Select Frequency</Label>
+                <Select
+                  value={form.frequency}
+                  onValueChange={(value) => handleChange("frequency", value)}
+                >
                   <SelectTrigger id="frequency" className="w-full mt-1">
                     <SelectValue placeholder="Select Frequency" />
                   </SelectTrigger>
@@ -118,39 +164,32 @@ export default function CreateForm({ users, shifts, schedules }) {
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="date">Date</Label>
-                <Input
-                  id="date"
-                  type="datetime-local"
-                  value={form.date}
-                  onChange={(e) => handleChange("date", e.target.value)}
-                  required
-                />
+              {/* Dates */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label htmlFor="startDate">Start Date</Label>
+                  <Input
+                    id="startDate"
+                    type="datetime-local"
+                    value={form.startDate}
+                    onChange={(e) => handleChange("startDate", e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="endDate">End Date</Label>
+                  <Input
+                    id="endDate"
+                    type="datetime-local"
+                    value={form.endDate}
+                    onChange={(e) => handleChange("endDate", e.target.value)}
+                    required
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="startDate">Start Date</Label>
-                <Input
-                  id="startDate"
-                  type="datetime-local"
-                  value={form.startDate}
-                  onChange={(e) => handleChange("startDate", e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-1">
-                <Label htmlFor="endDate">End Date</Label>
-                <Input
-                  id="endDate"
-                  type="datetime-local"
-                  value={form.endDate}
-                  onChange={(e) => handleChange("endDate", e.target.value)}
-                  required
-                />
-              </div>
-
+              {/* Shifts */}
               <div className="space-y-1">
                 <Label htmlFor="shift">Select Shift</Label>
                 <Select
@@ -161,34 +200,73 @@ export default function CreateForm({ users, shifts, schedules }) {
                     <SelectValue placeholder="Choose a shift" />
                   </SelectTrigger>
                   <SelectContent>
-                    {shifts.map((shift) => (
-                      <SelectItem key={shift.id} value={shift.id.toString()}>
-                        {capitalize(shift.type)}
-                      </SelectItem>
-                    ))}
+                    <div className="grid grid-cols-3 gap-2 p-2">
+                      {uniqueShifts.map((shift) => (
+                        <SelectItem
+                          key={shift.id}
+                          value={shift.id.toString()}
+                          className="flex items-center justify-start rounded-md p-2 cursor-pointer hover:bg-zinc-100"
+                        >
+                          {capitalize(shift.type)}
+                        </SelectItem>
+                      ))}
+                    </div>
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <Label htmlFor="user">Assign User</Label>
-                <Select
-                  value={form.userId}
-                  onValueChange={(val) => handleChange("userId", val)}
-                >
-                  <SelectTrigger id="user" className="w-full mt-1">
-                    <SelectValue placeholder="Choose a user" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {users.map((user) => (
-                      <SelectItem key={user.id} value={user.id.toString()}>
-                        {user.name} ({user.email}) - {capitalize(user.role)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <ContentList
+                items={[
+                  "If no shift selected, users will keep their default shift",
+                  "You can create custom shifts in the shifts menu",
+                ]}
+              />
 
+              {/* Users */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label>Assign Users</Label>
+                  <div className="flex gap-2">
+                    <Button type="button" variant="outline" size="sm" onClick={setAllUsers}>
+                      Set All Users
+                    </Button>
+                    <Button type="button" variant="destructive" size="sm" onClick={clearUsers}>
+                      Clear
+                    </Button>
+                  </div>
+                </div>
+
+                <ScrollArea className="h-64 w-full border border-zinc-100 rounded-md p-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {memoizedUsers.map((user) => {
+                      const isSelected = form.userIds.includes(user.id);
+                      return (
+                        <Card
+                          key={user.id}
+                          className={`p-3 cursor-pointer transition border shadow-xs ${
+                            isSelected
+                              ? "border-green-500 bg-green-100"
+                              : "hover:border-zinc-200 border-zinc-100"
+                          }`}
+                          onClick={() => toggleUser(user.id)}
+                        >
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <p className="text-sm font-medium text-zinc-600">{user.name}</p>
+                              <Badge
+                                className={`text-xs text-zinc-400 bg-none border-none ${roleStyles[capitalize(user.role)]}`}
+                              >
+                                {capitalize(user.role)}
+                              </Badge>
+                            </div>
+                            <p className="text-xs text-zinc-500">{user.email}</p>
+                          </div>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              </div>
             </section>
           </ContentForm.Body>
 

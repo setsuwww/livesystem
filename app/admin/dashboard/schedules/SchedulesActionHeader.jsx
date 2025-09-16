@@ -5,14 +5,10 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
 export default function SchedulesActionHeader({
-  search,
-  setSearch,
-  sortOrder,
-  onSortChange,
-  selectedCount,
-  totalCount,
-  onDeleteSelected,
-  onDeleteAll,
+  search, setSearch,
+  sortOrder, onSortChange,
+  selectedCount, totalCount,
+  onDeleteSelected, onDeleteAll,
   onExportPDF
 }) {
   return (

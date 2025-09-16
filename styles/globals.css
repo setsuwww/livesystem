@@ -63,3 +63,7 @@
     @apply cursor-pointer;
   }
 }
+
+input[type="datetime-local"]:placeholder-shown {
+  color: #9ca3af; /* gray-400 */
+}

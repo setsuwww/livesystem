@@ -6,4 +6,10 @@ export const frequencyStyles = {
   Once: "text-red-600 bg-red-100 border-red-300",
 };
 
-
+export const frequenciesLabel = [
+  { label: "Daily", color: "green" },
+  { label: "Weekly", color: "yellow" },
+  { label: "Monthly", color: "orange" },
+  { label: "Yearly", color: "purple" },
+  { label: "Once", color: "red" },
+];

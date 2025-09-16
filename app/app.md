@@ -3,23 +3,14 @@ MORNING 08:00 - 16:00
 AFTERNOON 16:00 - 00:00
 EVENING 00:00 - 08:00
 
-employee yang checkin tepat waktu -> PRESENT
-employee yang checkin lewat dari waktu masuk shift -> LATE
-employee yang izin harus click permission : masukin alasan permission -> PERMISSION
-ga checkin + permission = ABSENT
+swap 
+1 hari bisa 2 shift
+PM, SM, 
 
-berikan saya form yang cukup menampilkan 3 button
-checkin, checkout, dan permission
--> checkin -> set waktu + tanggal hari ini menjadi data kehadiran employee
--> checkout -> set waktu + tanggal hari ini menjadi data pulang employee , dibuka 10 menit sebelum jam shift berakhir
--> permission -> munculkan input untuk mengisi data reason
+nama shift model
+- shiftname
+- type 
+- start
+- end
 
-User A -> Shift A
- - di hari 1 User A === Shift Morning
- - di hari 2 User A === Shift Afternoon
- - di hari 3 User A === Shift Evening
-
-Masalah {
- - Semisal User A diedit shiftnya / tukeran shift, 
- maka cukup ubah data berikutnya dan biarkan data sebelumnya
-}
+di export di csv jadiin model shift bentuk shift

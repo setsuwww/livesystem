@@ -2,14 +2,8 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableHead,
-} from "@/components/ui/Table";
+
+import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 import SchedulesActionHeader from "./SchedulesActionHeader";
 import { SchedulesRow } from "./SchedulesRow";
@@ -23,7 +17,6 @@ export default function ScheduleTable({ data }) {
 
   const router = useRouter();
 
-  // ✅ selalu amanin data
   const filteredData = useMemo(() => {
     const safeData = Array.isArray(data) ? data : [];
 
@@ -31,44 +24,31 @@ export default function ScheduleTable({ data }) {
       const title = s?.title ?? "";
       const desc = s?.description ?? "";
       return (
-        title.toLowerCase().includes(search.toLowerCase()) ||
-        desc.toLowerCase().includes(search.toLowerCase())
+        title.toLowerCase().includes(search.toLowerCase()) || desc.toLowerCase().includes(search.toLowerCase())
       );
     });
 
     return filtered.sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
+      const dateA = new Date(a.startDate).getTime();
+      const dateB = new Date(b.startDate).getTime();
       return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
     });
   }, [data, search, sortOrder]);
 
-  const {
-    toggleSelect,
-    selectAll,
-    deleteSelected,
-    deleteAll,
-    handleEditSchedule,
-    handleDeleteSchedule,
+  const { 
+    toggleSelect, selectAll, 
+    deleteSelected, deleteAll, 
+    handleEditSchedule, handleDeleteSchedule, 
     onExportPDF,
-  } = handleSchedules(
-    selectedIds,
-    setSelectedIds,
-    filteredData,
-    () => router.refresh()
-  );
+  } = handleSchedules(selectedIds, setSelectedIds, filteredData, () => router.refresh());
 
   return (
     <div className="space-y-4">
       <SchedulesActionHeader
-        search={search}
-        setSearch={setSearch}
-        sortOrder={sortOrder}
-        onSortChange={setSortOrder}
-        selectedCount={selectedIds.length}
-        totalCount={filteredData.length}
-        onDeleteSelected={deleteSelected}
-        onDeleteAll={deleteAll}
+        search={search} setSearch={setSearch}
+        sortOrder={sortOrder} onSortChange={setSortOrder}
+        selectedCount={selectedIds.length} totalCount={filteredData.length}
+        onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
         onExportPDF={() => onExportPDF(filteredData)}
       />
 
@@ -76,12 +56,10 @@ export default function ScheduleTable({ data }) {
         <TableHeader>
           <TableRow>
             <TableHead>
-              <Checkbox
-                checked={
-                  selectedIds.length === filteredData.length &&
+              <Checkbox checked={ selectedIds.length === filteredData.length &&
                   filteredData.length > 0
                 }
-                onChange={selectAll}
+                onCheckedChange={selectAll} 
                 disabled={filteredData.length === 0}
               />
             </TableHead>
@@ -95,10 +73,7 @@ export default function ScheduleTable({ data }) {
         <TableBody>
           {filteredData.length === 0 ? (
             <TableRow>
-              <TableCell
-                colSpan={7}
-                className="text-center text-muted-foreground"
-              >
+              <TableCell colSpan={7} className="text-center text-gray-600">
                 No schedules found
               </TableCell>
             </TableRow>
@@ -107,10 +82,8 @@ export default function ScheduleTable({ data }) {
               <SchedulesRow
                 key={schedule.id}
                 schedule={schedule}
-                isSelected={selectedIds.includes(schedule.id)}
-                onSelect={() => toggleSelect(schedule.id)}
-                onEdit={handleEditSchedule}
-                onDelete={handleDeleteSchedule}
+                isSelected={selectedIds.includes(schedule.id)} onSelect={() => toggleSelect(schedule.id)}
+                onEdit={handleEditSchedule} onDelete={handleDeleteSchedule}
               />
             ))
           )}

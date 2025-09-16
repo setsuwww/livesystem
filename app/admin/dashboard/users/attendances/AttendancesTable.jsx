@@ -3,8 +3,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { Badge } from '@/components/ui/Badge';
 
-import { shiftStyles } from "@/constants/shiftStyles"
-import { attedancesStyles } from '@/constants/attedancesStyles';
+import { shiftStyles } from "@/constants/shiftConstants"
+import { attedancesStyles } from '@/constants/attedanceConstants';
 
 import { safeFormat, capitalize } from "@/function/globalFunction";
 

@@ -10,7 +10,7 @@ export default async function Page() {
     where: { userId: user.id },
     select: {
       id: true, title: true, description: true,
-      date: true, startDate: true, endDate: true,
+      startDate: true, endDate: true,
       createdAt: true, updatedAt: true,
       userId: true, shiftId: true,
       shift: {
@@ -21,7 +21,7 @@ export default async function Page() {
         },
       },
     },
-    orderBy: { date: "asc" },
+    orderBy: { startDate: "asc" },
   });
 
   const shifts = await prisma.shift.findMany({

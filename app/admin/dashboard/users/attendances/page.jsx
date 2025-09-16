@@ -3,7 +3,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import ContentForm from "@/components/content/ContentForm";
 import { DashboardHeader } from "../../DashboardHeader";
 import { Pagination } from "../../Pagination";
-import { ShiftCards } from "../../shifts/ShiftsCard";
+import { ShiftsCard } from "../../shifts/ShiftsCard";
 import AttendancesTable from "./AttendancesTable";
 
 import { minutesToTime } from "@/function/services/shiftAttendance";
@@ -51,8 +51,8 @@ async function getShifts() {
   return shifts.map((shift) => ({
     id: shift.id,
     type: shift.type,
-    startTime: minutesToTime(shift.startTime), // ✅ gunakan helper
-    endTime: minutesToTime(shift.endTime),     // ✅ gunakan helper
+    startTime: minutesToTime(shift.startTime),
+    endTime: minutesToTime(shift.endTime),    
     users: shift.users.map((user) => ({
       id: user.id,
       name: user.name,
@@ -82,8 +82,8 @@ export default async function AttendancesPage({ searchParams }) {
     shift: a.shift
       ? {
           ...a.shift,
-          startTime: minutesToTime(a.shift.startTime), // ✅ ganti ke helper
-          endTime: minutesToTime(a.shift.endTime),     // ✅ ganti ke helper
+          startTime: minutesToTime(a.shift.startTime),
+          endTime: minutesToTime(a.shift.endTime),    
         }
       : null,
   }));
@@ -102,7 +102,7 @@ export default async function AttendancesPage({ searchParams }) {
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <ShiftCards shifts={shifts} />
+          <ShiftsCard shifts={shifts} />
 
           <div className="my-8">
             <ContentInformation

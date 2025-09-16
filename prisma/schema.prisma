@@ -84,7 +84,6 @@ model Schedule {
   title       String
   description String?
   frequency   FrequencyType @default(ONCE)
-  date        DateTime?
   startDate   DateTime?
   endDate     DateTime?
 
