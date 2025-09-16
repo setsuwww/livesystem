@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/Button"
 
 import { fetch } from "@/function/helpers/fetch"
 import { capitalize } from "@/function/globalFunction"
-import { shiftStyles } from "@/constants/shiftStyles"
+import { shiftStyles } from "@/constants/shiftConstants"
 
 export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
   open,

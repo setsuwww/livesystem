@@ -1,31 +1,22 @@
 "use client";
 import { useState } from "react";
+import Link from 'next/link';
 import { Users } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 import { capitalize } from "@/function/globalFunction";
-import { shiftStyles } from "@/constants/shiftStyles";
-import { statusColorsClass } from "@/constants/attedancesStyles";
+import { shiftStyles, defaultShifts } from "@/constants/shiftConstants";
+import { statusPriority, statusColorsClass } from "@/constants/attedanceConstants";
 
-// Urutan prioritas status
-const statusPriority = ["ABSENT", "LATE", "PERMISSION"];
-
-export function ShiftCards({ shifts }) {
+export function ShiftsCard({ shifts }) {
   const [selectedShift, setSelectedShift] = useState(null);
 
   const handleOpen = (shift) => setSelectedShift(shift);
   const handleClose = () => setSelectedShift(null);
 
-  const mainTypes = ["MORNING", "AFTERNOON", "EVENING"];
-  const uniqueShifts = mainTypes
+  const uniqueShifts = defaultShifts
     .map((type) => shifts.find((s) => s.type === type))
     .filter(Boolean);
 
@@ -45,24 +36,15 @@ export function ShiftCards({ shifts }) {
         ).length;
 
         return (
-          <div
-            key={shift.id}
-            onClick={() => handleOpen(shift)}
-            className="relative bg-white border border-zinc-200 p-4 rounded-xl shadow-xs cursor-pointer transition"
-          >
+          <div key={shift.id} onClick={() => handleOpen(shift)}
+            className="relative bg-white border border-zinc-200 p-4 rounded-xl shadow-xs cursor-pointer transition">
             <div className="flex items-center justify-between mb-6 relative">
-              <span
-                className={`font-semibold text-sm px-2 py-1 rounded-lg bg-zinc-100 border border-zinc-300 text-zinc-600 relative`}
-              >
+              <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-zinc-100 border border-zinc-300 text-zinc-600 relative`}>
                 {capitalize(shift.type)}
                 {worstStatus !== "PRESENT" && (
                   <span className="absolute -top-1 -right-1 w-3 h-3 flex items-center justify-center">
-                    <span
-                      className={`absolute w-full h-full rounded-full animate-ping opacity-75 ${statusColorsClass[worstStatus].bgPing}`}
-                    ></span>
-                    <span
-                      className={`relative w-3 h-3 rounded-full ${statusColorsClass[worstStatus].bgDot}`}
-                    ></span>
+                    <span className={`absolute w-full h-full rounded-full animate-ping opacity-75 ${statusColorsClass[worstStatus].bgPing}`}></span>
+                    <span className={`relative w-3 h-3 rounded-full ${statusColorsClass[worstStatus].bgDot}`}></span>
                   </span>
                 )}
               </span>
@@ -81,6 +63,9 @@ export function ShiftCards({ shifts }) {
               </span>{" "}
               Present
             </div>
+            <Link className="text-blue-500" href={`/admin/dashboard/shifts/${shift.id}/users`}>
+               See Employees
+            </Link>
           </div>
         );
       })}
@@ -103,34 +88,23 @@ export function ShiftCards({ shifts }) {
             </DialogHeader>
             <div className="mt-4 space-y-4">
               {statusPriority.map((status) => {
-                const users = selectedShift.users.filter(
-                  (u) => u.attendanceStatus === status
-                );
+                const users = selectedShift.users.filter((u) => u.attendanceStatus === status);
                 if (!users.length) return null;
 
                 return (
                   <div key={status}>
                     <div className="flex items-center gap-1 mb-2">
-                      <span
-                        className={`${statusColorsClass[status].head} font-semibold`}
-                      >
+                      <span className={`${statusColorsClass[status].head} font-semibold`}>
                         {capitalize(status)} ({users.length})
                       </span>
                     </div>
                     <div className="space-y-1">
                       {users.map((u) => (
-                        <div
-                          key={u.id}
-                          className={`${statusColorsClass[status].border} rounded-r-md p-2 flex flex-col border-0 border-l-3`}
-                        >
-                          <span
-                            className={`${statusColorsClass[status].text} text-sm font-semibold`}
-                          >
+                        <div key={u.id} className={`${statusColorsClass[status].border} rounded-r-md p-2 flex flex-col border-0 border-l-3`}>
+                          <span className={`${statusColorsClass[status].text} text-sm font-semibold`}>
                             {u.name}
                           </span>
-                          <span
-                            className={`${statusColorsClass[status].subtext} text-xs`}
-                          >
+                          <span className={`${statusColorsClass[status].subtext} text-xs`}>
                             {u.email}
                           </span>
                         </div>

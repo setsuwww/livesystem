@@ -8,7 +8,7 @@ export async function POST(req) {
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
-  if (!body.title || !body.description || !body.frequency || !body.date || !body.startDate || !body.endDate) {
+  if (!body.title || !body.description || !body.frequency || !body.startDate || !body.endDate) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
 
@@ -17,7 +17,6 @@ export async function POST(req) {
       title: String(body.title),
       description: String(body.description),
       frequency: body.frequency, 
-      date: new Date(body.date),
       startDate: new Date(body.startDate),
       endDate: new Date(body.endDate),
       userId: user.id,

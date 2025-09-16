@@ -59,7 +59,6 @@ async function main() {
   const users = [
     { name: "Admin", email: "admin@example.com", password: "admin123", role: Role.ADMIN },
     { name: "Coordinator", email: "coordinator@example.com", password: "coordinator123", role: Role.COORDINATOR },
-
     { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.MORNING] },
     { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.AFTERNOON] },
     { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.EVENING] },

@@ -7,6 +7,8 @@ import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "../Pagination";
 
+import { frequenciesLabel } from "@/constants/frequencyStyles";
+
 const PAGE_SIZE = 5;
 
 export async function getSchedules(page = 1) {
@@ -15,16 +17,12 @@ export async function getSchedules(page = 1) {
     take: PAGE_SIZE,
     select: {
       id: true,
-      title: true,
-      description: true,
-      date: true,
-      startDate: true,
-      endDate: true,
+      title: true, description: true,
+      startDate: true, endDate: true,
       frequency: true,
       userId: true,
       shiftId: true,
-      createdAt: true,
-      updatedAt: true,
+      createdAt: true, updatedAt: true,
       shift: {
         select: {
           id: true,
@@ -34,7 +32,7 @@ export async function getSchedules(page = 1) {
         },
       },
     },
-    orderBy: { date: "asc" },
+    orderBy: { startDate: "asc" },
   });
 }
 
@@ -55,11 +53,8 @@ export default async function Page({ searchParams }) {
 
   const schedules = schedulesRaw.map(s => ({
     ...s,
-    date: s.date?.toISOString() ?? null,
-    startDate: s.startDate?.toISOString() ?? null,
-    endDate: s.endDate?.toISOString() ?? null,
-    createdAt: s.createdAt?.toISOString() ?? null,
-    updatedAt: s.updatedAt?.toISOString() ?? null,
+    startDate: s.startDate?.toISOString() ?? null, endDate: s.endDate?.toISOString() ?? null,
+    createdAt: s.createdAt?.toISOString() ?? null, updatedAt: s.updatedAt?.toISOString() ?? null,
     shift: s.shift
       ? {
         ...s.shift,
@@ -81,22 +76,14 @@ export default async function Page({ searchParams }) {
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation heading="Schedule table" subheading="Manage schedule more detail than calendar view" />
-          <div className="flex items-center space-x-2 mt-4">
-            <div className="flex items-center space-x-2 bg-green-100 border border-green-200 px-2 py-0.5 rounded-md">
-              <span className="text-green-700 text-sm font-base">Daily</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-yellow-100 border border-yellow-200 px-2 py-0.5 rounded-md">
-              <span className="text-yellow-700 text-sm font-base">Weekly</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-orange-100 border border-orange-200 px-2 py-0.5 rounded-md">
-              <span className="text-orange-700 text-sm font-base">Monthly</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-purple-100 border border-purple-200 px-2 py-0.5 rounded-md">
-              <span className="text-purple-700 text-sm font-base">Yearly</span>
-            </div>
-            <div className="flex items-center space-x-2 bg-red-100 border border-red-200 px-2 py-0.5 rounded-md">
-              <span className="text-red-700 text-sm font-base">Once</span>
-            </div>
+          <div className="flex items-center space-x-2 mt-4 mb-4">
+            {frequenciesLabel.map((f) => (
+              <div key={f.label} className={`flex items-center space-x-2 bg-${f.color}-100 border border-${f.color}-200 px-2 py-0.5 rounded-md`}> 
+                <span className={`text-${f.color}-700 text-sm font-base`}>
+                  {f.label}
+                </span>
+              </div>
+            ))}
           </div>
         </ContentForm.Header>
 

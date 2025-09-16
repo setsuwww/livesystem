@@ -2,29 +2,27 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronRight, MoreVertical, Sun, Moon, SunMoon, CircleOff, CalendarDays } from "lucide-react";
+import { ChevronRight, MoreVertical, CalendarDays } from "lucide-react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown-menu";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-
 import { ContentList } from "@/components/content/ContentList";
+import { ShiftAssignedUsersModal } from './ShiftAssignedUsersModal';
+
 import { capitalize } from "@/function/globalFunction";
 import { fetch } from "@/function/helpers/fetch";
-import { shiftStyles } from "@/constants/shiftStyles";
+import { shiftStyles, defaultShifts, shiftIcons } from "@/constants/shiftConstants";
 
 export function ShiftsTable({ data }) {
   const router = useRouter();
 
-  const handleEdit = (id) =>
-    router.push(`/admin/dashboard/shifts/${id}/edit`);
+  const handleEdit = (id) => router.push(`/admin/dashboard/shifts/${id}/edit`);
 
   const handleDelete = async (id) => {
-    try {
-      await fetch({
-        url: `/shifts/${id}`, method: "delete",
+    try { await fetch({ url: `/shifts/${id}`, method: "delete",
         successMessage: "Shift deleted successfully",
         errorMessage: "Failed to delete shift",
       });
@@ -35,29 +33,19 @@ export function ShiftsTable({ data }) {
     }
   };
 
-  // group by type
-  const grouped = data.reduce((acc, shift) => {
-    if (!acc[shift.type]) acc[shift.type] = [];
+  const grouped = data.reduce((acc, shift) => { if (!acc[shift.type]) acc[shift.type] = [];
     acc[shift.type].push(shift);
     return acc;
   }, {});
 
-  // ambil 3 shift utama
-  const mainTypes = ["MORNING", "AFTERNOON", "EVENING", "OFF"];
-  const mainShifts = mainTypes
+  const mainShifts = defaultShifts
     .map((type) => grouped[type]?.[0])
     .filter(Boolean);
 
-  const duplicateShifts = mainTypes
+  const duplicateShifts = defaultShifts
     .flatMap((type) => grouped[type]?.slice(1) || [])
     .filter(Boolean);
 
-  const shiftIcons = {
-    MORNING: <Sun className="w-4 h-4 text-yellow-500" />,
-    AFTERNOON: <SunMoon className="w-4 h-4 text-orange-500" />,
-    EVENING: <Moon className="w-4 h-4 text-blue-500" />,
-    OFF: <CircleOff className="w-4 h-4 text-gray-500" />,
-  };
   return (
 
     <div className="space-y-8">
@@ -185,11 +173,7 @@ export function ShiftsTable({ data }) {
                     </div>
                   </div>
                   <p>
-                    {shift.users?.length > 3 && (
-                      <Link href={`/admin/dashboard/shifts/${shift.id}/users`} className="text-sm text-blue-600 hover:text-blue-400">
-                        View details
-                      </Link>
-                    )}
+                    {shift.users?.length > 3 && <ShiftAssignedUsersModal shift={shift} />}
                   </p>
                 </div>
               </CardContent>

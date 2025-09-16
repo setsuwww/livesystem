@@ -32,11 +32,10 @@ export default function CreateShiftForm({ users }) {
   const processedUsers = useMemo(() => {
     let result = [...users];
 
-    if (search) {
-      result = result.filter(
-        (u) =>
-          u.name.toLowerCase().includes(search.toLowerCase()) ||
-          u.email.toLowerCase().includes(search.toLowerCase())
+    if (search) { result = result.filter(
+      (u) =>
+        u.name.toLowerCase().includes(search.toLowerCase()) ||
+        u.email.toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -52,10 +51,8 @@ export default function CreateShiftForm({ users }) {
     return result;
   }, [users, search, sortOrder]);
 
-  // toggle user select
   const toggleUser = useCallback(
-    (id) => {
-      setSelectedUsers((prev) =>
+    (id) => { setSelectedUsers((prev) =>
         prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
       );
     },
@@ -68,8 +65,7 @@ export default function CreateShiftForm({ users }) {
     const payload = {
       type, 
       shiftName,
-      startTime: timeToInt(startTime), 
-      endTime: timeToInt(endTime),
+      startTime: timeToInt(startTime), endTime: timeToInt(endTime),
       userIds: selectedUsers,
     };
 
@@ -99,7 +95,7 @@ export default function CreateShiftForm({ users }) {
         <form onSubmit={handleSubmit}>
           <ContentForm.Header>
             <ContentInformation
-              heading="Create Custom Shift"
+              heading="Create Shift"
               subheading="Create a new shift and assign users without changing their default shift"
             />
           </ContentForm.Header>
@@ -122,63 +118,47 @@ export default function CreateShiftForm({ users }) {
               </div>
               <div>
                 <Label htmlFor="shift-type">Shift Name<span className="text-red-500">*</span></Label>
-                <Input id="shiftName"
+                <Input id="shiftName" value={shiftName} onChange={(e) => setShiftName(e.target.value)} 
                   type="text"
                   className="mt-1"
-                  value={shiftName}
-                  onChange={(e) => setShiftName(e.target.value)} />
+                />
               </div>
 
               <div>
                 <Label htmlFor="start-time">Start Time<span className="text-red-500">*</span></Label>
-                <Input
-                  id="start-time"
+                <Input id="start-time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                   type="time"
                   className="mt-1"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
                 />
               </div>
 
               <div>
                 <Label htmlFor="end-time">End Time<span className="text-red-500">*</span></Label>
-                <Input
-                  id="end-time"
+                <Input id="end-time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                   type="time"
                   className="mt-1"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
                 />
               </div>
             </div>
 
-            {/* Assign Users */}
             <div className="mt-4">
               <Label>Assign Users</Label>
               <ScrollArea className="h-68 mt-2 rounded-md border border-zinc-100 p-4 overflow-auto" type="always">
-                {/* Header Search + Tabs + Filter */}
                 <div className="mb-6 flex items-center justify-between">
-                  <Input
-                    id="search-user"
+                  <Input id="search-user" placeholder="Search by name or email..." value={search} onChange={(e) => setSearch(e.target.value)}
                     type="text"
                     className="max-w-sm border-zinc-200"
-                    placeholder="Search by name or email..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
                   />
 
                   <div className="flex items-center space-x-2">
-                    {/* Tabs */}
                     <div className="flex bg-zinc-100 rounded-lg p-1 ">
-                      <Button type="button" size="sm"
-                        variant={sortOrder === "newest" ? "secondary" : "ghost"}
+                      <Button type="button" size="sm" variant={sortOrder === "newest" ? "secondary" : "ghost"}
                         onClick={() => setSortOrder("newest")}
                         className="rounded-l-lg text-sm px-3 py-1 font-medium focus:ring-0 focus:outline-none"
                       >
                         Newest
                       </Button>
-                      <Button type="button" size="sm"
-                        variant={sortOrder === "oldest" ? "secondary" : "ghost"}
+                      <Button type="button" size="sm" variant={sortOrder === "oldest" ? "secondary" : "ghost"}
                         onClick={() => setSortOrder("oldest")}
                         className="rounded-r-lg text-sm px-3 py-1 font-medium focus:ring-0 focus:outline-none"
                       >
@@ -186,7 +166,6 @@ export default function CreateShiftForm({ users }) {
                       </Button>
                     </div>
 
-                    {/* Filter - nanti diisi */}
                     <Select>
                       <SelectTrigger>
                         <span className="font-semibold text-zinc-600 mr-1">Status:</span>
@@ -201,7 +180,6 @@ export default function CreateShiftForm({ users }) {
                   </div>
                 </div>
 
-                {/* Users list */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {processedUsers.length === 0 && (
                     <p className="text-sm text-center text-zinc-600">
@@ -210,9 +188,7 @@ export default function CreateShiftForm({ users }) {
                   )}
 
                   {processedUsers.map((user) => (
-                    <Label key={user.id} htmlFor={`user-${user.id}`}
-                      className="group flex items-center space-x-2 border border-zinc-200 shadow-xs rounded-lg p-2 cursor-pointer hover:bg-zinc-50 transition-colors ease-in-out"
-                    >
+                    <Label key={user.id} htmlFor={`user-${user.id}`} className="group flex items-center space-x-2 border border-zinc-200 shadow-xs rounded-lg p-2 cursor-pointer hover:bg-zinc-50 transition-colors ease-in-out">
                       <Checkbox id={`user-${user.id}`} checked={selectedUsers.includes(user.id)} onCheckedChange={() => toggleUser(user.id)}
                         className="size-4 rounded-md border-zinc-300"
                       />
@@ -232,12 +208,6 @@ export default function CreateShiftForm({ users }) {
                   ))}
                 </div>
               </ScrollArea>
-            </div>
-
-            <div className="mt-2">
-              <ContentList items={[
-                "Users in this selection will assigned with their schedule"
-              ]} />
             </div>
           </ContentForm.Body>
 
