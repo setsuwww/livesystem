@@ -13,14 +13,12 @@ import { UsersActionButton } from "./UsersActionButton"
 export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }) {
   const handleToggle = () => onToggleSelect(user.id)
 
-  const formatedCreatedDate = useMemo(
-    () => format(new Date(user.createdAt), "dd MMMM yyyy"),
-    [user.createdAt]
+  const formatedCreatedDate = useMemo(() => 
+    format(new Date(user.createdAt), "dd MMMM yyyy"), [user.createdAt]
   )
 
-  const formatedUpdatedDate = useMemo(
-    () => format(new Date(user.updatedAt), "dd MMMM yyyy"),
-    [user.updatedAt]
+  const formatedUpdatedDate = useMemo(() => 
+    format(new Date(user.updatedAt), "dd MMMM yyyy"), [user.updatedAt]
   )
 
   return (
@@ -68,8 +66,7 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       <TableCell>
         <UsersActionButton
           userId={user.id}
-          onEdit={onEdit}
-          onDelete={onDelete}
+          onEdit={onEdit} onDelete={onDelete}
         />
       </TableCell>
     </TableRow>

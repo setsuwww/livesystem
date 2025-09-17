@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import UsersForm from "./CreateForm";
+import CreateForm from "./CreateForm";
 
 export default async function Page() {
   const shifts = await prisma.shift.findMany({
@@ -11,5 +11,5 @@ export default async function Page() {
     }
   });
 
-  return <UsersForm shifts={shifts} />;
+  return <CreateForm shifts={shifts} />;
 }

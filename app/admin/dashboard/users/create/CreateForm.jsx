@@ -18,13 +18,11 @@ import { fetch } from "@/function/helpers/fetch";
 import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
 
-export default function UsersForm({ shifts }) {
+export default function CreateForm({ shifts }) {
   const router = useRouter();
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "USER",
+    name: "", email: "",
+    password: "", role: "USER",
     shiftId: "",
   });
   const [loading, setLoading] = useState(false);
