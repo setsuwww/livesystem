@@ -40,8 +40,7 @@ export default function CreateForm({ users, shifts }) {
   const toggleUser = useCallback((id) => {
     setForm((prev) => {
       const exists = prev.userIds.includes(id);
-      return {
-        ...prev,
+      return {...prev,
         userIds: exists ? prev.userIds.filter((u) => u !== id)
           : [...prev.userIds, id],
       };
@@ -56,8 +55,7 @@ export default function CreateForm({ users, shifts }) {
     setForm((prev) => ({ ...prev, userIds: [] }));
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {e.preventDefault();
     if (!form.title.trim() || !form.description.trim() || form.userIds.length === 0) {
       toast.error("Please fill all required fields");
       return;
@@ -200,21 +198,17 @@ export default function CreateForm({ users, shifts }) {
                 </Select>
               </div>
 
-              <ContentList
-                items={[
-                  "If no shift selected, users will keep their default shift",
-                ]}
-              />
-
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label>Assign Users</Label>
                   <div className="flex gap-2">
                     <Button type="button" variant="outline" size="sm" onClick={setAllUsers}>
-                      Set All Users
+                      Assign all users
                     </Button>
-                    <Button type="button" variant="destructive" size="sm" onClick={clearUsers}>
-                      Clear
+                    <Button type="button" variant="outline" size="sm" className="text-red-500 hover:text-red-600" onClick={clearUsers}
+                      disabled={form.userIds.length === 0}  
+                    >
+                      Clear all
                     </Button>
                   </div>
                 </div>

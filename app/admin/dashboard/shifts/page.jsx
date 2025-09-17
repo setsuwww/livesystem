@@ -22,8 +22,7 @@ export default async function ShiftsPage({ searchParams }) {
         }
       },
       users: {
-        select: {
-          id: true, name: true, email: true,
+        select: { id: true, name: true, email: true,
           attendances: {
             select: { shiftId: true, status: true, reason: true },
           },
@@ -32,8 +31,7 @@ export default async function ShiftsPage({ searchParams }) {
       assignments: {
         include: {
           user: {
-            select: {
-              id: true, name: true, email: true,
+            select: { id: true, name: true, email: true,
               attendances: {
                 select: { shiftId: true, status: true, reason: true },
               },

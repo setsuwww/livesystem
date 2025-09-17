@@ -6,6 +6,7 @@ import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
 import { roleStyles } from "@/constants/roleStyles";
 import { useUsersHooks } from "@/function/hooks/useUsersHooks";
+import { Users } from 'lucide-react';
 
 export default function UsersTable({ data }) { const {
     search, handleSearchChange,
@@ -33,7 +34,11 @@ export default function UsersTable({ data }) { const {
             <TableHead className="flex items-center">
               <Checkbox checked={isAllSelected} onCheckedChange={selectAll} />
             </TableHead>
-            <TableHead>Username</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-2">
+                <Users size={16} className="text-yellow-500" />Username
+              </div>
+            </TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Shift</TableHead>
             <TableHead>Created & Updated</TableHead>

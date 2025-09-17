@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
 import { Tag } from "lucide-react";
-import ScheduleTable from "./SchedulesTable";
+import ScheduleCard from "./SchedulesCard";
 import { DashboardHeader } from "../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
@@ -89,7 +89,7 @@ export default async function Page({ searchParams }) {
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <ScheduleTable data={schedules} />
+          <ScheduleCard data={schedules} />
         </ContentForm.Body>
 
         <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/schedules" />

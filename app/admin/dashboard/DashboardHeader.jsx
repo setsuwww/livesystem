@@ -29,8 +29,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
             const href = "/" + segments.slice(0, index + 1).join("/")
             const isLast = index === visibleSegments.length - 1
 
-            return (
-              <span key={index}>
+            return (<span key={index}>
                 {!isLast ? (
                   <Link href={href} className="font-semibold text-zinc-700">
                     {formatLabel(segment)}
@@ -39,8 +38,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
                   <span className="text-zinc-500">{formatLabel(segment)}</span>
                 )}
                 {!isLast && <span className="mx-2">/</span>}
-              </span>
-            )
+              </span>)
           })}
         </nav>
 
