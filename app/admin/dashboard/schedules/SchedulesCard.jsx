@@ -152,7 +152,6 @@ export default function SchedulesCard({ data }) {
                   </div>
                 </CardContent>
 
-                {/* Footer */}
                 <CardFooter className="flex justify-between items-center text-xs text-zinc-500 px-6 py-3">
                   <div>
                     <div className="font-semibold text-zinc-600">

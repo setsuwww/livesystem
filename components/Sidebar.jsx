@@ -8,7 +8,7 @@ import { ChevronDown, Users, Clock, LayoutDashboard, User, Settings } from 'luci
 import SubHeading from './content/SubHeading'
 
 const linkBase = "flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-colors"
-const subLinkBase = "block text-sm px-3 py-1.5 font-base rounded-lg transition-colors"
+const subLinkBase = "block text-sm px-3 py-1.5 font-base rounded-r-lg transition-colors"
 
 function SidebarLink({
   href,
@@ -34,7 +34,7 @@ function SidebarSubLink({
   const isActive = pathname === href
 
   return (
-    <Link href={href} className={`${subLinkBase} ${isActive ? 'text-sky-600' : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'}`}>
+    <Link href={href} className={`${subLinkBase} ${isActive ? 'border-l-2 border-0 bg-sky-100 border-sky-400 text-sky-600' : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'}`}>
       {children}
     </Link>
   )
@@ -59,26 +59,21 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
 
   return (
     <div className="flex flex-col">
-      <button
-        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
+      <button className={`group   w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
           ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'}`}
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center gap-x-2">
-          <Icon size={18} />
-          <span>{title}</span>
+          <Icon size={18} className="group-hover:scale-125 group-hover:mr-1 transition-all" />
+          <span className="group-hover:font-bold">{title}</span>
         </div>
-        <ChevronDown
-          size={20}
+        <ChevronDown size={20}
           className={`transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
       {/* Collapsible content */}
-      <div
-        className="overflow-hidden transition-all duration-300"
-        style={{ height: `${height}px` }}
-      >
+      <div className="overflow-hidden transition-all duration-300" style={{ height: `${height}px` }}>
         <div ref={contentRef} className="border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2">
           {items.map(item => (
             <SidebarSubLink key={item.href} href={item.href}>

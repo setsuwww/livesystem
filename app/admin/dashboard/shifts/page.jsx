@@ -1,7 +1,7 @@
 import ContentForm from "@/components/content/ContentForm";
 import { DashboardHeader } from "../DashboardHeader";
 import { ContentInformation } from "@/components/content/ContentInformation";
-import { ShiftsTable } from "./ShiftsTable";
+import { ShiftsView } from "./ShiftsView";
 import { prisma } from "@/lib/prisma";
 
 import { minutesToTime } from "@/function/services/shiftAttendance";
@@ -84,7 +84,7 @@ export default async function ShiftsPage({ searchParams }) {
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <ShiftsTable data={tableData} />
+          <ShiftsView data={tableData} />
         </ContentForm.Body>
       </ContentForm>
     </section>

@@ -42,7 +42,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
           })}
         </nav>
 
-        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold rounded-lg bg-white border border-zinc-300 text-red-600 hover:border-zinc-400">
+        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold rounded-lg bg-white/50 hover:bg-white border border-zinc-300/70 hover:border-zinc-300/90 text-red-600 transition-colors">
           <LogOut strokeWidth={2.5} size={15} />
           Logout
         </Link>

@@ -6,7 +6,7 @@ import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
 import { roleStyles } from "@/constants/roleStyles";
 import { useUsersHooks } from "@/function/hooks/useUsersHooks";
-import { Users, Settings, ClockFading, Menu, Activity } from 'lucide-react';
+import { Users, AtSign, ClockFading, Menu, Activity } from 'lucide-react';
 
 export default function UsersTable({ data }) { const {
     search, handleSearchChange,
@@ -34,31 +34,11 @@ export default function UsersTable({ data }) { const {
             <TableHead className="flex items-center">
               <Checkbox checked={isAllSelected} onCheckedChange={selectAll} />
             </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-2">
-                <Users size={16} className="text-yellow-500" />Username
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-2">
-                <Settings size={16} className="text-yellow-500" /> Email
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-2">
-                <ClockFading size={16} className="text-yellow-500" /> Shift
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-2">
-                <Menu size={16} className="text-yellow-500" /> Created & Updated
-              </div>
-            </TableHead>
-            <TableHead>
-              <div className="flex items-center gap-2">
-                <Activity size={16} className="text-yellow-500" /> Actions
-              </div>
-            </TableHead>
+            <TableHead>Username</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Shift</TableHead>
+            <TableHead>Created & Updated</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
