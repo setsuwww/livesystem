@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+ provider = "prisma-client-js"
 }
 
 datasource db {
@@ -12,6 +12,7 @@ enum ShiftType {
   MORNING
   AFTERNOON
   EVENING
+  CUSTOM
 }
 
 enum Role {
@@ -66,34 +67,12 @@ model User {
   shift    Shift?  @relation("DefaultShift", fields: [shiftId], references: [id])
   shiftId  Int?
 
-  customShifts UserShiftAssignment[]
-
-  schedules          Schedule[]
-  attendances        Attendance[]
-  permissionRequests PermissionRequest[]
+  customShifts         UserShiftAssignment[]
+  schedules            SchedulesOnUsers[]
+  attendances          Attendance[]
+  permissionRequests   PermissionRequest[]
 
   office   Office? @relation(fields: [officeId], references: [id], onDelete: SetNull)
-  officeId Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Schedule {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String?
-  frequency   FrequencyType @default(ONCE)
-  startDate   DateTime?
-  endDate     DateTime?
-
-  user    User?   @relation(fields: [userId], references: [id])
-  userId  Int?
-
-  shift   Shift?  @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  shiftId Int?
-
-  office   Office? @relation(fields: [officeId], references: [id])
   officeId Int?
 
   createdAt DateTime @default(now())
@@ -113,14 +92,63 @@ model Shift {
   attendances        Attendance[] 
   permissionRequests PermissionRequest[]
 
+  scheduleDatesPrimary   ScheduleDate[] @relation("PrimaryShift")
+  scheduleDatesSecondary ScheduleDate[] @relation("SecondaryShift")
+
   office   Office? @relation(fields: [officeId], references: [id]) 
   officeId Int? 
 }
 
-model UserShiftAssignment {
+model Schedule {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  frequency   FrequencyType @default(ONCE)
+  startDate   DateTime?
+  endDate     DateTime?
+
+  users   SchedulesOnUsers[]
+  dates   ScheduleDate[]
+
+  shift   Shift?  @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  shiftId Int?
+
+  office   Office? @relation(fields: [officeId], references: [id])
+  officeId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SchedulesOnUsers {
   id        Int      @id @default(autoincrement())
+  scheduleId Int
   userId    Int
-  shiftId   Int
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([scheduleId, userId])
+}
+
+model ScheduleDate {
+  id           Int      @id @default(autoincrement())
+  scheduleId   Int
+  date         DateTime
+  shiftId      Int?
+  secondShiftId Int?
+
+  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  shift    Shift?   @relation("PrimaryShift", fields: [shiftId], references: [id])
+  secondShift Shift? @relation("SecondaryShift", fields: [secondShiftId], references: [id])
+
+  @@unique([scheduleId, date])
+}
+
+model UserShiftAssignment {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  shiftId    Int
   assignedAt DateTime @default(now())
 
   user  User  @relation(fields: [userId], references: [id])

@@ -1,57 +1,52 @@
-// app/api/schedules/route.ts
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { getUserFromToken } from "@/lib/auth";
+import { NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
 
-
-export async function POST(req: Request) {
+export async function POST(req) {
   try {
     const body = await req.json()
-    const { title, description, userIds, dates } = body
+    const { title, description, frequency, userIds, dates } = body
 
-    console.log("Received schedule data:", { title, description, userIds, dates })
-
-    // Simulate database operations
-    for (const userId of userIds) {
-      for (const dateInfo of dates) {
-        // Create schedule entry for each user and date
-        const scheduleData = {
-          title,
-          description,
-          startDate: new Date(dateInfo.date),
-          endDate: new Date(dateInfo.date),
-          shiftId: Number(dateInfo.shiftId),
-          userId: userId,
-        }
-
-        console.log("Creating schedule entry:", scheduleData)
-
-        // If there's a second shift, create another entry
-        if (dateInfo.secondShiftId) {
-          const secondScheduleData = {
-            title: `${title} (Second Shift)`,
-            description,
-            startDate: new Date(dateInfo.date),
-            endDate: new Date(dateInfo.date),
-            shiftId: Number(dateInfo.secondShiftId),
-            userId: userId,
-          }
-          console.log("Creating second schedule entry:", secondScheduleData)
-        }
-      }
+    if (!title || !description || !userIds?.length || !dates?.length) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      )
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Schedule created successfully",
-      totalEntries: userIds.length * dates.length,
+    const schedule = await prisma.schedule.create({
+      data: {
+        title,
+        description,
+        frequency,
+        // relasi ke user (pivot table ScheduleUser)
+        users: {
+          create: userIds.map((userId) => ({ userId })),
+        },
+        // relasi ke scheduleDates
+        dates: {
+          create: dates.map((d) => ({
+            date: new Date(d.date),
+            shiftId: parseInt(d.shiftId),
+            secondShiftId: d.secondShiftId ? parseInt(d.secondShiftId) : null,
+          })),
+        },
+      },
+      include: {
+        users: { include: { user: true } },
+        dates: { include: { shift: true } },
+      },
     })
-  } catch (error) {
-    console.error("Error creating schedule:", error)
-    return NextResponse.json({ error: "Failed to create schedule" }, { status: 500 })
+
+    return NextResponse.json(schedule, { status: 201 })
+  } catch (err) {
+    console.error("Error creating schedule:", err)
+    return NextResponse.json(
+      { error: "Failed to create schedule" },
+      { status: 500 }
+    )
   }
 }
-
 
 export async function DELETE(req) {
   const user = await getUserFromToken();

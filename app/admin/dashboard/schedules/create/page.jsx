@@ -7,22 +7,20 @@ export default async function Page() {
   if (!user) return <div>Unauthorized</div>;
 
   const schedules = await prisma.schedule.findMany({
-    where: { userId: user.id },
-    select: {
-      id: true, title: true, description: true,
-      startDate: true, endDate: true,
-      createdAt: true, updatedAt: true,
-      userId: true, shiftId: true,
-      shift: {
-        select: {
-          id: true,
-          type: true, shiftName: true,
-          startTime: true, endTime: true,
+    where: {
+      users: {
+        some: {
+          userId: user.id, 
         },
       },
     },
+    include: {
+      shift: true,
+      users: { include: { user: true } },
+    },
     orderBy: { startDate: "asc" },
-  });
+  })
+
 
   const shifts = await prisma.shift.findMany({
     select: {
@@ -39,5 +37,3 @@ export default async function Page() {
 
   return <ScheduleForm users={users} schedules={schedules} shifts={shifts} />;
 }
-
-// 

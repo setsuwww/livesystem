@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `shift` MODIFY `type` ENUM('OFF', 'MORNING', 'AFTERNOON', 'EVENING', 'CUSTOM') NOT NULL;

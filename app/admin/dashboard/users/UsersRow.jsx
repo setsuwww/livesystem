@@ -53,6 +53,7 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
             </span>
             <span className="text-xs text-zinc-400">
               {user.shiftTime ?? "OFF"}
+              {/* User ini ganti shiftnya menjadi jumlah shift, saat di click munculin drawer detail si user dan jadwal shiftnya dalam 1 bulan */}
             </span>
           </div>
         </div>

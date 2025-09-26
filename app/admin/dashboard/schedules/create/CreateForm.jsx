@@ -112,40 +112,45 @@ export default function ScheduleForm({ users, shifts }) {
     }
 
     setLoading(true)
-    try { const response = await fetch("/api/schedules", { method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          title: form.title,
-          description: form.description,
-          userIds: form.userIds,
-          dates: events.filter((e) => e.shiftId)
-            .map((e) => ({
-              date: e.date,
-              shiftId: e.shiftId,
-              secondShiftId: e.secondShiftId || null,
-            })),
-        }),
-      })
+    try {
+  const result = await fetch({
+    url: "/schedules",
+    method: "post",
+    data: {
+      title: form.title,
+      description: form.description,
+      frequency: form.frequency,
+      userIds: form.userIds,
+      dates: events.filter((e) => e.shiftId).map((e) => ({
+        date: e.date,
+        shiftId: e.shiftId,
+        secondShiftId: e.secondShiftId || null,
+      })),
+    },
+    successMessage: "Schedule created successfully",
+    errorMessage: "Failed to create schedule",
+  })
 
-      if (!response.ok) { throw new Error("Failed to create schedule")}
+  // result langsung isi dari response.data
+  console.log("Schedule created:", result)
 
-      const result = await response.json()
-      toast.success("Schedule created successfully")
+  // reset form
+  setForm({
+    title: "",
+    description: "",
+    frequency: "ONCE",
+    userIds: [],
+  })
+  setEvents([])
+  setActiveDate(null)
+} 
+catch (error) {
+  console.error("Error creating schedule:", error)
+}
+finally {
+  setLoading(false)
+}
 
-      setForm({
-        title: "",
-        description: "",
-        frequency: "ONCE",
-        userIds: [],
-      })
-      setEvents([])
-      setActiveDate(null)
-    } 
-    catch (error) { console.error("Error creating schedule:", error)
-      toast.error("Failed to create schedule")
-    } 
-    finally {
-      setLoading(false)
-    }
   }
 
   const memoizedUsers = useMemo(() => users, [users])
