@@ -50,8 +50,6 @@ export function ShiftsView({ data }) {
   return (
 
     <div className="space-y-8">
-      <ContentList items={["Shifts will be randomized every 3 weeks"]} />
-
       {mainShifts.length > 0 && (
         <Table>
           <TableHeader>
