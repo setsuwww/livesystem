@@ -53,4 +53,5 @@ Attendance {
     shift[]
 }
 
-karyawan tanpa shift berarti di jam kerja 
+karyawan tanpa shift berarti di jam kerja,
+tukeran shift antar user bisa manual dari admin dan karyawan, karyawan mengajukan alasan tukar shift, dan saat disetujui user kirim ke admin, dan harus di acc/reject admin
