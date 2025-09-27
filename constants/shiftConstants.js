@@ -10,7 +10,7 @@ export const shiftStyles = {
 export const shiftIcons = {
   MORNING: <Sun className="w-4 h-4 text-yellow-500" />,
   AFTERNOON: <SunMoon className="w-4 h-4 text-orange-500" />,
-  EVENING: <Moon className="w-4 h-4 text-blue-500" />,
+  EVENING: <Moon className="w-4 h-4 text-violet-500" />,
   OFF: <CircleOff className="w-4 h-4 text-gray-500" />,
 };
 

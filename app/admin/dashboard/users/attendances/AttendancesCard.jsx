@@ -102,7 +102,7 @@ export function ShiftsCard({ shifts }) {
                     </div>
                     <div className="space-y-1">
                       {users.map((u) => (
-                        <div key={u.id} className={`${statusColorsClass[status].border} rounded-r-md p-2 flex flex-col border-0 border-l-3`}>
+                        <div key={u.id} className={`${statusColorsClass[status].border} rounded-r-md px-3 py-2 flex flex-col border-0 border-l-2`}>
                           <span className={`${statusColorsClass[status].text} text-sm font-semibold`}>
                             {u.name}
                           </span>
@@ -116,11 +116,6 @@ export function ShiftsCard({ shifts }) {
                 );
               })}
             </div>
-            <DialogFooter className="mt-6 flex justify-end">
-              <Button variant="outline" onClick={handleClose}>
-                Close
-              </Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       )}

@@ -61,6 +61,8 @@ export default function CreateForm({ shifts }) {
             <ContentInformation
               heading="Public"
               subheading="Users public username & email"
+              show={true} 
+              variant="outline" buttonText="Back" href="/admin/dashboard/users"
             />
           </ContentForm.Header>
 
@@ -92,10 +94,6 @@ export default function CreateForm({ shifts }) {
                   onChange={handleChange}
                   required
                 />
-                <ContentList items={[
-                  "Minimum 8 characters with uppercase & lowercase", 
-                  "Contain numeric & symbol",
-                ]}/>
               </div>
 
               <div className="space-y-2">
@@ -131,10 +129,7 @@ export default function CreateForm({ shifts }) {
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <footer className="flex items-center space-x-2">
-              <Button type="submit" variant="outline">Cancel</Button>
-              <Button type="submit" disabled={loading}>{loading ? "Creating..." : "Create User"}</Button>
-            </footer>
+            <Button type="submit" disabled={loading}>{loading ? "Creating..." : "Create User"}</Button>
           </ContentForm.Footer>
         </form>
       </ContentForm>

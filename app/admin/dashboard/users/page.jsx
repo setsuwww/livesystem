@@ -57,7 +57,11 @@ export default async function Page({ searchParams }) {
       <DashboardHeader title="Users" subtitle="Users data detail" />
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation heading="List users" subheading="Manage all users data in this table" />
+          <ContentInformation 
+            heading="List users" subheading="Manage all users data in this table"
+            show={true} 
+            buttonText="Create Users" href="/admin/dashboard/users/create"
+          />
         </ContentForm.Header>
 
         <ContentForm.Body>

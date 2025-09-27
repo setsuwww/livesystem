@@ -2,15 +2,11 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ChevronRight, MoreVertical, CalendarDays } from "lucide-react";
+import { CircleUserRound, CalendarClock } from "lucide-react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown-menu";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { ContentList } from "@/components/content/ContentList";
-import { ShiftAssignedUsersModal } from './ShiftAssignedUsersModal';
 
 import { capitalize } from "@/function/globalFunction";
 import { fetch } from "@/function/helpers/fetch";
@@ -85,15 +81,11 @@ export function ShiftsView({ data }) {
                   <Badge>Total : {shift.schedulesCount}</Badge>
                 </TableCell>
                 <TableCell className="space-x-2">
-                  <Link href={`/admin/dashboard/shifts/${shift.id}/users`}>
-                    <Button size="sm" variant="secondary">
-                      See Users <ChevronRight size={16} />
-                    </Button>
+                  <Link href={`/admin/dashboard/shifts/${shift.id}/users`} className="text-sky-500 hover:underline flex items-center gap-x-1">
+                      <CircleUserRound strokeWidth={1.5} size={15} /> See Users
                   </Link>
-                  <Link href={`/admin/dashboard/shifts/${shift.id}/schedules`}>
-                    <Button size="sm" variant="secondary">
-                      See Schedules <ChevronRight size={16} />
-                    </Button>
+                  <Link href={`/admin/dashboard/shifts/${shift.id}/schedules`} className="text-sky-500 hover:underline flex items-center gap-x-1">
+                      <CalendarClock strokeWidth={1.5} size={15} /> See Schedules
                   </Link>
                 </TableCell>
                 <TableCell className="space-x-2">

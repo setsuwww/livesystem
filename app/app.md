@@ -51,5 +51,6 @@ Attendance {
     users[name, email]
     status({})
     shift[]
-
 }
+
+karyawan tanpa shift berarti di jam kerja 

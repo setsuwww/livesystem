@@ -60,9 +60,8 @@ export default function CreateShiftForm() {
       <ContentForm>
         <form onSubmit={handleSubmit}>
           <ContentForm.Header>
-            <ContentInformation
-              heading="Shift Form"
-              subheading="Create a new shift and assign users"
+            <ContentInformation heading="Shift Form" subheading="Create a new shift and assign users"
+              show={true} buttonText="Back" variant="outline" href="/admin/dashboard/shifts"
             />
           </ContentForm.Header>
 
@@ -108,12 +107,7 @@ export default function CreateShiftForm() {
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <div className="space-x-2">
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-              <Button type="submit">Create Shift</Button>
-            </div>
+            <Button type="submit">Create Shift</Button>
           </ContentForm.Footer>
         </form>
       </ContentForm>
