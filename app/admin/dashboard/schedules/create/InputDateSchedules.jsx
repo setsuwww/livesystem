@@ -10,23 +10,34 @@ import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import { capitalize } from "@/function/globalFunction"
 import { shiftStyles } from "@/constants/shiftConstants"
+import { Trash2 } from "lucide-react"
 
 export default function InputDateSchedules({
-  events, setEvents,
-  activeDate, setActiveDate,
+  events,
+  setEvents,
+  activeDate,
+  setActiveDate,
   shifts,
 }) {
   const handleDateSelect = useCallback(
     (info) => {
-      const date = info.startStr
-      setEvents((prev) => {
-        if (!prev.find((e) => e.date === date)) {
-          return [...prev, { date, shiftId: "", secondShiftId: "" }]
+      let current = new Date(info.start)
+      const end = new Date(info.end)
+      const newEvents = []
+
+      while (current < end) {
+        const dateStr = current.toISOString().split("T")[0]
+        if (!events.find((e) => e.date === dateStr)) {
+          newEvents.push({ date: dateStr, shiftId: "", secondShiftId: "" })
         }
-        return prev
-      })
+        current.setDate(current.getDate() + 1)
+      }
+
+      if (newEvents.length > 0) {
+        setEvents((prev) => [...prev, ...newEvents])
+      }
     },
-    [setEvents]
+    [events, setEvents]
   )
 
   const updateShift = useCallback(
@@ -37,7 +48,7 @@ export default function InputDateSchedules({
             if (isSecondShift) {
               return { ...e, secondShiftId: shiftId }
             } else {
-              return { ...e, shiftId, secondShiftId: "" }
+              return { ...e, shiftId, secondShiftId: shiftId ? "" : e.secondShiftId }
             }
           }
           return e
@@ -47,18 +58,47 @@ export default function InputDateSchedules({
     [setEvents]
   )
 
+  const removeDate = useCallback(
+    (date) => {
+      setEvents((prev) => prev.filter((e) => e.date !== date))
+      if (activeDate === date) {
+        setActiveDate(null)
+      }
+    },
+    [setEvents, activeDate, setActiveDate]
+  )
+
   const setAllShift = useCallback(
     (shiftId) => {
-      const targetShift = shifts.find((s) => s.id === shiftId)
-      if (!targetShift) return
+      const shiftIdStr = shiftId.toString()
 
-      setEvents((prev) =>
-        prev.map((e) => {
-          return { ...e, shiftId: shiftId.toString(), secondShiftId: "" }
-        })
-      )
+      if (events.length === 0) return
+
+      // Ambil bulan & tahun dari event pertama
+      const sampleDate = new Date(events[0].date)
+      const year = sampleDate.getFullYear()
+      const month = sampleDate.getMonth()
+
+      // Cari total hari di bulan itu
+      const lastDay = new Date(year, month + 1, 0).getDate()
+
+      // Generate semua tanggal dalam bulan tsb
+      const allDatesInMonth = Array.from({ length: lastDay }, (_, i) => {
+        const day = String(i + 1).padStart(2, "0")
+        const monthStr = String(month + 1).padStart(2, "0")
+        return `${year}-${monthStr}-${day}`
+      })
+
+      // Apply shift ke semua tanggal
+      const newEvents = allDatesInMonth.map((date) => ({
+        date,
+        shiftId: shiftIdStr,
+        secondShiftId: "",
+      }))
+
+      setEvents(newEvents)
     },
-    [shifts, setEvents]
+    [events, setEvents]
   )
 
   const getAvailableSecondShifts = useCallback(
@@ -71,18 +111,20 @@ export default function InputDateSchedules({
 
   return (
     <div className="space-y-4">
-      <Label className="text-zinc-700">Pick Dates & Assign Shifts</Label>
+      <Label className="text-zinc-700 text-base font-medium">Pick Dates & Assign Shifts</Label>
 
       <div className="border border-zinc-200 rounded-xl p-6 bg-white shadow-sm">
-        <FullCalendar plugins={[dayGridPlugin, interactionPlugin]}
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
-          selectable={true} select={handleDateSelect}
+          selectable={true}
+          select={handleDateSelect}
           height="auto"
           headerToolbar={{
             left: "prev next today",
             center: "title",
             right: "",
-          }} 
+          }}
           buttonText={{ today: "Today" }}
           dayCellContent={(args) => {
             const date = args.date.toISOString().split("T")[0]
@@ -96,10 +138,9 @@ export default function InputDateSchedules({
               <div className="flex flex-col space-y-1 w-full">
                 {event?.shiftId && (
                   <Badge
-                    className={`w-full flex items-center justify-center ${shiftStyles[
+                    className={`w-full flex items-center justify-center text-xs font-medium py-1 ${shiftStyles[
                       shifts.find((s) => s.id.toString() === event.shiftId)?.type
-                    ]
-                      }`}
+                    ]}`}
                   >
                     {capitalize(
                       shifts.find((s) => s.id.toString() === event.shiftId)?.type || ""
@@ -108,19 +149,18 @@ export default function InputDateSchedules({
                 )}
                 {event?.secondShiftId && (
                   <Badge
-                    className={`w-full flex items-center justify-center ${shiftStyles[
+                    className={`w-full flex items-center justify-center text-xs font-medium py-1 ${shiftStyles[
                       shifts.find((s) => s.id.toString() === event.secondShiftId)?.type
-                    ]
-                      }`}
+                    ]}`}
                   >
                     {capitalize(
                       shifts.find((s) => s.id.toString() === event.secondShiftId)?.type || ""
                     )}
                   </Badge>
                 )}
-                {!event?.shiftId && !event?.secondShiftId && (
-                  <span className="text-xs text-zinc-400 font-medium">
-                    Click to add
+                {!event?.shiftId && !event?.secondShiftId && event && (
+                  <span className="text-xs text-zinc-400 font-medium text-center">
+                    No shift assigned
                   </span>
                 )}
               </div>
@@ -128,12 +168,21 @@ export default function InputDateSchedules({
 
             return (
               <div
-                className={`flex flex-col items-center justify-start cursor-pointer p-3 rounded-lg transition-all transform
+                className={`flex flex-col items-center justify-start cursor-pointer p-3 rounded-lg transition-all duration-200
                   ${isActive
-                    ? "bg-white border-2 border-zinc-200 shadow-md scale-[1.02]"
-                    : "hover:scale-[0.98] hover:bg-white/50 backdrop-blur-md border border-transparent hover:border-zinc-300"
+                    ? "bg-white border-2 border-zinc-300 shadow-md scale-105 z-10"
+                    : event
+                      ? "bg-zinc-50 border border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300 hover:scale-102"
+                      : "hover:bg-zinc-50 hover:border-zinc-200 hover:scale-102"
                   }`}
-                onClick={() => setActiveDate(isActive ? null : date)}
+                onClick={() => {
+                  if (event) {
+                    setActiveDate(isActive ? null : date)
+                  } else {
+                    setEvents((prev) => [...prev, { date, shiftId: "", secondShiftId: "" }])
+                    setActiveDate(date)
+                  }
+                }}
               >
                 <div className="text-center mb-2">
                   <div className="text-xs font-medium text-zinc-500 uppercase tracking-wide">
@@ -150,10 +199,10 @@ export default function InputDateSchedules({
                       value={event?.shiftId || "default"}
                       onValueChange={(val) => updateShift(date, val, false)}
                     >
-                      <SelectTrigger className="w-full h-8 text-xs border-zinc-200 bg-white">
-                        <SelectValue placeholder="Shift 1" />
+                      <SelectTrigger className="w-full h-9 text-sm border-zinc-200 bg-white">
+                        <SelectValue placeholder="Select Shift 1" />
                       </SelectTrigger>
-                      <SelectContent className="bg-white border-zinc-200">
+                      <SelectContent className="bg-white border-zinc-200 max-h-60 overflow-y-auto">
                         <SelectItem value="default">No shift</SelectItem>
                         {shifts.map((s) => (
                           <SelectItem key={s.id} value={s.id.toString()}>
@@ -163,15 +212,15 @@ export default function InputDateSchedules({
                       </SelectContent>
                     </Select>
 
-                    {event?.shiftId && (
+                    {event?.shiftId && event.shiftId !== "default" && (
                       <Select
                         value={event?.secondShiftId || "default"}
                         onValueChange={(val) => updateShift(date, val, true)}
                       >
-                        <SelectTrigger className="w-full h-8 text-xs border-zinc-200 bg-white">
-                          <SelectValue placeholder="Shift 2" />
+                        <SelectTrigger className="w-full h-9 text-sm border-zinc-200 bg-white">
+                          <SelectValue placeholder="Select Shift 2" />
                         </SelectTrigger>
-                        <SelectContent className="bg-white border-zinc-200">
+                        <SelectContent className="bg-white border-zinc-200 max-h-60 overflow-y-auto">
                           <SelectItem value="default">No second shift</SelectItem>
                           {getAvailableSecondShifts(event.shiftId).map((s) => (
                             <SelectItem key={s.id} value={s.id.toString()}>
@@ -181,6 +230,17 @@ export default function InputDateSchedules({
                         </SelectContent>
                       </Select>
                     )}
+
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="w-full h-9 text-sm"
+                      onClick={() => removeDate(date)}
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Remove Date
+                    </Button>
                   </div>
                 ) : (
                   renderShifts()
@@ -191,24 +251,34 @@ export default function InputDateSchedules({
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <span className="text-sm font-medium text-zinc-700">
-          Preset:
+          Apply Preset to All Selected Dates:
         </span>
-        <div className="flex items-center space-x-2 justify-between">
-          <span className="space-x-2">
+        <div className="flex items-center space-x-3 justify-between">
+          <div className="flex space-x-2">
             {shifts.map((s) => (
-              <Button key={s.id} type="button" size="sm" onClick={() => setAllShift(s.id)}
-                className={`${shiftStyles[s.type]} hover:opacity-50 shadow-none border-1`}
+              <Button
+                key={s.id}
+                onClick={() => setAllShift(s.id)}
+                type="button"
+                size="sm"
+                className={`${shiftStyles[s.type]} hover:opacity-80 transition-opacity shadow-sm border border-zinc-300`}
+                disabled={events.length === 0}
               >
-                {capitalize(s.type)}
+                All {capitalize(s.type)}
               </Button>
             ))}
-          </span>
-          <Button type="button" variant="outline" size="sm" onClick={() => setEvents([])} disabled={events.length === 0}
-            className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 hover:text-red-700"
+          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setEvents([])}
+            disabled={events.length === 0}
+            className="text-red-600 border-red-300 hover:bg-red-50 hover:border-red-400 hover:text-red-700 transition-colors"
           >
-            Clear all dates
+            Clear All Dates
           </Button>
         </div>
       </div>

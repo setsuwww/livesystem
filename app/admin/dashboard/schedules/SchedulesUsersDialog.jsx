@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarClock } from "lucide-react"
+import { CalendarClock, PenSquareIcon } from "lucide-react"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog";
-import { Button } from "@/components/ui/Button";
 
 import { capitalize } from "@/function/globalFunction";
 import { frequencyStyles } from "@/constants/frequencyStyles";
@@ -52,8 +51,11 @@ export default function ScheduleUsersDialog({ users, schedules }) {
               <div className="max-h-[400px] overflow-y-auto space-y-2 mt-2">
                 {users.map((u) => (
                   <div key={u.user.id} className="flex items-center justify-between text-sm border-b py-1">
-                    <span className="font-semibold text-zinc-600">
-                      {u.user.name}
+                    <span className="flex items-center space-x-1 font-semibold text-zinc-600">
+                      <span className="text-sky-500 hover:bg-sky-100 p-1 hover:text-sky-700">
+                        <PenSquareIcon className="w-4 h-4" />
+                      </span>
+                      <span>{u.user.name}</span>
                     </span>
                     <span className="text-zinc-400">{u.user.email}</span>
                   </div>
