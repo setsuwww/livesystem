@@ -107,10 +107,13 @@ export function Sidebar() {
           ]}
         />
 
-        <SidebarCollapsible title="Employees" open={employeesOpen} onOpenChange={setEmployeesOpen} icon={Users}
+        <SidebarCollapsible title="Offices" open={employeesOpen} onOpenChange={setEmployeesOpen} icon={Users}
           items={[
+            { label: 'Office Hours', href: '/admin/dashboard/users/office-hours' },
             { label: 'Employees', href: '/admin/dashboard/users/employees' },
             { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
+            { label: 'Locations', href: '/admin/dashboard/users/locations' },
+            { label: 'Add Location', href: '/admin/dashboard/users/add-locatios' },
           ]}
         />
 
@@ -124,9 +127,6 @@ export function Sidebar() {
             { label: 'Add Shifts', href: '/admin/dashboard/shifts/create' },
             { label: 'Schedules', href: '/admin/dashboard/schedules' },
             { label: 'Add Schedules', href: '/admin/dashboard/schedules/create' },
-            { label: 'Shifts Schedule', href: '/admin/dashboard/shifts_schedule' },
-            { label: 'Relation', href: '/admin/dashboard/realtion' },
-            { label: 'Conflict', href: '/admin/dashboard/conflict' },
           ]}
         />
 

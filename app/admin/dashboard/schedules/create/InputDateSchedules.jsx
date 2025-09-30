@@ -10,7 +10,7 @@ import dayGridPlugin from "@fullcalendar/daygrid"
 import interactionPlugin from "@fullcalendar/interaction"
 import { capitalize } from "@/function/globalFunction"
 import { shiftStyles } from "@/constants/shiftConstants"
-import { Trash2 } from "lucide-react"
+import { Trash2, X } from "lucide-react"
 
 export default function InputDateSchedules({
   events,
@@ -195,6 +195,16 @@ export default function InputDateSchedules({
 
                 {isActive ? (
                   <div className="space-y-2 w-full">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setActiveDate(null)
+                      }}
+                      className="ml-auto flex items-center justify-center rounded-full p-1 hover:bg-red-100 transition-colors"
+                    >
+                      <X className="h-4 w-4 text-zinc-500 hover:text-red-700" />
+                    </button>
                     <Select
                       value={event?.shiftId || "default"}
                       onValueChange={(val) => updateShift(date, val, false)}

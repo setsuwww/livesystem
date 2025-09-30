@@ -28,84 +28,8 @@ export default function ScheduleForm({ users, shifts }) {
 
   const [events, setEvents] = useState([])
 
-  const handleDateSelect = useCallback((info) => {
-    const date = info.startStr
-    setEvents((prev) => {
-      if (!prev.find((e) => e.date === date)) {
-        return [...prev, { date, shiftId: "", secondShiftId: "" }]
-      }
-      return prev
-    })
-  }, [])
-
-  const updateShift = useCallback((date, shiftId, isSecondShift = false) => {
-    setEvents((prev) =>
-      prev.map((e) => {
-        if (e.date === date) {
-          if (isSecondShift) {
-            return { ...e, secondShiftId: shiftId }
-          }
-          else {
-            return { ...e, shiftId, secondShiftId: "" }
-          }
-        }
-        return e
-      }),
-    )
-  }, [])
-
-  const setAllShift = useCallback((shiftId) => {
-    const targetShift = shifts.find((s) => s.id === shiftId)
-    if (!targetShift) return
-
-    setEvents((prev) =>
-      prev.map((e) => {
-        if (e.shiftId && e.shiftId !== shiftId.toString()) {
-          const existingShift = shifts.find((s) => s.id.toString() === e.shiftId)
-          if (existingShift && existingShift.type !== targetShift.type) {
-            return e
-          }
-        }
-
-        if (e.secondShiftId && e.secondShiftId !== shiftId.toString()) {
-          const existingSecondShift = shifts.find((s) => s.id.toString() === e.secondShiftId)
-          if (existingSecondShift && existingSecondShift.type !== targetShift.type) {
-            return { ...e, shiftId: shiftId.toString() }
-          }
-        }
-
-        return { ...e, shiftId: shiftId.toString(), secondShiftId: "" }
-      }),
-    )
-  },
-    [shifts],
-  )
-
-  const getAvailableSecondShifts = useCallback(
-    (firstShiftId) => {
-      if (!firstShiftId) return shifts
-      return shifts.filter((s) => s.id.toString() !== firstShiftId)
-    },
-    [shifts],
-  )
-
   const handleChange = useCallback((field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }))
-  }, [])
-
-  const toggleUser = useCallback((id) => {
-    setForm((prev) => {
-      const exists = prev.userIds.includes(id)
-      return { ...prev, userIds: exists ? prev.userIds.filter((u) => u !== id) : [...prev.userIds, id] }
-    })
-  }, [])
-
-  const setAllUsers = useCallback(() => {
-    setForm((prev) => ({ ...prev, userIds: users.map((u) => u.id) }))
-  }, [users])
-
-  const clearUsers = useCallback(() => {
-    setForm((prev) => ({ ...prev, userIds: [] }))
   }, [])
 
   const handleSubmit = async (e) => {
@@ -153,9 +77,6 @@ export default function ScheduleForm({ users, shifts }) {
     }
 
   }
-
-  const memoizedUsers = useMemo(() => users, [users])
-  const memoizedShifts = useMemo(() => shifts, [shifts])
 
   return (
     <section>

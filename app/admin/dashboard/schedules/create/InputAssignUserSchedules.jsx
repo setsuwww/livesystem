@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/Label"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/Command"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/Popover"
 import { Badge } from "@/components/ui/Badge"
-import { Check, ChevronsUpDown, X } from "lucide-react"
+import { Check, ChevronsUpDown, CircleUserRound, X } from "lucide-react"
 
 export default function InputAssignUserSchedules({ users, form, setForm }) {
   const [open, setOpen] = useState(false)
@@ -71,14 +71,24 @@ export default function InputAssignUserSchedules({ users, form, setForm }) {
                 form.userIds.map((id) => {
                   const user = users.find((u) => u.id === id)
                   return (
-                    <Badge key={id} variant="secondary" className="flex items-center gap-1.5 bg-zinc-50 border-0 border-b-2 border-zinc-300 shadow-xs text-zinc-800 font-medium px-2 py-1">
+                    <Badge
+                      key={id}
+                      variant="secondary"
+                      className="flex items-center gap-1.5 bg-zinc-50 border-0 border-b-2 border-zinc-300 shadow-xs text-zinc-800 font-medium px-2 py-1"
+                    >
                       {user?.name}
-                      <X className="h-3.5 w-3.5 cursor-pointer text-red-500 hover:text-red-700" 
+                      <span
+                        role="button"
+                        tabIndex={0}
                         onClick={(e) => {
                           e.stopPropagation()
+                          e.preventDefault()
                           toggleUser(id)
                         }}
-                      />
+                        className="p-0 m-0 flex items-center cursor-pointer"
+                      >
+                        <X className="h-3.5 w-3.5 text-red-500 hover:text-red-700" />
+                      </span>
                     </Badge>
                   )
                 })
@@ -102,22 +112,26 @@ export default function InputAssignUserSchedules({ users, form, setForm }) {
               {users.map((user) => {
                 const isSelected = form.userIds.includes(user.id)
                 return (
-                  <CommandItem
-                    key={user.id}
-                    value={user.name}
-                    onSelect={() => toggleUser(user.id)}
-                    className="flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-zinc-50 transition-colors"
+                  <CommandItem key={user.id} value={user.name} onSelect={() => toggleUser(user.id)}
+                    className="justify-between py-2 px-4 cursor-pointer hover:bg-zinc-50 transition-colors"
                   >
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium text-zinc-800">
-                        {user.name}
-                      </span>
-                      <span className="text-xs text-zinc-500">
-                        {user.email}
-                      </span>
+                    <div className="flex items-center space-x-2">
+                      <div className="p-2 bg-zinc-200 rounded-lg">
+                        <CircleUserRound />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-zinc-600">
+                          {user.name}
+                        </span>
+                        <span className="text-xs text-zinc-400">
+                          {user.email}
+                        </span>
+                      </div>
                     </div>
                     {isSelected && (
-                      <Check className="h-4 w-4 text-green-600" />
+                      <div className="bg-green-100 p-2 rounded-md">
+                        <Check className="h-4 w-4 text-green-600" />
+                      </div>
                     )}
                   </CommandItem>
                 )
