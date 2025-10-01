@@ -85,7 +85,7 @@ export default function InputAssignUserSchedules({ users, form, setForm }) {
                           e.preventDefault()
                           toggleUser(id)
                         }}
-                        className="p-0 m-0 flex items-center cursor-pointer"
+                        className="p-0 m-0 flex items-center cursor-pointer hover:bg-red-100 rounded-md transition-colors"
                       >
                         <X className="h-3.5 w-3.5 text-red-500 hover:text-red-700" />
                       </span>

@@ -74,41 +74,50 @@ export function ShiftsCard({ shifts }) {
 
       {selectedShift && (
         <Dialog open={true} onOpenChange={handleClose}>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle className="flex items-center">
-                <div>
-                  <span>Detail attendance</span>
-                  <div className="flex items-center mt-4 gap-2">
-                    <h1 className="text-sm text-zinc-500">Reviewed shift</h1>
-                    <Badge className={shiftStyles[selectedShift.type]}>
-                      {capitalize(selectedShift.type)}
-                    </Badge>
-                  </div>
+          <DialogContent className="max-w-2xl p-6 rounded-2xl shadow-lg border border-zinc-200">
+            <DialogHeader className="mb-6">
+              <DialogTitle className="flex flex-col gap-2">
+                <span className="text-lg font-semibold text-zinc-900">Shift Attendance</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-zinc-500">Reviewed Shift:</span>
+                  <Badge className={`${shiftStyles[selectedShift.type]} text-xs px-2 py-0.5`}>
+                    {capitalize(selectedShift.type)}
+                  </Badge>
+                  <span className="text-sm text-zinc-400">
+                    {selectedShift.startTime} - {selectedShift.endTime}
+                  </span>
                 </div>
               </DialogTitle>
             </DialogHeader>
-            <div className="mt-4 space-y-4">
+
+            <div className="space-y-6">
               {statusPriority.map((status) => {
-                const users = selectedShift.users.filter((u) => u.attendanceStatus === status);
+                const users = selectedShift.users.filter(
+                  (u) => u.attendanceStatus === status
+                );
                 if (!users.length) return null;
 
                 return (
-                  <div key={status}>
-                    <div className="flex items-center gap-1 mb-2">
-                      <span className={`${statusColorsClass[status].head} font-semibold`}>
-                        {capitalize(status)} ({users.length})
-                      </span>
+                  <div key={status} className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h2 className={`${statusColorsClass[status].head} font-medium text-sm`}>
+                        {capitalize(status)}
+                      </h2>
+                      <span className="text-xs text-zinc-400">({users.length} Person)</span>
                     </div>
-                    <div className="space-y-1">
+
+                    <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 overflow-hidden bg-white">
                       {users.map((u) => (
-                        <div key={u.id} className={`${statusColorsClass[status].border} rounded-r-md px-3 py-2 flex flex-col border-0 border-l-2`}>
-                          <span className={`${statusColorsClass[status].text} text-sm font-semibold`}>
-                            {u.name}
-                          </span>
-                          <span className={`${statusColorsClass[status].subtext} text-xs`}>
-                            {u.email}
-                          </span>
+                        <div key={u.id} className="px-4 py-3 flex items-center justify-between hover:bg-zinc-50 transition">
+                          <div className="flex flex-col">
+                            <span className={`${statusColorsClass[status].text} text-sm font-medium`}>
+                              {u.name}
+                            </span>
+                            <span className="text-xs text-zinc-500">{u.email}</span>
+                          </div>
+                          <div
+                            className={`w-2 h-2 rounded-full ${statusColorsClass[status].bgDot}`}
+                          ></div>
                         </div>
                       ))}
                     </div>
@@ -116,6 +125,16 @@ export function ShiftsCard({ shifts }) {
                 );
               })}
             </div>
+
+            <DialogFooter className="mt-6">
+              <Button
+                onClick={handleClose}
+                variant="outline"
+                className="w-full md:w-auto"
+              >
+                Close
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       )}

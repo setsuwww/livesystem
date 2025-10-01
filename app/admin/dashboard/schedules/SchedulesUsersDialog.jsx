@@ -42,7 +42,7 @@ export default function ScheduleUsersDialog({ users, schedules }) {
               </DialogHeader>
 
               <div className="flex items-center space-x-3">
-                <div className ={`p-2 rounded-lg ${frequencyStyles[capitalize(schedules.frequency)]}`}>
+                <div className ={`p-0 rounded-lg bg-transparent ${frequencyStyles[capitalize(schedules.frequency)]}`}>
                   <CalendarClock strokeWidth={1.5} size={24} />
                 </div>
                 <h1 className="text-md font-bold text-zinc-600">{schedules.title}</h1>
