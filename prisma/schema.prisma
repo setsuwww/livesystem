@@ -1,10 +1,20 @@
 generator client {
- provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+enum LocationType {
+  WFA
+  WFO
+}
+
+enum LocationStatus {
+  ACTIVE
+  INACTIVE
 }
 
 enum ShiftType {
@@ -45,102 +55,108 @@ enum AttendanceStatus {
 }
 
 model Office {
-  id        Int       @id @default(autoincrement())
+  id        Int             @id @default(autoincrement())
   name      String
   location  String?
+  longitude Float?
+  latitude  Float?
+  radius    Float?
+  type      LocationType    @default(WFO)
+  status    LocationStatus  @default(INACTIVE)
+  startTime Int?
+  endTime   Int?
 
   users     User[]
   shifts    Shift[]
   schedules Schedule[]
 
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+
+  shiftId   Int?
+  officeId  Int?
+
+  shift     Shift?    @relation("DefaultShift", fields: [shiftId], references: [id])
+  office    Office?   @relation(fields: [officeId], references: [id], onDelete: SetNull)
+
+  workLocation       WorkLocation[]
+  customShifts       UserShiftAssignment[]
+  schedules          SchedulesOnUsers[]
+  attendances        Attendance[]
+  permissionRequests PermissionRequest[]
+
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
-  role     Role   @default(USER)
-
-  shift    Shift?  @relation("DefaultShift", fields: [shiftId], references: [id])
-  shiftId  Int?
-
-  customShifts         UserShiftAssignment[]
-  schedules            SchedulesOnUsers[]
-  attendances          Attendance[]
-  permissionRequests   PermissionRequest[]
-
-  office   Office? @relation(fields: [officeId], references: [id], onDelete: SetNull)
-  officeId Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Shift { 
-  id        Int       @id @default(autoincrement()) 
-  type      ShiftType 
+model Shift {
+  id        Int       @id @default(autoincrement())
+  type      ShiftType
   shiftName String?
-  startTime Int 
-  endTime   Int 
+  startTime Int
+  endTime   Int
+  officeId  Int?
+
+  office    Office?   @relation(fields: [officeId], references: [id])
 
   users              User[] @relation("DefaultShift")
   assignments        UserShiftAssignment[]
-  schedules          Schedule[] 
-  attendances        Attendance[] 
+  schedules          Schedule[]
+  attendances        Attendance[]
   permissionRequests PermissionRequest[]
-
   scheduleDatesPrimary   ScheduleDate[] @relation("PrimaryShift")
   scheduleDatesSecondary ScheduleDate[] @relation("SecondaryShift")
-
-  office   Office? @relation(fields: [officeId], references: [id]) 
-  officeId Int? 
 }
 
 model Schedule {
-  id          Int      @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   title       String
   description String?
-  frequency   FrequencyType @default(ONCE)
+  frequency   FrequencyType  @default(ONCE)
   startDate   DateTime?
   endDate     DateTime?
+  shiftId     Int?
+  officeId    Int?
 
-  users   SchedulesOnUsers[]
-  dates   ScheduleDate[]
+  shift       Shift?         @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  office      Office?        @relation(fields: [officeId], references: [id])
 
-  shift   Shift?  @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  shiftId Int?
+  users       SchedulesOnUsers[]
+  dates       ScheduleDate[]
 
-  office   Office? @relation(fields: [officeId], references: [id])
-  officeId Int?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 }
 
 model SchedulesOnUsers {
-  id        Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   scheduleId Int
-  userId    Int
+  userId     Int
 
-  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schedule   Schedule  @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([scheduleId, userId])
 }
 
 model ScheduleDate {
-  id           Int      @id @default(autoincrement())
-  scheduleId   Int
-  date         DateTime
-  shiftId      Int?
+  id            Int      @id @default(autoincrement())
+  scheduleId    Int
+  date          DateTime
+  shiftId       Int?
   secondShiftId Int?
 
-  schedule Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
-  shift    Shift?   @relation("PrimaryShift", fields: [shiftId], references: [id])
-  secondShift Shift? @relation("SecondaryShift", fields: [secondShiftId], references: [id])
+  schedule      Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  shift         Shift?   @relation("PrimaryShift", fields: [shiftId], references: [id])
+  secondShift   Shift?   @relation("SecondaryShift", fields: [secondShiftId], references: [id])
 
   @@unique([scheduleId, date])
 }
@@ -158,19 +174,17 @@ model UserShiftAssignment {
 }
 
 model Attendance {
-  id     Int              @id @default(autoincrement())
-  date   DateTime
-  status AttendanceStatus @default(ABSENT)
-  reason String?
-
-  checkInTime   DateTime?
-  checkOutTime  DateTime?
+  id           Int               @id @default(autoincrement())
+  date         DateTime
+  status       AttendanceStatus  @default(ABSENT)
+  reason       String?
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+  userId       Int
+  shiftId      Int
 
   user   User  @relation(fields: [userId], references: [id])
-  userId Int
-
-  shift   Shift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  shiftId Int
+  shift  Shift @relation(fields: [shiftId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -182,14 +196,28 @@ model PermissionRequest {
   id        Int              @id @default(autoincrement())
   reason    String
   status    PermissionStatus @default(PENDING)
+  userId    Int
+  shiftId   Int?
+  date      DateTime
 
-  user   User  @relation(fields: [userId], references: [id])
-  userId Int
+  user      User   @relation(fields: [userId], references: [id])
+  shift     Shift? @relation(fields: [shiftId], references: [id], onDelete: Cascade)
 
-  shift   Shift? @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  shiftId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  date DateTime
+model WorkLocation {
+  id        Int            @id @default(autoincrement())
+  type      LocationType
+  name      String
+  address   String?
+  longitude Float?
+  latitude  Float?
+  radius    Float?
+  status    LocationStatus @default(INACTIVE)
+
+  users     User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

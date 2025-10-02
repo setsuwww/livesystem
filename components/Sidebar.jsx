@@ -109,11 +109,10 @@ export function Sidebar() {
 
         <SidebarCollapsible title="Offices" open={employeesOpen} onOpenChange={setEmployeesOpen} icon={Users}
           items={[
-            { label: 'Office Hours', href: '/admin/dashboard/users/office-hours' },
+            { label: 'Offices', href: '/admin/dashboard/users/locations' },
+            { label: 'Add Offices', href: '/admin/dashboard/users/locations/create'},
             { label: 'Employees', href: '/admin/dashboard/users/employees' },
             { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
-            { label: 'Locations', href: '/admin/dashboard/users/locations' },
-            { label: 'Add Location', href: '/admin/dashboard/users/add-locatios' },
           ]}
         />
 

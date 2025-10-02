@@ -14,13 +14,13 @@ export const Pagination = React.memo(function ({
   return (
     <div className="flex gap-2 mt-4">
       {page > 1 && (
-        <Link href={`${basePath}?page=${page - 1}`} className="flex items-center space-x-2 px-4 py-1.5 text-sm font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-sm hover:bg-zinc-50">
-          <ChevronLeft size={20} /> <span>Prev Page</span>
+        <Link href={`${basePath}?page=${page - 1}`} className="p-2 rounded-2xl text-sm font-medium text-sky-600 border border-zinc-200 bg-[#ffffff46] shadow-sm hover:bg-zinc-50">
+          <ChevronLeft size={20} />
         </Link>
       )}
       {page < totalPages && (
-        <Link href={`${basePath}?page=${page + 1}`} className="flex items-center space-x-2 px-4 py-1.5 text-sm font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-sm hover:bg-zinc-50">
-          <span>Next Page</span> <ChevronRight size={20}/>
+        <Link href={`${basePath}?page=${page + 1}`} className="p-2 rounded-2xl text-sm font-medium text-sky-600 border border-zinc-200 bg-[#ffffff46] shadow-sm hover:bg-zinc-50">
+          <ChevronRight size={20}/>
         </Link>
       )}
     </div>
