@@ -87,7 +87,7 @@ const RegisterPage = () => {
       </form>
 
       {error && (
-        <p className="text-red-500 mt-2 text-center text-sm">{error}</p>
+        <p className="text-rose-500 mt-2 text-center text-sm">{error}</p>
       )}
 
       <AuthLink

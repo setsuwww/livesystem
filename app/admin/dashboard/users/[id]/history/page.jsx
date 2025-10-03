@@ -85,13 +85,13 @@ export default async function UserHistoryPage({ params, searchParams }) {
           />
           <div className='mb-6'>
             {profile && (
-              <div className="mb-2 p-3 flex items-center space-x-2 rounded-xl bg-gray-50 border border-zinc-200 shadow-xs">
-                <div className="p-2 bg-gray-200 text-gray-600 rounded-lg">
+              <div className="mb-2 p-3 flex items-center space-x-2 rounded-lg bg-neutral-50 border border-neutral-200 shadow-xs">
+                <div className="p-2 bg-neutral-200 text-neutral-600 rounded-lg">
                   <CircleUserRound strokeWidth={1.5} size={30} />
                 </div>
                 <div className="flex flex-col">
-                  <h2 className="text-md font-semibold text-zinc-600">{profile.name}</h2>
-                  <p className="text-sm text-gray-400">{profile.email}</p>
+                  <h2 className="text-md font-semibold text-neutral-600">{profile.name}</h2>
+                  <p className="text-sm text-neutral-400">{profile.email}</p>
                 </div>
               </div>
             )}

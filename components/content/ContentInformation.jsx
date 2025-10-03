@@ -21,10 +21,10 @@ export const ContentInformation = React.memo(function ContentInformation({
     <header className="flex items-center justify-between mb-3">
       <div className="flex flex-col">
         {heading && (
-          <h2 className="text-lg font-bold text-zinc-700">{heading}</h2>
+          <h2 className="text-lg font-bold text-neutral-700">{heading}</h2>
         )}
         {subheading && (
-          <p className="text-sm text-zinc-500">{subheading}</p>
+          <p className="text-sm text-neutral-500">{subheading}</p>
         )}
       </div>
 

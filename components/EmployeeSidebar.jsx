@@ -14,7 +14,7 @@ function SidebarLink({ href, icon: Icon, children }) {
 
   return (
     <Link href={href} className={`${linkBase} ${ isActive ? 'bg-sky-100 text-sky-700'
-        : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'
+        : 'text-neutral-600 hover:bg-sky-100 hover:text-sky-700'
     }`}>
       <Icon size={18} />
       {children}
@@ -24,11 +24,11 @@ function SidebarLink({ href, icon: Icon, children }) {
 
 export function EmployeeSidebar({ employee }) {
   return (
-    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-0 border-r-2 border-zinc-200">
-      <div className="px-8 py-4 border-b border-zinc-200 flex flex-col items-center">
+    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-0 border-r-2 border-neutral-200">
+      <div className="px-8 py-4 border-b border-neutral-200 flex flex-col items-center">
         <Image src="/images/lintasarta.webp" width={120} height={120} alt="Lintasarta" />
-        <p className="mt-2 text-sm text-zinc-700 font-semibold">{employee?.name}</p>
-        <p className="text-xs text-zinc-500">{employee?.email}</p>
+        <p className="mt-2 text-sm text-neutral-700 font-semibold">{employee?.name}</p>
+        <p className="text-xs text-neutral-500">{employee?.email}</p>
       </div>
 
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">

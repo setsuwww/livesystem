@@ -4,18 +4,18 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva([
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors duration-100 ease-in",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors duration-100 ease-in",
   "disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus:ring-2",
   ].join(" "),
   {
     variants: { variant: {
-        default: "bg-gradient-to-b from-zinc-800 to-zinc-600 text-white shadow-xs hover:from-zinc-900 hover:to-zinc-700 hover:inset-shadow-zinc-600 focus:ring-zinc-400",
-        destructive:"bg-red-500 text-white shadow-xs hover:bg-red-700 focus:ring-red-300",
-        positive:"bg-green-500 text-white shadow-xs hover:bg-green-700 focus:ring-green-400",
-        outline:"border border-zinc-300 text-zinc-600 bg-zinc-50 shadow-xs hover:bg-zinc-100 hover:text-zinc-900 hover:inset-shadow-xs focus:ring-zinc-200",
+        default: "bg-gradient-to-b from-neutral-800 to-neutral-600 text-white shadow-xs hover:from-neutral-900 hover:to-neutral-700 hover:inset-shadow-neutral-600 focus:ring-neutral-400",
+        destructive:"bg-rose-500 text-white shadow-xs hover:bg-rose-700 focus:ring-rose-300",
+        positive:"bg-teal-500 text-white shadow-xs hover:bg-teal-700 focus:ring-teal-400",
+        outline:"border border-neutral-300 font-semibold text-neutral-800 hover:bg-neutral-100 hover:text-neutral-900 focus:ring-neutral-200",
         primary: "bg-sky-600 border border-sky-600 text-white hover:bg-sky-700 hover:border-sky-700",
-        secondary:"font-medium text-sky-600 border border-zinc-300 bg-[#ffffff46] rounded-md shadow-xs hover:bg-zinc-50 hover:border-sky-200",
-        ghost:"bg-zinc-100 text-zinc-600 hover:bg-zinc-200",
+        secondary:"font-medium text-sky-600 border border-neutral-300 bg-[#ffffff46] rounded-md shadow-xs hover:bg-neutral-50 hover:border-sky-200",
+        ghost:"bg-neutral-100 text-neutral-600 hover:bg-neutral-200",
         link: "text-primary underline-offset-4 hover:underline",
       }, 
       size: {

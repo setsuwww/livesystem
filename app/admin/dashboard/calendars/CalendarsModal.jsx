@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/Label";
 export function CalendarsModal({ open, loading, formData, selectedEvent, onClose, onChange, onSave }) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-white sm:max-w-[800px] border border-zinc-300">
+      <DialogContent className="bg-white sm:max-w-[800px] border border-neutral-300">
         <DialogHeader>
           <DialogTitle className="text-title">Employees</DialogTitle>
           <DialogDescription className="text-subtitle">Simple view dialog for see employees in this Date</DialogDescription>

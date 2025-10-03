@@ -50,7 +50,7 @@ export default function AttendanceForm() {
       <CardContent className="space-y-4">
         {/* Check in/out buttons */}
         <div className="flex gap-2">
-          <Button onClick={handleCheckIn} className="flex-1 bg-green-600 hover:bg-green-700">
+          <Button onClick={handleCheckIn} className="flex-1 bg-teal-600 hover:bg-teal-700">
             Check In
           </Button>
           <Button onClick={handleCheckOut} className="flex-1 bg-blue-600 hover:bg-blue-700">

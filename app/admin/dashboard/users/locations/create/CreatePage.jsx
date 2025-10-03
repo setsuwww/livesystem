@@ -100,13 +100,13 @@ export default function CreateOfficeForm() {
           <ContentForm.Body>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="name">Name <span className="text-red-500">*</span></Label>
+                <Label htmlFor="name">Name <span className="text-rose-500">*</span></Label>
                 <Input name="name" placeholder="Head Office"
                   value={form.name} onChange={handleChange} required />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="location">Location <span className="text-red-500">*</span></Label>
+                <Label htmlFor="location">Location <span className="text-rose-500">*</span></Label>
                 <Input name="location" placeholder="Jakarta"
                   value={form.location} onChange={handleChange} required />
               </div>
@@ -124,7 +124,7 @@ export default function CreateOfficeForm() {
                 </div>
               </div>
 
-              <div className="text-xs text-zinc-400">
+              <div className="text-xs text-neutral-400">
                 <span>Insert locations longitude and latitude here, the function is for make the location is readable by system</span>
               </div>
 
@@ -151,7 +151,7 @@ export default function CreateOfficeForm() {
                 <div className="space-y-2">
                   <Label>Type</Label>
                   <Select value={form.type} onValueChange={(value) => handleCustomChange("type", value)}>
-                    <SelectTrigger><span className="font-semibold text-zinc-600 mr-1">Type:</span><SelectValue /></SelectTrigger>
+                    <SelectTrigger><span className="font-semibold text-neutral-600 mr-1">Type:</span><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {typeOptions.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
@@ -163,7 +163,7 @@ export default function CreateOfficeForm() {
                 <div className="space-y-2">
                   <Label>Status</Label>
                   <Select value={form.status} onValueChange={(value) => handleCustomChange("status", value)}>
-                    <SelectTrigger><span className="font-semibold text-zinc-600 mr-1">Status:</span><SelectValue /></SelectTrigger>
+                    <SelectTrigger><span className="font-semibold text-neutral-600 mr-1">Status:</span><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {statusOptions.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>{capitalize(opt.label)}</SelectItem>

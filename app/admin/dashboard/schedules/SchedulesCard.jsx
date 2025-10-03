@@ -70,7 +70,7 @@ export default function SchedulesCard({ data }) {
       />
 
       {filteredData.length === 0 ? (
-        <div className="text-center text-gray-600 py-8">
+        <div className="text-center text-neutral-600 py-8">
           No schedules found
         </div>
       ) : (
@@ -108,7 +108,7 @@ export default function SchedulesCard({ data }) {
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => handleDeleteSchedule(schedule.id)}
-                          className="text-red-600 focus:text-red-600"
+                          className="text-rose-600 focus:text-rose-600"
                         >
                           Delete
                         </DropdownMenuItem>

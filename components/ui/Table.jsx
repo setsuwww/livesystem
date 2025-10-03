@@ -14,7 +14,7 @@ function Table({
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm text-zinc-700", className)}
+        className={cn("w-full caption-bottom text-sm text-neutral-700", className)}
         {...props}
       />
     </div>
@@ -27,7 +27,7 @@ function TableHeader({
 }) {
   return (
     <thead data-slot="table-header" className={cn(
-        "[&_tr]:border-b border-zinc-100 bg-zinc-50",
+        "[&_tr]:border-b border-neutral-100 bg-neutral-50",
         className
       )}
       {...props}
@@ -56,7 +56,7 @@ function TableFooter({
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "bg-zinc-50 border-t border-neutral-200 font-medium [&>tr]:last:border-b-0 text-zinc-600",
+        "bg-neutral-50 border-t border-neutral-200 font-medium [&>tr]:last:border-b-0 text-neutral-600",
         className
       )}
       {...props}
@@ -72,7 +72,7 @@ function TableRow({
     <tr
       data-slot="table-row"
       className={cn(
-        "data-[state=selected]:bg-zinc-100 border-b border-neutral-200 transition-colors",
+        "data-[state=selected]:bg-neutral-100 border-b border-neutral-200 transition-colors",
         className
       )}
       {...props}
@@ -88,7 +88,7 @@ function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-3 text-left align-middle whitespace-nowrap tracking-wide text-zinc-600 text-sm uppercase font-semibold",
+        "h-10 px-3 text-left align-middle whitespace-nowrap tracking-wide text-neutral-600 text-sm uppercase font-semibold",
         className
       )}
       {...props}
@@ -104,7 +104,7 @@ function TableCell({
     <td
       data-slot="table-cell"
       className={cn(
-        "p-3 align-middle whitespace-nowrap text-sm text-zinc-700",
+        "p-3 align-middle whitespace-nowrap text-sm text-neutral-700",
         className
       )}
       {...props}
@@ -119,7 +119,7 @@ function TableCaption({
   return (
     <caption
       data-slot="table-caption"
-      className={cn("text-zinc-400 mt-4 text-sm", className)}
+      className={cn("text-neutral-400 mt-4 text-sm", className)}
       {...props}
     />
   )

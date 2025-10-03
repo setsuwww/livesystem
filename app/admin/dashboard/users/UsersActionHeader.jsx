@@ -18,7 +18,7 @@ export const UsersActionHeader = ({
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-zinc-600 mr-1">Role:</span>
+            <span className="font-semibold text-neutral-600 mr-1">Role:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -32,7 +32,7 @@ export const UsersActionHeader = ({
 
         <Select value={shiftFilter} onValueChange={onShiftFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-zinc-600 mr-1">Shift:</span>
+            <span className="font-semibold text-neutral-600 mr-1">Shift:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -52,20 +52,20 @@ export const UsersActionHeader = ({
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" className="text-red-500"
+        <Button variant="ghost" size="sm" className="text-rose-500"
           onClick={onDeleteSelected}
           disabled={selectedCount === 0}
         >
           Delete Selected
         </Button>
 
-        <Button variant="ghost" size="sm" className="bg-red-50 hover:bg-red-100 text-red-500"
+        <Button variant="ghost" size="sm" className="bg-rose-50 hover:bg-rose-100 text-rose-500"
           onClick={onDeleteAll}>
           <Trash2 size={18} strokeWidth={2} />
           Delete All
         </Button>
 
-        <Button variant="ghost" size="sm" className="bg-green-100 hover:bg-green-200 text-green-700"
+        <Button variant="ghost" size="sm" className="bg-teal-100 hover:bg-teal-200 text-teal-700"
           onClick={() => onExportPDF(filteredData)}>
           <FolderInput size={16} />
           Export

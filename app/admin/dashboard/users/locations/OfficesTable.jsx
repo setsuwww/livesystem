@@ -35,8 +35,8 @@ export default function OfficesTable({ data, onEdit, onDelete }) {
               <TableRow key={office.id}>
                 {/* Name + Location */}
                 <TableCell className="flex flex-col">
-                  <span className="text-sm text-zinc-600 font-semibold">{office.name}</span>
-                  <span className="text-xs text-zinc-400">{office.location}</span>
+                  <span className="text-sm text-neutral-600 font-semibold">{office.name}</span>
+                  <span className="text-xs text-neutral-400">{office.location}</span>
                 </TableCell>
 
                 {/* Type */}
@@ -68,10 +68,10 @@ export default function OfficesTable({ data, onEdit, onDelete }) {
 
                 {/* Created & Updated */}
                 <TableCell className="flex flex-col">
-                  <span className="text-sm text-zinc-600 font-semibold">
+                  <span className="text-sm text-neutral-600 font-semibold">
                     {format(new Date(office.createdAt), "dd MMM yyyy")}
                   </span>
-                  <span className="text-xs text-zinc-400">
+                  <span className="text-xs text-neutral-400">
                     {format(new Date(office.updatedAt), "dd MMM yyyy")}
                   </span>
                 </TableCell>

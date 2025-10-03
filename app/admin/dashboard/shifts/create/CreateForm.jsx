@@ -81,7 +81,7 @@ export default function CreateShiftForm() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="shift-type">Shift Name<span className="text-red-500">*</span></Label>
+                <Label htmlFor="shift-type">Shift Name<span className="text-rose-500">*</span></Label>
                 <Input id="shiftName" value={shiftName} onChange={(e) => setShiftName(e.target.value)}
                   type="text"
                   className="mt-1"
@@ -89,7 +89,7 @@ export default function CreateShiftForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="start-time">Start Time<span className="text-red-500">*</span></Label>
+                <Label htmlFor="start-time">Start Time<span className="text-rose-500">*</span></Label>
                 <Input id="start-time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
                   type="time"
                   className="mt-1"
@@ -97,7 +97,7 @@ export default function CreateShiftForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="end-time">End Time<span className="text-red-500">*</span></Label>
+                <Label htmlFor="end-time">End Time<span className="text-rose-500">*</span></Label>
                 <Input id="end-time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
                   type="time"
                   className="mt-1"

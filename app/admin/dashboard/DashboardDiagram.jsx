@@ -111,10 +111,10 @@ function DashboardDiagramComponent({
   }
 
   return (
-    <Card className="border border-zinc-200 shadow-sm rounded-2xl">
+    <Card className="border border-neutral-200 shadow-sm rounded-2xl">
       <CardHeader>
         <div className="flex items-center justify-between gap-2">
-          <CardTitle className="text-zinc-700  font-semibold">
+          <CardTitle className="text-neutral-700  font-semibold">
             {title}
           </CardTitle>
 
@@ -135,7 +135,7 @@ function DashboardDiagramComponent({
         </div>
 
         {description && (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {description}
           </p>
         )}

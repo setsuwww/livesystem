@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
-import { signToken, setAuthCookie } from "@/lib/auth";
+import { signToken } from "@/lib/auth";
 
 export async function POST(req) {
   try {
@@ -17,20 +17,28 @@ export async function POST(req) {
       return NextResponse.json({ error: "Invalid password" }, { status: 401 });
     }
 
-    const token = await signToken({
+    const token = signToken({
       id: user.id,
       name: user.name,
       role: user.role,
     });
 
-    await setAuthCookie(token);
-
-    return NextResponse.json({
+    const res = NextResponse.json({
       success: true,
       role: user.role,
       name: user.name,
       id: user.id,
     });
+
+    res.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 hari
+    });
+
+    return res;
   } catch (error) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }

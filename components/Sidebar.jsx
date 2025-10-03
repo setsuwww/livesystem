@@ -6,6 +6,9 @@ import { useState, useEffect, useRef  } from 'react'
 import { usePathname } from 'next/navigation'
 import { ChevronDown, Users, Clock, LayoutDashboard, User, Settings } from 'lucide-react'
 import SubHeading from './content/SubHeading'
+import { CircleUserRound } from 'lucide-react';
+import { capitalize } from '@/function/globalFunction';
+import { roleStyles } from '@/constants/roleStyles';
 
 const linkBase = "flex items-center gap-2 text-sm px-3 py-2 rounded-lg transition-colors"
 const subLinkBase = "block text-sm px-3 py-1.5 font-base rounded-r-lg transition-colors"
@@ -19,7 +22,7 @@ function SidebarLink({
   const isActive = pathname === href
 
   return (
-    <Link href={href} className={`${linkBase} ${isActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'}`}>
+    <Link href={href} className={`${linkBase} ${isActive ? 'bg-sky-100 text-sky-700' : 'text-neutral-600 hover:bg-sky-100 hover:text-sky-700'}`}>
       <Icon size={18} />
       {children}
     </Link>
@@ -34,7 +37,7 @@ function SidebarSubLink({
   const isActive = pathname === href
 
   return (
-    <Link href={href} className={`${subLinkBase} ${isActive ? 'border-l-2 border-0 bg-sky-100 border-sky-400 text-sky-600' : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'}`}>
+    <Link href={href} className={`${subLinkBase} ${isActive ? 'border-l-2 border-0 bg-sky-100 border-sky-400 text-sky-600' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'}`}>
       {children}
     </Link>
   )
@@ -60,7 +63,7 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
   return (
     <div className="flex flex-col">
       <button className={`group   w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
-          ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-zinc-600 hover:bg-sky-100 hover:text-sky-700'}`}
+          ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-neutral-600 hover:bg-sky-100 hover:text-sky-700'}`}
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center gap-x-2">
@@ -74,7 +77,7 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
 
       {/* Collapsible content */}
       <div className="overflow-hidden transition-all duration-300" style={{ height: `${height}px` }}>
-        <div ref={contentRef} className="border-l-2 border-zinc-300 ml-4 flex flex-col space-y-1 mt-2 p-2">
+        <div ref={contentRef} className="border-l-2 border-neutral-300 ml-4 flex flex-col space-y-1 mt-2 p-2">
           {items.map(item => (
             <SidebarSubLink key={item.href} href={item.href}>
               {item.label}
@@ -86,16 +89,18 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
   )
 }
 
-export function Sidebar() {
+export function Sidebar({ user }) {
   const [userOpen, setUserOpen] = useState(false)
   const [employeesOpen, setEmployeesOpen] = useState(false)
   const [shiftOpen, setShiftOpen] = useState(false)
 
+  const formattedRole = user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1).toLowerCase()
+
   return (
-    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-0 border-r-2 border-zinc-200">
-      <picture className='px-8 py-2 border-b border-zinc-200'>
-        <Image src="/images/lintasarta.webp" width={150} height={150} alt='Lintasarta' />
-      </picture>
+    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-r-2 border-0 border-neutral-200">
+      <div className='text-2xl font-bold px-7 text-sky-800 py-6 border-b border-neutral-200'>
+        Live<span className="text-sky-600">system.</span>
+      </div>
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         <SubHeading title='Main' />
         <SidebarLink href="/admin/dashboard" icon={LayoutDashboard}>Dashboard</SidebarLink>
@@ -133,6 +138,21 @@ export function Sidebar() {
         <SidebarLink href="/admin/dashboard/profile" icon={User}>Profile</SidebarLink>
         <SidebarLink href="/admin/dashboard/setting" icon={Settings}>Settings</SidebarLink>
       </nav>
+
+      <div className="p-4 border-t border-neutral-200 bg-gradient-to-t from-neutral-300 via-neutral-100 towhite">
+        <div className="flex items-center space-x-2 bg-white border border-neutral-300 p-2 rounded-lg cursor-pointer">
+        <div className={`${roleStyles[formattedRole]} p-2 rounded-lg`}>
+          <CircleUserRound size={28} strokeWidth={1.5} />
+        </div>
+        <div className="flex flex-col text-sm">
+          <div className="flex items-center justify-between space-x-2">
+            <span className="font-semibold">{user?.name || "Guest"}</span>
+            <span className={`text-xs px-1.5 py-0.5 rounded-full ${roleStyles[formattedRole]}`}>{capitalize(user?.role || "")}</span>
+          </div>
+          <span className="text-xs text-neutral-500">{user?.email || ""}</span>
+        </div>
+        </div>
+      </div>
     </aside>
   )
 }

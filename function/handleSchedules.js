@@ -30,7 +30,7 @@ export const handleSchedules = ( selectedIds, setSelectedIds, filteredData, relo
   };
 
   // Delete All
-  const deleteAll = async () => { if (filteredData.length === 0) return;
+  const deleteall = async () => { if (filteredData.length === 0) return;
 
     const confirmDelete = confirm("Are you sure you want to delete ALL schedules?");
     if (!confirmDelete) return;
@@ -88,5 +88,5 @@ export const handleSchedules = ( selectedIds, setSelectedIds, filteredData, relo
     doc.save("scheduleReport.pdf");
   };
 
-  return { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditSchedule, handleDeleteSchedule, onExportPDF };
+  return { toggleSelect, selectAll, deleteSelected, deleteall, handleEditSchedule, handleDeleteSchedule, onExportPDF };
 };

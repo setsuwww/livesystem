@@ -63,7 +63,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
           <ContentForm.Body>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-head">Username <span className="text-red-500">*</span></Label>
+                <Label htmlFor="username" className="text-head">Username <span className="text-rose-500">*</span></Label>
                 <Input placeholder="Username" name="name"
                   value={form.name}
                   onChange={handleChange}
@@ -72,7 +72,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-head">Email <span className="text-red-500">*</span></Label>
+                <Label htmlFor="email" className="text-head">Email <span className="text-rose-500">*</span></Label>
                 <Input placeholder="Users Email" type="email" name="email"
                   value={form.email}
                   onChange={handleChange}
@@ -90,7 +90,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role" className="text-head">Role <span className="text-red-500">*</span></Label>
+                <Label htmlFor="role" className="text-head">Role <span className="text-rose-500">*</span></Label>
                 <RadioButton name="role"
                   options={roleOptions}
                   value={form.role}

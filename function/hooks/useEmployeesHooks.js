@@ -25,7 +25,7 @@ export function useEmployeesHooks(users) {
     setSelected([]);
   }, [selected]);
 
-  const deleteAll = useCallback(() => { alert("Delete all employees!");
+  const deleteall = useCallback(() => { alert("Delete all employees!");
     setData([]);
     setSelected([]);
   }, []);
@@ -63,7 +63,7 @@ export function useEmployeesHooks(users) {
     selected, setSelected,
     data, filteredData,
     toggleSelect, deleteSelected,
-    deleteAll, exportCSV,
+    deleteall, exportCSV,
     onSwitch, onEdit, onDelete,
   };
 }

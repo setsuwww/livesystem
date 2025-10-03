@@ -20,8 +20,8 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <div className="flex flex-col">
-                <h3 className="text-zinc-600">{capitalize(shift.type)}</h3>
-                <p className="text-xs text-zinc-400">{shift.shiftName}</p>
+                <h3 className="text-neutral-600">{capitalize(shift.type)}</h3>
+                <p className="text-xs text-neutral-400">{shift.shiftName}</p>
                 <Badge className={`mt-2 ${shiftStyles[shift.type]}`}>
                   {shift.timeRange}
                 </Badge>
@@ -33,7 +33,7 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="p-0.5 bg-zinc-50 hover:bg-sky-50 text-zinc-600 hover:text-sky-600"
+                  className="p-0.5 bg-neutral-50 hover:bg-sky-50 text-neutral-600 hover:text-sky-600"
                 >
                   <MoreVertical className="h-3 w-3" />
                 </Button>
@@ -41,13 +41,13 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => onEdit(shift.id)}
-                  className="hover:text-gray-600"
+                  className="hover:text-neutral-600"
                 >
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => onDelete(shift.id)}
-                  className="hover:bg-red-50 text-red-600"
+                  className="hover:bg-rose-50 text-rose-600"
                 >
                   Delete
                 </DropdownMenuItem>
@@ -57,16 +57,16 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
 
           <CardContent className="space-y-3">
             <div>
-              <p className="text-base font-semibold text-zinc-600 mb-4">
+              <p className="text-base font-semibold text-neutral-600 mb-4">
                 Assigned users:
               </p>
               <ul className="space-y-2">
                 {shift.users?.slice(0, 3).map((user) => (
                   <li
                     key={user.id}
-                    className="flex items-center gap-x-2 justify-between border-b border-zinc-200 pb-2"
+                    className="flex items-center gap-x-2 justify-between border-b border-neutral-200 pb-2"
                   >
-                    <span className="font-semibold text-zinc-600 text-sm">
+                    <span className="font-semibold text-neutral-600 text-sm">
                       {user.name}
                     </span>
                     <span className="text-xs text-sky-500">{user.email}</span>
@@ -78,7 +78,7 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
             {/* Schedules count */}
             <div className="flex items-center justify-between space-x-2 pb-2">
               <div className="flex items-center justify-between space-x-2">
-                <div className="p-2 bg-zinc-200 text-zinc-600 rounded-lg">
+                <div className="p-2 bg-neutral-200 text-neutral-600 rounded-lg">
                   <CalendarDays size={16} strokeWidth={2} />
                 </div>
                 <div className="text-sm flex items-center">

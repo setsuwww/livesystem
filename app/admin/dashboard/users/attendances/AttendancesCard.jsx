@@ -37,9 +37,9 @@ export function ShiftsCard({ shifts }) {
 
         return (
           <div key={shift.id} onClick={() => handleOpen(shift)}
-            className="relative bg-white border border-zinc-200 p-4 rounded-xl shadow-xs cursor-pointer transition">
+            className="relative bg-white border border-neutral-200 p-4 rounded-lg shadow-xs cursor-pointer transition">
             <div className="flex items-center justify-between mb-6 relative">
-              <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-zinc-100 border border-zinc-300 text-zinc-600 relative`}>
+              <span className={`font-semibold text-sm px-2 py-1 rounded-lg bg-neutral-100 border border-neutral-300 text-neutral-600 relative`}>
                 {capitalize(shift.type)}
                 {worstStatus !== "PRESENT" && (
                   <span className="absolute -top-1 -right-1 w-3 h-3 flex items-center justify-center">
@@ -55,11 +55,11 @@ export function ShiftsCard({ shifts }) {
               </Badge>
             </div>
             <footer className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-sm text-zinc-600">
-                <div className="p-2 bg-zinc-200 rounded-full">
+              <div className="flex items-center gap-2 text-sm text-neutral-600">
+                <div className="p-2 bg-neutral-200 rounded-full">
                   <Users className="w-4 h-4" strokeWidth={2} />
                 </div>
-                <span className="text-zinc-600 font-semibold">
+                <span className="text-neutral-600 font-semibold">
                   {presentCount}/{shift.users.length}
                 </span>{" "}
                 Present
@@ -74,16 +74,16 @@ export function ShiftsCard({ shifts }) {
 
       {selectedShift && (
         <Dialog open={true} onOpenChange={handleClose}>
-          <DialogContent className="max-w-2xl p-6 rounded-2xl shadow-lg border border-zinc-200">
+          <DialogContent className="max-w-2xl p-6 rounded-2xl shadow-lg border border-neutral-200">
             <DialogHeader className="mb-6">
               <DialogTitle className="flex flex-col gap-2">
-                <span className="text-lg font-semibold text-zinc-900">Shift Attendance</span>
+                <span className="text-lg font-semibold text-neutral-900">Shift Attendance</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-zinc-500">Reviewed Shift:</span>
+                  <span className="text-sm text-neutral-500">Reviewed Shift:</span>
                   <Badge className={`${shiftStyles[selectedShift.type]} text-xs px-2 py-0.5`}>
                     {capitalize(selectedShift.type)}
                   </Badge>
-                  <span className="text-sm text-zinc-400">
+                  <span className="text-sm text-neutral-400">
                     {selectedShift.startTime} - {selectedShift.endTime}
                   </span>
                 </div>
@@ -103,17 +103,17 @@ export function ShiftsCard({ shifts }) {
                       <h2 className={`${statusColorsClass[status].head} font-medium text-sm`}>
                         {capitalize(status)}
                       </h2>
-                      <span className="text-xs text-zinc-400">({users.length} Person)</span>
+                      <span className="text-xs text-neutral-400">({users.length} Person)</span>
                     </div>
 
-                    <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 overflow-hidden bg-white">
+                    <div className="divide-y divide-neutral-100 rounded-lg border border-neutral-200 overflow-hidden bg-white">
                       {users.map((u) => (
-                        <div key={u.id} className="px-4 py-3 flex items-center justify-between hover:bg-zinc-50 transition">
+                        <div key={u.id} className="px-4 py-3 flex items-center justify-between hover:bg-neutral-50 transition">
                           <div className="flex flex-col">
                             <span className={`${statusColorsClass[status].text} text-sm font-medium`}>
                               {u.name}
                             </span>
-                            <span className="text-xs text-zinc-500">{u.email}</span>
+                            <span className="text-xs text-neutral-500">{u.email}</span>
                           </div>
                           <div
                             className={`w-2 h-2 rounded-full ${statusColorsClass[status].bgDot}`}

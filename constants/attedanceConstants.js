@@ -1,31 +1,31 @@
 export const statusPriority = ["ABSENT", "LATE", "PERMISSION"];
 
 export const attedancesStyles = {
-  Present: "text-green-600 bg-green-100 border-green-300",
+  Present: "text-teal-600 bg-teal-100 border-teal-300",
   Late: "text-yellow-600 bg-yellow-100 border-yellow-300",
   Permission: "text-blue-600 bg-blue-100 border-blue-300",
-  Absent: "text-red-600 bg-red-100 border-red-300",
-  Alpha: "text-zinc-600 bg-zinc-100 border-zinc-300"
+  Absent: "text-rose-600 bg-rose-100 border-rose-300",
+  Alpha: "text-neutral-600 bg-neutral-100 border-neutral-300"
 };
 
 export const statusColorsClass = {
   PRESENT: { 
-    bgPing: "bg-green-400", 
-    bgDot: "bg-radial from-green-400 to-green-500", 
+    bgPing: "bg-teal-400", 
+    bgDot: "bg-radial from-teal-400 to-teal-500", 
 
-    head: "text-green-800",
-    text: "text-green-600", 
-    subtext: "text-green-400", 
-    border: "bg-green-100 border-green-600" 
+    head: "text-teal-800",
+    text: "text-teal-600", 
+    subtext: "text-teal-400", 
+    border: "bg-teal-100 border-teal-600" 
   },
   ABSENT: { 
-    bgPing: "bg-red-400", 
-    bgDot: "bg-radial from-red-400 to-red-500", 
+    bgPing: "bg-rose-400", 
+    bgDot: "bg-radial from-rose-400 to-rose-500", 
     
-    head: "text-red-800",
-    text: "text-red-600", 
-    subtext: "text-red-400", 
-    border: "bg-red-50 border-red-600" 
+    head: "text-rose-800",
+    text: "text-rose-600", 
+    subtext: "text-rose-400", 
+    border: "bg-rose-50 border-rose-600" 
   },
   LATE: { 
     bgPing: "bg-yellow-400", 

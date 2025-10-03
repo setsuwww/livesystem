@@ -2,15 +2,15 @@ import { CircleCheckBig, CircleX, Info } from "lucide-react";
 
 const typeStyles = {
   p: {
-    text: "text-green-600",
-    bg: "bg-green-100",
-    border: "border-green-200",
+    text: "text-teal-600",
+    bg: "bg-teal-100",
+    border: "border-teal-200",
     icon: CircleCheckBig
   },
   n: {
-    text: "text-red-600",
-    bg: "bg-red-100",
-    border: "border-red-200",
+    text: "text-rose-600",
+    bg: "bg-rose-100",
+    border: "border-rose-200",
     icon: CircleX
   },
   i: {
@@ -39,7 +39,7 @@ export function IconListItem({ children, type = "i" }) {
 export function ContentList({ items, type = "i" }) {
   const { bg, border, icon: Icon, text } = typeStyles[type];
   return (
-    <div className={`w-1/3 flex items-start space-x-2 ${bg} border ${border} p-2 rounded-xl`}>
+    <div className={`w-1/3 flex items-start space-x-2 ${bg} border ${border} p-2 rounded-lg`}>
       <div className="font-semibold">
         <Icon className={text} strokeWidth={1.5} size={16} />
       </div>

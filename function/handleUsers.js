@@ -27,7 +27,7 @@ export const handleUsers = (selectedIds, setSelectedIds, filteredData, reloadDat
   };
 
   // Menghapus semua
-  const deleteAll = async () => { if (filteredData.length === 0) return;
+  const deleteall = async () => { if (filteredData.length === 0) return;
 
     try { await api.delete("/users", { data: { ids: filteredData.map(u => u.id) } });
       alert("All deleted");
@@ -75,5 +75,5 @@ export const handleUsers = (selectedIds, setSelectedIds, filteredData, reloadDat
     doc.save("userReport.pdf");
   };
 
-  return { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF };
+  return { toggleSelect, selectAll, deleteSelected, deleteall, handleEditUser, handleDeleteUser, onExportPDF };
 }

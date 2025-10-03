@@ -31,8 +31,8 @@ export default function AttendancesTable({ data }) {
 
             <TableCell>
               <div className="flex flex-col">
-                <span className="text-sm text-zinc-700 font-semibold">{att.user?.name}</span>
-                <span className="text-xs text-zinc-400">{att.user?.email}</span>
+                <span className="text-sm text-neutral-700 font-semibold">{att.user?.name}</span>
+                <span className="text-xs text-neutral-400">{att.user?.email}</span>
               </div>
             </TableCell>
 
@@ -44,10 +44,10 @@ export default function AttendancesTable({ data }) {
 
             <TableCell>
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-green-500">
+                <span className="text-sm text-teal-500">
                   {safeFormat(att.checkInTime, "HH:mm")}
                 </span>
-                <span className="text-sm text-red-500">
+                <span className="text-sm text-rose-500">
                   {safeFormat(att.checkOutTime, "HH:mm")}
                 </span>
               </div>

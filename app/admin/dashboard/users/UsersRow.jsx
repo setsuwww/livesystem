@@ -29,12 +29,12 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
 
       <TableCell>
         <div className="flex items-center gap-3">
-          <div className="bg-zinc-200 p-2 rounded-full">
-            <CircleUserRound className="h-5 w-5 text-zinc-600" strokeWidth={1} />
+          <div className="bg-neutral-200 p-2 rounded-full">
+            <CircleUserRound className="h-5 w-5 text-neutral-600" strokeWidth={1} />
           </div>
           <div>
-            <p className="text-sm font-semibold text-zinc-600">{user.name}</p>
-            <p className="text-xs text-zinc-400">{user.email}</p>
+            <p className="text-sm font-semibold text-neutral-600">{user.name}</p>
+            <p className="text-xs text-neutral-400">{user.email}</p>
           </div>
         </div>
       </TableCell>
@@ -48,10 +48,10 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       <TableCell>
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-zinc-600">
+            <span className="text-sm font-semibold text-neutral-600">
               {user.shift ?? "OFF"}
             </span>
-            <span className="text-xs text-zinc-400">
+            <span className="text-xs text-neutral-400">
               {user.shiftTime ?? "OFF"}
               {/* User ini ganti shiftnya menjadi jumlah shift, saat di click munculin drawer detail si user dan jadwal shiftnya dalam 1 bulan */}
             </span>
@@ -60,8 +60,8 @@ export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggl
       </TableCell>
 
       <TableCell className="flex flex-col">
-        <span className="text-sm font-semibold text-zinc-600">{formatedCreatedDate}</span>
-        <span className="text-xs text-zinc-400">{formatedUpdatedDate}</span>
+        <span className="text-sm font-semibold text-neutral-600">{formatedCreatedDate}</span>
+        <span className="text-xs text-neutral-400">{formatedUpdatedDate}</span>
       </TableCell>
 
       <TableCell>

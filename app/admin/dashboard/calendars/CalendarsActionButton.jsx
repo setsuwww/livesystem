@@ -14,7 +14,7 @@ export function CalendarsActionButton({
         <Edit />
       </Button>
 
-      <Button size="icon" className="border-red-200 bg-white text-red-500 hover:bg-red-100 rounded"
+      <Button size="icon" className="border-rose-200 bg-white text-rose-500 hover:bg-rose-100 rounded"
         onClick={(e) => {e.stopPropagation();
           onDelete();
         }}>

@@ -70,7 +70,7 @@ export default function CreateForm({ shifts }) {
           <ContentForm.Body>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-head">Username <span className="text-red-500">*</span></Label>
+                <Label htmlFor="username" className="text-head">Username <span className="text-rose-500">*</span></Label>
                 <Input placeholder="Username" name="name"
                   value={form.name}
                   onChange={handleChange}
@@ -79,7 +79,7 @@ export default function CreateForm({ shifts }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-head">Email <span className="text-red-500">*</span></Label>
+                <Label htmlFor="email" className="text-head">Email <span className="text-rose-500">*</span></Label>
                 <Input placeholder="Users email" type="email" name="email"
                   value={form.email}
                   onChange={handleChange}
@@ -88,7 +88,7 @@ export default function CreateForm({ shifts }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-head">Password <span className="text-red-500">*</span></Label>
+                <Label htmlFor="password" className="text-head">Password <span className="text-rose-500">*</span></Label>
                 <Input placeholder="Users password" type="password" name="password"
                   value={form.password}
                   onChange={handleChange}
@@ -97,7 +97,7 @@ export default function CreateForm({ shifts }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role" className="text-head">Role <span className="text-red-500">*</span></Label>
+                <Label htmlFor="role" className="text-head">Role <span className="text-rose-500">*</span></Label>
                 <RadioButton name="role"
                   options={roleOptions}
                   value={form.role}

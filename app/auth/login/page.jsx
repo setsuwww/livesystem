@@ -27,7 +27,7 @@ const LoginPage = () => {
     }
 
     setIsSubmitting(true)
-    try { const { data } = await api.post("/auth/login", { email, password })
+    try { const { data } = await api.post("/auth/login", { email, password }, { withCredentials: true })
 
       if (data.success) { if (data.role === "ADMIN") router.push("/admin/dashboard")
         else if (data.role === "USER") router.push("/user/dashboard")
@@ -53,7 +53,7 @@ const LoginPage = () => {
             placeholder="Enter your email"
           />
           {error && !email && (
-            <p className="text-xs text-red-500">Email is required</p>
+            <p className="text-xs text-rose-500">Email is required</p>
           )}
         </div>
 
@@ -65,17 +65,17 @@ const LoginPage = () => {
             placeholder="Enter your password"
           />
           {error && !password && (
-            <p className="text-xs text-red-500">Password is required</p>
+            <p className="text-xs text-rose-500">Password is required</p>
           )}
         </div>
 
         {/* Remember me + Forgot password */}
         <div className="flex items-center justify-between w-full text-sm">
           <div className="flex items-center space-x-2">
-            <Checkbox id="remember" checked={rememberMe} className="border-zinc-400"
+            <Checkbox id="remember" checked={rememberMe} className="border-neutral-400"
               onCheckedChange={(checked) => setRememberMe(!!checked)}
             />
-            <Label htmlFor="remember" className="text-sm text-zinc-500">
+            <Label htmlFor="remember" className="text-sm text-neutral-500">
               Remember Me
             </Label>
           </div>
@@ -89,7 +89,7 @@ const LoginPage = () => {
         </Button>
       </form>
 
-      {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+      {error && <p className="text-rose-500 mt-2 text-center">{error}</p>}
 
       <AuthLink question="Don't have an account?" link="Register" href="/auth/register" className="text-sm mt-4"/>
     </AuthForm>

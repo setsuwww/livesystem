@@ -1,4 +1,4 @@
-import { Sidebar } from "@/components/Sidebar"
+import SidebarServer from "@/components/SidebarServer"
 import '@/styles/globals.css'
 import { ReactQueryProvider } from '@/context/useQueryClient';
 
@@ -10,10 +10,11 @@ export const metadata = {
 export default function DashboardLayout({ children }) {
   return (
     <div className="flex h-screen">
-      <Sidebar />
+      {/* ⬅️ ganti Sidebar jadi SidebarServer */}
+      <SidebarServer />
 
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 overflow-y-auto p-4 bg-gray-100">
+        <main className="flex-1 overflow-y-auto p-4 bg-neutral-100">
           <ReactQueryProvider>
             {children}
           </ReactQueryProvider>

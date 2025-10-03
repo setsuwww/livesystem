@@ -14,21 +14,29 @@ export async function POST(req) {
       )
     }
 
+    console.log("REQ BODY:", body)
+
     const schedule = await prisma.schedule.create({
       data: {
         title,
         description,
         frequency,
-        // relasi ke user (pivot table ScheduleUser)
         users: {
-          create: userIds.map((userId) => ({ userId })),
+          create: userIds
+            .filter((id) => id) // buang null/undefined
+            .map((id) => ({
+              user: { connect: { id } }
+          })),
         },
-        // relasi ke scheduleDates
+
+        // assign dates
         dates: {
           create: dates.map((d) => ({
             date: new Date(d.date),
-            shiftId: parseInt(d.shiftId),
-            secondShiftId: d.secondShiftId ? parseInt(d.secondShiftId) : null,
+            shiftId: d.shiftId ? parseInt(d.shiftId) : null,
+            secondShiftId: d.secondShiftId
+              ? parseInt(d.secondShiftId)
+              : null,
           })),
         },
       },

@@ -63,7 +63,7 @@ export function DashboardAreaChart({
           >
             <SelectValue placeholder="Select range" />
           </SelectTrigger>
-          <SelectContent className="rounded-xl">
+          <SelectContent className="rounded-lg">
             <SelectItem value="90d" className="rounded-lg">
               Last 3 months
             </SelectItem>

@@ -27,7 +27,7 @@ export function TimePicker({
 
   return (
     <div className="flex items-center gap-2">
-      <Clock className="h-4 w-4 text-zinc-600" />
+      <Clock className="h-4 w-4 text-neutral-600" />
       <Select
         value={hour}
         onValueChange={(h) => {
@@ -50,7 +50,7 @@ export function TimePicker({
         </SelectContent>
       </Select>
 
-      <span className="text-zinc-500">:</span>
+      <span className="text-neutral-500">:</span>
 
       <Select
         value={minute}

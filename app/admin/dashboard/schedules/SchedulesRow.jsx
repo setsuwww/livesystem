@@ -36,10 +36,10 @@ export const SchedulesRow = React.memo(function ({
             <CalendarClock strokeWidth={1.5} />
           </div>
           <div className="flex flex-col gap-x-2">
-            <h1 className="text-sm font-semibold text-zinc-600">
+            <h1 className="text-sm font-semibold text-neutral-600">
               {capitalize(schedule.title)}
             </h1>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-neutral-400">
               {capitalize(schedule.shift ? schedule.shift.type : "-")}
             </p>
           </div>
@@ -52,16 +52,16 @@ export const SchedulesRow = React.memo(function ({
       </TableCell>
       <TableCell>
         <div className="text-sm font-semibold flex flex-col">
-          <span className="text-green-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
-          <span className="text-red-500">{schedule.endDate && ` ${format(new Date(schedule.endDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
+          <span className="text-teal-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
+          <span className="text-rose-500">{schedule.endDate && ` ${format(new Date(schedule.endDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
         </div>
       </TableCell>
       <TableCell>
         <div>
-          <div className="text-sm font-semibold text-zinc-600">
+          <div className="text-sm font-semibold text-neutral-600">
             {formatedCreatedDate}
           </div>
-          <div className="text-xs text-zinc-400">
+          <div className="text-xs text-neutral-400">
             {formatedUpdatedDate}
           </div>
         </div>
