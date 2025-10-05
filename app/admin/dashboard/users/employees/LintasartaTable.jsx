@@ -68,37 +68,37 @@ export default function ShiftScheduleTable({ month = 8, year = 2025, rows = demo
   return (
     <div className="w-full bg-white">
       {/* Legend */}
-      <div className="mb-4 flex flex-wrap items-center gap-4 text-sm p-4 bg-neutral-50 rounded-lg">
+      <div className="mb-4 flex flex-wrap items-center gap-4 text-sm p-4 bg-slate-50 rounded-lg">
         <Legend code="S" label="Shift Siang" color="bg-blue-500" />
         <Legend code="M" label="Shift Pagi" color="bg-teal-500" />
         <Legend code="P" label="Shift Malam" color="bg-purple-500" />
-        <Legend code="L" label="Libur" color="bg-neutral-500" />
+        <Legend code="L" label="Libur" color="bg-slate-500" />
         <Legend code="N" label="Cuti/Need" color="bg-yellow-500" />
-        <span className="ml-2 text-neutral-600 font-medium">⚠️ Sabtu & Minggu highlight merah</span>
+        <span className="ml-2 text-slate-600 font-medium">⚠️ Sabtu & Minggu highlight merah</span>
       </div>
 
-      <div className="overflow-x-auto border border-neutral-300 rounded-lg shadow-lg">
+      <div className="overflow-x-auto border border-slate-300 rounded-lg shadow-lg">
         <table className="max-w-xs border-collapse bg-white">
           <thead>
             <tr>
-              <th colSpan={3} className="bg-blue-600 text-white px-4 py-3 text-left font-bold border border-neutral-300 text">
+              <th colSpan={3} className="bg-blue-600 text-white px-4 py-3 text-left font-bold border border-slate-300 text">
                 HELPDESK INDOSAT & GLOBAL PARTNER
               </th>
-              <th colSpan={daysInMonth}  className="bg-blue-600 text-white px-4 py-3 text-center font-bold border border-neutral-300 text-lg">
+              <th colSpan={daysInMonth}  className="bg-blue-600 text-white px-4 py-3 text-center font-bold border border-slate-300 text-lg">
                 {monthName(month)}-{String(year).slice(-2)}
               </th>
             </tr>
             
             {/* Column Headers */}
             <tr>
-              <th className="bg-neutral-200 px-3 py-3 text-center font-bold border border-neutral-300 w-16">NO</th>
-              <th className="bg-neutral-200 px-4 py-3 text-center font-bold border border-neutral-300 w-64">NAMA</th>
-              <th className="bg-neutral-200 px-4 py-3 text-center font-bold border border-neutral-300 w-48">FUNGSI</th>
+              <th className="bg-slate-200 px-3 py-3 text-center font-bold border border-slate-300 w-16">NO</th>
+              <th className="bg-slate-200 px-4 py-3 text-center font-bold border border-slate-300 w-64">NAMA</th>
+              <th className="bg-slate-200 px-4 py-3 text-center font-bold border border-slate-300 w-48">FUNGSI</th>
               {headerCells.map((cell, index) => (
                 <th
                   key={index}
                   className={cn(
-                    "bg-neutral-200 px-2 py-3 text-center font-bold border border-neutral-300 w-12 text-xs",
+                    "bg-slate-200 px-2 py-3 text-center font-bold border border-slate-300 w-12 text-xs",
                     isWeekend(cell.weekdayIndex) && "bg-rose-100 text-rose-800"
                   )}
                   title={cell.weekdayLabel}
@@ -115,14 +115,14 @@ export default function ShiftScheduleTable({ month = 8, year = 2025, rows = demo
           {/* Body */}
           <tbody>
             {rows.map((row, rowIndex) => (
-              <tr key={row.no ?? rowIndex} className="hover:bg-neutral-50">
-                <td className="px-3 py-2 text-center font-medium border border-neutral-300 bg-neutral-50">
+              <tr key={row.no ?? rowIndex} className="hover:bg-slate-50">
+                <td className="px-3 py-2 text-center font-medium border border-slate-300 bg-slate-50">
                   {row.no ?? rowIndex + 1}
                 </td>
-                <td className="px-4 py-2 font-semibold border border-neutral-300 text-sm">
+                <td className="px-4 py-2 font-semibold border border-slate-300 text-sm">
                   {row.name}
                 </td>
-                <td className="px-4 py-2 border border-neutral-300 text-sm">
+                <td className="px-4 py-2 border border-slate-300 text-sm">
                   {row.fungsi}
                 </td>
                 {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
@@ -133,7 +133,7 @@ export default function ShiftScheduleTable({ month = 8, year = 2025, rows = demo
                     <td
                       key={day}
                       className={cn(
-                        "px-1 py-2 text-center border border-neutral-300 text-sm",
+                        "px-1 py-2 text-center border border-slate-300 text-sm",
                         isWeekendDay && "bg-rose-50"
                       )}
                     >
@@ -157,13 +157,13 @@ function Legend({ code, label, color }) {
       <span className={cn("px-2 py-1 rounded text-white text-xs font-bold", color)}>
         {code}
       </span>
-      <span className="text-neutral-700 font-medium">{label}</span>
+      <span className="text-slate-700 font-medium">{label}</span>
     </div>
   );
 }
 
 function ShiftBadge({ value }) {
-  if (!value || value === "0") return <span className="text-neutral-400 text-xs">-</span>;
+  if (!value || value === "0") return <span className="text-slate-400 text-xs">-</span>;
   
   const v = String(value).toUpperCase();
   
@@ -177,19 +177,19 @@ function ShiftBadge({ value }) {
       case "P":
         return "bg-purple-500 text-white";
       case "L":
-        return "bg-neutral-500 text-white";
+        return "bg-slate-500 text-white";
       case "N":
         return "bg-yellow-500 text-black";
       case "CM":
         return "bg-teal-500 text-white";
       case "SM":
-        return "bg-indigo-500 text-white";
+        return "bg-purple-500 text-white";
       case "PS":
         return "bg-pink-500 text-white";
       case "CP":
         return "bg-orange-500 text-white";
       default:
-        return "bg-neutral-400 text-white";
+        return "bg-slate-400 text-white";
     }
   };
 

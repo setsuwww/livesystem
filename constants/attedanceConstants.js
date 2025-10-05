@@ -5,7 +5,7 @@ export const attedancesStyles = {
   Late: "text-yellow-600 bg-yellow-100 border-yellow-300",
   Permission: "text-blue-600 bg-blue-100 border-blue-300",
   Absent: "text-rose-600 bg-rose-100 border-rose-300",
-  Alpha: "text-neutral-600 bg-neutral-100 border-neutral-300"
+  Alpha: "text-slate-600 bg-slate-100 border-slate-300"
 };
 
 export const statusColorsClass = {

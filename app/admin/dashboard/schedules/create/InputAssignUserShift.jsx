@@ -9,7 +9,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/Dialog";
 import { Badge } from "@/components/ui/Badge"
 import { ContentInformation } from '@/components/content/ContentInformation';
-import { Check, ChevronsUpDown, CircleUserRound, X } from "lucide-react"
+import { Check, ChevronsUpDown, CircleUserRound, X, CalendarArrowUp, CalendarArrowDown } from "lucide-react"
 
 import { capitalize } from '@/function/globalFunction';
 
@@ -70,7 +70,7 @@ export default function InputAssignUserShift({
             setDialogType("success")
             setDialogOpen(true)
         }
-        }, [startDate, endDate, selectedShift, selectedUsers, setEvents])
+    }, [startDate, endDate, selectedShift, selectedUsers, setEvents])
 
     return (
         <div className="space-y-6">
@@ -94,13 +94,16 @@ export default function InputAssignUserShift({
                         className="border rounded-md px-3 py-2 text-sm"
                     />
                     {startDate && (
-                        <span className="text-xs text-neutral-500">
-                            {new Intl.DateTimeFormat("en-US", {
-                                day: "2-digit",
-                                month: "long",
-                                year: "numeric",
-                            }).format(new Date(startDate))}
-                        </span>
+                        <div className="flex items-center space-x-1 text-teal-600">
+                            <CalendarArrowUp size={16} strokeWidth={2} />
+                            <span className="text-xs font-semibold">
+                                {new Intl.DateTimeFormat("en-US", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                }).format(new Date(startDate))}
+                            </span>
+                        </div>
                     )}
                 </div>
 
@@ -114,13 +117,16 @@ export default function InputAssignUserShift({
                         className="border rounded-md px-3 py-2 text-sm"
                     />
                     {endDate && (
-                        <span className="text-xs text-neutral-500">
-                            {new Intl.DateTimeFormat("en-US", {
-                                day: "2-digit",
-                                month: "long",
-                                year: "numeric",
-                            }).format(new Date(endDate))}
-                        </span>
+                        <div className="flex items-center space-x-1 text-rose-600">
+                            <CalendarArrowDown size={16} strokeWidth={2} />
+                            <span className="text-xs font-semibold">
+                                {new Intl.DateTimeFormat("en-US", {
+                                    day: "2-digit",
+                                    month: "long",
+                                    year: "numeric",
+                                }).format(new Date(endDate))}
+                            </span>
+                        </div>
                     )}
                 </div>
             </div>
@@ -178,7 +184,7 @@ export default function InputAssignUserShift({
                                             <Badge
                                                 key={id}
                                                 variant="secondary"
-                                                className="flex items-center gap-1 bg-neutral-50 border border-neutral-200 text-neutral-700 text-xs px-2 py-0.5"
+                                                className="flex items-center gap-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs px-2 py-0.5"
                                             >
                                                 {user?.name}
                                                 <span
@@ -197,17 +203,17 @@ export default function InputAssignUserShift({
                                         )
                                     })
                                 ) : (
-                                    <span className="text-neutral-500">Select users...</span>
+                                    <span className="text-slate-500">Select users...</span>
                                 )}
                             </div>
-                            <ChevronsUpDown className="h-4 w-4 text-neutral-500" />
+                            <ChevronsUpDown className="h-4 w-4 text-slate-500" />
                         </Button>
                     </PopoverTrigger>
 
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
                         <Command className="bg-white">
                             <CommandInput placeholder="Search users..." className="h-10 text-sm" />
-                            <CommandEmpty className="py-4 text-center text-sm text-neutral-500">
+                            <CommandEmpty className="py-4 text-center text-sm text-slate-500">
                                 No users found.
                             </CommandEmpty>
                             <CommandGroup className="max-h-64 overflow-y-auto">
@@ -218,17 +224,17 @@ export default function InputAssignUserShift({
                                             key={user.id}
                                             value={user.name}
                                             onSelect={() => toggleUser(user.id)}
-                                            className="flex items-center justify-between py-2 px-4 hover:bg-neutral-50"
+                                            className="flex items-center justify-between py-2 px-4 hover:bg-slate-50"
                                         >
                                             <div className="flex items-center gap-3">
-                                                <div className="p-2 bg-neutral-100 rounded-lg">
-                                                    <CircleUserRound className="h-5 w-5 text-neutral-600" />
+                                                <div className="p-2 bg-slate-100 rounded-lg">
+                                                    <CircleUserRound className="h-5 w-5 text-slate-600" />
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-sm font-medium text-neutral-700">
+                                                    <span className="text-sm font-medium text-slate-700">
                                                         {user.name}
                                                     </span>
-                                                    <span className="text-xs text-neutral-400">
+                                                    <span className="text-xs text-slate-400">
                                                         {user.email}
                                                     </span>
                                                 </div>
@@ -260,12 +266,12 @@ export default function InputAssignUserShift({
             </div>
 
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent className="sm:max-w-md rounded-md border border-neutral-700 bg-neutral-900 text-neutral-100">
+                <DialogContent className="sm:max-w-md rounded-md border border-slate-700 bg-slate-900 text-slate-100">
                     <DialogHeader>
                         <DialogTitle className={dialogType === "success" ? "text-teal-400" : "text-rose-400"}>
                             {dialogType === "success" ? "Success" : "Error"}
                         </DialogTitle>
-                        <DialogDescription className="text-neutral-300">
+                        <DialogDescription className="text-slate-300">
                             {dialogMessage}
                         </DialogDescription>
                     </DialogHeader>

@@ -28,9 +28,9 @@ export function Dropdown({
       </div>
 
       {open && (
-        <ul className="absolute mt-2 w-40 p-2 bg-white border border-neutral-200 rounded-lg shadow-lg z-50">
+        <ul className="absolute mt-2 w-40 p-2 bg-white border border-slate-200 rounded-lg shadow-lg z-50">
           {items.map((item, i) => (
-            <li key={i} onClick={() => { item.onClick(), setOpen(false)}} className="px-4 py-2 hover:bg-neutral-100 hover:rounded-lg cursor-pointer">
+            <li key={i} onClick={() => { item.onClick(), setOpen(false)}} className="px-4 py-2 hover:bg-slate-100 hover:rounded-lg cursor-pointer">
               {item.label}
             </li>
           ))}

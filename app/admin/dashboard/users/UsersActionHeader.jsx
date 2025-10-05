@@ -18,7 +18,7 @@ export const UsersActionHeader = ({
       <div className="flex items-center gap-2">
         <Select value={roleFilter} onValueChange={onRoleFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-neutral-600 mr-1">Role:</span>
+            <span className="font-semibold text-slate-600 mr-1">Role:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
@@ -32,7 +32,7 @@ export const UsersActionHeader = ({
 
         <Select value={shiftFilter} onValueChange={onShiftFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-neutral-600 mr-1">Shift:</span>
+            <span className="font-semibold text-slate-600 mr-1">Shift:</span>
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>

@@ -37,10 +37,10 @@ export default function UserHistoryTable({ history }) {
               </TableCell>
               <TableCell>
                 <span className="flex flex-col items-start">
-                  <span className={`!bg-transparent text-sm font-semibold ${shiftStyles[h.shift?.type] ?? "text-neutral-700"}`}>
+                  <span className={`!bg-transparent text-sm font-semibold ${shiftStyles[h.shift?.type] ?? "text-slate-700"}`}>
                     {capitalize(h.shift?.type) ?? "-"}
                   </span>
-                  <div className="flex items-center gap-x-2 text-xs text-neutral-400">
+                  <div className="flex items-center gap-x-2 text-xs text-slate-400">
                     <span>{h.shift?.startTime ?? "-"}</span>
                     <span>-</span>
                     <span>{h.shift?.endTime ?? "-"}</span>

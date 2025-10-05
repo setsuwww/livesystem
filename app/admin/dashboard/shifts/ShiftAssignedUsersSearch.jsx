@@ -37,7 +37,7 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
         <div className="absolute left-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
           <Popover>
             <PopoverTrigger asChild>
-              <button type="button" className="text-neutral-400 p-1 rounded-md hover:text-sky-600 hover:bg-sky-100 group-focus:text-sky-600">
+              <button type="button" className="text-slate-400 p-1 rounded-md hover:text-sky-600 hover:bg-sky-100 group-focus:text-sky-600">
                 <Filter size={16} />
               </button>
             </PopoverTrigger>
@@ -67,7 +67,7 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
             </PopoverContent>
           </Popover>
 
-          <div className="h-4 border-l border-neutral-300" />
+          <div className="h-4 border-l border-slate-300" />
         </div>
       </div>
     </div>

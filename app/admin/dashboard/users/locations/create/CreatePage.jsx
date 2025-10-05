@@ -14,7 +14,6 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 
 import { fetch } from "@/function/helpers/fetch";
 import { capitalize } from '@/function/globalFunction';
-import { ContentList } from '@/components/content/ContentList';
 
 const typeOptions = [
   { label: "WFO", value: "WFO" },
@@ -111,37 +110,35 @@ export default function CreateOfficeForm() {
                   value={form.location} onChange={handleChange} required />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <ContentInformation heading="Offices Coordinate" subheading="insert latitude and longitude for activate office location"/>
+
+              <div className="grid grid-cols-2 gap-4 mt-8">
                 <div className="space-y-2">
-                  <Label htmlFor="longitude">Longitude</Label>
+                  <Label htmlFor="longitude">Longitude<span className="text-rose-500">*</span></Label>
                   <Input name="longitude" placeholder="106.8456"
                     value={form.longitude} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="latitude">Latitude</Label>
+                  <Label htmlFor="latitude">Latitude<span className="text-rose-500">*</span></Label>
                   <Input name="latitude" placeholder="-6.2088"
                     value={form.latitude} onChange={handleChange} />
                 </div>
               </div>
 
-              <div className="text-xs text-neutral-400">
-                <span>Insert locations longitude and latitude here, the function is for make the location is readable by system</span>
-              </div>
-
               <div className="space-y-2">
-                <Label htmlFor="radius">Radius (meter)</Label>
+                <Label htmlFor="radius">Radius (meter)<span className="text-rose-500">*</span></Label>
                 <Input name="radius" placeholder="100"
                   value={form.radius} onChange={handleChange} />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="startTime">Start Time (minutes)</Label>
+                  <Label htmlFor="startTime">Start Time (minutes)<span className="text-rose-500">*</span></Label>
                   <Input name="startTime" placeholder="480" // 08:00
                     value={form.startTime} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="endTime">End Time (minutes)</Label>
+                  <Label htmlFor="endTime">End Time (minutes)<span className="text-rose-500">*</span></Label>
                   <Input name="endTime" placeholder="1020" // 17:00
                     value={form.endTime} onChange={handleChange} />
                 </div>
@@ -149,9 +146,9 @@ export default function CreateOfficeForm() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Type</Label>
+                  <Label>Type<span className="text-rose-500">*</span></Label>
                   <Select value={form.type} onValueChange={(value) => handleCustomChange("type", value)}>
-                    <SelectTrigger><span className="font-semibold text-neutral-600 mr-1">Type:</span><SelectValue /></SelectTrigger>
+                    <SelectTrigger><span className="font-semibold text-slate-600 mr-1">Type:</span><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {typeOptions.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
@@ -161,9 +158,9 @@ export default function CreateOfficeForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Status</Label>
+                  <Label>Status<span className="text-rose-500">*</span></Label>
                   <Select value={form.status} onValueChange={(value) => handleCustomChange("status", value)}>
-                    <SelectTrigger><span className="font-semibold text-neutral-600 mr-1">Status:</span><SelectValue /></SelectTrigger>
+                    <SelectTrigger><span className="font-semibold text-slate-600 mr-1">Status:</span><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {statusOptions.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>{capitalize(opt.label)}</SelectItem>

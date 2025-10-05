@@ -94,7 +94,7 @@ export default function CalendarPageview({initialEvents}) {
     <div className="min-h-screen">
       <div className="container mx-auto space-y-6">
         <DashboardHeader title="Calendars" subtitle="List events or schedules in calendar grid" />
-        <Card className="bg-white border-neutral-100">
+        <Card className="bg-white border-slate-100">
           <CardHeader className="flex items-center justify-between">
             <div>
               <ContentInformation heading="Calendar" subheading="Calendar grid see a all users's" />

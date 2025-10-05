@@ -17,7 +17,7 @@ export default function SchedulesActionHeader({
       <div className="flex items-center gap-2 w-full">
         <Select value={filterFrequency} onValueChange={onFilterFrequencyChange} defaultValue="all">
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-neutral-600 mr-1">Frequency:</span>
+            <span className="font-semibold text-slate-600 mr-1">Frequency:</span>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -32,7 +32,7 @@ export default function SchedulesActionHeader({
 
         <Select value={filterShift} onValueChange={onFilterShiftChange} defaultValue="all">
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-neutral-600 mr-1">Shift:</span>
+            <span className="font-semibold text-slate-600 mr-1">Shift:</span>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

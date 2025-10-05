@@ -61,7 +61,7 @@ export function ShiftsView({ data }) {
           <TableBody>
             {mainShifts.map((shift) => (
               <TableRow key={shift.id}>
-                <TableCell className="font-bold text-neutral-600">
+                <TableCell className="font-bold text-slate-600">
                   <div className="flex items-center space-x-2">
                     <div className={`p-2 rounded-lg ${shiftStyles[shift.type]}`}>
                       {shiftIcons[shift.type]}

@@ -1,5 +1,5 @@
 export const frequencyStyles = {
-  Daily: "text-teal-600 bg-teal-100 border-violet-300",
+  Daily: "text-teal-600 bg-teal-100 border-purple-300",
   Weekly: "text-yellow-600 bg-yellow-100 border-yellow-300",
   Monthly: "text-orange-600 bg-orange-100 border-orange-300",
   Yearly: "text-purple-600 bg-purple-100 border-purple-300",
@@ -11,5 +11,5 @@ export const frequenciesLabel = [
   { label: "Weekly", color: "yellow" },
   { label: "Monthly", color: "orange" },
   { label: "Yearly", color: "purple" },
-  { label: "Once", color: "red" },
+  { label: "Once", color: "rose" },
 ];

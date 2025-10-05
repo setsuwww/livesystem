@@ -72,10 +72,10 @@ const LoginPage = () => {
         {/* Remember me + Forgot password */}
         <div className="flex items-center justify-between w-full text-sm">
           <div className="flex items-center space-x-2">
-            <Checkbox id="remember" checked={rememberMe} className="border-neutral-400"
+            <Checkbox id="remember" checked={rememberMe} className="border-slate-400"
               onCheckedChange={(checked) => setRememberMe(!!checked)}
             />
-            <Label htmlFor="remember" className="text-sm text-neutral-500">
+            <Label htmlFor="remember" className="text-sm text-slate-500">
               Remember Me
             </Label>
           </div>

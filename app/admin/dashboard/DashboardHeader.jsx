@@ -17,32 +17,32 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
   return (
     <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
       <div>
-        <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-neutral-800 to-sky-600">
+        <h1 className="text-xl font-bold text-slate-700">
           {title || formatLabel(visibleSegments[visibleSegments.length - 1] || "Home")}
         </h1>
-        <p className="text-sm text-neutral-500">{subtitle}</p>
+        <p className="text-sm text-slate-500">{subtitle}</p>
       </div>
 
       <div className="flex items-center space-x-4">
-        <nav className="flex-1 text-sm text-neutral-500">
+        <nav className="flex-1 text-sm text-slate-500">
           {visibleSegments.map((segment, index) => {
             const href = "/" + segments.slice(0, index + 1).join("/")
             const isLast = index === visibleSegments.length - 1
 
             return (<span key={index}>
                 {!isLast ? (
-                  <Link href={href} className="font-semibold text-neutral-700">
+                  <Link href={href} className="font-semibold text-slate-700">
                     {formatLabel(segment)}
                   </Link>
                 ) : (
-                  <span className="text-neutral-500">{formatLabel(segment)}</span>
+                  <span className="text-slate-500">{formatLabel(segment)}</span>
                 )}
                 {!isLast && <span className="mx-2">/</span>}
               </span>)
           })}
         </nav>
 
-        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold rounded-lg bg-white/50 hover:bg-white border border-neutral-300/70 hover:border-neutral-300/90 text-rose-600 transition-colors">
+        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold rounded-lg bg-white/50 hover:bg-white border border-slate-300/70 hover:border-slate-300/90 text-rose-600 transition-colors">
           <LogOut strokeWidth={2.5} size={15} />
           Logout
         </Link>

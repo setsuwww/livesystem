@@ -9,13 +9,13 @@ const buttonVariants = cva([
   ].join(" "),
   {
     variants: { variant: {
-        default: "bg-gradient-to-b from-neutral-800 to-neutral-600 text-white shadow-xs hover:from-neutral-900 hover:to-neutral-700 hover:inset-shadow-neutral-600 focus:ring-neutral-400",
+        default: "bg-gradient-to-b from-slate-800 to-slate-600 text-white shadow-xs hover:from-slate-900 hover:to-slate-700 hover:inset-shadow-slate-600 focus:ring-slate-400",
         destructive:"bg-rose-500 text-white shadow-xs hover:bg-rose-700 focus:ring-rose-300",
         positive:"bg-teal-500 text-white shadow-xs hover:bg-teal-700 focus:ring-teal-400",
-        outline:"border border-neutral-300 font-semibold text-neutral-800 hover:bg-neutral-100 hover:text-neutral-900 focus:ring-neutral-200",
+        outline:"border border-slate-300 font-semibold text-slate-800 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-200",
         primary: "bg-sky-600 border border-sky-600 text-white hover:bg-sky-700 hover:border-sky-700",
-        secondary:"font-medium text-sky-600 border border-neutral-300 bg-[#ffffff46] rounded-md shadow-xs hover:bg-neutral-50 hover:border-sky-200",
-        ghost:"bg-neutral-100 text-neutral-600 hover:bg-neutral-200",
+        secondary:"font-medium text-sky-600 border border-slate-300 bg-[#ffffff46] rounded-md shadow-xs hover:bg-slate-50 hover:border-sky-200",
+        ghost:"bg-slate-100 text-slate-600 hover:bg-slate-200",
         link: "text-primary underline-offset-4 hover:underline",
       }, 
       size: {

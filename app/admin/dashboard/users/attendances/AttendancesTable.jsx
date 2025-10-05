@@ -31,8 +31,8 @@ export default function AttendancesTable({ data }) {
 
             <TableCell>
               <div className="flex flex-col">
-                <span className="text-sm text-neutral-700 font-semibold">{att.user?.name}</span>
-                <span className="text-xs text-neutral-400">{att.user?.email}</span>
+                <span className="text-sm text-slate-700 font-semibold">{att.user?.name}</span>
+                <span className="text-xs text-slate-400">{att.user?.email}</span>
               </div>
             </TableCell>
 

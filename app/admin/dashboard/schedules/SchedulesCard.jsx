@@ -70,7 +70,7 @@ export default function SchedulesCard({ data }) {
       />
 
       {filteredData.length === 0 ? (
-        <div className="text-center text-neutral-600 py-8">
+        <div className="text-center text-slate-600 py-8">
           No schedules found
         </div>
       ) : (

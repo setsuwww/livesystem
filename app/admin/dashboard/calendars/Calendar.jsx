@@ -20,7 +20,7 @@ export function Calendar({
       moreLinkContent={(args) => {
         return {
           html: `<div class="mt-0.5">
-            <span class="px-2 py-1 bg-neutral-800 text-white rounded-md text-xs transition">
+            <span class="px-2 py-1 bg-slate-800 text-white rounded-md text-xs transition">
               +${args.num} more
             </span>
           </div>`
@@ -31,10 +31,10 @@ export function Calendar({
         center: "title",
         right: "dayGridYear,dayGridMonth,dayGridWeek,dayGridDay",
       }} eventContent={(eventInfo) => (
-        <div className="flex items-center justify-between border border-neutral-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-neutral-300 transition">
+        <div className="flex items-center justify-between border border-slate-200 shadow-sm w-full rounded-lg bg-white p-2 hover:border-slate-300 transition">
           <p className="flex flex-col truncate font-medium">
-            <span className="text-sm text-neutral-700">{eventInfo.event.title}</span>
-            <span className="text-xs text-neutral-400">{eventInfo.event.extendedProps.description}</span>
+            <span className="text-sm text-slate-700">{eventInfo.event.title}</span>
+            <span className="text-xs text-slate-400">{eventInfo.event.extendedProps.description}</span>
           </p>
           <CalendarsActionButton
             onEdit={() => onEditEvent(eventInfo)}
@@ -42,13 +42,13 @@ export function Calendar({
           />
         </div>
       )} eventClassNames="!bg-transparent !border-0 !p-0"
-      dayHeaderClassNames="text-sm text-neutral-600 p-2"
+      dayHeaderClassNames="text-sm text-slate-600 p-2"
       dayHeaderFormat={{ weekday: 'long' }}
       dayCellClassNames={(arg) => {
         if (dayjs(arg.date).isSame(dayjs(), "day")) {
           return "!bg-sky-200 today-highlight";
         }
-        return "border border-neutral-200";
+        return "border border-slate-200";
       }}
       eventDisplay="block"
     />

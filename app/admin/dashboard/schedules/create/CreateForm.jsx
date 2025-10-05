@@ -103,7 +103,7 @@ export default function ScheduleForm({ users, shifts }) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-neutral-700">
+                <Label htmlFor="title" className="text-slate-700">
                   Title
                 </Label>
                 <Input
@@ -111,13 +111,13 @@ export default function ScheduleForm({ users, shifts }) {
                   value={form.title}
                   onChange={(e) => handleChange("title", e.target.value)}
                   placeholder="Enter schedule title"
-                  className="border-neutral-200 focus:border-neutral-400 focus:ring-neutral-400"
+                  className="border-slate-200 focus:border-slate-400 focus:ring-slate-400"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-neutral-700">
+                <Label htmlFor="description" className="text-slate-700">
                   Description
                 </Label>
                 <Input
@@ -125,14 +125,14 @@ export default function ScheduleForm({ users, shifts }) {
                   value={form.description}
                   onChange={(e) => handleChange("description", e.target.value)}
                   placeholder="Enter schedule description"
-                  className="border-neutral-200 focus:border-neutral-400 focus:ring-neutral-400"
+                  className="border-slate-200 focus:border-slate-400 focus:ring-slate-400"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="frequency" className="text-neutral-700">
+              <Label htmlFor="frequency" className="text-slate-700">
                 Select Frequency
               </Label>
               <Select
@@ -141,11 +141,11 @@ export default function ScheduleForm({ users, shifts }) {
               >
                 <SelectTrigger
                   id="frequency"
-                  className="w-full mt-1 border-neutral-200 focus:border-neutral-400"
+                  className="w-full mt-1 border-slate-200 focus:border-slate-400"
                 >
                   <SelectValue placeholder="Select Frequency" />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-neutral-200">
+                <SelectContent className="bg-white border-slate-200">
                   <SelectItem value="DAILY">Daily</SelectItem>
                   <SelectItem value="WEEKLY">Weekly</SelectItem>
                   <SelectItem value="MONTHLY">Monthly</SelectItem>
@@ -164,8 +164,8 @@ export default function ScheduleForm({ users, shifts }) {
               setActiveDate={setActiveDate}
             />
 
-            <div className="flex items-center justify-between pt-6 border-t border-neutral-200">
-              <div className="text-sm text-neutral-600">
+            <div className="flex items-center justify-between pt-6 border-t border-slate-200">
+              <div className="text-sm text-slate-600">
                 {events.reduce((acc, e) => acc + e.users.length, 0)} users
                 assigned • {events.length} dates scheduled
               </div>
@@ -174,14 +174,14 @@ export default function ScheduleForm({ users, shifts }) {
                   type="button"
                   variant="outline"
                   disabled={loading}
-                  className="border-neutral-200 text-neutral-700 hover:bg-neutral-50 bg-transparent"
+                  className="border-slate-200 text-slate-700 hover:bg-slate-50 bg-transparent"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="bg-neutral-900 hover:bg-neutral-800 text-white"
+                  className="bg-slate-900 hover:bg-slate-800 text-white"
                 >
                   {loading ? "Saving..." : "Save Schedule"}
                 </Button>

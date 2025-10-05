@@ -20,11 +20,11 @@ function DashboardStatsComponent({
 
   // default theme styles
   const theme = dark
-    ? "border-neutral-500 bg-neutral-600 text-neutral-100 hover:border-neutral-600"
-    : "border-neutral-200 bg-white text-neutral-700 hover:border-neutral-300"
+    ? "border-slate-500 bg-slate-600 text-slate-100 hover:border-slate-600"
+    : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
 
   const defaultIcon =
-    dark ? "bg-neutral-800 text-neutral-300" : "bg-neutral-100 text-neutral-600"
+    dark ? "bg-slate-800 text-slate-300" : "bg-slate-100 text-slate-600"
 
   return (
     <div className={`${base} ${theme}`}>
@@ -44,7 +44,7 @@ function DashboardStatsComponent({
               <EllipsisVertical
                 strokeWidth={2}
                 size={15}
-                className={dark ? "text-neutral-400" : "text-neutral-500"}
+                className={dark ? "text-slate-400" : "text-slate-500"}
               />
               {textlink}
             </Link>

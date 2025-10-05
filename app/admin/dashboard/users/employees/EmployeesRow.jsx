@@ -24,22 +24,22 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-neutral-200 text-neutral-500 rounded-full">
-            <CircleUserRound className="h-5 w-5 text-neutral-600" strokeWidth={1} />
+          <div className="p-2 bg-slate-200 text-slate-500 rounded-full">
+            <CircleUserRound className="h-5 w-5 text-slate-600" strokeWidth={1} />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold text-neutral-600">
+            <span className="text-sm font-semibold text-slate-600">
               {user.name}
             </span>
-            <span className="text-xs text-neutral-400">{user.email}</span>
+            <span className="text-xs text-slate-400">{user.email}</span>
           </div>
         </div>
       </TableCell>
       <TableCell>
-        <div className="flex flex-col text-sm text-neutral-600">
+        <div className="flex flex-col text-sm text-slate-600">
           <p className="font-semibold">{capitalize(user.shift?.type)}</p>
 
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-slate-400">
             <span>{user.shift?.startTime}</span> - <span>{user.shift?.endTime}</span>
           </p>
         </div>
@@ -51,10 +51,10 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
       </TableCell>
       <TableCell>
         <div className="flex flex-col">
-          <span className="text-sm font-semibold text-neutral-600">
+          <span className="text-sm font-semibold text-slate-600">
             {user.createdAt ? format(new Date(user.createdAt), "dd MMMM yyyy") : "-"}
           </span>
-          <span className="text-xs text-neutral-400">
+          <span className="text-xs text-slate-400">
             {user.updatedAt ? format(new Date(user.updatedAt), "dd MMMM yyyy") : "-"}
           </span>
         </div>

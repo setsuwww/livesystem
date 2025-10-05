@@ -2,15 +2,15 @@
 
 /* 🎨 Background grid */
 .fc .fc-daygrid-day-frame {
-  @apply bg-neutral-50; /* soft gray */
+  @apply bg-slate-50; /* soft gray */
 }
 
 .fc .fc-toolbar-chunk button {
-  @apply text-white bg-neutral-700 px-4 py-1.5 rounded-md font-medium capitalize transition-colors duration-200;
+  @apply text-white bg-slate-700 px-4 py-1.5 rounded-md font-medium capitalize transition-colors duration-200;
 }
 
 .fc .fc-toolbar-chunk button:hover {
-  @apply bg-neutral-600;
+  @apply bg-slate-600;
 }
 
 .fc .fc-toolbar-title {
@@ -22,7 +22,7 @@
 }
 
 .fc-daygrid-day-number {
-  @apply text-neutral-700 text-sm font-bold;
+  @apply text-slate-700 text-sm font-bold;
 }
 
 .fc-daygrid-day.today-highlight {

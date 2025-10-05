@@ -22,11 +22,11 @@ export default function DashboardLayout({
           duration={3000}
           closeButton
           toastOptions={{
-            className: "rounded-lg shadow-lg border border-neutral-200",
+            className: "rounded-lg shadow-lg border border-slate-200",
             style: { fontSize: "14px", padding: "12px 16px" },
           }}
         />
-        <main className="flex-1 overflow-y-auto p-6 bg-neutral-50">
+        <main className="flex-1 overflow-y-auto p-6 bg-slate-50">
           {children}
         </main>
       </div>

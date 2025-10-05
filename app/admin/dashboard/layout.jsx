@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }) {
       <SidebarServer />
 
       <div className="flex-1 flex flex-col">
-        <main className="flex-1 overflow-y-auto p-4 bg-neutral-100">
+        <main className="flex-1 overflow-y-auto p-4 bg-slate-100">
           <ReactQueryProvider>
             {children}
           </ReactQueryProvider>

@@ -77,19 +77,19 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
         </DialogHeader>
 
         {loadingCurrent ? (
-          <p className="text-xs text-neutral-400">Loading current user...</p>
+          <p className="text-xs text-slate-400">Loading current user...</p>
         ) : (
           currentUser && (
             <header>
               <Label htmlFor="past" className="mb-4">
                 Current user
               </Label>
-              <div className="flex items-center border border-neutral-300 rounded p-2 space-x-2 bg-neutral-100 text-neutral-600">
-                <div className="p-2 rounded-full bg-neutral-300">
+              <div className="flex items-center border border-slate-300 rounded p-2 space-x-2 bg-slate-100 text-slate-600">
+                <div className="p-2 rounded-full bg-slate-300">
                   <CircleUserRound strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-neutral-700">{currentUser.name}</p>
+                  <p className="text-sm font-semibold text-slate-700">{currentUser.name}</p>
                   <p className="text-xs">{currentUser.email}</p>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
 
         <Label htmlFor="search">Search & switch user</Label>
         <div className="relative mb-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-neutral-400" />
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Search user..."
             value={search}
@@ -108,32 +108,32 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
           />
         </div>
 
-        <section className="max-h-60 overflow-y-auto space-y-2 border border-neutral-100 shadow-xs rounded-lg p-2">
+        <section className="max-h-60 overflow-y-auto space-y-2 border border-slate-100 shadow-xs rounded-lg p-2">
           {loadingUsers ? (
-            <p className="text-xs text-center text-neutral-400">Loading users...</p>
+            <p className="text-xs text-center text-slate-400">Loading users...</p>
           ) : filteredUsers.length === 0 ? (
-            <p className="text-xs text-center text-neutral-400">No users found</p>
+            <p className="text-xs text-center text-slate-400">No users found</p>
           ) : (
             filteredUsers.map((user) => (
-              <label key={user.id} className="group flex items-center gap-x-3 cursor-pointer border border-neutral-200 px-4 py-2 rounded transition">
+              <label key={user.id} className="group flex items-center gap-x-3 cursor-pointer border border-slate-200 px-4 py-2 rounded transition">
                 <Checkbox checked={selectedId === user.id} onCheckedChange={() => setSelectedId(user.id)} />
 
                 <div className="flex items-center gap-x-3 flex-1">
-                  <div className="p-2 bg-neutral-100 group-hover:bg-sky-100 rounded-lg flex items-center justify-center transition">
+                  <div className="p-2 bg-slate-100 group-hover:bg-sky-100 rounded-lg flex items-center justify-center transition">
                     <CircleUserRound
                       strokeWidth={1.5}
-                      className="text-neutral-400 group-hover:text-sky-600 transition"
+                      className="text-slate-400 group-hover:text-sky-600 transition"
                     />
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
                     <div className="flex flex-col gap-x-2">
-                      <p className="text-sm font-semibold text-neutral-700">{user.name}</p>
-                      <p className="text-xs text-neutral-400 mt-1 sm:mt-0">{user.email}</p>
+                      <p className="text-sm font-semibold text-slate-700">{user.name}</p>
+                      <p className="text-xs text-slate-400 mt-1 sm:mt-0">{user.email}</p>
                     </div>
 
                     <p className={`px-2 py-0.5 rounded-md text-xs ${
-                        shiftStyles[user.shift?.type ?? "bg-neutral-100"]
+                        shiftStyles[user.shift?.type ?? "bg-slate-100"]
                       }`}
                     >
                       {capitalize(user.shift?.type ?? "OFF")}

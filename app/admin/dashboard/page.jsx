@@ -58,7 +58,7 @@ export default async function AdminDashboardPage() {
           value={`${totalUsers.toString()} Users`}
           valueColor="text-yellow-400"
           icon={<Clock strokeWidth={2} />}
-          color="bg-neutral-500 text-white"
+          color="bg-slate-500 text-white"
         />
 
         <DashboardStats

@@ -64,7 +64,7 @@ export default function UserShiftTable({ data }) {
         <div className="flex items-center gap-2">
           <Select value={filterRole} onValueChange={setFilterRole}>
             <SelectTrigger>
-              <span className="text-neutral-700 font-semibold">Role :</span>
+              <span className="text-slate-700 font-semibold">Role :</span>
               <SelectValue placeholder="All" />
             </SelectTrigger>
             <SelectContent>
@@ -133,12 +133,12 @@ export default function UserShiftTable({ data }) {
 
                 <TableCell>
                   <div className="flex items-center gap-x-2">
-                    <div className="p-2 bg-neutral-200 rounded-full">
-                      <CircleUserRound strokeWidth={1.5} className="text-neutral-500" />
+                    <div className="p-2 bg-slate-200 rounded-full">
+                      <CircleUserRound strokeWidth={1.5} className="text-slate-500" />
                     </div>
                     <div className="flex flex-col">
-                      <span className="font-semibold text-neutral-600">{user.name}</span>
-                      <span className="text-xs text-neutral-400">{user.email}</span>
+                      <span className="font-semibold text-slate-600">{user.name}</span>
+                      <span className="text-xs text-slate-400">{user.email}</span>
                     </div>
                   </div>
                 </TableCell>
@@ -151,10 +151,10 @@ export default function UserShiftTable({ data }) {
 
                 <TableCell>
                   <span className="flex flex-col">
-                    <span className="text-sm font-semibold text-neutral-600">
+                    <span className="text-sm font-semibold text-slate-600">
                       {created}
                     </span>
-                    <span className="text-xs text-neutral-400">
+                    <span className="text-xs text-slate-400">
                       {updated}
                     </span>
                   </span>

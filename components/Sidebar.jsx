@@ -22,7 +22,7 @@ function SidebarLink({
   const isActive = pathname === href
 
   return (
-    <Link href={href} className={`${linkBase} ${isActive ? 'bg-sky-100 text-sky-700' : 'text-neutral-600 hover:bg-sky-100 hover:text-sky-700'}`}>
+    <Link href={href} className={`${linkBase} ${isActive ? 'bg-sky-100 text-sky-700' : 'text-slate-600 hover:bg-sky-100 hover:text-sky-700'}`}>
       <Icon size={18} />
       {children}
     </Link>
@@ -37,7 +37,7 @@ function SidebarSubLink({
   const isActive = pathname === href
 
   return (
-    <Link href={href} className={`${subLinkBase} ${isActive ? 'border-l-2 border-0 bg-sky-100 border-sky-400 text-sky-600' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700'}`}>
+    <Link href={href} className={`${subLinkBase} ${isActive ? 'border-l-2 border-0 bg-sky-100 border-sky-400 text-sky-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-700'}`}>
       {children}
     </Link>
   )
@@ -63,7 +63,7 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
   return (
     <div className="flex flex-col">
       <button className={`group   w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors
-          ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-neutral-600 hover:bg-sky-100 hover:text-sky-700'}`}
+          ${isParentActive ? 'bg-sky-100 text-sky-700' : 'text-slate-600 hover:bg-sky-100 hover:text-sky-700'}`}
         onClick={() => setOpen(!open)}
       >
         <div className="flex items-center gap-x-2">
@@ -77,7 +77,7 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
 
       {/* Collapsible content */}
       <div className="overflow-hidden transition-all duration-300" style={{ height: `${height}px` }}>
-        <div ref={contentRef} className="border-l-2 border-neutral-300 ml-4 flex flex-col space-y-1 mt-2 p-2">
+        <div ref={contentRef} className="border-l-2 border-slate-300 ml-4 flex flex-col space-y-1 mt-2 p-2">
           {items.map(item => (
             <SidebarSubLink key={item.href} href={item.href}>
               {item.label}
@@ -97,8 +97,8 @@ export function Sidebar({ user }) {
   const formattedRole = user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1).toLowerCase()
 
   return (
-    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-r-2 border-0 border-neutral-200">
-      <div className='text-2xl font-bold px-7 text-sky-800 py-6 border-b border-neutral-200'>
+    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-r-2 border-0 border-slate-200">
+      <div className='text-2xl font-bold px-7 text-sky-800 py-6 border-b border-slate-200'>
         Live<span className="text-sky-600">system.</span>
       </div>
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -139,8 +139,8 @@ export function Sidebar({ user }) {
         <SidebarLink href="/admin/dashboard/setting" icon={Settings}>Settings</SidebarLink>
       </nav>
 
-      <div className="p-4 border-t border-neutral-200 bg-gradient-to-t from-neutral-300 via-neutral-100 towhite">
-        <div className="flex items-center space-x-2 bg-white border border-neutral-300 p-2 rounded-lg cursor-pointer">
+      <div className="p-4 border-t border-slate-200 bg-gradient-to-t from-slate-300 via-slate-100 towhite">
+        <div className="flex items-center space-x-2 bg-white border border-slate-300 p-2 rounded-lg cursor-pointer">
         <div className={`${roleStyles[formattedRole]} p-2 rounded-lg`}>
           <CircleUserRound size={28} strokeWidth={1.5} />
         </div>
@@ -149,7 +149,7 @@ export function Sidebar({ user }) {
             <span className="font-semibold">{user?.name || "Guest"}</span>
             <span className={`text-xs px-1.5 py-0.5 rounded-full ${roleStyles[formattedRole]}`}>{capitalize(user?.role || "")}</span>
           </div>
-          <span className="text-xs text-neutral-500">{user?.email || ""}</span>
+          <span className="text-xs text-slate-500">{user?.email || ""}</span>
         </div>
         </div>
       </div>

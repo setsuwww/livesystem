@@ -15,7 +15,7 @@ export default function EmployeeTable({ users, shifts }) {
     selected, setSelected,
     data, filteredData,
     toggleSelect,
-    deleteSelected, deleteall,
+    deleteSelected, deleteAll,
     exportCSV, onSwitch, onDelete,
   } = useEmployeesHooks(users, shifts);
 

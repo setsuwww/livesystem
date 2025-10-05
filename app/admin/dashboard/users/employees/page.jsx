@@ -22,16 +22,6 @@ async function getEmployees(page = 1) {
   });
 }
 
-async function getSwapEmployee(currentUserId) {
-  return await prisma.user.findMany({
-    where: { role: "EMPLOYEE", NOT: { id: currentUserId }},
-    include: {
-      shift: true,
-    },
-    orderBy: { createdAt: "desc" },
-  });
-}
-
 async function getEmployeeCount() {
   return await prisma.user.count({
     where: { role: "EMPLOYEE" },

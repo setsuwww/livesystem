@@ -36,10 +36,10 @@ export const SchedulesRow = React.memo(function ({
             <CalendarClock strokeWidth={1.5} />
           </div>
           <div className="flex flex-col gap-x-2">
-            <h1 className="text-sm font-semibold text-neutral-600">
+            <h1 className="text-sm font-semibold text-slate-600">
               {capitalize(schedule.title)}
             </h1>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-slate-400">
               {capitalize(schedule.shift ? schedule.shift.type : "-")}
             </p>
           </div>
@@ -58,10 +58,10 @@ export const SchedulesRow = React.memo(function ({
       </TableCell>
       <TableCell>
         <div>
-          <div className="text-sm font-semibold text-neutral-600">
+          <div className="text-sm font-semibold text-slate-600">
             {formatedCreatedDate}
           </div>
-          <div className="text-xs text-neutral-400">
+          <div className="text-xs text-slate-400">
             {formatedUpdatedDate}
           </div>
         </div>

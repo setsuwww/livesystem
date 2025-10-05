@@ -44,7 +44,7 @@ const dummyOffices = [
     id: 4,
     name: "Bali Hub",
     location: "Denpasar",
-    type: "Hybrid",
+    type: "WFH",
     status: "ACTIVE",
     startTime: "10:00",
     endTime: "19:00",

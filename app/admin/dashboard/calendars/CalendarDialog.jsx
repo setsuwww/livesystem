@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/Label";
 export function CalendarsDialog({ open, loading, formData, selectedEvent, onClose, onChange, onSave }) {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-white sm:max-w-[425px] border border-neutral-300">
+      <DialogContent className="bg-white sm:max-w-[425px] border border-slate-300">
         <DialogHeader>
           <DialogTitle>{selectedEvent ? "Edit Event" : "Add New Event"}</DialogTitle>
           <DialogDescription>{selectedEvent ? "Update the details of your event below." : "filling out the form below."}</DialogDescription>
