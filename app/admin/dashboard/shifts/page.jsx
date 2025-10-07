@@ -16,11 +16,6 @@ export default async function ShiftsPage({ searchParams }) {
     select: {
       id: true, type: true, name: true,
       startTime: true, endTime: true,
-      schedules: {
-        select: {
-          id: true, title: true, startDate: true, endDate: true,
-        }
-      },
       users: {
         select: { id: true, name: true, email: true,
           attendances: {
@@ -64,14 +59,8 @@ export default async function ShiftsPage({ searchParams }) {
       id: s.id, type: s.type, name: s.name,
       startTime: start, endTime: end,
       timeRange: `${start} - ${end}`,
-      usersCount: usersWithStatus.length, schedulesCount: s.schedules.length,
+      usersCount: usersWithStatus.length,
       users: usersWithStatus,
-      schedules: s.schedules.map((sch) => ({
-        id: sch.id,
-        title: sch.title,
-        startDate: sch.startDate,
-        endDate: sch.endDate,
-      })),
     };
   });
 

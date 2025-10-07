@@ -11,7 +11,6 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true,
   },
 };
 

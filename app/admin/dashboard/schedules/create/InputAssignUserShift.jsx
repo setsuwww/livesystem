@@ -8,14 +8,18 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
 import { Badge } from "@/components/ui/Badge"
 import { ContentInformation } from "@/components/content/ContentInformation"
-import { Check, ChevronsUpDown, CircleUserRound, X, CalendarArrowUp, CalendarArrowDown } from "lucide-react"
+import {
+  Check,
+  ChevronsUpDown,
+  CircleUserRound,
+  X,
+  CalendarArrowUp,
+  CalendarArrowDown,
+  Clock,
+} from "lucide-react"
 import { fetch } from "@/function/helpers/fetch"
 
-export default function InputAssignUserShift({
-  events,
-  setEvents,
-  users,
-}) {
+export default function InputAssignUserShift({ events, setEvents, users }) {
   const [startDate, setStartDate] = useState("")
   const [startTime, setStartTime] = useState("")
   const [endDate, setEndDate] = useState("")
@@ -27,6 +31,9 @@ export default function InputAssignUserShift({
   const [dialogMessage, setDialogMessage] = useState("")
   const [dialogType, setDialogType] = useState("success")
 
+  // -------------------------
+  // Handlers
+  // -------------------------
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
       prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
@@ -81,6 +88,9 @@ export default function InputAssignUserShift({
     }
   }
 
+  // -------------------------
+  // UI
+  // -------------------------
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -93,63 +103,79 @@ export default function InputAssignUserShift({
 
       {/* Date + Time Range */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-  {/* Start Date & Time */}
-  <div className="flex flex-col gap-2">
-    <Label>Start Date & Time</Label>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <input
-        type="date"
-        className="border rounded-md px-3 py-2 text-sm"
-        value={startDate}
-        onChange={(e) => setStartDate(e.target.value)}
-      />
-      <input
-        type="time"
-        className="border rounded-md px-3 py-2 text-sm"
-        value={startTime}
-        onChange={(e) => setStartTime(e.target.value)}
-      />
+        {/* Start Date & Time */}
+        <div className="flex flex-col gap-2">
+          <Label>Start Date & Time</Label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input
+              type="date"
+              className="border rounded-md px-3 py-2 text-sm"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            <input
+              type="time"
+              className="border rounded-md px-3 py-2 text-sm"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+            />
+          </div>
+
+          {(startDate || startTime) && (
+  <div className="flex items-center gap-3 text-teal-600 mt-1">
+    {/* Calendar icon + date */}
+    <div className="flex items-center gap-1 text-xs font-semibold">
+      <CalendarArrowUp size={14} className="text-teal-600" />
+      <span>{startDate}</span>
     </div>
 
-    {(startDate || startTime) && (
-      <div className="flex items-center gap-2 text-teal-600 mt-1">
-        <CalendarArrowUp size={16} />
-        <span className="text-xs font-semibold">
-          {startDate} {startTime && `(${startTime})`}
-        </span>
+    {/* Clock icon + time */}
+    {startTime && (
+      <div className="flex items-center gap-1 text-xs font-semibold">
+        <Clock size={14} className="text-teal-600" />
+        <span>{startTime}</span>
       </div>
     )}
   </div>
+)}
 
-  {/* End Date & Time */}
-  <div className="flex flex-col gap-2">
-    <Label>End Date & Time</Label>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <input
-        type="date"
-        className="border rounded-md px-3 py-2 text-sm"
-        value={endDate}
-        onChange={(e) => setEndDate(e.target.value)}
-      />
-      <input
-        type="time"
-        className="border rounded-md px-3 py-2 text-sm"
-        value={endTime}
-        onChange={(e) => setEndTime(e.target.value)}
-      />
+        </div>
+
+        {/* End Date & Time */}
+        <div className="flex flex-col gap-2">
+          <Label>End Date & Time</Label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <input
+              type="date"
+              className="border rounded-md px-3 py-2 text-sm"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            <input
+              type="time"
+              className="border rounded-md px-3 py-2 text-sm"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+            />
+          </div>
+
+          {(endDate || endTime) && (
+  <div className="flex items-center gap-3 text-rose-600 mt-1">
+    <div className="flex items-center gap-1 text-xs font-semibold">
+      <CalendarArrowDown size={14} className="text-rose-600" />
+      <span>{endDate}</span>
     </div>
-
-    {(endDate || endTime) && (
-      <div className="flex items-center gap-2 text-rose-600 mt-1">
-        <CalendarArrowDown size={16} />
-        <span className="text-xs font-semibold">
-          {endDate} {endTime && `(${endTime})`}
-        </span>
+    {endTime && (
+      <div className="flex items-center gap-1 text-xs font-semibold">
+        <Clock size={14} className="text-rose-600" />
+        <span>{endTime}</span>
       </div>
     )}
   </div>
-</div>
+)}
 
+        </div>
+      </div>
 
       {/* User MultiSelect */}
       <div className="space-y-2">
@@ -213,77 +239,69 @@ export default function InputAssignUserShift({
             </Button>
           </PopoverTrigger>
 
-<PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-  <Command className="bg-white">
-    <CommandInput placeholder="Search users..." className="h-10 text-sm" />
-    <CommandEmpty className="py-4 text-center text-sm text-slate-500">
-      No users found.
-    </CommandEmpty>
+          <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+            <Command className="bg-white">
+              <CommandInput placeholder="Search users..." className="h-10 text-sm" />
+              <CommandEmpty className="py-4 text-center text-sm text-slate-500">
+                No users found.
+              </CommandEmpty>
 
-    <CommandGroup className="max-h-64 overflow-y-auto">
-      {users.map((user) => {
-        const isSelected = selectedUsers.includes(user.id)
-        return (
-          <CommandItem
-            key={user.id}
-            value={user.name}
-            onSelect={() => toggleUser(user.id)}
-            className="
-              group cursor-pointer 
-              flex items-center justify-between py-2 px-4
-              border border-transparent 
-              hover:border-slate-200 
-              transition-colors
-            "
-          >
-            <div
-              className="
-                flex items-center gap-3 w-full 
-                rounded-md p-2
-                group-hover:bg-slate-50 
-                transition-colors
-              "
-            >
-              {/* Avatar */}
-              <div
-                className="
-                  p-2 rounded-lg bg-slate-100 
-                  group-hover:bg-teal-100 
-                  transition-colors
-                "
-              >
-                <CircleUserRound className="h-5 w-5 text-slate-600 group-hover:text-teal-700 transition-colors" />
-              </div>
+              <CommandGroup className="max-h-64 overflow-y-auto">
+                {users.map((user) => {
+                  const isSelected = selectedUsers.includes(user.id)
+                  return (
+                    <CommandItem
+                      key={user.id}
+                      value={user.name}
+                      onSelect={() => toggleUser(user.id)}
+                      className="
+                        group cursor-pointer flex items-center justify-between py-1 px-2
+                        border border-transparent hover:border-slate-200 transition-colors
+                      "
+                    >
+                      <div
+                        className="
+                          flex items-center gap-3 w-full rounded-md p-1
+                          transition-colors
+                        "
+                      >
+                        {/* Avatar */}
+                        <div
+                          className="
+                            p-2 rounded-lg bg-slate-100 transition-colors
+                          "
+                        >
+                          <CircleUserRound className="h-5 w-5 text-slate-600 transition-colors" />
+                        </div>
 
-              {/* User Info */}
-              <div className="flex flex-col">
-                <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">
-                  {user.name}
-                </span>
-                <span className="text-xs text-slate-400 group-hover:text-slate-600 transition-colors">
-                  {user.email}
-                </span>
-              </div>
+                        {/* User Info */}
+                        <div className="flex flex-col">
+                          <span className="text-sm font-medium text-slate-700 transition-colors">
+                            {user.name}
+                          </span>
+                          <span className="text-xs text-slate-400 transition-colors">
+                            {user.email}
+                          </span>
+                        </div>
 
-              {/* Check icon */}
-              {isSelected && (
-                <div className="ml-auto bg-teal-100 p-1.5 rounded-md group-hover:bg-teal-200 transition-colors">
-                  <Check className="h-4 w-4 text-teal-600 group-hover:text-teal-700 transition-colors" />
-                </div>
-              )}
-            </div>
-          </CommandItem>
-        )
-      })}
-    </CommandGroup>
-  </Command>
-</PopoverContent>
-
+                        {/* Check icon */}
+                        {isSelected && (
+                          <div className="ml-auto bg-teal-100 p-1.5 rounded-md  transition-colors">
+                            <Check className="h-4 w-4 text-teal-600 transition-colors" />
+                          </div>
+                        )}
+                      </div>
+                    </CommandItem>
+                  )
+                })}
+              </CommandGroup>
+            </Command>
+          </PopoverContent>
         </Popover>
       </div>
 
       {/* Submit Button */}
-      <div className="items-end">
+      <div className="flex justify-end pt-2">
         <Button
           type="button"
           onClick={handleSubmit}
@@ -298,7 +316,9 @@ export default function InputAssignUserShift({
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className={dialogType === "success" ? "text-teal-600" : "text-rose-600"}>
+            <DialogTitle
+              className={dialogType === "success" ? "text-teal-600" : "text-rose-600"}
+            >
               {dialogType === "success" ? "Success" : "Error"}
             </DialogTitle>
             <DialogDescription className="text-slate-500">

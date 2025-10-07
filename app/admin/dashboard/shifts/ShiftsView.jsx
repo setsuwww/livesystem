@@ -40,7 +40,6 @@ export function ShiftsView({ data }) {
             <TableHead>Type</TableHead>
             <TableHead>Time Range</TableHead>
             <TableHead>Users</TableHead>
-            <TableHead>Schedules</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -81,12 +80,6 @@ export function ShiftsView({ data }) {
                   <CircleUserRound strokeWidth={1.5} size={15} /> {shift.usersCount} Users
                 </Link>
               </TableCell>
-
-              {/* Schedules */}
-              <TableCell>
-                <span className="text-slate-600">{shift.schedulesCount ?? 0}</span>
-              </TableCell>
-
               {/* Actions */}
               <TableCell className="space-x-2">
                 <Button size="sm" variant="outline" onClick={() => handleEdit(shift.id)}>
