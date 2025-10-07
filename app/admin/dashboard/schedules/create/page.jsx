@@ -13,15 +13,9 @@ export default async function Page() {
       },
     },
     include: {
-      shift: true,
       users: { include: { user: true } },
     },
     orderBy: { startDate: "asc" },
-  });
-
-  const shifts = await prisma.shift.findMany({
-    select: { id: true, type: true, name: true, startTime: true, endTime: true },
-    orderBy: { id: "asc" },
   });
 
   const users = await prisma.user.findMany({
@@ -29,6 +23,6 @@ export default async function Page() {
   });
 
   return (
-    <ScheduleForm users={users} schedules={schedules} shifts={shifts} />
+    <ScheduleForm users={users} schedules={schedules} />
   );
 }

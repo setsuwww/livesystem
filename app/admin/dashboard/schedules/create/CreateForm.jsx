@@ -53,15 +53,11 @@ export default function ScheduleForm({ users, shifts }) {
         title: form.title,
         description: form.description,
         frequency: form.frequency,
-        startDate: events[0]?.startDate || null,
-        endDate: events[0]?.endDate || null,
-        shiftId: events[0]?.shiftId || null,
+          startDate: events[0]?.startDate || null,
+  endDate: events[0]?.endDate || null,
+  startTime: events[0]?.startTime || null,
+  endTime: events[0]?.endTime || null,
         userIds, 
-        dates: events.filter((e) => e.shiftId).map((e) => ({
-          date: e.date,
-          shiftId: e.shiftId,
-          secondShiftId: e.secondShiftId || null,
-        })),
       }
 
       await fetch({
@@ -103,7 +99,7 @@ export default function ScheduleForm({ users, shifts }) {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-slate-700">
+                <Label htmlFor="title">
                   Title
                 </Label>
                 <Input
@@ -117,7 +113,7 @@ export default function ScheduleForm({ users, shifts }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description" className="text-slate-700">
+                <Label htmlFor="description">
                   Description
                 </Label>
                 <Input
@@ -132,7 +128,7 @@ export default function ScheduleForm({ users, shifts }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="frequency" className="text-slate-700">
+              <Label htmlFor="frequency">
                 Select Frequency
               </Label>
               <Select
@@ -158,7 +154,6 @@ export default function ScheduleForm({ users, shifts }) {
             <InputAssignUserShift
               events={events}
               setEvents={setEvents}
-              shifts={shifts}
               users={users}
               activeDate={activeDate}
               setActiveDate={setActiveDate}

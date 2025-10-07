@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";  // pastikan path prisma client bener
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { type, shiftName, startTime, endTime } = body;
+    const { type, name, startTime, endTime } = body;
 
-    if (!shiftName || !startTime || !endTime) {
+    if (!name || !startTime || !endTime) {
       return NextResponse.json(
         { error: "Shift name, start time, and end time are required" },
         { status: 400 }
@@ -17,7 +17,7 @@ export async function POST(req) {
     const newShift = await prisma.shift.create({
       data: {
         type,
-        shiftName,
+        name,
         startTime,
         endTime,
       },

@@ -115,7 +115,6 @@ model Shift {
 
   users              User[]                @relation("ShiftUsers")
   assignments        UserShiftAssignment[]
-  schedules          Schedule[]
   attendances        Attendance[]
   permissionRequests PermissionRequest[]
 
@@ -133,15 +132,14 @@ model Schedule {
   description String?
   frequency   FrequencyType @default(ONCE)
   startDate   DateTime?
+  startTime   String?
   endDate     DateTime?
-  shiftId     Int?
+  endTime     String?
   officeId    Int?
 
-  shift  Shift?  @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-  office Office? @relation(fields: [officeId], references: [id])
-
-  users SchedulesOnUsers[]
-  dates ScheduleDate[]
+  office  Office? @relation(fields: [officeId], references: [id])
+  
+  users   SchedulesOnUsers[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -167,7 +165,6 @@ model ScheduleDate {
   shiftId       Int?
   secondShiftId Int?
 
-  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
   shift       Shift?   @relation("PrimaryShift", fields: [shiftId], references: [id])
   secondShift Shift?   @relation("SecondaryShift", fields: [secondShiftId], references: [id])
 

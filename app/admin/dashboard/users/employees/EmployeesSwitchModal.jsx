@@ -71,7 +71,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
         onOpenChange(val)
       }}
     >
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
           <DialogTitle>Swap shift</DialogTitle>
         </DialogHeader>
@@ -108,42 +108,52 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
           />
         </div>
 
-        <section className="max-h-60 overflow-y-auto space-y-2 border border-slate-100 shadow-xs rounded-lg p-2">
-          {loadingUsers ? (
-            <p className="text-xs text-center text-slate-400">Loading users...</p>
-          ) : filteredUsers.length === 0 ? (
-            <p className="text-xs text-center text-slate-400">No users found</p>
-          ) : (
-            filteredUsers.map((user) => (
-              <label key={user.id} className="group flex items-center gap-x-3 cursor-pointer border border-slate-200 px-4 py-2 rounded transition">
-                <Checkbox checked={selectedId === user.id} onCheckedChange={() => setSelectedId(user.id)} />
+        <section className="max-h-80 overflow-y-auto border border-slate-100 shadow-xs rounded-lg p-3">
+  {loadingUsers ? (
+    <p className="text-xs text-center text-slate-400">Loading users...</p>
+  ) : filteredUsers.length === 0 ? (
+    <p className="text-xs text-center text-slate-400">No users found</p>
+  ) : (
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      {filteredUsers.map((user) => (
+        <label
+          key={user.id}
+          className="group flex items-center gap-x-3 cursor-pointer border border-slate-200 px-4 py-3 rounded-lg transition hover:bg-slate-50"
+        >
+          <Checkbox
+            checked={selectedId === user.id}
+            onCheckedChange={() => setSelectedId(user.id)}
+          />
 
-                <div className="flex items-center gap-x-3 flex-1">
-                  <div className="p-2 bg-slate-100 group-hover:bg-sky-100 rounded-lg flex items-center justify-center transition">
-                    <CircleUserRound
-                      strokeWidth={1.5}
-                      className="text-slate-400 group-hover:text-sky-600 transition"
-                    />
-                  </div>
+          <div className="flex items-center gap-x-3 flex-1">
+            <div className="p-2 bg-slate-100 group-hover:bg-sky-100 rounded-lg flex items-center justify-center transition">
+              <CircleUserRound
+                strokeWidth={1.5}
+                className="text-slate-400 group-hover:text-sky-600 transition"
+              />
+            </div>
 
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
-                    <div className="flex flex-col gap-x-2">
-                      <p className="text-sm font-semibold text-slate-700">{user.name}</p>
-                      <p className="text-xs text-slate-400 mt-1 sm:mt-0">{user.email}</p>
-                    </div>
+           <div className="flex items-center justify-between w-full">
+  <div className="flex flex-col flex-1 min-w-0">
+    <p className="text-sm font-semibold text-slate-700 truncate">{user.name}</p>
+    <p className="text-xs text-slate-400 truncate">{user.email}</p>
+  </div>
+  <p
+    className={`px-2 py-0.5 rounded-md text-xs ml-3 ${
+      shiftStyles[user.shift?.type ?? "bg-slate-100"]
+    }`}
+  >
+    {capitalize(user.shift?.type ?? "OFF")}
+  </p>
+</div>
 
-                    <p className={`px-2 py-0.5 rounded-md text-xs ${
-                        shiftStyles[user.shift?.type ?? "bg-slate-100"]
-                      }`}
-                    >
-                      {capitalize(user.shift?.type ?? "OFF")}
-                    </p>
-                  </div>
-                </div>
-              </label>
-            ))
-          )}
-        </section>
+          </div>
+        </label>
+      ))}
+    </div>
+  )}
+</section>
+
 
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>

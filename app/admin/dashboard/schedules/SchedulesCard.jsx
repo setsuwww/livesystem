@@ -18,7 +18,6 @@ import { frequencyStyles } from "@/constants/frequencyStyles";
 export default function SchedulesCard({ data }) {
   const [search, setSearch] = useState("");
   const [filterFrequency, setFilterFrequency] = useState("all");
-  const [filterShift, setFilterShift] = useState("all");
   const [selectedIds, setSelectedIds] = useState([]);
 
   const router = useRouter();
@@ -36,19 +35,15 @@ export default function SchedulesCard({ data }) {
       );
     })
     .filter((s) => {
-      if (filterShift === "all") return true;
-      return s.shift?.type === filterShift;
-    })
-    .filter((s) => {
       if (filterFrequency === "all") return true;
       return s.frequency === filterFrequency;
     })
     .sort((a, b) => {
       const dateA = new Date(a.startDate).getTime();
       const dateB = new Date(b.startDate).getTime();
-      return dateB - dateA; // newest first
+      return dateB - dateA;
     });
-  }, [data, search, filterFrequency, filterShift]);
+  }, [data, search, filterFrequency]);
 
   const {
     toggleSelect, deleteSelected, deleteAll,
@@ -65,7 +60,6 @@ export default function SchedulesCard({ data }) {
         filterFrequency={filterFrequency} onFilterFrequencyChange={setFilterFrequency}
         selectedCount={selectedIds.length} totalCount={filteredData.length}
         onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
-        filterShift={filterShift} onFilterShiftChange={setFilterShift}
         onExportPDF={() => onExportPDF(filteredData)}
       />
 

@@ -38,9 +38,6 @@ export async function getSchedules({ page = 1, search = "", frequency, shift }) 
       frequency: true,
       createdAt: true,
       updatedAt: true,
-      shift: {
-        select: { id: true, type: true, startTime: true, endTime: true },
-      },
       users: {
         select: {
           user: { select: { id: true, name: true, email: true } },

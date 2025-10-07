@@ -9,7 +9,6 @@ export default function SchedulesActionHeader({
   selectedCount, totalCount,
   onDeleteSelected, onDeleteAll,
   onExportPDF,
-  filterShift, onFilterShiftChange,
   filterFrequency, onFilterFrequencyChange
 }) {
   return (
@@ -27,20 +26,6 @@ export default function SchedulesActionHeader({
             <SelectItem value="MONTHLY">Monthly</SelectItem>
             <SelectItem value="YEARLY">Yearly</SelectItem>
             <SelectItem value="ONCE">Once</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={filterShift} onValueChange={onFilterShiftChange} defaultValue="all">
-          <SelectTrigger className="w-auto px-3 whitespace-nowrap">
-            <span className="font-semibold text-slate-600 mr-1">Shift:</span>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="MORNING">Morning</SelectItem>
-            <SelectItem value="AFTERNOON">Afternoon</SelectItem>
-            <SelectItem value="EVENING">Evening</SelectItem>
-            <SelectItem value="NIGHT">Night</SelectItem>
           </SelectContent>
         </Select>
 

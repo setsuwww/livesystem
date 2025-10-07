@@ -3,285 +3,315 @@
 import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/Button"
 import { Label } from "@/components/ui/Label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/Popover"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/Command"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
 import { Badge } from "@/components/ui/Badge"
-import { ContentInformation } from '@/components/content/ContentInformation';
+import { ContentInformation } from "@/components/content/ContentInformation"
 import { Check, ChevronsUpDown, CircleUserRound, X, CalendarArrowUp, CalendarArrowDown } from "lucide-react"
-
-import { capitalize } from '@/function/globalFunction';
+import { fetch } from "@/function/helpers/fetch"
 
 export default function InputAssignUserShift({
-    events,
-    setEvents,
-    shifts,
-    users,
-    activeDate,
-    setActiveDate,
+  events,
+  setEvents,
+  users,
 }) {
-    const [startDate, setStartDate] = useState("")
-    const [endDate, setEndDate] = useState("")
-    const [selectedShift, setSelectedShift] = useState(null)
-    const [selectedUsers, setSelectedUsers] = useState([])
-    const [open, setOpen] = useState(false)
+  const [startDate, setStartDate] = useState("")
+  const [startTime, setStartTime] = useState("")
+  const [endDate, setEndDate] = useState("")
+  const [endTime, setEndTime] = useState("")
+  const [selectedUsers, setSelectedUsers] = useState([])
+  const [open, setOpen] = useState(false)
 
-    const [dialogOpen, setDialogOpen] = useState(false)
-    const [dialogMessage, setDialogMessage] = useState("")
-    const [dialogType, setDialogType] = useState("success")
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [dialogMessage, setDialogMessage] = useState("")
+  const [dialogType, setDialogType] = useState("success")
 
-    const toggleUser = (id) => {
-        setSelectedUsers((prev) =>
-            prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
-        )
+  const toggleUser = (id) => {
+    setSelectedUsers((prev) =>
+      prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
+    )
+  }
+
+  const setAllUsers = useCallback(() => {
+    setSelectedUsers(users.map((u) => u.id))
+  }, [users])
+
+  const clearUsers = useCallback(() => {
+    setSelectedUsers([])
+  }, [])
+
+  const handleSubmit = async () => {
+    if (!startDate || !endDate || !startTime || !endTime || selectedUsers.length === 0) {
+      setDialogType("error")
+      setDialogMessage("Please fill all required fields.")
+      setDialogOpen(true)
+      return
     }
 
-    const setAllUsers = useCallback(() => {
-        setSelectedUsers(users.map((u) => u.id))
-    }, [users])
+    const payload = {
+      title: "Scheduled Task",
+      description: "Auto-generated schedule",
+      frequency: "ONCE",
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      userIds: selectedUsers,
+    }
 
-    const clearUsers = useCallback(() => {
-        setSelectedUsers([])
-    }, [])
+    try {
+      const res = await fetch({
+        url: "/schedules",
+        method: "post",
+        data: payload,
+        successMessage: "Schedule successfully created!",
+        errorMessage: "Failed to create schedule.",
+        onSuccess: (data) => setEvents((prev) => [...prev, data]),
+      })
 
-    const generateRange = useCallback(() => {
-        if (!startDate || !endDate || !selectedShift || selectedUsers.length === 0) return
+      setDialogType("success")
+      setDialogMessage(`Schedule created for ${selectedUsers.length} user(s).`)
+      setDialogOpen(true)
+    } catch (err) {
+      console.error(err)
+      setDialogType("error")
+      setDialogMessage("Something went wrong.")
+      setDialogOpen(true)
+    }
+  }
 
-        let current = new Date(startDate)
-        const end = new Date(endDate)
-        const newEvents = []
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="py-2">
+        <ContentInformation
+          heading="Assign Users to Schedules"
+          subheading="Select date, time, and assign users."
+        />
+      </div>
 
-        while (current <= end) {
-            const dateStr = current.toISOString().split("T")[0]
-            newEvents.push({
-                date: dateStr,
-                shiftId: Number(selectedShift),
-                users: users.filter((u) => selectedUsers.includes(u.id)),
-                startDate,
-                endDate,
-            })
-            current.setDate(current.getDate() + 1)
-        }
+      {/* Date + Time Range */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {/* Start Date & Time */}
+  <div className="flex flex-col gap-2">
+    <Label>Start Date & Time</Label>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <input
+        type="date"
+        className="border rounded-md px-3 py-2 text-sm"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+      />
+      <input
+        type="time"
+        className="border rounded-md px-3 py-2 text-sm"
+        value={startTime}
+        onChange={(e) => setStartTime(e.target.value)}
+      />
+    </div>
 
-        if (newEvents.length > 0) {
-            setEvents((prev) => [...prev, ...newEvents])
-            setDialogMessage(`✅ Successfully generated ${newEvents.length} schedule(s).`)
-            setDialogType("success")
-            setDialogOpen(true)
-        }
-    }, [startDate, endDate, selectedShift, selectedUsers, setEvents])
+    {(startDate || startTime) && (
+      <div className="flex items-center gap-2 text-teal-600 mt-1">
+        <CalendarArrowUp size={16} />
+        <span className="text-xs font-semibold">
+          {startDate} {startTime && `(${startTime})`}
+        </span>
+      </div>
+    )}
+  </div>
 
-    return (
-        <div className="space-y-6">
+  {/* End Date & Time */}
+  <div className="flex flex-col gap-2">
+    <Label>End Date & Time</Label>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <input
+        type="date"
+        className="border rounded-md px-3 py-2 text-sm"
+        value={endDate}
+        onChange={(e) => setEndDate(e.target.value)}
+      />
+      <input
+        type="time"
+        className="border rounded-md px-3 py-2 text-sm"
+        value={endTime}
+        onChange={(e) => setEndTime(e.target.value)}
+      />
+    </div>
 
-            <div className="py-2">
-                <ContentInformation
-                    heading="Assign Users to Shifts"
-                    subheading="Pick a date range, select a shift, and assign multiple users"
-                />
-            </div>
+    {(endDate || endTime) && (
+      <div className="flex items-center gap-2 text-rose-600 mt-1">
+        <CalendarArrowDown size={16} />
+        <span className="text-xs font-semibold">
+          {endDate} {endTime && `(${endTime})`}
+        </span>
+      </div>
+    )}
+  </div>
+</div>
 
-            {/* Date Range */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Start Date */}
-                <div className="flex flex-col space-y-2">
-                    <Label>Start Date</Label>
-                    <input
-                        type="date"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                        className="border rounded-md px-3 py-2 text-sm"
-                    />
-                    {startDate && (
-                        <div className="flex items-center space-x-1 text-teal-600">
-                            <CalendarArrowUp size={16} strokeWidth={2} />
-                            <span className="text-xs font-semibold">
-                                {new Intl.DateTimeFormat("en-US", {
-                                    day: "2-digit",
-                                    month: "long",
-                                    year: "numeric",
-                                }).format(new Date(startDate))}
-                            </span>
-                        </div>
-                    )}
-                </div>
 
-                {/* End Date */}
-                <div className="flex flex-col space-y-2">
-                    <Label>End Date</Label>
-                    <input
-                        type="date"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                        className="border rounded-md px-3 py-2 text-sm"
-                    />
-                    {endDate && (
-                        <div className="flex items-center space-x-1 text-rose-600">
-                            <CalendarArrowDown size={16} strokeWidth={2} />
-                            <span className="text-xs font-semibold">
-                                {new Intl.DateTimeFormat("en-US", {
-                                    day: "2-digit",
-                                    month: "long",
-                                    year: "numeric",
-                                }).format(new Date(endDate))}
-                            </span>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Shift Select */}
-            <div className="flex flex-col space-y-2">
-                <Label>Select Shift</Label>
-                <Select value={selectedShift?.toString()} onValueChange={(val) => setSelectedShift(Number(val))}>
-                    <SelectTrigger className="w-full md:w-[250px]">
-                        <SelectValue placeholder="Select a shift" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {shifts.map((s) => (
-                            <SelectItem key={s.id} value={s.id.toString()}>
-                                {capitalize(s.type)}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            </div>
-
-            {/* User MultiSelect */}
-            <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                    <Label>Assign Users</Label>
-                    <div className="flex space-x-2">
-                        <Button type="button" variant="outline" size="sm" onClick={setAllUsers}>
-                            Select All
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="destructive"
-                            size="sm"
-                            onClick={clearUsers}
-                            disabled={selectedUsers.length === 0}
-                        >
-                            Clear
-                        </Button>
-                    </div>
-                </div>
-
-                <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                        <Button
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={open}
-                            className="w-full justify-between bg-white text-sm h-12"
-                        >
-                            <div className="flex flex-wrap gap-1.5 items-center min-h-[1.5rem]">
-                                {selectedUsers.length > 0 ? (
-                                    selectedUsers.map((id) => {
-                                        const user = users.find((u) => u.id === id)
-                                        return (
-                                            <Badge
-                                                key={id}
-                                                variant="secondary"
-                                                className="flex items-center gap-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs px-2 py-0.5"
-                                            >
-                                                {user?.name}
-                                                <span
-                                                    role="button"
-                                                    tabIndex={0}
-                                                    onClick={(e) => {
-                                                        e.stopPropagation()
-                                                        e.preventDefault()
-                                                        toggleUser(id)
-                                                    }}
-                                                    className="cursor-pointer hover:bg-rose-100 rounded-md ml-1"
-                                                >
-                                                    <X className="h-3 w-3 text-rose-500 hover:text-rose-700" />
-                                                </span>
-                                            </Badge>
-                                        )
-                                    })
-                                ) : (
-                                    <span className="text-slate-500">Select users...</span>
-                                )}
-                            </div>
-                            <ChevronsUpDown className="h-4 w-4 text-slate-500" />
-                        </Button>
-                    </PopoverTrigger>
-
-                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
-                        <Command className="bg-white">
-                            <CommandInput placeholder="Search users..." className="h-10 text-sm" />
-                            <CommandEmpty className="py-4 text-center text-sm text-slate-500">
-                                No users found.
-                            </CommandEmpty>
-                            <CommandGroup className="max-h-64 overflow-y-auto">
-                                {users.map((user) => {
-                                    const isSelected = selectedUsers.includes(user.id)
-                                    return (
-                                        <CommandItem
-                                            key={user.id}
-                                            value={user.name}
-                                            onSelect={() => toggleUser(user.id)}
-                                            className="flex items-center justify-between py-2 px-4 hover:bg-slate-50"
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className="p-2 bg-slate-100 rounded-lg">
-                                                    <CircleUserRound className="h-5 w-5 text-slate-600" />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-sm font-medium text-slate-700">
-                                                        {user.name}
-                                                    </span>
-                                                    <span className="text-xs text-slate-400">
-                                                        {user.email}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            {isSelected && (
-                                                <div className="bg-teal-100 p-1.5 rounded-md">
-                                                    <Check className="h-4 w-4 text-teal-600" />
-                                                </div>
-                                            )}
-                                        </CommandItem>
-                                    )
-                                })}
-                            </CommandGroup>
-                        </Command>
-                    </PopoverContent>
-                </Popover>
-            </div>
-
-            {/* Generate Button */}
-            <div>
-                <Button
-                    type="button"
-                    onClick={generateRange}
-                    disabled={!startDate || !endDate || !selectedShift || selectedUsers.length === 0}
-                    className="w-full md:w-auto"
-                >
-                    Generate Schedule
-                </Button>
-            </div>
-
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                <DialogContent className="sm:max-w-md rounded-md border border-slate-700 bg-slate-900 text-slate-100">
-                    <DialogHeader>
-                        <DialogTitle className={dialogType === "success" ? "text-teal-400" : "text-rose-400"}>
-                            {dialogType === "success" ? "Success" : "Error"}
-                        </DialogTitle>
-                        <DialogDescription className="text-slate-300">
-                            {dialogMessage}
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                            Close
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+      {/* User MultiSelect */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label>Assign Users</Label>
+          <div className="flex space-x-2">
+            <Button type="button" variant="outline" size="sm" onClick={setAllUsers}>
+              Select All
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={clearUsers}
+              disabled={selectedUsers.length === 0}
+            >
+              Clear
+            </Button>
+          </div>
         </div>
-    )
+
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-full justify-between bg-white text-sm h-12"
+            >
+              <div className="flex flex-wrap gap-1.5 items-center min-h-[1.5rem]">
+                {selectedUsers.length > 0 ? (
+                  selectedUsers.map((id) => {
+                    const user = users.find((u) => u.id === id)
+                    return (
+                      <Badge
+                        key={id}
+                        variant="secondary"
+                        className="flex items-center gap-1 bg-slate-50 border border-slate-200 text-slate-700 text-xs px-2 py-0.5"
+                      >
+                        {user?.name}
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            toggleUser(id)
+                          }}
+                          className="cursor-pointer hover:bg-rose-100 rounded-md ml-1"
+                        >
+                          <X className="h-3 w-3 text-rose-500 hover:text-rose-700" />
+                        </span>
+                      </Badge>
+                    )
+                  })
+                ) : (
+                  <span className="text-slate-500">Select users...</span>
+                )}
+              </div>
+              <ChevronsUpDown className="h-4 w-4 text-slate-500" />
+            </Button>
+          </PopoverTrigger>
+
+<PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+  <Command className="bg-white">
+    <CommandInput placeholder="Search users..." className="h-10 text-sm" />
+    <CommandEmpty className="py-4 text-center text-sm text-slate-500">
+      No users found.
+    </CommandEmpty>
+
+    <CommandGroup className="max-h-64 overflow-y-auto">
+      {users.map((user) => {
+        const isSelected = selectedUsers.includes(user.id)
+        return (
+          <CommandItem
+            key={user.id}
+            value={user.name}
+            onSelect={() => toggleUser(user.id)}
+            className="
+              group cursor-pointer 
+              flex items-center justify-between py-2 px-4
+              border border-transparent 
+              hover:border-slate-200 
+              transition-colors
+            "
+          >
+            <div
+              className="
+                flex items-center gap-3 w-full 
+                rounded-md p-2
+                group-hover:bg-slate-50 
+                transition-colors
+              "
+            >
+              {/* Avatar */}
+              <div
+                className="
+                  p-2 rounded-lg bg-slate-100 
+                  group-hover:bg-teal-100 
+                  transition-colors
+                "
+              >
+                <CircleUserRound className="h-5 w-5 text-slate-600 group-hover:text-teal-700 transition-colors" />
+              </div>
+
+              {/* User Info */}
+              <div className="flex flex-col">
+                <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">
+                  {user.name}
+                </span>
+                <span className="text-xs text-slate-400 group-hover:text-slate-600 transition-colors">
+                  {user.email}
+                </span>
+              </div>
+
+              {/* Check icon */}
+              {isSelected && (
+                <div className="ml-auto bg-teal-100 p-1.5 rounded-md group-hover:bg-teal-200 transition-colors">
+                  <Check className="h-4 w-4 text-teal-600 group-hover:text-teal-700 transition-colors" />
+                </div>
+              )}
+            </div>
+          </CommandItem>
+        )
+      })}
+    </CommandGroup>
+  </Command>
+</PopoverContent>
+
+        </Popover>
+      </div>
+
+      {/* Submit Button */}
+      <div className="items-end">
+        <Button
+          type="button"
+          onClick={handleSubmit}
+          disabled={!startDate || !endDate || selectedUsers.length === 0}
+          variant="secondary"
+        >
+          Create Schedule
+        </Button>
+      </div>
+
+      {/* Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className={dialogType === "success" ? "text-teal-600" : "text-rose-600"}>
+              {dialogType === "success" ? "Success" : "Error"}
+            </DialogTitle>
+            <DialogDescription className="text-slate-500">
+              {dialogMessage}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
 }
