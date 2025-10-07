@@ -14,7 +14,7 @@ export default async function ShiftsPage({ searchParams }) {
   const mainShifts = await prisma.shift.findMany({
     where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
     select: {
-      id: true, type: true, shiftName: true,
+      id: true, type: true, name: true,
       startTime: true, endTime: true,
       schedules: {
         select: {
@@ -61,7 +61,7 @@ export default async function ShiftsPage({ searchParams }) {
     });
 
     return {
-      id: s.id, type: s.type, shiftName: s.shiftName,
+      id: s.id, type: s.type, name: s.name,
       startTime: start, endTime: end,
       timeRange: `${start} - ${end}`,
       usersCount: usersWithStatus.length, schedulesCount: s.schedules.length,

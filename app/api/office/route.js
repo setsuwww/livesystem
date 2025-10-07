@@ -1,34 +1,53 @@
+import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
-export async function GET() {
-  try {
-    const offices = await prisma.office.findMany({
+// ✅ GET all offices (pagination optional)
+export async function GET(request) {
+  const { searchParams } = new URL(request.url)
+  const page = Number(searchParams.get("page")) || 1
+  const pageSize = 5
+
+  const [offices, total] = await Promise.all([
+    prisma.office.findMany({
+      skip: (page - 1) * pageSize,
+      take: pageSize,
       orderBy: { createdAt: "desc" },
-    });
-    return Response.json(offices);
-  } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
-  }
+    }),
+    prisma.office.count(),
+  ])
+
+  return NextResponse.json({
+    data: offices,
+    total,
+    page,
+    totalPages: Math.ceil(total / pageSize),
+  })
 }
 
-export async function POST(req) {
+export async function POST(request) {
   try {
-    const body = await req.json();
-    const office = await prisma.office.create({
+    const body = await request.json()
+
+    const newOffice = await prisma.office.create({
       data: {
         name: body.name,
         location: body.location,
         longitude: body.longitude,
         latitude: body.latitude,
         radius: body.radius,
-        type: body.type || "WFO",
-        status: body.status || "INACTIVE",
+        type: body.type,       // enum LocationType
+        status: body.status,   // enum LocationStatus
         startTime: body.startTime,
         endTime: body.endTime,
       },
-    });
-    return Response.json(office);
+    })
+
+    return NextResponse.json(newOffice, { status: 201 })
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 400 });
+    console.error("❌ Error creating office:", error)
+    return NextResponse.json(
+      { message: "Failed to create office" },
+      { status: 500 }
+    )
   }
 }

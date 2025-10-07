@@ -20,7 +20,7 @@ export default async function Page() {
   });
 
   const shifts = await prisma.shift.findMany({
-    select: { id: true, type: true, shiftName: true, startTime: true, endTime: true },
+    select: { id: true, type: true, name: true, startTime: true, endTime: true },
     orderBy: { id: "asc" },
   });
 

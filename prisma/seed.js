@@ -13,25 +13,25 @@ async function main() {
   const shifts = [
     {
       type: ShiftType.MORNING,
-      shiftName: "Morning",
+      name: "Morning",
       startTime: 8 * 60,
       endTime: 16 * 60,
     },
     {
       type: ShiftType.AFTERNOON,
-      shiftName: "Afternoon",
+      name: "Afternoon",
       startTime: 16 * 60,
       endTime: 24 * 60,
     },
     {
       type: ShiftType.EVENING,
-      shiftName: "Evening",
+      name: "Evening",
       startTime: 0,
       endTime: 8 * 60,
     },
     {
       type: ShiftType.OFF,
-      shiftName: "Off",
+      name: "Off",
       startTime: 0,
       endTime: 0,
     },
@@ -40,7 +40,7 @@ async function main() {
   const seededShifts = {};
   for (const shift of shifts) {
     let s = await prisma.shift.findFirst({
-      where: { type: shift.type, shiftName: shift.shiftName },
+      where: { type: shift.type, name: shift.name },
     });
 
     if (s) {
@@ -59,12 +59,12 @@ async function main() {
   const users = [
     { name: "Admin", email: "admin@example.com", password: "admin123", role: Role.ADMIN },
     { name: "Coordinator", email: "coordinator@example.com", password: "coordinator123", role: Role.COORDINATOR },
-    { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.MORNING] },
-    { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.AFTERNOON] },
-    { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.EVENING] },
-    { name: "Mursidi", email: "mursidi@example.com", password: "mursidi123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.MORNING] },
-    { name: "Surya", email: "surya@example.com", password: "surya123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.AFTERNOON] },
-    { name: "Agus", email: "agus@example.com", password: "agus123", role: Role.EMPLOYEE, shift: seededShifts[ShiftType.EVENING] },
+    { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.MORNING] },
+    { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.AFTERNOON] },
+    { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.EVENING] },
+    { name: "Mursidi", email: "mursidi@example.com", password: "mursidi123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.MORNING] },
+    { name: "Surya", email: "surya@example.com", password: "surya123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.AFTERNOON] },
+    { name: "Agus", email: "agus@example.com", password: "agus123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.EVENING] },
   ];
 
   for (const u of users) {

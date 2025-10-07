@@ -3,89 +3,36 @@ import ContentForm from "@/components/content/ContentForm"
 import { ContentInformation } from "@/components/content/ContentInformation"
 import { Pagination } from "../../Pagination"
 import OfficesTable from "./OfficesTable"
+import { prisma } from "@/lib/prisma"
 
-// data dummy
 const PAGE_SIZE = 5
-const dummyOffices = [
-  {
-    id: 1,
-    name: "Head Office",
-    location: "Jakarta",
-    type: "WFO",
-    status: "ACTIVE",
-    startTime: "08:00",
-    endTime: "17:00",
-    createdAt: "2025-01-01T08:00:00.000Z",
-    updatedAt: "2025-02-01T09:00:00.000Z",
-  },
-  {
-    id: 2,
-    name: "Remote Office Bandung",
-    location: "Bandung",
-    type: "WFH",
-    status: "INACTIVE",
-    startTime: "09:00",
-    endTime: "18:00",
-    createdAt: "2025-01-10T08:00:00.000Z",
-    updatedAt: "2025-02-02T09:00:00.000Z",
-  },
-  {
-    id: 3,
-    name: "Surabaya Branch",
-    location: "Surabaya",
-    type: "WFO",
-    status: "ACTIVE",
-    startTime: "07:30",
-    endTime: "16:30",
-    createdAt: "2025-01-15T08:00:00.000Z",
-    updatedAt: "2025-02-03T09:00:00.000Z",
-  },
-  {
-    id: 4,
-    name: "Bali Hub",
-    location: "Denpasar",
-    type: "WFH",
-    status: "ACTIVE",
-    startTime: "10:00",
-    endTime: "19:00",
-    createdAt: "2025-01-20T08:00:00.000Z",
-    updatedAt: "2025-02-04T09:00:00.000Z",
-  },
-  {
-    id: 5,
-    name: "Jogja Office",
-    location: "Yogyakarta",
-    type: "WFO",
-    status: "INACTIVE",
-    startTime: "08:30",
-    endTime: "17:30",
-    createdAt: "2025-01-25T08:00:00.000Z",
-    updatedAt: "2025-02-05T09:00:00.000Z",
-  },
-  {
-    id: 6,
-    name: "Medan Office",
-    location: "Medan",
-    type: "WFH",
-    status: "ACTIVE",
-    startTime: "09:00",
-    endTime: "18:00",
-    createdAt: "2025-01-28T08:00:00.000Z",
-    updatedAt: "2025-02-06T09:00:00.000Z",
-  },
-]
 
 export default async function Page({ searchParams }) {
   const page = Number(searchParams?.page) || 1
-  const total = dummyOffices.length
+  const [offices, total] = await Promise.all([
+    prisma.office.findMany({
+      skip: (page - 1) * PAGE_SIZE,
+      take: PAGE_SIZE,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true, name: true, location: true, type: true, status: true,
+        latitude: true, longitude: true, radius: true,
+        startTime: true, endTime: true, createdAt: true, updatedAt: true,
+      },
+    }),
+    prisma.office.count(),
+  ])
+
   const totalPages = Math.ceil(total / PAGE_SIZE)
-
-  // slice dummy data for pagination
-  const offices = dummyOffices.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-
-  if (page > totalPages && totalPages > 0) {
-    return <div className="p-4">Page not found</div>
-  }
+  const formattedOffices = offices.map((office) => ({
+    ...office,
+    startTime: office.startTime != null
+      ? `${String(Math.floor(office.startTime / 60)).padStart(2, "0")}:${String(office.startTime % 60).padStart(2, "0")}`
+      : "-",
+    endTime: office.endTime != null
+      ? `${String(Math.floor(office.endTime / 60)).padStart(2, "0")}:${String(office.endTime % 60).padStart(2, "0")}`
+      : "-",
+  }))
 
   return (
     <section>
@@ -102,7 +49,7 @@ export default async function Page({ searchParams }) {
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <OfficesTable data={offices} />
+          <OfficesTable data={formattedOffices} />
           <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/offices" />
         </ContentForm.Body>
       </ContentForm>

@@ -21,8 +21,8 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
             <CardTitle className="flex items-center gap-2">
               <div className="flex flex-col">
                 <h3 className="text-slate-600">{capitalize(shift.type)}</h3>
-                <p className="text-xs text-slate-400">{shift.shiftName}</p>
-                <Badge className={`mt-2 ${shiftStyles[shift.type]}`}>
+                <p className="text-xs text-slate-400">{shift.name}</p>
+                <Badge className={`mt-2 ${shiftStyles[shift.type]} bg-transparent border-transparent px-0 py-0`}>
                   {shift.timeRange}
                 </Badge>
               </div>

@@ -17,7 +17,7 @@ import { DashboardHeader } from "../../DashboardHeader";
 
 export default function CreateShiftForm() {
   const [type, setType] = useState("MORNING");
-  const [shiftName, setShiftName] = useState("");
+  const [name, setname] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
 
@@ -28,7 +28,7 @@ export default function CreateShiftForm() {
 
     const payload = {
       type,
-      shiftName,
+      name,
       startTime: timeToInt(startTime), endTime: timeToInt(endTime),
     };
 
@@ -40,7 +40,7 @@ export default function CreateShiftForm() {
         errorMessage: "Failed to create shift",
         onSuccess: () => {
           setType("MORNING");
-          setShiftName("");
+          setname("");
           setStartTime("");
           setEndTime("");
           router.push("/admin/dashboard/shifts");
@@ -82,7 +82,7 @@ export default function CreateShiftForm() {
               </div>
               <div>
                 <Label htmlFor="shift-type">Shift Name<span className="text-rose-500">*</span></Label>
-                <Input id="shiftName" value={shiftName} onChange={(e) => setShiftName(e.target.value)}
+                <Input id="name" value={name} onChange={(e) => setname(e.target.value)}
                   type="text"
                   className="mt-1"
                 />

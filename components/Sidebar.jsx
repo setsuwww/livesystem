@@ -145,10 +145,7 @@ export function Sidebar({ user }) {
           <CircleUserRound size={28} strokeWidth={1.5} />
         </div>
         <div className="flex flex-col text-sm">
-          <div className="flex items-center justify-between space-x-2">
-            <span className="font-semibold">{user?.name || "Guest"}</span>
-            <span className={`text-xs px-1.5 py-0.5 rounded-full ${roleStyles[formattedRole]}`}>{capitalize(user?.role || "")}</span>
-          </div>
+          <span className="font-semibold">{user?.name || "Guest"}</span>
           <span className="text-xs text-slate-500">{user?.email || ""}</span>
         </div>
         </div>

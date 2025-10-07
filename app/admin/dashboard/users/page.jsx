@@ -15,17 +15,27 @@ async function getUsers(page = 1) {
   return await prisma.user.findMany({
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
-    select: { id: true, name: true, email: true, role: true,
-      createdAt: true, updatedAt: true,
-      shift: {
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+      shiftId: true,
+      shift:{
         select: {
-          id: true, type: true, startTime: true, endTime: true,
+          id: true,
+          type: true,
+          startTime: true,
+          endTime: true,
         },
       },
     },
     orderBy: { createdAt: "desc" },
   });
 }
+
 
 async function getUserCount() { return await prisma.user.count() }
 

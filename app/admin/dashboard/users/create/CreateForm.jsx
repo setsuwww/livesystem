@@ -6,24 +6,27 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { RadioButton } from "@/components/ui/RadioButton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
-import { ContentList } from "@/components/content/ContentList";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
-
 import { DashboardHeader } from "../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
 import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
 
-export default function CreateForm({ shifts }) {
+export default function CreateForm({ shifts, offices }) {
   const router = useRouter();
   const [form, setForm] = useState({
-    name: "", email: "",
-    password: "", role: "USER",
+    name: "",
+    email: "",
+    password: "",
+    role: "USER",
     shiftId: "",
+    officeId: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -31,13 +34,16 @@ export default function CreateForm({ shifts }) {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCustomChange = (name, value) => { setForm((prev) => ({ ...prev, [name]: value })); };
+  const handleCustomChange = (name, value) => {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => { e.preventDefault();
     setLoading(true);
 
     const payload = { ...form,
       shiftId: form.shiftId && form.shiftId !== "NONE" ? parseInt(form.shiftId) : null,
+      officeId: form.officeId && form.officeId !== "NONE" ? parseInt(form.officeId) : null,
     };
 
     try { await fetch({ url: "/users", method: "post", data: payload,
@@ -45,71 +51,84 @@ export default function CreateForm({ shifts }) {
         errorMessage: "Failed to create user ❌",
         onSuccess: () => router.push("/admin/dashboard/users"),
       });
-    }
-    finally {
-      setLoading(false);
-    }
+    } 
+    finally { setLoading(false)}
   };
 
   return (
     <section>
-      <DashboardHeader title="Create Users" subtitle="Insert name, email, password, select role and shift for users data" />
+      <DashboardHeader title="Create User" subtitle="Insert name, email, password, role, shift, and office for user"/>
 
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
-            <ContentInformation
-              heading="Public"
-              subheading="Users public username & email"
-              show={true} 
-              variant="outline" buttonText="Back" href="/admin/dashboard/users"
+            <ContentInformation heading="Public" subheading="Users public username & email"
+              show={true} variant="outline" buttonText="Back" href="/admin/dashboard/users"
             />
           </ContentForm.Header>
 
-          {/* BODY */}
           <ContentForm.Body>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-head">Username <span className="text-rose-500">*</span></Label>
+                <Label htmlFor="username">
+                  Username <span className="text-rose-500">*</span>
+                </Label>
                 <Input placeholder="Username" name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
+                  value={form.name} onChange={handleChange} required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-head">Email <span className="text-rose-500">*</span></Label>
+                <Label htmlFor="email">
+                  Email <span className="text-rose-500">*</span>
+                </Label>
                 <Input placeholder="Users email" type="email" name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
+                  value={form.email} onChange={handleChange} required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-head">Password <span className="text-rose-500">*</span></Label>
+                <Label htmlFor="password">
+                  Password <span className="text-rose-500">*</span>
+                </Label>
                 <Input placeholder="Users password" type="password" name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  required
+                  value={form.password} onChange={handleChange} required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role" className="text-head">Role <span className="text-rose-500">*</span></Label>
+                <Label htmlFor="role">
+                  Role <span className="text-rose-500">*</span>
+                </Label>
                 <RadioButton name="role"
-                  options={roleOptions}
-                  value={form.role}
-                  onChange={(value) => handleCustomChange("role", value)}
+                  options={roleOptions} value={form.role} onChange={(value) => handleCustomChange("role", value)}
                 />
-                
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-head">
+                <Label htmlFor="officeId">
+                  Office Assignment
+                </Label>
+                <Select value={form.officeId} onValueChange={(value) => handleCustomChange("officeId", value)}>
+                  <SelectTrigger className="w-1/2">
+                    <SelectValue placeholder="No Office Assigned" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="NONE">-</SelectItem>
+                    {offices.map((office) => (
+                      <SelectItem key={office.id} value={String(office.id)}>
+                        {capitalize(office.name)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-subhead">Optional</p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="shiftId">
                   Shift Assignment
-                </label>
+                </Label>
                 <Select value={form.shiftId} onValueChange={(value) => handleCustomChange("shiftId", value)}>
                   <SelectTrigger className="w-1/2">
                     <SelectValue placeholder="No Shift Assigned" />
@@ -129,7 +148,9 @@ export default function CreateForm({ shifts }) {
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <Button type="submit" disabled={loading}>{loading ? "Creating..." : "Create User"}</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Create User"}
+            </Button>
           </ContentForm.Footer>
         </form>
       </ContentForm>

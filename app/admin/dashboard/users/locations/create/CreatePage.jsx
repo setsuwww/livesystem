@@ -16,8 +16,8 @@ import { fetch } from "@/function/helpers/fetch";
 import { capitalize } from '@/function/globalFunction';
 
 const typeOptions = [
-  { label: "WFO", value: "WFO" },
-  { label: "WFH", value: "WFH" },
+  { label: "WFO (Work From Office)", value: "WFO" },
+  { label: "WFA (Work From Anywhere)", value: "WFA" },
 ];
 
 const statusOptions = [
@@ -64,12 +64,12 @@ export default function CreateOfficeForm() {
 
     try {
       await fetch({
-        url: "/offices",
+        url: "/office",
         method: "post",
         data: payload,
         successMessage: "Office created successfully ✅",
         errorMessage: "Failed to create office ❌",
-        onSuccess: () => router.push("/admin/dashboard/offices"),
+        onSuccess: () => router.push("/admin/dashboard/users/locations"),
       });
     } finally {
       setLoading(false);

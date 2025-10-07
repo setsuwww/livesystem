@@ -36,7 +36,7 @@ export function ShiftAssignedUsersModal({ shift }) {
               </h4>
               <p className="flex space-x-2">
                 <span className="text-slate-600">Assigned Users </span>
-                <span className="text-slate-400">{shift.shiftName || shift.type}</span>
+                <span className="text-slate-400">{shift.name || shift.type}</span>
               </p>
             </div>
             <Badge className={shiftStyles[shift.type]}>{shift.startTime} - {shift.endTime}</Badge>
