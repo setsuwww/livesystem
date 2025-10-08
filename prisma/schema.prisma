@@ -54,6 +54,12 @@ enum AttendanceStatus {
   ALPHA
 }
 
+model SystemConfig {
+  id           Int     @id @default(autoincrement())
+  allWfaActive Boolean @default(false)
+  updatedAt    DateTime @updatedAt
+}
+
 /// Office / Lokasi Kerja
 model Office {
   id        Int            @id @default(autoincrement())

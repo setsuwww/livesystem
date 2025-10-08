@@ -39,6 +39,7 @@ export function ShiftsView({ data }) {
             <TableHead>Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Time Range</TableHead>
+            <TableHead>Office</TableHead>
             <TableHead>Users</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -70,6 +71,10 @@ export function ShiftsView({ data }) {
                   {shift.timeRange}
                 </Badge>
               </TableCell>
+
+              <TableCell className="text-slate-700">
+        {shift.office}
+      </TableCell>
 
               {/* Users */}
               <TableCell>

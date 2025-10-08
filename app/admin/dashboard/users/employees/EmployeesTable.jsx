@@ -1,22 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { EmployeesActionHeader } from "./EmployeesActionHeader";
 import { EmployeesRow } from "./EmployeesRow";
-
 import { useEmployeesHooks } from "@/function/hooks/useEmployeesHooks";
 
-export default function EmployeeTable({ users, shifts }) {
+export default function EmployeesTable({ users, offices, shifts }) {
   const {
     search, setSearch,
     selected, setSelected,
     data, filteredData,
-    toggleSelect,
-    deleteSelected, deleteAll,
-    exportCSV, onSwitch, onDelete,
+    officeFilter, setOfficeFilter,
+    shiftFilter, setShiftFilter,
+    toggleSelect, deleteSelected,
+    deleteAll, exportCSV,
+    onSwitch, onDelete,
   } = useEmployeesHooks(users, shifts);
 
   const router = useRouter();
@@ -24,24 +24,20 @@ export default function EmployeeTable({ users, shifts }) {
   return (
     <div className="space-y-4">
       <EmployeesActionHeader
-        search={search}
-        setSearch={setSearch}
-        selected={selected}
-        onDeleteSelected={deleteSelected}
-        onDeleteAll={deleteAll}
-        onExport={exportCSV}
+        search={search} setSearch={setSearch}
+        selected={selected} onDeleteSelected={deleteSelected}
+        onDeleteAll={deleteAll} onExport={exportCSV}
+        officeFilter={officeFilter} setOfficeFilter={setOfficeFilter}
+        shiftFilter={shiftFilter} setShiftFilter={setShiftFilter}
+        offices={offices}
+        shifts={shifts}
       />
 
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="flex items-center">
-              <Checkbox
-                checked={selected.length === data.length && data.length > 0}
-                onCheckedChange={(value) =>
-                  setSelected(value ? data.map((u) => u.id) : [])
-                }
-              />
+              <Checkbox checked={selected.length === data.length && data.length > 0} onCheckedChange={(value) => setSelected(value ? data.map((u) => u.id) : [])}/>
             </TableHead>
             <TableHead>Employees</TableHead>
             <TableHead>Shifts</TableHead>
@@ -53,22 +49,15 @@ export default function EmployeeTable({ users, shifts }) {
 
         <TableBody>
           {filteredData.map((user) => (
-            <EmployeesRow
-              key={user.id}
-              user={user}
-              selected={selected}
-              toggleSelect={toggleSelect}
-              onHistory={() => router.push("/admin/dashboard/users/" + user.id + "/history")}
+            <EmployeesRow key={user.id} user={user} selected={selected} toggleSelect={toggleSelect}
+              onHistory={() => router.push(`/admin/dashboard/users/${user.id}/history`)}
               onSwitch={onSwitch}
-              onEdit={() => router.push("/admin/dashboard/users/" + user.id + "/edit")}
+              onEdit={() => router.push(`/admin/dashboard/users/${user.id}/edit`)}
               onDelete={() => onDelete(user.id)}
             />
           ))}
         </TableBody>
       </Table>
-
-
-      {/* <ShiftScheduleTable /> */}
     </div>
   );
 }

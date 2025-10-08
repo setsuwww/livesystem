@@ -1,9 +1,19 @@
 "use client"
 
 import { useState, useMemo, useCallback, useRef } from "react"
+import useSWR from "swr"
 import { handleOffices } from "../handleOffices"
 
+const fetcher = async (url) => {
+  const res = await fetch(url)
+  const data = await res.json()
+  return Array.isArray(data) ? data : data.data || []
+}
+
 export function useOfficesHooks(initialData = []) {
+  // Ambil data dari API + fallback dari server
+  const { data: offices = [], mutate } = useSWR("/api/office", fetcher)
+
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -11,23 +21,21 @@ export function useOfficesHooks(initialData = []) {
 
   const searchRef = useRef(null)
 
+  // Filtering lokal
   const filteredData = useMemo(() => {
-    return initialData.filter((office) => {
+    return offices.filter((office) => {
       const matchesSearch =
         office.name.toLowerCase().includes(search.toLowerCase()) ||
         office.location.toLowerCase().includes(search.toLowerCase())
 
-      const matchesType =
-        typeFilter === "all" || office.type === typeFilter
-
-      const matchesStatus =
-        statusFilter === "all" || office.status === statusFilter
+      const matchesType = typeFilter === "all" || office.type === typeFilter
+      const matchesStatus = statusFilter === "all" || office.status === statusFilter
 
       return matchesSearch && matchesType && matchesStatus
     })
-  }, [initialData, search, typeFilter, statusFilter])
+  }, [offices, search, typeFilter, statusFilter])
 
-  // ✅ Select/Deselect office untuk bulk action
+  // Bulk action handlers
   const toggleSelect = useCallback((id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -35,12 +43,12 @@ export function useOfficesHooks(initialData = []) {
   }, [])
 
   const handleDeleteAll = useCallback(() => {
-    handleOffices.onDeleteAll?.()
-  }, [])
+    handleOffices.onDeleteAll?.(mutate)
+  }, [mutate])
 
   const handleDeleteSelected = useCallback(() => {
-    handleOffices.onDeleteSelected?.(selectedIds)
-  }, [selectedIds])
+    handleOffices.onDeleteSelected?.(selectedIds, mutate)
+  }, [selectedIds, mutate])
 
   const handleExportPDF = useCallback(() => {
     handleOffices.onExportPDF?.(filteredData)
@@ -60,5 +68,6 @@ export function useOfficesHooks(initialData = []) {
     handleDeleteAll,
     handleExportPDF,
     searchRef,
+    mutate,
   }
 }

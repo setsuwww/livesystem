@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/Button";
@@ -8,68 +8,105 @@ import { Input } from "@/components/ui/Input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
-import { ScrollArea } from "@/components/ui/Scroll-area";
 import { Label } from "@/components/ui/Label";
+import { DashboardHeader } from "../../DashboardHeader";
 
 import { fetch } from "@/function/helpers/fetch";
 import { timeToInt } from "@/function/services/shiftAttendance";
-import { DashboardHeader } from "../../DashboardHeader";
+import { capitalize } from "@/function/globalFunction";
 
-export default function CreateShiftForm() {
+export default function CreateShiftForm({ offices }) {
+  const router = useRouter();
+
   const [type, setType] = useState("MORNING");
-  const [name, setname] = useState("");
+  const [name, setName] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-
-  const router = useRouter();
+  const [officeId, setOfficeId] = useState("NONE");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (officeId === "NONE") {
+      alert("Please select an office for this shift!");
+      return;
+    }
+
     const payload = {
       type,
       name,
-      startTime: timeToInt(startTime), endTime: timeToInt(endTime),
+      startTime: timeToInt(startTime),
+      endTime: timeToInt(endTime),
+      officeId: parseInt(officeId),
     };
 
     try {
+      setLoading(true);
       await fetch({
-        url: "/shifts", method: "post",
+        url: "/shifts",
+        method: "post",
         data: payload,
         successMessage: "Shift created successfully!",
         errorMessage: "Failed to create shift",
         onSuccess: () => {
           setType("MORNING");
-          setname("");
+          setName("");
           setStartTime("");
           setEndTime("");
+          setOfficeId("NONE");
           router.push("/admin/dashboard/shifts");
         },
       });
-    }
-    catch (err) {
-      console.error("Shift creation error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-
   return (
     <section>
-      <DashboardHeader title="Create Shifts" subtitle="Manage shifts data" />
+      <DashboardHeader title="Create Shift" subtitle="Assign a shift to an office" />
 
       <ContentForm>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <ContentForm.Header>
-            <ContentInformation heading="Shift Form" subheading="Create a new shift and assign users"
-              show={true} buttonText="Back" variant="outline" href="/admin/dashboard/shifts"
+            <ContentInformation
+              heading="Shift Form"
+              subheading="Create a new shift and assign it to an office"
+              show={true}
+              buttonText="Back"
+              variant="outline"
+              href="/admin/dashboard/shifts"
             />
           </ContentForm.Header>
 
           <ContentForm.Body>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 space-y-2">
-              <div>
+            <div className="flex flex-col space-y-4">
+              {/* Office */}
+              <div className="space-y-2">
+                <Label htmlFor="office-select">
+                  Office <span className="text-rose-500">*</span>
+                </Label>
+                <Select value={officeId} onValueChange={setOfficeId}>
+                  <SelectTrigger id="office-select" className="w-full mt-1">
+                    <SelectValue placeholder="Select an office" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="NONE">-</SelectItem>
+                    {offices.map((office) => (
+                      <SelectItem key={office.id} value={String(office.id)}>
+                        {capitalize(office.name)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Shift Type and Name */}
+              <div className="flex space-x-4">
+              <div className="flex-1 space-y-2">
                 <Label htmlFor="shift-type">Shift Type</Label>
-                <Select value={type} onValueChange={(v) => setType(v)}>
+                <Select value={type} onValueChange={setType}>
                   <SelectTrigger id="shift-type" className="w-full mt-1">
                     <SelectValue placeholder="Select shift type" />
                   </SelectTrigger>
@@ -80,34 +117,60 @@ export default function CreateShiftForm() {
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label htmlFor="shift-type">Shift Name<span className="text-rose-500">*</span></Label>
-                <Input id="name" value={name} onChange={(e) => setname(e.target.value)}
+
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="shift-name">
+                  Shift Name <span className="text-rose-500">*</span>
+                </Label>
+                <Input
+                  id="shift-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
+                  placeholder="Example: Morning Shift"
                   className="mt-1"
+                  required
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="start-time">Start Time<span className="text-rose-500">*</span></Label>
-                <Input id="start-time" value={startTime} onChange={(e) => setStartTime(e.target.value)}
-                  type="time"
-                  className="mt-1"
-                />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="end-time">End Time<span className="text-rose-500">*</span></Label>
-                <Input id="end-time" value={endTime} onChange={(e) => setEndTime(e.target.value)}
-                  type="time"
-                  className="mt-1"
-                />
+              {/* Start & End Time */}
+              <div className="flex space-x-4">
+                <div className="flex-1 space-y-2">
+                  <Label htmlFor="start-time">
+                    Start Time <span className="text-rose-500">*</span>
+                  </Label>
+                  <Input
+                    id="start-time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    type="time"
+                    className="mt-1"
+                    required
+                  />
+                </div>
+
+                <div className="flex-1 space-y-2">
+                  <Label htmlFor="end-time">
+                    End Time <span className="text-rose-500">*</span>
+                  </Label>
+                  <Input
+                    id="end-time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    type="time"
+                    className="mt-1"
+                    required
+                  />
+                </div>
               </div>
             </div>
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <Button type="submit">Create Shift</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Create Shift"}
+            </Button>
           </ContentForm.Footer>
         </form>
       </ContentForm>

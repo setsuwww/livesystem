@@ -1,20 +1,21 @@
-import { prisma } from "@/lib/prisma"
-
-import { DashboardHeader } from '../DashboardHeader'; 
-import UsersTable from "./UsersTable"
-import ContentForm from '@/components/content/ContentForm';
-import { ContentInformation } from '@/components/content/ContentInformation';
+import { prisma } from "@/lib/prisma";
+import { DashboardHeader } from "../DashboardHeader";
+import UsersTable from "./UsersTable";
+import ContentForm from "@/components/content/ContentForm";
+import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "../Pagination";
-
 import { capitalize } from "@/function/globalFunction";
-import { minutesToTime } from '@/function/services/shiftAttendance';
+import { minutesToTime } from "@/function/services/shiftAttendance";
+import { notFound } from "next/navigation";
 
 const PAGE_SIZE = 5;
+export const revalidate = 60;
 
 async function getUsers(page = 1) {
-  return await prisma.user.findMany({
+  return prisma.user.findMany({
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
+    orderBy: { createdAt: "desc" },
     select: {
       id: true,
       name: true,
@@ -22,24 +23,25 @@ async function getUsers(page = 1) {
       role: true,
       createdAt: true,
       updatedAt: true,
-      shiftId: true,
-      shift:{
-        select: {
-          id: true,
-          type: true,
-          startTime: true,
-          endTime: true,
+      shift: {
+        select: { name: true, type: true, startTime: true, endTime: true },
+      },
+      office: {
+        select: { name: true,
+          startTime: true, endTime: true,
+          shifts: {
+            select: { name: true, startTime: true, endTime: true },
+            where: { isActive: true },
+          },
         },
       },
     },
-    orderBy: { createdAt: "desc" },
   });
 }
 
-
-async function getUserCount() { return await prisma.user.count() }
-
-export const revalidate = 60;
+async function getUserCount() {
+  return prisma.user.count();
+}
 
 export default async function Page({ searchParams }) {
   const page = Number(searchParams?.page) || 1;
@@ -49,28 +51,71 @@ export default async function Page({ searchParams }) {
     getUserCount(),
   ]);
 
-  const tableData = users.map(u => ({
-    id: u.id, name: u.name, email: u.email,
-    role: capitalize(u.role), shift: u.shift ? `${capitalize(u.shift.type)}` : "",
-    shiftTime: u.shift
-      ? `${minutesToTime(u.shift.startTime)} - ${minutesToTime(u.shift.endTime)}`
-      : "",
-    createdAt: u.createdAt.toISOString(), updatedAt: u.updatedAt.toISOString(),
-  }));
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (page > totalPages && totalPages > 0) return notFound();
 
-  const totalPages = Math.ceil(total / PAGE_SIZE);
+  const tableData = users.map((u) => {
+    // 🧩 PRIORITAS WAKTU
+    // 1️⃣ Langsung dari shift user
+    const userShift = u.shift
+      ? {
+          label: capitalize(u.shift.name || u.shift.type),
+          start: u.shift.startTime,
+          end: u.shift.endTime,
+        }
+      : null;
 
-  if (page > totalPages && totalPages > 0) { return <div className="p-4">Page not found</div> }
+    // 2️⃣ Kalau gak ada shift, coba ambil shift kantor (first active)
+    const officeShift =
+      !userShift && u.office?.shifts?.length
+        ? {
+            label: `${u.office.shifts[0].name} (Office)`,
+            start: u.office.shifts[0].startTime,
+            end: u.office.shifts[0].endTime,
+          }
+        : null;
+
+    // 3️⃣ Kalau gak ada juga, ambil jam kerja default dari kantor
+    const officeTime =
+      !userShift && !officeShift && u.office?.startTime && u.office?.endTime
+        ? {
+            label: u.office.name,
+            start: u.office.startTime,
+            end: u.office.endTime,
+          }
+        : null;
+
+    // 🔄 Tentukan final fallback (urutan prioritas)
+    const finalShift = userShift || officeShift || officeTime;
+
+    const shiftLabel = finalShift ? finalShift.label : "—";
+    const shiftTime = finalShift
+      ? `${minutesToTime(finalShift.start)} - ${minutesToTime(finalShift.end)}`
+      : "—";
+
+    return {
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: capitalize(u.role),
+      shift: shiftLabel,
+      shiftTime,
+      createdAt: u.createdAt.toISOString(),
+      updatedAt: u.updatedAt.toISOString(),
+    };
+  });
 
   return (
     <section>
       <DashboardHeader title="Users" subtitle="Users data detail" />
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation 
-            heading="List users" subheading="Manage all users data in this table"
-            show={true} 
-            buttonText="Create Users" href="/admin/dashboard/users/create"
+          <ContentInformation
+            heading="List users"
+            subheading="Manage all users data in this table"
+            show
+            buttonText="Create Users"
+            href="/admin/dashboard/users/create"
           />
         </ContentForm.Header>
 

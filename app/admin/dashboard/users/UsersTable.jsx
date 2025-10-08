@@ -36,7 +36,7 @@ export default function UsersTable({ data }) { const {
             </TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Shift</TableHead>
+            <TableHead>Work Hours</TableHead>
             <TableHead>Created & Updated</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>

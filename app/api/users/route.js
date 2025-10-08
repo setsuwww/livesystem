@@ -32,30 +32,26 @@ export async function GET(req) {
 
 export async function POST(request) {
   try {
-    const body = await request.json();
-    const { name, email, password, role, shiftId, officeId } = body;
+    const body = await request.json()
+    const { name, email, password, role, shiftId, officeId } = body
 
-    // 🧩 Validasi input dasar
     if (!name || !email || !password) {
       return NextResponse.json(
         { error: "Name, email, and password are required." },
         { status: 400 }
-      );
+      )
     }
 
-    // 🚫 Cek duplicate email
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findUnique({ where: { email } })
     if (existingUser) {
       return NextResponse.json(
         { error: "User with this email already exists." },
         { status: 409 }
-      );
+      )
     }
 
-    // 🔒 Hash password
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 12)
 
-    // 🧠 Susun data
     const userData = {
       name,
       email,
@@ -63,27 +59,26 @@ export async function POST(request) {
       role: role || "USER",
       ...(shiftId && { shiftId: parseInt(shiftId) }),
       ...(officeId && { officeId: parseInt(officeId) }),
-    };
+    }
 
-    // 💾 Simpan user baru
     const user = await prisma.user.create({
       data: userData,
       include: {
-        shift: { select: { id: true, type: true, startTime: true, endTime: true } },
-        office: { select: { id: true, name: true, location: true, type: true } },
+        shift: { select: { id: true, name: true, startTime: true, endTime: true } },
+        office: { select: { id: true, name: true, location: true } },
       },
-    });
+    })
 
     return NextResponse.json(
       { message: "User created successfully ✅", user },
       { status: 201 }
-    );
+    )
   } catch (error) {
-    console.error("❌ Error creating user:", error);
+    console.error("❌ Error creating user:", error)
     return NextResponse.json(
       { error: "Failed to create user." },
       { status: 500 }
-    );
+    )
   }
 }
 

@@ -1,14 +1,13 @@
 import { Badge } from "@/components/ui/Badge"
+import { ChevronUp, ChevronDown } from "lucide-react"
 
 export function OfficesStatusBadge({ status, onToggle }) {
   const isActive = status === "ACTIVE"
 
   return (
-    <Badge
-      variant="outline"
-      onClick={onToggle}
-      className={`flex items-center border-slate-200 gap-2 px-2.5 py-1 rounded-full cursor-pointer select-none transition 
-      ${isActive ? "hover:bg-teal-50" : "hover:bg-rose-50"}`}
+    <Badge variant="outline" onClick={onToggle}
+      className={`flex items-center gap-2 px-2.5 py-1 rounded-full cursor-pointer select-none border-slate-200 transition
+        ${isActive ? "hover:bg-teal-50" : "hover:bg-rose-50"}`}
     >
       <span className="relative flex h-2 w-2">
         <span
@@ -22,9 +21,15 @@ export function OfficesStatusBadge({ status, onToggle }) {
           }`}
         ></span>
       </span>
-      <span className="text-xs font-semibold text-slate-600">
-        {isActive ? "Active" : "Inactive"}
-      </span>
+
+      <div className="flex items-center gap-1 text-xs font-semibold text-slate-600">
+        <span>{isActive ? "Active" : "Inactive"}</span>
+        {isActive ? (
+          <ChevronUp className="h-3.5 w-3.5 text-teal-600" />
+        ) : (
+          <ChevronDown className="h-3.5 w-3.5 text-rose-600" />
+        )}
+      </div>
     </Badge>
   )
 }

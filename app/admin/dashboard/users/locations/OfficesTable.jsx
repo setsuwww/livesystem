@@ -1,9 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { MapPin, AlarmClock, Radar, Locate, LocateFixed } from "lucide-react"
-import { officeStyles } from "@/constants/officeStyles"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
 import { Badge } from "@/components/ui/Badge"
@@ -13,30 +12,44 @@ import { Label } from "@/components/ui/Label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog"
 
-import { useOfficesHooks } from "@/function/hooks/useOfficesHooks"
+import { officeStyles } from "@/constants/officeStyles"
 import { OfficesStatusBadge } from "./OfficesStatusBadge"
 import { OfficesActionHeader } from "./OfficesActionHeader"
+import { useOfficesHooks } from "@/function/hooks/useOfficesHooks"
 import { handleOffices } from "@/function/handleOffices"
+import { minutesToTime } from "@/function/globalFunction"
 
 export default function OfficesTable({ data }) {
   const {
-    search,
-    setSearch,
-    typeFilter,
-    setTypeFilter,
-    statusFilter,
-    setStatusFilter,
+    search, setSearch,
+    typeFilter, setTypeFilter,
+    statusFilter, setStatusFilter,
     filteredData,
     selectedIds,
-    handleDeleteSelected,
-    handleDeleteAll,
+    handleDeleteSelected, handleDeleteAll,
     handleExportPDF,
-    searchRef,
+    searchRef, mutate
   } = useOfficesHooks(data)
 
   const [allActive, setAllActive] = useState(false)
+  const [loadingConfig, setLoadingConfig] = useState(true)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [pendingStatus, setPendingStatus] = useState(null)
+
+  useEffect(() => {
+    async function fetchConfig() {
+      try {
+        const res = await fetch("/api/system-config")
+        const data = await res.json()
+        setAllActive(data.allWfaActive)
+      } catch (err) {
+        console.error("❌ Failed to fetch config:", err)
+      } finally {
+        setLoadingConfig(false)
+      }
+    }
+    fetchConfig()
+  }, [])
 
   const handleBulkToggle = () => {
     const newStatus = !allActive
@@ -44,14 +57,31 @@ export default function OfficesTable({ data }) {
     setConfirmOpen(true)
   }
 
-  const confirmBulkToggle = () => {
+  const confirmBulkToggle = async () => {
     setAllActive(pendingStatus)
     setConfirmOpen(false)
-    handleOffices.onBulkUpdate({
-      activateType: "WFA",
-      deactivateType: "WFO",
-      isActive: pendingStatus,
-    })
+
+    try {
+      await fetch("/api/system-config", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ allWfaActive: pendingStatus }),
+      })
+
+      await handleOffices.onBulkUpdate({
+        activateType: "WFA",
+        deactivateType: "WFO",
+        isActive: pendingStatus,
+      })
+
+      mutate && mutate()
+      window.location.reload()
+    } 
+    catch (err) { console.error("❌ Error confirming bulk toggle:", err)}
+  }
+
+  if (loadingConfig) {
+    return <p className="text-sm text-slate-500">Loading configuration...</p>
   }
 
   return (
@@ -79,7 +109,6 @@ export default function OfficesTable({ data }) {
           searchInputRef={searchRef}
         />
 
-        {/* Table */}
         <div className="rounded-md overflow-hidden">
           <Table>
             <TableHeader>
@@ -141,29 +170,27 @@ export default function OfficesTable({ data }) {
                       </Popover>
                     </TableCell>
 
-                    {/* Type */}
                     <TableCell>
                       <Badge variant="outline" className={officeStyles[office.type]}>
                         {office.type}
                       </Badge>
                     </TableCell>
 
-                    {/* Status */}
                     <TableCell>
-                      <OfficesStatusBadge status={office.status} onToggle={() => handleOffices.onToggleStatus(office)} />
+                      <OfficesStatusBadge status={office.status} onToggle={() => handleOffices.onToggleStatus(office, mutate)} />
                     </TableCell>
 
-                    {/* Work Hours */}
                     <TableCell>
                       <div className="text-slate-600 flex items-center space-x-2">
                         <AlarmClock strokeWidth={1.5} size={16} />
                         <span>
-                          {office.startTime && office.endTime ? `${office.startTime} - ${office.endTime}` : "-"}
+                          {office.startTime != null && office.endTime != null
+                            ? `${minutesToTime(office.startTime)} - ${minutesToTime(office.endTime)}`
+                            : "-"}
                         </span>
                       </div>
                     </TableCell>
 
-                    {/* Created & Updated */}
                     <TableCell>
                       <div className="flex flex-col">
                         <span className="text-sm text-slate-600 font-semibold">
@@ -175,7 +202,6 @@ export default function OfficesTable({ data }) {
                       </div>
                     </TableCell>
 
-                    {/* Actions */}
                     <TableCell>
                       <div className="flex gap-2">
                         <Button size="sm" variant="outline" onClick={() => handleOffices.onEdit(office)}>
@@ -202,8 +228,8 @@ export default function OfficesTable({ data }) {
           </DialogHeader>
           <p className="text-sm text-slate-600">
             {pendingStatus
-              ? "Are you sure want to activate all WFA (Work From Home) & inactivate all WFO (Work From Office)?"
-              : "Are you sure want to activate all WFA & inactivate all WFO?"}
+              ? "Are you sure you want to activate all WFA (Work From Home) and inactivate all WFO (Work From Office)?"
+              : "Are you sure you want to deactivate all WFA and activate all WFO?"}
           </p>
           <DialogFooter className="mt-4">
             <Button variant="outline" onClick={() => setConfirmOpen(false)}>

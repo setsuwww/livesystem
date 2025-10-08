@@ -51,3 +51,39 @@ export async function POST(request) {
     )
   }
 }
+
+export async function PATCH(request) {
+  try {
+    const body = await request.json()
+    const { activateType, deactivateType, isActive } = body
+
+    if (isActive) {
+      await prisma.office.updateMany({
+        where: { type: activateType },
+        data: { status: "ACTIVE" },
+      })
+      await prisma.office.updateMany({
+        where: { type: deactivateType },
+        data: { status: "INACTIVE" },
+      })
+    } else {
+      await prisma.office.updateMany({
+        where: { type: activateType },
+        data: { status: "INACTIVE" },
+      })
+      await prisma.office.updateMany({
+        where: { type: deactivateType },
+        data: { status: "ACTIVE" },
+      })
+    }
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error("❌ Bulk update failed:", error)
+    return NextResponse.json(
+      { message: "Bulk update failed" },
+      { status: 500 }
+    )
+  }
+}
+

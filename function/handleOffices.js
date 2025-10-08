@@ -10,7 +10,7 @@ export const handleOffices = {
 
   async onDelete(officeId, mutate) {
     try {
-      const res = await fetch(`/api/offices/${officeId}`, { method: "DELETE" })
+      const res = await fetch(`/api/office/${officeId}`, { method: "DELETE" })
       if (!res.ok) throw new Error("Failed to delete office")
 
       toast.success("Office deleted")
@@ -21,37 +21,21 @@ export const handleOffices = {
     }
   },
 
-  async onToggleStatus(officeId, currentStatus, mutate) {
-    try {
-      const res = await fetch(`/api/offices/${officeId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE" }),
-      })
-      if (!res.ok) throw new Error("Failed to update status")
-
-      toast.success("Status updated")
-      mutate && mutate()
-    } catch (err) {
-      toast.error("Error updating status")
-      console.error(err)
-    }
+  async onBulkUpdate({ activateType, deactivateType, isActive }) {
+    await fetch("/api/office", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ activateType, deactivateType, isActive }),
+    })
   },
 
-  async onBulkUpdate({ ids, status }, mutate) {
-    try {
-      const res = await fetch(`/api/offices/bulk`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids, status }),
-      })
-      if (!res.ok) throw new Error("Bulk update failed")
-
-      toast.success("Bulk update successful")
-      mutate && mutate()
-    } catch (err) {
-      toast.error("Error in bulk update")
-      console.error(err)
-    }
+  async onToggleStatus(office, mutate) {
+    const newStatus = office.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"
+    await fetch(`/api/office/${office.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    })
+    mutate && mutate()
   },
 }

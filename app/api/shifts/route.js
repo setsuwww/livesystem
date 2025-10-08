@@ -20,6 +20,7 @@ export async function POST(req) {
         name,
         startTime,
         endTime,
+        officeId: body.officeId
       },
     });
 

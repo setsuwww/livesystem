@@ -31,26 +31,25 @@ export function IconListItem({ children, type = "i" }) {
   const { text } = typeStyles[type];
   return (
     <div className={`flex items-center gap-x-2 ${text}`}>
-      <p className="text-xs">{children}</p>
+      {children}
     </div>
   );
 }
 
 export function ContentList({ items, type = "i" }) {
-  const { bg, border, icon: Icon, text } = typeStyles[type];
+  const { bg, border, text, icon: Icon } = typeStyles[type];
   return (
-    <div className={`w-1/3 flex items-start space-x-2 ${bg} border ${border} p-2 rounded-lg`}>
-      <div className="font-semibold">
-        <Icon className={text} strokeWidth={1.5} size={16} />
-      </div>
-      <div className="flex flex-col">
-        {items.map((item, idx) => (
-          <IconListItem key={idx} type={type}>
-            {item}
-          </IconListItem>
-        ))}
-      </div>
+    <div
+      className={`w-fit flex flex-col ${bg} border ${border} p-3 rounded-lg space-y-0.5`}
+    >
+      {items.map((item, idx) => (
+        <div key={idx} className="flex items-center gap-x-2">
+          <Icon className={`${text}`} strokeWidth={1.5} size={16} />
+          <span className={`text-sm ${text}`}>{item}</span>
+        </div>
+      ))}
     </div>
   );
 }
+
 

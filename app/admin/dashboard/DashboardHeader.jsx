@@ -1,11 +1,12 @@
 "use client"
 
 import React from "react"
-import { LogOut } from "lucide-react"
+import { LogOut, Inbox } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export const DashboardHeader = React.memo(function DashboardHeader({ title, subtitle }) {
+  const rightActionClass = "flex items-center text-sm font-semibold rounded-lg bg-white/50 border border-slate-300/70 text-slate-600 hover:bg-white hover:border-slate-300/90 transition-colors"
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
 
@@ -42,10 +43,15 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
           })}
         </nav>
 
-        <Link href="/logout" className="flex items-center gap-x-1 px-4 py-1.5 text-sm font-semibold rounded-lg bg-white/50 hover:bg-white border border-slate-300/70 hover:border-slate-300/90 text-rose-600 transition-colors">
+          <div className="flex items-center gap-x-2">
+          <Link href="/request" className={`px-2 py-1.5 ${rightActionClass}`}>
+            <Inbox size={20} strokeWidth={2} />
+          </Link>
+        <Link href="/logout" className={`px-4 py-1.5 gap-x-1 ${rightActionClass}`}>
           <LogOut strokeWidth={2.5} size={15} />
           Logout
         </Link>
+        </div>
       </div>
     </header>
   )
