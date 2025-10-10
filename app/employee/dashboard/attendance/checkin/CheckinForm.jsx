@@ -78,17 +78,20 @@ export default function DashboardPage() {
     <div className="mx-auto px-2 md:px-4 py-10 space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
-          Welcome back,{" "}
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-700">
+          Welcome,{" "}
           <span className="text-sky-600">{user.name.split(" ")[0]}</span>
         </h1>
-        <p className="text-sm text-slate-500">
+        <p className="bg-white border border-slate-300 px-4 py-1.5 rounded-lg flex items-center space-x-2 text-sm text-slate-500">
+        <CalendarDays size={16}/>
+        <span >
           {new Date().toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",
             month: "long",
             year: "numeric",
           })}
+        </span>
         </p>
       </div>
 
