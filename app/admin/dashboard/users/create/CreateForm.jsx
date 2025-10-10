@@ -126,8 +126,13 @@ export default function CreateForm({ offices, shifts }) {
                 />
               </div>
 
+              <ContentInformation
+                heading="Private"
+                subheading="Users private password & role"
+              />
+
               {/* Password */}
-              <div className="space-y-2">
+              <div className="space-y-2 mt-8">
                 <Label htmlFor="password">
                   Password <span className="text-rose-500">*</span>
                 </Label>

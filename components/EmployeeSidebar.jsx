@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Clock, CalendarDays, ChevronUp, ChevronDown, User, LogOut } from 'lucide-react'
+import { Clock, CalendarDays, QrCode, User, LogOut, Inbox } from 'lucide-react'
 import SubHeading from './content/SubHeading'
 
 const linkBase = "flex items-center gap-2 text-md px-3 py-2 rounded-lg transition-colors"
@@ -32,13 +32,13 @@ export function EmployeeSidebar({ employee }) {
       </div>
 
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-        <SubHeading title="Absensi" />
-        <SidebarLink href="/employee/dashboard/attendance/checkin" icon={ChevronUp}>Absensi Datang</SidebarLink>
-        <SidebarLink href="/employee/dashboard/attendance/checkout" icon={ChevronDown}>Absensi Pulang</SidebarLink>
-        <SidebarLink href="/employee/attendance/history" icon={Clock}>History Absensi</SidebarLink>
+        <SubHeading title="Attendance" />
+        <SidebarLink href="/employee/dashboard/attendance/checkin" icon={QrCode}>Attendances</SidebarLink>
+        <SidebarLink href="/employee/attendance/history" icon={Clock}>History</SidebarLink>
 
         <SubHeading title="Calendar" />
-        <SidebarLink href="/employee/calendar" icon={CalendarDays}>Calendar</SidebarLink>
+        <SidebarLink href="/employee/calendar" icon={CalendarDays}>My Schedule</SidebarLink>
+        <SidebarLink href="/employee/calendar" icon={Inbox}>Inbox</SidebarLink>
 
         <SubHeading title="Account" />
         <SidebarLink href="/employee/profile" icon={User}>Profile</SidebarLink>

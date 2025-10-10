@@ -1,16 +1,17 @@
-import { getUserFromCookie } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth"
 
 export async function GET() {
-  const userData = await getUserFromCookie();
-  if (!userData) {
-    return new Response("Unauthorized", { status: 401 });
+  try {
+    const user = await getCurrentUser()
+    if (!user) {
+      return new Response("Unauthorized", { status: 401 })
+    }
+
+    return Response.json(user)
+  } catch (error) {
+    console.error("❌ /api/me error:", error)
+    return new Response(JSON.stringify({ message: "Internal Server Error" }), {
+      status: 500,
+    })
   }
-
-  const user = await prisma.user.findUnique({
-    where: { id: userData.id },
-    include: { shift: true },
-  });
-
-  return Response.json(user);
 }
