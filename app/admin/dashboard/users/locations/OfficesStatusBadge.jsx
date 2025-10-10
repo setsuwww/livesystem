@@ -6,8 +6,7 @@ export function OfficesStatusBadge({ status, onToggle }) {
 
   return (
     <Badge variant="outline" onClick={onToggle}
-      className={`flex items-center gap-2 px-2.5 py-1 rounded-full cursor-pointer select-none border-slate-200 transition
-        ${isActive ? "hover:bg-teal-50" : "hover:bg-rose-50"}`}
+      className="flex items-center gap-2 px-2.5 py-1 rounded-full cursor-pointer select-none border-slate-200 hover:bg-slate-50 transition"
     >
       <span className="relative flex h-2 w-2">
         <span

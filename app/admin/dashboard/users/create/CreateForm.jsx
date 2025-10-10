@@ -44,7 +44,8 @@ export default function CreateForm({ offices, shifts }) {
     e.preventDefault()
     setLoading(true)
 
-    const payload = { ...form,
+    const payload = {
+      ...form,
       officeId: form.officeId && form.officeId !== "NONE" ? parseInt(form.officeId) : null,
       shiftId:
         form.workMode === "SHIFT" && form.shiftId && form.shiftId !== "NONE"
@@ -56,7 +57,9 @@ export default function CreateForm({ offices, shifts }) {
           : null,
     }
 
-    try { await fetch({ url: "/users", method: "post", data: payload,
+    try {
+      await fetch({
+        url: "/users", method: "post", data: payload,
         successMessage: "User created successfully ✅",
         errorMessage: "Failed to create user ❌",
         onSuccess: () => router.push("/admin/dashboard/users"),
@@ -195,49 +198,46 @@ export default function CreateForm({ offices, shifts }) {
               {form.workMode === "WORK_HOURS" && defaultOfficeHour && (
                 <div className="p-3 rounded-md bg-muted/30 border text-sm">
                   <p>
-                    <strong>Office Hours:</strong> {formatIntToTime(defaultOfficeHour.startTime)} - {formatIntToTime(defaultOfficeHour.endTime)}
+                    <strong>Office Hours : </strong> {formatIntToTime(defaultOfficeHour.startTime)} - {formatIntToTime(defaultOfficeHour.endTime)}
                   </p>
                 </div>
               )}
 
               {/* Shift Selection */}
               {form.workMode === "SHIFT" && (
-  <>
-    <div className="space-y-2">
-      <Label htmlFor="shiftId">Shift Assignment</Label>
-      <Select
-        value={form.shiftId}
-        onValueChange={(v) => handleCustomChange("shiftId", v)}
-        disabled={availableShifts.length === 0}
-      >
-        <SelectTrigger className="w-1/2">
-          <SelectValue
-            placeholder={
-              availableShifts.length === 0 ? "No shifts found" : "Select a Shift"
-            }
-          />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="NONE">-</SelectItem>
-          {availableShifts.map((s) => (
-            <SelectItem key={s.id} value={String(s.id)}>
-              {capitalize(s.name)} ({formatIntToTime(s.startTime)} - {formatIntToTime(s.endTime)})
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="shiftId">Shift Assignment</Label>
+                    <Select
+                      value={form.shiftId}
+                      onValueChange={(v) => handleCustomChange("shiftId", v)}
+                      disabled={availableShifts.length === 0}
+                    >
+                      <SelectTrigger className="w-1/2">
+                        <SelectValue
+                          placeholder={
+                            availableShifts.length === 0 ? "No shifts found" : "Select a Shift"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="NONE">-</SelectItem>
+                        {availableShifts.map((s) => (
+                          <SelectItem key={s.id} value={String(s.id)}>
+                            {capitalize(s.name)} ({formatIntToTime(s.startTime)} - {formatIntToTime(s.endTime)})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-    {availableShifts.length === 0 && (
-                      <ContentList
-                  type="w"
-                  items={[
-                    "There is no shift detected or created in this Office to assign",
-                  ]}
-                />
-    )}
-  </>
-)}
+                  {availableShifts.length === 0 && (
+                    <ContentList type="w"
+                      items={["There is no shift detected or created in this Office to assign",]}
+                    />
+                  )}
+                </>
+              )}
 
             </div>
           </ContentForm.Body>

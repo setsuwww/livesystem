@@ -31,26 +31,32 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
             const isLast = index === visibleSegments.length - 1
 
             return (<span key={index}>
-                {!isLast ? (
-                  <Link href={href} className="font-semibold text-slate-700">
-                    {formatLabel(segment)}
-                  </Link>
-                ) : (
-                  <span className="text-slate-500">{formatLabel(segment)}</span>
-                )}
-                {!isLast && <span className="mx-2">/</span>}
-              </span>)
+              {!isLast ? (
+                <Link href={href} className="font-semibold text-slate-700">
+                  {formatLabel(segment)}
+                </Link>
+              ) : (
+                <span className="text-slate-500">{formatLabel(segment)}</span>
+              )}
+              {!isLast && <span className="mx-2">/</span>}
+            </span>)
           })}
         </nav>
 
-          <div className="flex items-center gap-x-2">
-          <Link href="/request" className={`px-2 py-1.5 ${rightActionClass}`}>
+        <div className="flex items-center gap-x-2">
+          <Link href="/request" className={`hover:text-sky-600 relative px-2 py-1.5 ${rightActionClass}`}>
             <Inbox size={20} strokeWidth={2} />
+
+            <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
+            </span>
           </Link>
-        <Link href="/logout" className={`px-4 py-1.5 gap-x-1 ${rightActionClass}`}>
-          <LogOut strokeWidth={2.5} size={15} />
-          Logout
-        </Link>
+
+          <Link href="/logout" className={`hover:text-rose-500 px-4 py-1.5 gap-x-1 ${rightActionClass}`}>
+            <LogOut strokeWidth={2.5} size={15} />
+            Logout
+          </Link>
         </div>
       </div>
     </header>
