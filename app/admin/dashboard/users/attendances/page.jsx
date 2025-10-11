@@ -18,7 +18,7 @@ async function getAttendanceData(page = 1) {
       take: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true } },
-        shift: { select: { id: true, type: true, startTime: true, endTime: true } },
+        shift: { select: { id: true, name: true, startTime: true, endTime: true } },
       },
       orderBy: { date: "desc" },
     }),
@@ -50,7 +50,7 @@ async function getShifts() {
 
   return shifts.map((shift) => ({
     id: shift.id,
-    type: shift.type,
+    name: shift.name,
     startTime: minutesToTime(shift.startTime),
     endTime: minutesToTime(shift.endTime),    
     users: shift.users.map((user) => ({
