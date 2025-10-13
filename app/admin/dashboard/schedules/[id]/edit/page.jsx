@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import EditForm from "./EditForm";
-import { getUserFromToken } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 export default async function Page({
   params
 }) {
-  const user = await getUserFromToken();
+  const user = await getCurrentUser();
 
   if (!user) return <div>Unauthorized</div>
 

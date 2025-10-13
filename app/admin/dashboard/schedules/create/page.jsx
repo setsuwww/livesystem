@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { getUserFromToken } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 import ScheduleForm from "./CreateForm";
 
 export default async function Page() {
-  const user = await getUserFromToken();
+  const user = await getCurrentUser();
   if (!user) return <div>Unauthorized</div>;
 
   const schedules = await prisma.schedule.findMany({

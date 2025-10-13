@@ -5,22 +5,17 @@ import { Button } from "@/components/ui/Button"
 import { Label } from "@/components/ui/Label"
 import { Textarea } from "@/components/ui/Textarea"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select"
-import { format } from "date-fns"
 import { CalendarDays, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { fetch as apiFetch } from "@/function/helpers/fetch"
 
 function toDateOnlyIso(s) {
-  // input "YYYY-MM-DD" or Date -> returns "YYYY-MM-DD"
   if (!s) return null
   const d = new Date(s)
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, "0")
-  const day = String(d.getDate()).padStart(2, "0")
-  return `${y}-${m}-${day}`
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
 }
 
 export default function ChangeShiftForm({ employees = [] }) {
-  // default start = today (YYYY-MM-DD)
   const todayIso = toDateOnlyIso(new Date())
 
   const [selectedUser, setSelectedUser] = useState("")
@@ -29,70 +24,66 @@ export default function ChangeShiftForm({ employees = [] }) {
   const [reason, setReason] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const startDateObj = startDate ? new Date(startDate + "T00:00:00") : null
-  const endDateObj = endDate ? new Date(endDate + "T00:00:00") : null
+  const startDateObj = new Date(startDate + "T00:00:00")
+  const endDateObj = new Date(endDate + "T00:00:00")
   const todayObj = new Date(todayIso + "T00:00:00")
 
-  const startValid = startDateObj && startDateObj >= todayObj // start must be today or future
-  const endValid = endDateObj && (!startDateObj || endDateObj >= startDateObj)
+  const startValid = startDateObj >= todayObj
+  const endValid = !startDateObj || endDateObj >= startDateObj
 
-  const disabled =
-    loading ||
-    !selectedUser ||
-    !startDate ||
-    !reason.trim() ||
-    !startValid ||
-    !endValid
+  const disabled = loading || !selectedUser || !reason.trim() || !startValid || !endValid
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!startValid) return toast.error("Start date must be today or in the future.")
+    if (!startValid) return toast.error("Start date must be today or later.")
     if (!endValid) return toast.error("End date must be same or after start date.")
-    setLoading(true)
 
-    try {
-      const payload = {
-        userId: Number(selectedUser),
-        startDate: new Date(startDate + "T00:00:00").toISOString(),
-        endDate: endDate ? new Date(endDate + "T00:00:00").toISOString() : null,
-        reason: reason.trim(),
-      }
+  const target = employees.find((emp) => String(emp.id) === selectedUser)
+  if (!target?.shiftId) return toast.error("Selected user has no shift assigned.")
 
-      const res = await fetch("/api/shifts/change", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      })
+  setLoading(true)
+  try {
+    const payload = {
+      targetUserId: Number(target.id),
+      newShiftId: target.shiftId, // shift target user
+      startDate: new Date(startDate + "T00:00:00").toISOString(),
+      endDate: endDate ? new Date(endDate + "T00:00:00").toISOString() : null,
+      reason: reason.trim(),
+    }
 
-      let body = {}
-      try { body = await res.json() } catch (err) { /* ignore parse err */ }
+    await apiFetch({
+      url: "/shifts/user-side-change",
+      method: "post",
+      data: payload,
+      successMessage: "Shift change request submitted successfully.",
+      errorMessage: "Failed to submit shift change request.",
+    })
 
-      if (!res.ok) {
-        toast.error(body?.message || "Failed to submit shift change")
-        console.error("Shift change error:", body)
-        return
-      }
-
-      toast.success(body?.message || "Shift change request submitted")
-      // reset
-      setSelectedUser("")
-      setStartDate(todayIso)
-      setEndDate(todayIso)
-      setReason("")
-    } catch (err) {
-      console.error("Network error:", err)
-      toast.error("Network error, please try again")
-    } finally {
+    setSelectedUser("")
+    setStartDate(todayIso)
+    setEndDate(todayIso)
+    setReason("")
+  } catch (err) {
+    console.error("Submit error:", err)
+    }   finally {
       setLoading(false)
     }
   }
 
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow-md border">
-      {/* Select Employee */}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 bg-white p-6 rounded-xl shadow-md border border-slate-200"
+    >
+      {/* Employee select */}
       <div className="space-y-2">
         <Label>Select Employee</Label>
-        <Select value={String(selectedUser)} onValueChange={(v) => setSelectedUser(String(v))}>
+        <Select
+          value={String(selectedUser)}
+          onValueChange={(v) => setSelectedUser(String(v))}
+          disabled={loading}
+        >
           <SelectTrigger>
             <SelectValue placeholder="Choose an employee" />
           </SelectTrigger>
@@ -106,36 +97,34 @@ export default function ChangeShiftForm({ employees = [] }) {
         </Select>
       </div>
 
-      {/* Period - start & end */}
+      {/* Dates */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Start Date (default today)</Label>
+          <Label>Start Date</Label>
           <div className="flex items-center gap-2">
-            <span className="text-slate-400"><CalendarDays /></span>
+            <CalendarDays className="text-slate-400" />
             <input
               type="date"
-              value={startDate || ""}
+              value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
               min={todayIso}
             />
           </div>
-          {!startValid && <p className="text-xs text-amber-600">Start must be today or later.</p>}
         </div>
 
         <div className="space-y-2">
           <Label>End Date (optional)</Label>
           <div className="flex items-center gap-2">
-            <span className="text-slate-400"><CalendarDays /></span>
+            <CalendarDays className="text-slate-400" />
             <input
               type="date"
-              value={endDate || ""}
+              value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-400 text-sm"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
               min={startDate || todayIso}
             />
           </div>
-          {!endValid && <p className="text-xs text-amber-600">End date must be same or after start.</p>}
         </div>
       </div>
 
@@ -150,7 +139,6 @@ export default function ChangeShiftForm({ employees = [] }) {
         />
       </div>
 
-      {/* Submit */}
       <Button type="submit" className="w-full" disabled={disabled}>
         {loading && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
         Submit Request

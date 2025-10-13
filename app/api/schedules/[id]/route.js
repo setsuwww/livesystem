@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getUserFromToken } from "@/lib/auth";
+import { getCurrentUser } from "@/lib/auth";
 
 // Update schedule
 export async function PUT(req, {
   params
 }) {
-  const user = await getUserFromToken();
+  const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await req.json();
@@ -36,7 +36,7 @@ export async function PUT(req, {
 export async function DELETE(req, {
   params
 }) {
-  const user = await getUserFromToken();
+  const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const deleted = await prisma.schedule.deleteMany({

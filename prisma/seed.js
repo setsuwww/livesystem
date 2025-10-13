@@ -1,93 +1,110 @@
 // prisma/seed.js
-import { PrismaClient, Role, ShiftType } from "@prisma/client";
+import { PrismaClient, Role, ShiftType, LocationType, LocationStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Bersihin data lama
+  console.log("🚀 Starting seed...");
+
+  // Bersihkan data lama
   await prisma.user.deleteMany();
   await prisma.shift.deleteMany();
+  await prisma.office.deleteMany();
 
-  // Seed Shifts
-  const shifts = [
+  // === 1️⃣ Seed Offices ===
+  const officesData = [
     {
-      type: ShiftType.MORNING,
-      name: "Morning",
+      name: "Head Office",
+      location: "Jakarta",
+      type: LocationType.WFO,
+      status: LocationStatus.ACTIVE,
+      longitude: 106.8272,
+      latitude: -6.1754,
+      radius: 100,
       startTime: 8 * 60,
-      endTime: 16 * 60,
+      endTime: 17 * 60,
     },
     {
-      type: ShiftType.AFTERNOON,
-      name: "Afternoon",
-      startTime: 16 * 60,
-      endTime: 24 * 60,
+      name: "Branch A",
+      location: "Bandung",
+      type: LocationType.WFO,
+      status: LocationStatus.ACTIVE,
+      longitude: 107.6191,
+      latitude: -6.9175,
+      radius: 100,
+      startTime: 8 * 60,
+      endTime: 17 * 60,
     },
     {
-      type: ShiftType.EVENING,
-      name: "Evening",
-      startTime: 0,
-      endTime: 8 * 60,
-    },
-    {
-      type: ShiftType.OFF,
-      name: "Off",
-      startTime: 0,
-      endTime: 0,
+      name: "Branch B",
+      location: "Surabaya",
+      type: LocationType.WFA,
+      status: LocationStatus.INACTIVE,
+      longitude: 112.7508,
+      latitude: -7.2575,
+      radius: 100,
+      startTime: 8 * 60,
+      endTime: 17 * 60,
     },
   ];
 
-  const seededShifts = {};
-  for (const shift of shifts) {
-    let s = await prisma.shift.findFirst({
-      where: { type: shift.type, name: shift.name },
-    });
-
-    if (s) {
-      s = await prisma.shift.update({
-        where: { id: s.id },
-        data: shift,
-      });
-    } else {
-      s = await prisma.shift.create({ data: shift });
-    }
-
-    seededShifts[shift.type] = s;
+  const offices = [];
+  for (const data of officesData) {
+    const office = await prisma.office.create({ data });
+    offices.push(office);
   }
 
-  // Seed Users
-  const users = [
-    { name: "Admin", email: "admin@example.com", password: "admin123", role: Role.ADMIN },
-    { name: "Coordinator", email: "coordinator@example.com", password: "coordinator123", role: Role.COORDINATOR },
-    { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.MORNING] },
-    { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.AFTERNOON] },
-    { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.EVENING] },
-    { name: "Mursidi", email: "mursidi@example.com", password: "mursidi123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.MORNING] },
-    { name: "Surya", email: "surya@example.com", password: "surya123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.AFTERNOON] },
-    { name: "Agus", email: "agus@example.com", password: "agus123", role: Role.EMPLOYEE, defaultShift: seededShifts[ShiftType.EVENING] },
+  // === 2️⃣ Seed Shifts (3 per Office) ===
+  const shiftTemplates = [
+    { type: ShiftType.MORNING, name: "Morning", startTime: 8 * 60, endTime: 16 * 60 },
+    { type: ShiftType.AFTERNOON, name: "Afternoon", startTime: 16 * 60, endTime: 24 * 60 },
+    { type: ShiftType.EVENING, name: "Evening", startTime: 0, endTime: 8 * 60 },
   ];
 
-  for (const u of users) {
-    const hashed = await bcrypt.hash(u.password, 10);
+  const allShifts = [];
 
-    let user = await prisma.user.findUnique({ where: { email: u.email } });
-
-    if (user) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data: { shiftId: u.shift?.id ?? null },
-      });
-    } else {
-      await prisma.user.create({
+  for (const office of offices) {
+    for (const template of shiftTemplates) {
+      const shift = await prisma.shift.create({
         data: {
-          name: u.name,
-          email: u.email,
-          password: hashed,
-          role: u.role,
-          shiftId: u.shift?.id ?? null,
+          ...template,
+          officeId: office.id,
+          isActive: true,
         },
       });
+      allShifts.push(shift);
     }
+  }
+
+  // === 3️⃣ Seed Users ===
+  const usersData = [
+    { name: "Admin", email: "admin@example.com", password: "admin123", role: Role.ADMIN },
+    { name: "Coordinator", email: "coordinator@example.com", password: "coordinator123", role: Role.COORDINATOR },
+    { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE },
+    { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE },
+    { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE },
+    { name: "Surya", email: "surya@example.com", password: "surya123", role: Role.EMPLOYEE },
+    { name: "Agus", email: "agus@example.com", password: "agus123", role: Role.EMPLOYEE },
+  ];
+
+  for (const [i, u] of usersData.entries()) {
+    const hashed = await bcrypt.hash(u.password, 10);
+
+    // Assign random office & shift
+    const assignedOffice = offices[i % offices.length];
+    const assignedShift = allShifts[i % allShifts.length];
+
+    await prisma.user.create({
+      data: {
+        name: u.name,
+        email: u.email,
+        password: hashed,
+        role: u.role,
+        officeId: assignedOffice.id,
+        shiftId: assignedShift.id,
+      },
+    });
   }
 
   console.log("✅ Seeding Done!");
@@ -95,7 +112,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Error seeding:", e);
     process.exit(1);
   })
   .finally(async () => {

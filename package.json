@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prisma:seed": "node prisma/seed.js",
-    "dev": "next dev --turbopack",
+    "dirman": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
