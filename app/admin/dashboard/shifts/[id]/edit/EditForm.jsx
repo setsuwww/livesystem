@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { toast } from "sonner";
-import { fetch } from "@/function/helpers/fetch";
+import { apiFetchData } from "@/function/helpers/fetch";
 
 export default function EditForm({
   shift
@@ -27,7 +27,7 @@ export default function EditForm({
     setLoading(true);
 
     try {
-      await fetch({
+      await apiFetchData({
         url: `/shifts/${shift.id}`,
         method: "put",
         data: {

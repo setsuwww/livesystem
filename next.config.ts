@@ -8,9 +8,17 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === "development",
 });
 
-const nextConfig: NextConfig = {
+/** @type {NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
-  experimental: {
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/auth/login",
+        permanent: false,
+      },
+    ];
   },
 };
 

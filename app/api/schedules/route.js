@@ -70,3 +70,44 @@ export async function DELETE(req) {
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
+
+export async function PUT(req) {
+  try {
+    const body = await req.json();
+    const { id, title, description, frequency, startDate, startTime, endDate, endTime, userIds } = body;
+
+    if (!id) return NextResponse.json({ error: "Missing schedule ID" }, { status: 400 });
+
+    const validUsers = await prisma.user.findMany({
+      where: { id: { in: userIds.map(Number) } },
+    });
+
+    if (validUsers.length !== userIds.length) {
+      const missing = userIds.filter((id) => !validUsers.some((u) => u.id === Number(id)));
+      return NextResponse.json({ error: "Some users not found", missing }, { status: 400 });
+    }
+
+    const schedule = await prisma.schedule.update({
+      where: { id: Number(id) },
+      data: {
+        title,
+        description,
+        frequency,
+        startDate: new Date(startDate),
+        startTime,
+        endDate: new Date(endDate),
+        endTime,
+        users: {
+          deleteMany: {},
+          create: validUsers.map((u) => ({ user: { connect: { id: u.id } } })),
+        },
+      },
+      include: { users: { include: { user: true } } },
+    });
+
+    return NextResponse.json(schedule, { status: 200 });
+  } catch (err) {
+    console.error("❌ Error updating schedule:", err);
+    return NextResponse.json({ error: "Failed to update schedule" }, { status: 500 });
+  }
+}

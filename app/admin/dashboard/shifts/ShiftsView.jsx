@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 
 import { capitalize } from "@/function/globalFunction";
-import { fetch } from "@/function/helpers/fetch";
+import { apiFetchData } from "@/function/helpers/fetch";
 import { shiftStyles, shiftIcons } from "@/constants/shiftConstants";
 
 export function ShiftsView({ data }) {
@@ -19,7 +19,7 @@ export function ShiftsView({ data }) {
 
   const handleDelete = async (id) => {
     try {
-      await fetch({
+      await apiFetchData({
         url: `/shifts/${id}`,
         method: "delete",
         successMessage: "Shift deleted successfully",

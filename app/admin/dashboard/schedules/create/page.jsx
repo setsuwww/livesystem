@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import ScheduleForm from "./CreateForm";
+import CreateForm from "./CreateForm";
 
 export default async function Page() {
   const user = await getCurrentUser();
@@ -23,6 +23,6 @@ export default async function Page() {
   });
 
   return (
-    <ScheduleForm users={users} schedules={schedules} />
+    <CreateForm users={users} schedules={schedules} />
   );
 }

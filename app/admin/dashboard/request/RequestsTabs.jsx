@@ -11,7 +11,6 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
   return (
     <div className="rounded-xl border border-slate-200 bg-white/80 backdrop-blur-sm shadow-md p-6">
       <Tabs value={tab} onValueChange={setTab}>
-        {/* Tab Header */}
         <TabsList
           className={cn(
             "mb-6 w-full grid grid-cols-2 rounded-lg bg-slate-100/60 p-1",
@@ -49,7 +48,6 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
           </TabsTrigger>
         </TabsList>
 
-        {/* Tab Content */}
         <div className="mt-2">
           <TabsContent value="shift">
             <RequestsTable data={shiftRequests} type="Shift Change" />

@@ -1,108 +1,184 @@
-"use client";;
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+"use client"
 
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
-import ContentForm from "@/components/content/ContentForm";
-import { ContentInformation } from "@/components/content/ContentInformation";
-import { toast } from "sonner";
+import { useState, useCallback, useEffect } from "react"
+import { toast } from "sonner"
 
-import { fetch } from "@/function/helpers/fetch";
+import UpdateAssignUserShift from "./UpdateAssignUserShift"
 
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select";
-import { capitalize } from "@/function/globalFunction";
-import { DashboardHeader } from './../../../DashboardHeader';
+import { Label } from "@/components/ui/Label"
+import { Input } from "@/components/ui/Input"
+import { Button } from "@/components/ui/Button"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select"
+import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
+import ContentForm from "@/components/content/ContentForm"
+import { ContentInformation } from "@/components/content/ContentInformation"
 
-export default function EditForm({
-  schedule,
-  shifts
-}) {
-  const [loading, setLoading] = useState(false);
+import { apiFetchData } from "@/function/helpers/fetch"
+
+export default function EditForm({ schedule, users, shifts }) {
+  const [loading, setLoading] = useState(false)
+  const [events, setEvents] = useState([])
+
   const [form, setForm] = useState({
-    title: schedule.title || "",
-    description: schedule.description || "",
-    date: schedule.date ? schedule.date.toString().slice(0, 10) : "",
-    shiftId: schedule.shiftId ? schedule.shiftId.toString() : "",
-  });
+    title: "",
+    description: "",
+    frequency: "ONCE",
+  })
 
-  const router = useRouter();
+  useEffect(() => {
+    if (schedule) {
+      setForm({
+        title: schedule.title ?? "",
+        description: schedule.description ?? "",
+        frequency: schedule.frequency ?? "ONCE",
+      })
 
-  const handleChange = (field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  };
+      setEvents([
+        {
+          startDate: schedule.startDate || "",
+          endDate: schedule.endDate || "",
+          startTime: schedule.startTime || "",
+          endTime: schedule.endTime || "",
+          users: schedule.users || [],
+        },
+      ])
+    }
+  }, [schedule])
+
+  const handleChange = useCallback((field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }))
+  }, [])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!form.title.trim() || !form.description.trim() || !form.date.trim()) {
-      toast.error("Please fill all required fields");
-      return;
+    e.preventDefault()
+    if (!form.title.trim() || !form.description.trim() || events.length === 0) {
+      toast.error("Please fill all required fields")
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
     try {
-      await fetch({
+      const userIds = Array.from(
+        new Set(events.flatMap((e) => e.users.map((u) => u.id).filter(Boolean)))
+      )
+
+      const payload = {
+        title: form.title,
+        description: form.description,
+        frequency: form.frequency,
+        startDate: events[0]?.startDate ?? null,
+        endDate: events[0]?.endDate ?? null,
+        startTime: events[0]?.startTime ?? null,
+        endTime: events[0]?.endTime ?? null,
+        userIds,
+      }
+
+      await apiFetchData({
         url: `/schedules/${schedule.id}`,
         method: "put",
-        data: form,
+        data: payload,
         successMessage: "Schedule updated successfully",
         errorMessage: "Failed to update schedule",
-        onSuccess: () => {
-          router.push("/admin/dashboard/schedules");
-        },
-      });
+      })
+
+      toast.success("Schedule updated successfully")
+    } catch (error) {
+      console.error("Error updating schedule:", error)
+      toast.error("Error updating schedule")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <section className="space-y-6">
-      <DashboardHeader title="Edit Schedule" subtitle="Update title, description, date, and select shift"/>
+    <section>
+      <DashboardHeader title="Edit Schedule" subtitle="Update schedule details" />
 
       <ContentForm>
-        <ContentInformation heading="Information" subheading="Schedule public information"/>
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
-            
-          {/* tambahin label sebelum input */}
-          <Input value={form.title}
-            onChange={(e) => handleChange("title", e.target.value)}
-            required
+        <ContentForm.Header>
+          <ContentInformation
+            heading="Edit Schedule Form"
+            subheading="Modify existing schedule and assigned users"
           />
-          <Input value={form.description}
-            onChange={(e) => handleChange("description", e.target.value)}
-            required
-          />
+        </ContentForm.Header>
 
-          <ContentInformation heading="Date & shift" subheading="Schedule's date & shift data"/>
+        <ContentForm.Body>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Basic Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  value={form.title}
+                  onChange={(e) => handleChange("title", e.target.value)}
+                  placeholder="Enter schedule title"
+                  required
+                />
+              </div>
 
-          <Input type="date" value={form.date}
-            onChange={(e) => handleChange("date", e.target.value)}
-            required
-          />
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Input
+                  id="description"
+                  value={form.description}
+                  onChange={(e) => handleChange("description", e.target.value)}
+                  placeholder="Enter schedule description"
+                  required
+                />
+              </div>
+            </div>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-700 mb-1">Select Shift</label>
-            <Select value={form.shiftId} onValueChange={(val) => handleChange("shiftId", val)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Choose a shift" />
-              </SelectTrigger>
-              <SelectContent>
-                {shifts.map((shift) => (
-                  <SelectItem key={shift.id} value={shift.id.toString()}>
-                    {capitalize(shift.type)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+            {/* Frequency */}
+            <div className="space-y-2">
+              <Label htmlFor="frequency">Select Frequency</Label>
+              <Select
+                value={form.frequency}
+                onValueChange={(value) => handleChange("frequency", value)}
+              >
+                <SelectTrigger className="border-slate-200 focus:border-slate-400">
+                  <SelectValue placeholder="Select Frequency" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-slate-200">
+                  <SelectItem value="DAILY">Daily</SelectItem>
+                  <SelectItem value="WEEKLY">Weekly</SelectItem>
+                  <SelectItem value="MONTHLY">Monthly</SelectItem>
+                  <SelectItem value="YEARLY">Yearly</SelectItem>
+                  <SelectItem value="ONCE">Once</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <Button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Schedule"}
-          </Button>
-        </form>
+            {/* Update User Assignments */}
+            <UpdateAssignUserShift events={events} setEvents={setEvents} users={users} />
+
+            {/* Footer */}
+            <div className="flex items-center justify-between pt-6 border-t border-slate-200">
+              <div className="text-sm text-slate-600">
+                {events.reduce((acc, e) => acc + e.users.length, 0)} users assigned •{" "}
+                {events.length} dates scheduled
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={loading}
+                  className="border-slate-200 text-slate-700 hover:bg-slate-50"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-slate-900 hover:bg-slate-800 text-white"
+                >
+                  {loading ? "Updating..." : "Update Schedule"}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </ContentForm.Body>
       </ContentForm>
     </section>
-  );
+  )
 }

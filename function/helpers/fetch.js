@@ -1,44 +1,54 @@
 import { api } from "@/lib/api";
 import { toast } from "sonner";
 
-const cache = {};
-const cacheTimestamps = {};
+const cache = new Map();
 const CACHE_TTL = 1000 * 60;
 
-function isEqual(a, b) { return JSON.stringify(a) === JSON.stringify(b) }
+function isEqual(a, b) { return JSON.stringify(a) === JSON.stringify(b)}
 
-export async function fetch({
+/**
+ * apiFetchData — helper universal buat API call
+ *
+ * @param {Object} options
+ * @param {string} options.url - endpoint (tanpa /api prefix)
+ * @param {string} [options.method=get] - get, post, put, patch, delete
+ * @param {Object} [options.data] - request body / params
+ * @param {Function} [options.onSuccess] - callback on success
+ * @param {Function} [options.onError] - callback on error
+ * @param {string} [options.successMessage] - toast success
+ * @param {string} [options.errorMessage] - toast error
+ * @param {boolean} [options.useCache=true] - aktifin cache utk GET
+ */
+
+export async function apiFetchData({
   url, method = "get", data,
   onSuccess, onError,
   successMessage, errorMessage,
   useCache = true,
 }) {
-  try { const now = Date.now();
-    const lastFetch = cacheTimestamps[url] || 0;
+  const cacheKey = `${method}-${url}-${data ? JSON.stringify(data) : ""}`;
+  const now = Date.now();
 
-    let res;
-
-    if (method === "get") {
-      if (useCache && cache[url] && now - lastFetch < CACHE_TTL) return cache[url];
-
-      res = await api.get(url, { params: data });
-
-      cache[url] = res.data;
-      cacheTimestamps[url] = now;
-    } 
-    else { res = await api[method](url, data);
-      delete cache[url];
-      delete cacheTimestamps[url];
+  try { if (method === "get" && useCache) {
+      const cached = cache.get(cacheKey);
+      if (cached && now - cached.timestamp < CACHE_TTL) { return cached.data }
     }
 
-    if (successMessage) toast.success(successMessage);
-    if (onSuccess) onSuccess(res.data);
+    const response = method === "get"
+      ? await api.get(url, { params: data })
+        : await api[method](url, data);
 
-    return res.data;
+    // Simpan cache kalau GET
+    if (method === "get" && useCache) { cache.set(cacheKey, { data: response.data, timestamp: now }) }
+
+    if (successMessage) toast.success(successMessage);
+    if (onSuccess) onSuccess(response.data);
+
+    return response.data;
   } 
-  catch (err) { if (errorMessage) toast.error(errorMessage);
+  catch (err) { console.error("❌ apiFetchData error:", err);
+    if (errorMessage) toast.error(errorMessage);
     if (onError) onError(err);
     throw err;
   }
 }
-

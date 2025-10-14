@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react"
 import { LogOut, Inbox, Calendar } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import {  } from "lucide-react";
-import { format } from "date-fns";
 
 export const DashboardHeader = React.memo(function DashboardHeader({ title, subtitle }) {
   const [hasNotifications, setHasNotifications] = useState(false)
@@ -15,9 +13,6 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
   const segments = pathname.split("/").filter(Boolean)
   const formatLabel = (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
   const visibleSegments = segments.slice(0, 3)
-
-  const today = new Date();
-  const formattedDate = format(today, "dd-MMMM-yyyy");
 
   useEffect(() => {
     async function fetchNotifications() {
@@ -64,11 +59,6 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
         </nav>
 
         <div className="flex items-center gap-x-2">
-          <div className={`flex items-center gap-2 text-sm text-slate-700 font-medium px-3 ${rightActionClass} `}>
-            <Calendar strokeWidth={2.5} size={15} />
-            <span>{formattedDate}</span>
-          </div>
-
           <Link href="/admin/dashboard/request" className={`hover:text-sky-600 relative px-2 ${rightActionClass} hover:bg-white hover:border-slate-300/90`}>
             <Inbox size={20} strokeWidth={2} />
 
