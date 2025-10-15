@@ -1,0 +1,46 @@
+// middleware.ts
+import { NextResponse } from "next/server";
+import { jwtVerify } from "jose";
+import { JWT_SECRET_STRING } from "./lib/jwt";
+
+const roleRoutes = {
+  ADMIN: "/admin/dashboard",
+  COORDINATOR: "/coordinator/dashboard",
+  EMPLOYEE: "/employee/dashboard",
+  USER: "/user/dashboard",
+};
+
+export async function middleware(req) {
+  const token = req.cookies.get("token")?.value;
+  const path = req.nextUrl.pathname;
+  const publicPaths = ["/auth/login", "/auth/register"];
+
+  if (!token) { if (!publicPaths.includes(path)) {
+      return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+    return NextResponse.next();
+  }
+  
+  try {
+    const { payload } = await jwtVerify( token,
+      new TextEncoder().encode(JWT_SECRET_STRING)
+    );
+
+    if (publicPaths.includes(path)) return NextResponse.next();
+
+    if (path.startsWith("/admin") && payload.role !== "ADMIN") return NextResponse.redirect(new URL(roleRoutes[payload.role], req.url));
+    if (path.startsWith("/coordinator") && payload.role !== "COORDINATOR") return NextResponse.redirect(new URL(roleRoutes[payload.role], req.url));
+    if (path.startsWith("/employee") && payload.role !== "EMPLOYEE") return NextResponse.redirect(new URL(roleRoutes[payload.role], req.url));
+    if (path.startsWith("/user") && payload.role !== "USER") return NextResponse.redirect(new URL(roleRoutes[payload.role], req.url));
+    
+
+    return NextResponse.next();
+  } catch (err) {
+    console.error("Invalid token:", err);
+    return NextResponse.redirect(new URL("/auth/login", req.url));
+  }
+}
+
+export const config = {
+  matcher: ["/admin/:path*", "/coordinator/:path*", "/employee/:path*", "/user/:path*"],
+};

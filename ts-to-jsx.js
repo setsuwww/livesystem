@@ -1,24 +1,48 @@
 #!/usr/bin/env node
-const fs = require("fs");
-const path = require("path");
-const jscodeshift = require("jscodeshift");
+import fs from "fs";
+import path from "path";
+import jscodeshift from "jscodeshift";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Cari root project dari next.config.ts
+function findProjectRoot(dir = __dirname) {
+  let current = dir;
+  while (current !== path.parse(current).root) {
+    if (fs.existsSync(path.join(current, "next.config.ts"))) {
+      return current;
+    }
+    current = path.dirname(current);
+  }
+  return __dirname;
+}
+
+const ROOT = findProjectRoot();
+console.log("📁 Project root:", ROOT);
 
 // Folder yang akan di-scan
-const FOLDERS = ["./app", "./components", "./lib", "./hooks", "./static", "./prisma", "./function", "./constants"];
+const FOLDERS = [
+  ROOT,
+  path.join(ROOT, "app"),
+  path.join(ROOT, "components"),
+  path.join(ROOT, "lib"),
+  path.join(ROOT, "hooks"),
+  path.join(ROOT, "static"),
+  path.join(ROOT, "prisma"),
+  path.join(ROOT, "function"),
+  path.join(ROOT, "constants"),
+];
 
-// Fungsi hapus semua type annotations, interface, type alias, as Type
+// Hapus semua type annotations, interface, type alias, dan `as Type`
 function removeTypes(fileContent, isTSX) {
   const j = jscodeshift.withParser(isTSX ? "tsx" : "ts");
   const root = j(fileContent);
 
-  // hapus type annotations
   root.find(j.TSTypeAnnotation).remove();
-
-  // hapus interface / type alias
   root.find(j.TSInterfaceDeclaration).remove();
   root.find(j.TSTypeAliasDeclaration).remove();
-
-  // hapus cast 'as Type'
   root.find(j.TSAsExpression).replaceWith(p => p.node.expression);
 
   return root.toSource({ quote: "double" });
@@ -35,52 +59,55 @@ function renameFile(filePath) {
   return newPath;
 }
 
-// Scan folder rekursif
+// Rekursif scan folder
 function walkFolder(folder) {
   if (!fs.existsSync(folder)) return;
   const files = fs.readdirSync(folder);
-  files.forEach(file => {
+
+  for (const file of files) {
     const fullPath = path.join(folder, file);
-    if (!fs.existsSync(fullPath)) return; // ✅ skip kalau file hilang
+    if (!fs.existsSync(fullPath)) continue;
     const stat = fs.statSync(fullPath);
-    if (stat.isDirectory()) {
+
+    // ❌ skip folder yang tidak perlu
+    if (
+      stat.isDirectory() &&
+      !["node_modules", ".next", "dist", "build", "out"].includes(file)
+    ) {
       walkFolder(fullPath);
-    } else if (file.endsWith(".ts") || file.endsWith(".tsx")) {
-      console.log("Processing:", fullPath);
-      const isTSX = file.endsWith(".tsx");
-      let content = fs.readFileSync(fullPath, "utf-8");
-      content = removeTypes(content, isTSX);
-      fs.writeFileSync(fullPath, content, "utf-8");
-      renameFile(fullPath);
-    }
-  });
-}
-
-
-// Update import paths dari .ts/.tsx ke .js/.jsx
-function updateImports(filePath, oldName, newName) {
-  FOLDERS.forEach(folder => {
-    if (!fs.existsSync(folder)) return;
-    const files = fs.readdirSync(folder);
-    files.forEach(f => {
-      const full = path.join(folder, f);
-      const stat = fs.statSync(full);
-      if (stat.isDirectory()) {
-        walkFolder(full);
-      } else if (full.endsWith(".js") || full.endsWith(".jsx")) {
-        let content = fs.readFileSync(full, "utf-8");
-        const regex = new RegExp(`(\\./.*${oldName.replace(".", "\\.")})`, "g");
-        content = content.replace(regex, newName);
-        fs.writeFileSync(full, content, "utf-8");
+    } else if (
+      stat.isFile() &&
+      (file.endsWith(".ts") || file.endsWith(".tsx")) &&
+      !file.endsWith(".d.ts") // ⛔ skip deklarasi
+    ) {
+      try {
+        console.log("🔧 Processing:", fullPath);
+        const isTSX = file.endsWith(".tsx");
+        let content = fs.readFileSync(fullPath, "utf-8");
+        content = removeTypes(content, isTSX);
+        fs.writeFileSync(fullPath, content, "utf-8");
+        renameFile(fullPath);
+      } catch (err) {
+        console.warn("⚠️ Skip (parse error):", fullPath);
       }
-    });
-  });
+    }
+  }
 }
 
-// Run script
-FOLDERS.forEach(folder => {
+// Jalankan konversi pada semua folder
+for (const folder of FOLDERS) {
   if (fs.existsSync(folder)) walkFolder(folder);
-  else console.warn("Folder not found:", folder);
-});
+  else console.warn("⚠️ Folder not found:", folder);
+}
+
+// Konversi next.config.ts → next.config.js
+const nextConfigTS = path.join(ROOT, "next.config.ts");
+if (fs.existsSync(nextConfigTS)) {
+  console.log("⚙️ Converting next.config.ts...");
+  let content = fs.readFileSync(nextConfigTS, "utf-8");
+  content = removeTypes(content, false);
+  fs.writeFileSync(nextConfigTS, content, "utf-8");
+  renameFile(nextConfigTS);
+}
 
 console.log("✅ Conversion TS/TSX → JS/JSX selesai!");
