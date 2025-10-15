@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-export async function GET(req) {
+export async function GET(request) {
   try {
     const users = await prisma.user.findMany({
       select: { id: true, name: true, email: true, role: true,
@@ -19,7 +19,7 @@ export async function GET(req) {
     });
 
     const latestUpdate = users[0]?.updatedAt ? new Date(users[0].updatedAt).getTime() : 0;
-    const ifModifiedSince = req.headers.get("if-modified-since");
+    const ifModifiedSince = request.headers.get("if-modified-since");
 
     if (ifModifiedSince && parseInt(ifModifiedSince) >= latestUpdate) return new NextResponse(null, { status: 304 });
     return NextResponse.json(users, { headers: { "Last-Modified": latestUpdate.toString() } });
@@ -82,8 +82,51 @@ export async function POST(request) {
   }
 }
 
-export async function DELETE(req) {
-  try { const { ids } = await req.json();
+export async function PUT(request) {
+  try {
+    const body = await request.json();
+    const { id, name, email, password, role, shiftId, officeId } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "User ID is required." }, { status: 400 });
+    }
+
+    // Siapkan data update
+    const updateData = {
+      name,
+      email,
+      role,
+      officeId: officeId ? parseInt(officeId) : null,
+      shiftId: shiftId ? parseInt(shiftId) : null,
+    };
+
+    // Kalau user ubah password
+    if (password && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      updateData.password = hashedPassword;
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+      include: {
+        shift: { select: { id: true, name: true, startTime: true, endTime: true } },
+        office: { select: { id: true, name: true, location: true } },
+      },
+    });
+
+    return NextResponse.json(
+      { message: "User updated successfully ✅", user: updatedUser },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("❌ Error updating user:", error);
+    return NextResponse.json({ error: "Failed to update user." }, { status: 500 });
+  }
+} 
+
+export async function DELETE(request) {
+  try { const { ids } = await request.json();
 
     if (!ids || !Array.isArray(ids)) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
 

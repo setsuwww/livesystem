@@ -68,7 +68,7 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
         className={`group w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors font-semibold
           ${
             isParentActive
-              ? 'bg-slate-50 ring ring-slate-200 border-0 border-b-2 border-slate-200 text-slate-600 hover:border-b-0'
+              ? 'bg-slate-50 ring ring-slate-200 border-0 border-b-2 border-slate-200 text-slate-600'
               : 'text-slate-600 hover:text-slate-600 hover:bg-slate-50'
           }`}
         onClick={() => setOpen(!open)}

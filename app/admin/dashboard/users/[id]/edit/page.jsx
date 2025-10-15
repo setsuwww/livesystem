@@ -1,28 +1,36 @@
-import UsersEditForm from "./EditForm";
 import { prisma } from "@/lib/prisma";
+import EditForm from "./EditForm";
 
-export const revalidate = 60 
+export default async function Page({ params }) {
+  const userId = parseInt(params.id);
 
-export default async function EditUserPage({ params }) {
-  const user = await prisma.user.findUnique({
-    where: { id: Number(params.id) },
-    select: { id: true, name: true, email: true, role: true, shiftId: true },
-  })
+  const [user, shifts, offices] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        officeId: true,
+        shiftId: true,
+      },
+    }),
+    prisma.shift.findMany({
+      select: { id: true, name: true, startTime: true, endTime: true },
+    }),
+    prisma.office.findMany({
+      select: {
+        id: true,
+        name: true,
+        startTime: true,
+        endTime: true,
+        shifts: {
+          select: { id: true, name: true, startTime: true, endTime: true },
+        },
+      },
+    }),
+  ]);
 
-  if (!user) {
-    throw new Error("User not found")
-  }
-
-  const shifts = await prisma.shift.findMany({
-    select: { id: true, type: true, startTime: true, endTime: true },
-  })
-
-  return (
-    <UsersEditForm userId={user.id} shifts={shifts}
-      initialForm={{ name: user.name, email: user.email, password: "",
-        role: user.role,
-        shiftId: user.shiftId ? String(user.shiftId) : "NONE",
-      }}
-    />
-  )
+  return <EditForm user={user} shifts={shifts} offices={offices} />;
 }

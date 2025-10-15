@@ -48,29 +48,6 @@ export async function PATCH( request, { params }) {
   }
 }
 
-export async function PUT(req) {
-  try { const { id, name, email, role, shifts } = await req.json();
-    const updatedUser = await prisma.user.update({
-      where: { id },
-      data: { name, email, role,
-        shift: { create: shifts.map((shift) => ({
-            type: shift.type,
-            startTime: new Date(`${shift.date}T${shift.startTime}:00`), 
-            endTime: new Date(`${shift.date}T${shift.endTime}:00`)
-          }))
-        }
-      },
-      include: { shift: true }
-    });
-
-    return NextResponse.json(updatedUser);
-  } 
-  catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Failed to update user" }, { status: 500 });
-  }
-}
-
 export async function DELETE(req, { params }) {
   try { const id = parseInt(params.id, 10);
     if (isNaN(id)) return NextResponse.json({ error: "Invalid ID" }, { status: 400 });

@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { RadioButton } from "@/components/ui/RadioButton";
@@ -11,120 +10,148 @@ import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../../DashboardHeader";
-
 import { apiFetchData } from "@/function/helpers/fetch";
 import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
 
-export default function UsersEditForm({ userId, shifts, initialForm }) {
+export default function EditForm({ user, offices, shifts }) {
   const router = useRouter();
-  const [form, setForm] = useState({ ...initialForm, password: "" });
+
+  const [form, setForm] = useState({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    password: "",
+    role: user.role,
+    officeId: user.officeId ? String(user.officeId) : "",
+    shiftId: user.shiftId ? String(user.shiftId) : "",
+  });
+
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => { const { name, value } = e.target;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCustomChange = (name, value) => setForm((prev) => ({ ...prev, [name]: value }));
+  const handleCustomChange = (name, value) => {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = async (e) => { e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
-
-    const payload = { name: form.name, email: form.email, role: form.role,
-      shiftId: form.shiftId && form.shiftId !== "NONE" ? parseInt(form.shiftId) : null,
-    };
-
-    if (form.password.trim() !== "") payload.password = form.password;
-
-    try { await apiFetchData({ url: `/users/${userId}`, method: "patch", data: payload,
+    try {
+      await apiFetchData({
+        url: "/users",
+        method: "put",
+        data: form,
         successMessage: "User updated successfully ✅",
         errorMessage: "Failed to update user ❌",
         onSuccess: () => router.push("/admin/dashboard/users"),
       });
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
 
+  const selectedOffice = useMemo(
+    () => offices.find((o) => String(o.id) === form.officeId),
+    [form.officeId, offices]
+  );
+
+  const availableShifts = useMemo(() => selectedOffice?.shifts || [], [selectedOffice]);
+
   return (
     <section>
-      <DashboardHeader title={`Edit User : ${form.name}`} subtitle="Update name, email, password, role, and shift for this user"/>
+      <DashboardHeader
+        title="Edit User"
+        subtitle="Update user details including name, email, role, and assignment"
+      />
 
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
-            <ContentInformation
-              heading="Public"
-              subheading="Users public username & email"
-            />
+            <ContentInformation heading="Public" subheading="Update user info" />
           </ContentForm.Header>
 
           <ContentForm.Body>
             <div className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="username" className="text-head">Username <span className="text-rose-500">*</span></Label>
-                <Input placeholder="Username" name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                />
+                <Label>Username</Label>
+                <Input name="name" value={form.name} onChange={handleChange} required />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-head">Email <span className="text-rose-500">*</span></Label>
-                <Input placeholder="Users Email" type="email" name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                />
+                <Label>Email</Label>
+                <Input type="email" name="email" value={form.email} onChange={handleChange} required />
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-head">Password</Label>
-                <Input placeholder="Leave blank to keep current password" type="password" name="password"
+              <ContentInformation heading="Private" subheading="Password & Role" />
+
+              <div className="space-y-2 mt-6">
+                <Label>Password</Label>
+                <Input
+                  type="password"
+                  name="password"
                   value={form.password}
+                  placeholder="Leave blank to keep current"
                   onChange={handleChange}
                 />
-                <p className="text-xs text-subhead">Leave empty if you don’t want to change it</p>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="role" className="text-head">Role <span className="text-rose-500">*</span></Label>
-                <RadioButton name="role"
+                <Label>Role</Label>
+                <RadioButton
+                  name="role"
                   options={roleOptions}
                   value={form.role}
-                  onChange={(value) => handleCustomChange("role", value)}
+                  onChange={(v) => handleCustomChange("role", v)}
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-head">Shift Assignment</label>
-                <Select value={form.shiftId} onValueChange={(value) => handleCustomChange("shiftId", value)}>
+                <Label>Office Assignment</Label>
+                <Select value={form.officeId} onValueChange={(v) => handleCustomChange("officeId", v)}>
                   <SelectTrigger className="w-1/2">
-                    <SelectValue placeholder="No Shift Assigned" />
+                    <SelectValue placeholder="Select an Office" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="NONE">-</SelectItem>
-                    {shifts.map((shift) => (
-                      <SelectItem key={shift.id} value={String(shift.id)}>
-                        {capitalize(shift.type)}
+                    {offices.map((o) => (
+                      <SelectItem key={o.id} value={String(o.id)}>
+                        {capitalize(o.name)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-subhead">Optional</p>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Shift Assignment</Label>
+                <Select
+                  value={form.shiftId}
+                  onValueChange={(v) => handleCustomChange("shiftId", v)}
+                  disabled={availableShifts.length === 0}
+                >
+                  <SelectTrigger className="w-1/2">
+                    <SelectValue placeholder={availableShifts.length === 0 ? "No shifts found" : "Select a Shift"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableShifts.map((s) => (
+                      <SelectItem key={s.id} value={String(s.id)}>
+                        {capitalize(s.name)} ({s.startTime} - {s.endTime})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <footer className="flex items-center space-x-2">
-              <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-              <Button type="submit" disabled={loading}>
-                {loading ? "Updating..." : "Update User"}
-              </Button>
-            </footer>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Updating..." : "Update User"}
+            </Button>
           </ContentForm.Footer>
         </form>
       </ContentForm>
