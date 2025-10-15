@@ -3,8 +3,8 @@
 import { Badge } from "@/components/ui/Badge"
 import { Checkbox } from "@/components/ui/Checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { attedancesStyles } from "@/constants/attedancesStyles"
-import { shiftStyles } from "@/constants/shiftStyles"
+import { attedancesStyles } from "@/constants/attedanceConstants"
+import { shiftStyles } from "@/constants/shiftConstants"
 
 import { capitalize } from "@/function/globalFunction";
 import { format } from "date-fns"

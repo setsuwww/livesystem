@@ -12,7 +12,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../../DashboardHeader";
 
-import { fetch } from "@/function/helpers/fetch";
+import { apiFetchData } from "@/function/helpers/fetch";
 import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
 
@@ -36,7 +36,7 @@ export default function UsersEditForm({ userId, shifts, initialForm }) {
 
     if (form.password.trim() !== "") payload.password = form.password;
 
-    try { await fetch({ url: `/users/${userId}`, method: "patch", data: payload,
+    try { await apiFetchData({ url: `/users/${userId}`, method: "patch", data: payload,
         successMessage: "User updated successfully ✅",
         errorMessage: "Failed to update user ❌",
         onSuccess: () => router.push("/admin/dashboard/users"),

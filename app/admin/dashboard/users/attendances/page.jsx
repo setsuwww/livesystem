@@ -1,16 +1,16 @@
 import { prisma } from "@/lib/prisma";
-import { ContentInformation } from "@/components/content/ContentInformation";
-import ContentForm from "@/components/content/ContentForm";
 import { DashboardHeader } from "../../DashboardHeader";
+import ContentForm from "@/components/content/ContentForm";
+import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "../../Pagination";
-import { ShiftsCard } from "./AttendancesCard";
+import { AttendancesCard } from "./AttendancesCard";
 import AttendancesTable from "./AttendancesTable";
-
 import { minutesToTime } from "@/function/services/shiftAttendance";
 import { safeToISOString } from "@/function/globalFunction";
 
 const PAGE_SIZE = 5;
 
+// Ambil attendance paginated
 async function getAttendanceData(page = 1) {
   const [attendances, total] = await prisma.$transaction([
     prisma.attendance.findMany({
@@ -18,7 +18,7 @@ async function getAttendanceData(page = 1) {
       take: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true } },
-        shift: { select: { id: true, name: true, startTime: true, endTime: true } },
+        shift: { select: { id: true, name: true, type:true, startTime: true, endTime: true, officeId: true } },
       },
       orderBy: { date: "desc" },
     }),
@@ -28,11 +28,17 @@ async function getAttendanceData(page = 1) {
   return { attendances, total };
 }
 
+// Ambil shift beserta users & attendance hari ini
 async function getShifts() {
-  const today = new Date(new Date().setHours(0, 0, 0, 0));
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const allowedShiftTypes = ["MORNING", "AFTERNOON", "EVENING"];
 
   const shifts = await prisma.shift.findMany({
+    where: { name: { in: allowedShiftTypes } },
     include: {
+      office: { select: { id: true, name: true } },
       users: {
         select: {
           id: true,
@@ -51,8 +57,10 @@ async function getShifts() {
   return shifts.map((shift) => ({
     id: shift.id,
     name: shift.name,
+    type: shift.type,
+    officeName: shift.office?.name || "-",
     startTime: minutesToTime(shift.startTime),
-    endTime: minutesToTime(shift.endTime),    
+    endTime: minutesToTime(shift.endTime),
     users: shift.users.map((user) => ({
       id: user.id,
       name: user.name,
@@ -81,9 +89,11 @@ export default async function AttendancesPage({ searchParams }) {
     updatedAt: safeToISOString(a.updatedAt),
     shift: a.shift
       ? {
-          ...a.shift,
+          id: a.shift.id,
+          name: a.shift.name,
+          type: a.shift.type,
           startTime: minutesToTime(a.shift.startTime),
-          endTime: minutesToTime(a.shift.endTime),    
+          endTime: minutesToTime(a.shift.endTime),
         }
       : null,
   }));
@@ -95,14 +105,20 @@ export default async function AttendancesPage({ searchParams }) {
 
   return (
     <section>
-      <DashboardHeader title="Attendances" subtitle="Employees attendance records" />
+      <DashboardHeader
+        title="Attendances"
+        subtitle="Employees attendance records"
+      />
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation heading="Shift Overview" subheading="View attendance by shift" />
+          <ContentInformation
+            heading="Shift Overview"
+            subheading="View attendance by shift"
+          />
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <ShiftsCard shifts={shifts} />
+          <AttendancesCard shifts={shifts} />
 
           <div className="my-8">
             <ContentInformation
@@ -114,7 +130,11 @@ export default async function AttendancesPage({ searchParams }) {
           <AttendancesTable data={serializedAttendances} />
         </ContentForm.Body>
 
-        <Pagination page={page} totalPages={totalPages} basePath="/admin/dashboard/attendances"/>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          basePath="/admin/dashboard/attendances"
+        />
       </ContentForm>
     </section>
   );

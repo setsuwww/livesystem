@@ -55,11 +55,11 @@ enum AttendanceStatus {
 }
 
 enum ShiftChangeStatus {
-  PENDING
-  ACCEPTED_BY_TARGET
-  REJECTED_BY_TARGET
-  APPROVED_BY_ADMIN
-  REJECTED_BY_ADMIN
+  PENDING          
+  PENDING_TARGET   
+  PENDING_ADMIN    
+  APPROVED
+  REJECTED
 }
 
 model SystemConfig {
@@ -110,8 +110,10 @@ model User {
   schedules          SchedulesOnUsers[]
   attendances        Attendance[]
   permissionRequests PermissionRequest[]
-  shiftRequests     ShiftChangeRequest[]   @relation("RequestedUser")
-  createdRequests   ShiftChangeRequest[]   @relation("RequestedByAdmin")
+
+  shiftRequests        ShiftChangeRequest[] @relation("RequestedUser")     
+  createdRequests      ShiftChangeRequest[] @relation("RequestedByAdmin")  
+  targetShiftRequests  ShiftChangeRequest[] @relation("TargetUser")        
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -136,8 +138,10 @@ model Shift {
 
   scheduleDatesPrimary   ScheduleDate[] @relation("PrimaryShift")
   scheduleDatesSecondary ScheduleDate[] @relation("SecondaryShift")
-  oldShiftRequests  ShiftChangeRequest[]   @relation("OldShift")
-  newShiftRequests  ShiftChangeRequest[]   @relation("NewShift")
+
+  oldShiftRequests     ShiftChangeRequest[] @relation("OldShift")
+  newShiftRequests     ShiftChangeRequest[] @relation("NewShift")
+  targetShiftRequests  ShiftChangeRequest[] @relation("TargetShift")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -239,22 +243,36 @@ model PermissionRequest {
 }
 
 model ShiftChangeRequest {
-  id            Int       @id @default(autoincrement())
-  user          User      @relation("RequestedUser", fields: [userId], references: [id]) // karyawan yang shiftnya mau diganti
-  userId        Int
+  id              Int       @id @default(autoincrement())
 
-  requestedBy   User      @relation("RequestedByAdmin", fields: [requestedById], references: [id]) // admin/manager yang membuat permintaan
-  requestedById Int
+  user            User      @relation("RequestedUser", fields: [userId], references: [id])
+  userId          Int
 
-  reason        String
-  startDate     DateTime
-  endDate       DateTime?
-  status        ShiftChangeStatus @default(PENDING)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  requestedBy     User      @relation("RequestedByAdmin", fields: [requestedById], references: [id])
+  requestedById   Int
 
-  oldShiftId    Int?      
-  newShiftId    Int?
-  oldShift      Shift?    @relation("OldShift", fields: [oldShiftId], references: [id])
-  newShift      Shift?    @relation("NewShift", fields: [newShiftId], references: [id])
+  targetUser      User?     @relation("TargetUser", fields: [targetUserId], references: [id])
+  targetUserId    Int?
+
+  oldShift        Shift?    @relation("OldShift", fields: [oldShiftId], references: [id])
+  oldShiftId      Int?
+
+  newShift        Shift?    @relation("NewShift", fields: [newShiftId], references: [id])
+  newShiftId      Int?
+
+  targetShift     Shift?    @relation("TargetShift", fields: [targetShiftId], references: [id])
+  targetShiftId   Int?
+
+  reason          String
+  startDate       DateTime
+  endDate         DateTime?
+  status          ShiftChangeStatus @default(PENDING)
+
+  verifiedByTarget Boolean  @default(false)
+  verifiedByAdmin  Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+

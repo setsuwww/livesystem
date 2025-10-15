@@ -8,16 +8,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
 import { Badge } from "@/components/ui/Badge"
 import { ContentInformation } from "@/components/content/ContentInformation"
-import {
-  Check,
-  ChevronsUpDown,
-  CircleUserRound,
-  X,
-  CalendarArrowUp,
-  CalendarArrowDown,
-  Clock,
-} from "lucide-react"
-import { fetch } from "@/function/helpers/fetch"
+import { Check, ChevronsUpDown, CircleUserRound, X, CalendarArrowUp, CalendarArrowDown, Clock } from "lucide-react"
+import { apiFetchData } from "@/function/helpers/fetch"
 
 export default function InputAssignUserShift({ events, setEvents, users }) {
   const [startDate, setStartDate] = useState("")
@@ -31,9 +23,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
   const [dialogMessage, setDialogMessage] = useState("")
   const [dialogType, setDialogType] = useState("success")
 
-  // -------------------------
-  // Handlers
-  // -------------------------
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
       prev.includes(id) ? prev.filter((u) => u !== id) : [...prev, id]
@@ -68,10 +57,7 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
     }
 
     try {
-      const res = await fetch({
-        url: "/schedules",
-        method: "post",
-        data: payload,
+      const res = await apiFetchData({ url: "/schedules", method: "post", data: payload,
         successMessage: "Schedule successfully created!",
         errorMessage: "Failed to create schedule.",
         onSuccess: (data) => setEvents((prev) => [...prev, data]),
@@ -80,20 +66,16 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
       setDialogType("success")
       setDialogMessage(`Schedule created for ${selectedUsers.length} user(s).`)
       setDialogOpen(true)
-    } catch (err) {
-      console.error(err)
+    } 
+    catch (err) { console.error(err)
       setDialogType("error")
       setDialogMessage("Something went wrong.")
       setDialogOpen(true)
     }
   }
 
-  // -------------------------
-  // UI
-  // -------------------------
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="py-2">
         <ContentInformation
           heading="Assign Users to Schedules"
@@ -101,9 +83,7 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
         />
       </div>
 
-      {/* Date + Time Range */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Start Date & Time */}
         <div className="flex flex-col gap-2">
           <Label>Start Date & Time</Label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -123,13 +103,11 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
 
           {(startDate || startTime) && (
   <div className="flex items-center gap-3 text-teal-600 mt-1">
-    {/* Calendar icon + date */}
     <div className="flex items-center gap-1 text-xs font-semibold">
       <CalendarArrowUp size={14} className="text-teal-600" />
       <span>{startDate}</span>
     </div>
 
-    {/* Clock icon + time */}
     {startTime && (
       <div className="flex items-center gap-1 text-xs font-semibold">
         <Clock size={14} className="text-teal-600" />
@@ -141,7 +119,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
 
         </div>
 
-        {/* End Date & Time */}
         <div className="flex flex-col gap-2">
           <Label>End Date & Time</Label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -177,7 +154,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
         </div>
       </div>
 
-      {/* User MultiSelect */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label>Assign Users</Label>
@@ -265,7 +241,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
                           transition-colors
                         "
                       >
-                        {/* Avatar */}
                         <div
                           className="
                             p-2 rounded-lg bg-slate-100 transition-colors
@@ -274,7 +249,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
                           <CircleUserRound className="h-5 w-5 text-slate-600 transition-colors" />
                         </div>
 
-                        {/* User Info */}
                         <div className="flex flex-col">
                           <span className="text-sm font-medium text-slate-700 transition-colors">
                             {user.name}
@@ -284,7 +258,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
                           </span>
                         </div>
 
-                        {/* Check icon */}
                         {isSelected && (
                           <div className="ml-auto bg-teal-100 p-1.5 rounded-md  transition-colors">
                             <Check className="h-4 w-4 text-teal-600 transition-colors" />
@@ -300,7 +273,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
         </Popover>
       </div>
 
-      {/* Submit Button */}
       <div className="flex justify-end pt-2">
         <Button
           type="button"
@@ -312,7 +284,6 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
         </Button>
       </div>
 
-      {/* Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>

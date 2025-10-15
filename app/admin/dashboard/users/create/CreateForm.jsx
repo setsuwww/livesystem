@@ -13,7 +13,7 @@ import { ContentList } from "@/components/content/ContentList";
 import { Label } from "@/components/ui/Label"
 import { DashboardHeader } from "../../DashboardHeader"
 
-import { fetch } from "@/function/helpers/fetch"
+import { apiFetchData } from "@/function/helpers/fetch"
 import { capitalize, formatIntToTime } from "@/function/globalFunction"
 import { roleOptions } from "@/constants/roleOptions"
 
@@ -58,7 +58,7 @@ export default function CreateForm({ offices, shifts }) {
     }
 
     try {
-      await fetch({
+      await apiFetchData({
         url: "/users", method: "post", data: payload,
         successMessage: "User created successfully ✅",
         errorMessage: "Failed to create user ❌",

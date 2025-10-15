@@ -48,7 +48,7 @@ const LoginPage = () => {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={email}
+          <Input id="email" type="email" value={email} className="h-10"
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
           />
@@ -60,7 +60,7 @@ const LoginPage = () => {
         {/* Password */}
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" value={password}
+          <Input id="password" type="password" value={password} className="h-10"
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
           />

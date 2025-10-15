@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/Label"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
 
-import { fetch } from "@/function/helpers/fetch"
+import { apiFetchData } from "@/function/helpers/fetch"
 import { capitalize } from "@/function/globalFunction"
 import { shiftStyles } from "@/constants/shiftConstants"
 
@@ -26,7 +26,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
   const { data: currentUser, isLoading: loadingCurrent } = useQuery({
     queryKey: ["currentUser", currentUserId],
     queryFn: () =>
-      fetch({
+      apiFetchData({
         url: `/users/${currentUserId}`,
         method: "get",
         errorMessage: "Failed to load current user",
@@ -37,7 +37,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
   const { data: users = [], isLoading: loadingUsers } = useQuery({
     queryKey: ["usersToSwitch", currentUserId],
     queryFn: () =>
-      fetch({ url: `/users/${currentUserId}/switch`,
+      apiFetchData({ url: `/users/${currentUserId}/switch`,
         method: "get",
         errorMessage: "Failed to load users",
       }),
@@ -46,7 +46,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
 
   const swapMutation = useMutation({
     mutationFn: () =>
-      fetch({ url: `/users/${currentUserId}/switch`, method: "post", data: { otherUserId: selectedId },
+      apiFetchData({ url: `/users/${currentUserId}/switch`, method: "post", data: { otherUserId: selectedId },
         successMessage: "Shift swapped successfully",
         errorMessage: "Failed to swap shifts",
       }),

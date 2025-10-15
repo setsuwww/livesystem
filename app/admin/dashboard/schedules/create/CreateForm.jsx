@@ -13,75 +13,52 @@ import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 import ContentForm from "@/components/content/ContentForm"
 import { ContentInformation } from "@/components/content/ContentInformation"
 
-import { fetch } from "@/function/helpers/fetch"
+import { apiFetchData } from "@/function/helpers/fetch"
 
-export default function ScheduleForm({ users, shifts }) {
+export default function CreateForm({ users, shifts }) {
   const [loading, setLoading] = useState(false)
   const [activeDate, setActiveDate] = useState(null)
+  const [events, setEvents] = useState([])
+
   const [form, setForm] = useState({
     title: "",
     description: "",
     frequency: "ONCE",
   })
 
-  const [events, setEvents] = useState([])
-
   const handleChange = useCallback((field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }))
   }, [])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => { e.preventDefault()
     if (!form.title.trim() || !form.description.trim() || events.length === 0) {
       toast.error("Please fill all required fields")
       return
     }
 
     setLoading(true)
-    try {
-      const userIds = Array.from(
-        new Set(
-          events.flatMap((e) => 
-            e.users
-              .map((u) => u.id)
-              .filter((id) => id !== null && id !== undefined)
-          )
-        )
-      )
+    try { const userIds = Array.from(new Set(events.flatMap((e) => e.users.map((u) => u.id).filter(Boolean))))
 
       const payload = {
         title: form.title,
         description: form.description,
         frequency: form.frequency,
-          startDate: events[0]?.startDate || null,
-  endDate: events[0]?.endDate || null,
-  startTime: events[0]?.startTime || null,
-  endTime: events[0]?.endTime || null,
-        userIds, 
+        startDate: events[0]?.startDate ?? null, endDate: events[0]?.endDate ?? null,
+        startTime: events[0]?.startTime ?? null, endTime: events[0]?.endTime ?? null,
+        userIds,
       }
 
-      await fetch({
-        url: "/schedules",
-        method: "post",
-        data: payload,
+      await apiFetchData({ url: "/schedules", method: "post", data: payload,
         successMessage: "Schedule created successfully",
         errorMessage: "Failed to create schedule",
       })
 
-      setForm({
-        title: "",
-        description: "",
-        frequency: "ONCE",
-      })
+      setForm({ title: "", description: "", frequency: "ONCE" })
       setEvents([])
       setActiveDate(null)
     } 
-    catch (error) {
-      console.error("Error creating schedule:", error)
-    } 
-    finally {
-      setLoading(false)
-    }
+    catch (error) { console.error("Error creating schedule:", error)} 
+    finally { setLoading(false)}
   }
 
   return (
@@ -95,13 +72,12 @@ export default function ScheduleForm({ users, shifts }) {
             subheading="Create a new schedule and assign users"
           />
         </ContentForm.Header>
+
         <ContentForm.Body>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="title">
-                  Title
-                </Label>
+                <Label htmlFor="title">Title</Label>
                 <Input
                   id="title"
                   value={form.title}
@@ -113,9 +89,7 @@ export default function ScheduleForm({ users, shifts }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">
-                  Description
-                </Label>
+                <Label htmlFor="description">Description</Label>
                 <Input
                   id="description"
                   value={form.description}
@@ -128,17 +102,12 @@ export default function ScheduleForm({ users, shifts }) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="frequency">
-                Select Frequency
-              </Label>
+              <Label htmlFor="frequency">Select Frequency</Label>
               <Select
                 value={form.frequency}
                 onValueChange={(value) => handleChange("frequency", value)}
               >
-                <SelectTrigger
-                  id="frequency"
-                  className="w-full mt-1 border-slate-200 focus:border-slate-400"
-                >
+                <SelectTrigger className="border-slate-200 focus:border-slate-400">
                   <SelectValue placeholder="Select Frequency" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200">
@@ -161,15 +130,15 @@ export default function ScheduleForm({ users, shifts }) {
 
             <div className="flex items-center justify-between pt-6 border-t border-slate-200">
               <div className="text-sm text-slate-600">
-                {events.reduce((acc, e) => acc + e.users.length, 0)} users
-                assigned • {events.length} dates scheduled
+                {events.reduce((acc, e) => acc + e.users.length, 0)} users assigned •{" "}
+                {events.length} dates scheduled
               </div>
               <div className="flex items-center space-x-2">
                 <Button
                   type="button"
                   variant="outline"
                   disabled={loading}
-                  className="border-slate-200 text-slate-700 hover:bg-slate-50 bg-transparent"
+                  className="border-slate-200 text-slate-700 hover:bg-slate-50"
                 >
                   Cancel
                 </Button>

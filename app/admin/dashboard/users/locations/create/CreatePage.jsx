@@ -12,7 +12,7 @@ import { DashboardHeader } from "../../../DashboardHeader";
 import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 
-import { fetch } from "@/function/helpers/fetch";
+import { apiFetchData } from "@/function/helpers/fetch";
 import { capitalize, timeToMinutes } from "@/function/globalFunction";
 
 const typeOptions = [
@@ -63,7 +63,7 @@ export default function CreateOfficeForm() {
     };
 
     try {
-      await fetch({
+      await apiFetchData({
         url: "/office",
         method: "post",
         data: payload,

@@ -4,5 +4,3 @@ export const roleStyles = {
   Employee: "text-teal-600 bg-teal-100 border-teal-300",
   User: "text-slate-600 bg-slate-100 border-slate-300",
 };
-
-

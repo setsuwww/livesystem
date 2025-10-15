@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma"
 import { CircleUserRound } from "lucide-react"
 
 import { ContentInformation } from "@/components/content/ContentInformation"
-import { ContentList } from "@/components/content/ContentList"
 import ContentForm from "@/components/content/ContentForm"
 import UserHistoryTable from "./HistoryTable"
 import { DashboardHeader } from "../../../DashboardHeader"
@@ -74,7 +73,7 @@ export default async function UserHistoryPage({ params, searchParams }) {
     <section>
       <DashboardHeader
         title={`Attendance History`}
-        subtitle={profile ? `${profile.name} (${profile.email})` : "User"}
+        subtitle={profile ? `History : ${profile.name} (${profile.email})` : "User"}
       />
 
       <ContentForm>
@@ -95,9 +94,6 @@ export default async function UserHistoryPage({ params, searchParams }) {
                 </div>
               </div>
             )}
-            <ContentList type="w" items={[
-              "This page only see users history and clear the history, manage all data shift and attendances on their on page"
-            ]}/>
           </div>
         </ContentForm.Header>
 

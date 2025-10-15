@@ -11,7 +11,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "../../DashboardHeader";
 
-import { fetch } from "@/function/helpers/fetch";
+import { apiFetchData } from "@/function/helpers/fetch";
 import { timeToInt } from "@/function/services/shiftAttendance";
 import { capitalize } from "@/function/globalFunction";
 
@@ -43,7 +43,7 @@ export default function CreateShiftForm({ offices }) {
 
     try {
       setLoading(true);
-      await fetch({
+      await apiFetchData({
         url: "/shifts",
         method: "post",
         data: payload,
