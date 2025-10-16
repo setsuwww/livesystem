@@ -1,6 +1,6 @@
 function ContentForm({ children }) {
   return (
-    <div className="mx-auto bg-white rounded-lg border border-slate-200 shadow-md">
+    <div className="mx-auto bg-white rounded-lg border border-slate-200 shadow-xs">
       {children}
     </div>
   );
