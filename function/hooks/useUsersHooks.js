@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useDeferredValue, useRef } from "react";
-import { handleUsers } from "@/function/handleUsers";
+import { handleUsers } from "@/function/handlers/handleUsers";
 
 export function useUsersHooks(data) {
   const [search, setSearch] = useState("");
@@ -73,13 +73,6 @@ export function useUsersHooks(data) {
   };
 }
 
-/**
- * Custom hook untuk search users
- * @param {Array} users - list users
- * @param {string} query - kata kunci pencarian
- * @param {Array} fields - field yang ingin dicari (default: ["name", "email"])
- * @returns {Array} - hasil filter
- */
 export function useSearchUsers(users, query, fields = ["name", "email"]) {
   const filteredUsers = useMemo(() => {
     if (!query) return users;

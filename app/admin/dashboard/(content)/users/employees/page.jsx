@@ -4,7 +4,7 @@ import ContentForm from "@/components/content/ContentForm";
 import EmployeesTable from "./EmployeesTable";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
-import { minutesToTime } from "@/function/services/shiftAttendance";
+import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
 
 const PAGE_SIZE = 100;
 

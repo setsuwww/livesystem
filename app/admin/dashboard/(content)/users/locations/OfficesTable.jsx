@@ -16,7 +16,7 @@ import { officeStyles } from "@/constants/officeStyles"
 import { OfficesStatusBadge } from "./OfficesStatusBadge"
 import { OfficesActionHeader } from "./OfficesActionHeader"
 import { useOfficesHooks } from "@/function/hooks/useOfficesHooks"
-import { handleOffices } from "@/function/handleOffices"
+import { handleOffices } from "@/function/handlers/handleOffices"
 import { minutesToTime } from "@/function/globalFunction"
 
 export default function OfficesTable({ data }) {

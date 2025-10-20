@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useRef } from "react"
 import useSWR from "swr"
-import { handleOffices } from "../handleOffices"
+import { handleOffices } from "../handlers/handleOffices"
 
 const fetcher = async (url) => {
   const res = await fetch(url)
@@ -11,7 +11,6 @@ const fetcher = async (url) => {
 }
 
 export function useOfficesHooks(initialData = []) {
-  // Ambil data dari API + fallback dari server
   const { data: offices = [], mutate } = useSWR("/api/office", fetcher)
 
   const [search, setSearch] = useState("")

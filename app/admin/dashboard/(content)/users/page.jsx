@@ -8,7 +8,7 @@ import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 
 import { capitalize } from "@/function/globalFunction";
-import { minutesToTime } from "@/function/services/shiftAttendance";
+import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
 
 const PAGE_SIZE = 5;
 export const revalidate = 60;

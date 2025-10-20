@@ -1,7 +1,9 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useTransition } from "react"
 import { useRouter } from "next/navigation"
+
+import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
@@ -9,17 +11,15 @@ import { RadioButton } from "@/components/ui/RadioButton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
 import ContentForm from "@/components/content/ContentForm"
 import { ContentInformation } from "@/components/content/ContentInformation"
-import { ContentList } from "@/components/content/ContentList";
+import { ContentList } from "@/components/content/ContentList"
 import { Label } from "@/components/ui/Label"
-import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 
-import { apiFetchData } from "@/function/helpers/fetch"
+import { createUser } from "@/components/server/userAction.js"
 import { capitalize, formatIntToTime } from "@/function/globalFunction"
 import { roleOptions } from "@/constants/roleOptions"
 
 export default function CreateForm({ offices, shifts }) {
   const router = useRouter()
-
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -29,7 +29,8 @@ export default function CreateForm({ offices, shifts }) {
     workMode: "WORK_HOURS",
     shiftId: "",
   })
-  const [loading, setLoading] = useState(false)
+
+  const [isPending, startTransition] = useTransition()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -42,35 +43,23 @@ export default function CreateForm({ offices, shifts }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
+    const fd = new FormData()
+    Object.entries(form).forEach(([key, value]) => fd.append(key, value))
 
-    const payload = {
-      ...form,
-      officeId: form.officeId && form.officeId !== "NONE" ? parseInt(form.officeId) : null,
-      shiftId:
-        form.workMode === "SHIFT" && form.shiftId && form.shiftId !== "NONE"
-          ? parseInt(form.shiftId)
-          : null,
-      workHours:
-        form.workMode === "WORK_HOURS" && defaultOfficeHour
-          ? { startTime: defaultOfficeHour.startTime, endTime: defaultOfficeHour.endTime }
-          : null,
-    }
-
-    try {
-      await apiFetchData({
-        url: "/users", method: "post", data: payload,
-        successMessage: "User created successfully ✅",
-        errorMessage: "Failed to create user ❌",
-        onSuccess: () => router.push("/admin/dashboard/users"),
-      })
-    } finally {
-      setLoading(false)
-    }
+    startTransition(async () => {
+      const res = await createUser(fd)
+      if (res.success) router.push("/admin/dashboard/users")
+    })
   }
 
-  const selectedOffice = useMemo(() => offices.find(o => String(o.id) === form.officeId), [form.officeId, offices])
-  const defaultOfficeHour = useMemo(() => selectedOffice ? { startTime: selectedOffice.startTime, endTime: selectedOffice.endTime } : null, [selectedOffice])
+  const selectedOffice = useMemo(
+    () => offices.find(o => String(o.id) === form.officeId),
+    [form.officeId, offices]
+  )
+  const defaultOfficeHour = useMemo(
+    () => selectedOffice ? { startTime: selectedOffice.startTime, endTime: selectedOffice.endTime } : null,
+    [selectedOffice]
+  )
   const availableShifts = useMemo(() => selectedOffice?.shifts || [], [selectedOffice])
 
   return (
@@ -237,20 +226,19 @@ export default function CreateForm({ offices, shifts }) {
                   </div>
 
                   {availableShifts.length === 0 && (
-                    <ContentList type="w"
-                      items={["There is no shift detected or created in this Office to assign",]}
+                    <ContentList
+                      type="w"
+                      items={["There is no shift detected or created in this Office to assign"]}
                     />
                   )}
                 </>
               )}
-
             </div>
           </ContentForm.Body>
 
-          {/* Footer */}
           <ContentForm.Footer>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create User"}
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Creating..." : "Create User"}
             </Button>
           </ContentForm.Footer>
         </form>

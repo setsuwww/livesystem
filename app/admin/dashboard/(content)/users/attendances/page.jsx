@@ -5,7 +5,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import { AttendancesCard } from "./AttendancesCard";
 import AttendancesTable from "./AttendancesTable";
-import { minutesToTime } from "@/function/services/shiftAttendance";
+import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
 import { safeToISOString } from "@/function/globalFunction";
 
 const PAGE_SIZE = 5;

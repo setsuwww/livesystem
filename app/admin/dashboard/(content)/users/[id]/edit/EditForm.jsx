@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -10,12 +10,13 @@ import ContentForm from "@/components/content/ContentForm";
 import { ContentInformation } from "@/components/content/ContentInformation";
 import { Label } from "@/components/ui/Label";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import { apiFetchData } from "@/function/helpers/fetch";
 import { capitalize } from "@/function/globalFunction";
 import { roleOptions } from "@/constants/roleOptions";
+import { updateUser } from "@/components/server/userAction.js";
 
 export default function EditForm({ user, offices, shifts }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const [form, setForm] = useState({
     id: user.id,
@@ -27,8 +28,6 @@ export default function EditForm({ user, offices, shifts }) {
     shiftId: user.shiftId ? String(user.shiftId) : "",
   });
 
-  const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -38,29 +37,21 @@ export default function EditForm({ user, offices, shifts }) {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
-    try {
-      await apiFetchData({
-        url: "/users",
-        method: "put",
-        data: form,
-        successMessage: "User updated successfully ✅",
-        errorMessage: "Failed to update user ❌",
-        onSuccess: () => router.push("/admin/dashboard/users"),
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  const selectedOffice = useMemo(
-    () => offices.find((o) => String(o.id) === form.officeId),
-    [form.officeId, offices]
-  );
+    startTransition(async () => {
+      const result = await updateUser(form);
+      if (result?.success) {
+        router.push("/admin/dashboard/users");
+      } else {
+        alert(result?.error || "Failed to update user ❌");
+      }
+    });
+  }
 
-  const availableShifts = useMemo(() => selectedOffice?.shifts || [], [selectedOffice]);
+  const selectedOffice = offices.find((o) => String(o.id) === form.officeId);
+  const availableShifts = selectedOffice?.shifts || [];
 
   return (
     <section>
@@ -149,8 +140,8 @@ export default function EditForm({ user, offices, shifts }) {
           </ContentForm.Body>
 
           <ContentForm.Footer>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Updating..." : "Update User"}
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Updating..." : "Update User"}
             </Button>
           </ContentForm.Footer>
         </form>

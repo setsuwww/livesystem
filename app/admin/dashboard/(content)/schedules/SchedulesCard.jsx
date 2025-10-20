@@ -11,7 +11,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 import SchedulesActionHeader from "./SchedulesActionHeader";
 import ScheduleUsersDialog from "./SchedulesUsersDialog";
-import { handleSchedules } from "@/function/handleSchedules";
+import { handleSchedules } from "@/function/handlers/handleSchedules";
 import { capitalize } from "@/function/globalFunction";
 import { frequencyStyles } from "@/constants/frequencyStyles";
 

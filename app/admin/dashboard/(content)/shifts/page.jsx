@@ -4,7 +4,7 @@ import { ContentInformation } from "@/components/content/ContentInformation";
 import { ShiftsView } from "./ShiftsView";
 import { prisma } from "@/lib/prisma";
 
-import { minutesToTime } from "@/function/services/shiftAttendance";
+import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
 
 export const revalidate = 60;
 
