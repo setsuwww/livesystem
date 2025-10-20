@@ -9,7 +9,7 @@ export const ContentInformation = React.memo(function ContentInformation({
   subheading,
   show = false,
   buttonText = "Create",
-  href,
+  href, autoMargin = "mb-3",
   variant = "primary",
 }) {
   const hasHeader = heading || subheading;
@@ -18,7 +18,7 @@ export const ContentInformation = React.memo(function ContentInformation({
   if (!hasHeader) return null;
 
   return (
-    <header className="flex items-center justify-between mb-3">
+    <header className={`${autoMargin ? "mb-3" : "mb-0"} flex items-center justify-between`}>
       <div className="flex flex-col">
         {heading && (
           <h2 className="text-lg font-bold text-slate-700/80">{heading}</h2>

@@ -1,10 +1,15 @@
+import { Clock, Sun, SunMoon, Moon, Zap, ChartNoAxesCombined, FileClock, BrushCleaning } from "lucide-react";
+
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { DashboardStats } from "@/app/admin/dashboard/DashboardStats";
-import { Clock, Sun, SunMoon, Moon } from "lucide-react";
-import { DashboardDiagram } from "./DashboardDiagram";
-import { prisma } from "@/_lib/prisma";
+import { ContentInformation } from "@/_components/content/ContentInformation";
+import { Button } from '@/_components/ui/Button';
+import { AreaDiagram, BarDiagram } from "./DashboardDiagram";
 
-export default async function AdminDashboardPage({ action }) {
+import { prisma } from "@/_lib/prisma";
+import FastActions from './page-action';
+
+export default async function AdminDashboardPage() {
   // total
   const totalUsers = await prisma.user.count();
   const totalShifts = await prisma.shift.count();
@@ -32,17 +37,24 @@ export default async function AdminDashboardPage({ action }) {
     { name: "5", value: 12, negativeValue: 4 },
     { name: "6", value: 18, negativeValue: 6 },
     { name: "7", value: 25, negativeValue: 9 },
+    { name: "8", value: 8, negativeValue: 9 },
+    { name: "9", value: 9, negativeValue: 9 },
+    { name: "10", value: 15, negativeValue: 9 },
+    { name: "11", value: 20, negativeValue: 9 },
+    { name: "12", value: 6, negativeValue: 9 },
   ];
 
   const ticketChartData = [
-    { name: "Minggu", accepted: 5, rejected: 2, late: 1, onTime: 3 },
-    { name: "Senin", accepted: 8, rejected: 1, late: 2, onTime: 4 },
-    { name: "Selasa", accepted: 6, rejected: 3, late: 2, onTime: 5 },
-    { name: "Rabu", accepted: 10, rejected: 2, late: 1, onTime: 6 },
-    { name: "Kamis", accepted: 7, rejected: 1, late: 3, onTime: 4 },
-    { name: "Jumat", accepted: 9, rejected: 4, late: 2, onTime: 5 },
-    { name: "Sabtu", accepted: 11, rejected: 3, late: 1, onTime: 7 },
+    { name: "Minggu", accepted: 9, rejected: 3, late: 7, onTime: 4 },
+    { name: "Senin", accepted: 7, rejected: 5, late: 5, onTime: 6 },
+    { name: "Selasa", accepted: 9, rejected: 4, late: 7, onTime: 2 },
+    { name: "Rabu", accepted: 7, rejected: 3, late: 5, onTime: 5 },
+    { name: "Kamis", accepted: 9, rejected: 5, late: 7, onTime: 6 },
+    { name: "Jumat", accepted: 12, rejected: 7, late: 10, onTime: 12 },
+    { name: "Sabtu", accepted: 10, rejected: 5, late: 8, onTime: 15 },
   ];
+
+  console.log(ticketChartData)
 
   return (
     <div className="space-y-6">
@@ -83,29 +95,47 @@ export default async function AdminDashboardPage({ action }) {
         />
       </div>
 
-      {action}
-      {/* Diagrams */}
-      <div className="grid gap-4 grid-cols-2">
-        <DashboardDiagram
-          title="Employee performance"
-          description="Bad and Good performance from Employee"
-          data={salesChartData}
-          color="#1d293d"
-          type="bar"
-        />
-
-        <DashboardDiagram
-          title="Shifts statistic"
-          data={ticketChartData}
-          type="area"
-          series={[
-            { key: "accepted", color: "#7bf1a8", label: "On Time" },
-            { key: "rejected", color: "#ffdf20", label: "Late" },
-            { key: "late", color: "#ffa2a2", label: "Absent" },
-            { key: "onTime", color: "#3b82f6", label: "Permission" },
-          ]}
-        />
+      <div className="mt-4 mb-6 flex items-center space-x-3">
+        <div className="bg-white border border-slate-200 text-rose-500 p-2 rounded-lg">
+        <Zap strokeWidth={2} />
+        </div>
+        <ContentInformation heading="Fast action" subheading="Access your content in one click" autoMargin={false} />
       </div>
+
+      <FastActions />
+
+      <div className="mt-4 mb-6 flex items-center justify-between space-x-2">
+        <div className="flex items-center space-x-3">
+        <div className="bg-white border border-slate-200 text-purple-500 p-2 rounded-lg">
+        <ChartNoAxesCombined strokeWidth={2} />
+        </div>
+        <ContentInformation heading="Analytics" subheading="Views statistic in diagram views" autoMargin={false} />
+        </div>
+        <Button variant="secondary" className="flex items-center bg-white hover:bg-white/70 text-slate-600 border-slate-200 hover:border-slate-200 shadow-none" >
+          <FileClock strokeWidth={2} className="text-yellow-500" />
+          <span>Log activity</span>
+        </Button>
+      </div>
+<div className="grid gap-4 grid-cols-2">
+  <BarDiagram
+    title="Employee performance"
+    description="Bad and Good performance from Employee"
+    data={salesChartData}
+    series={[{ key: "value", color: "#1d293d", label: "Value" }]}
+  />
+
+  <AreaDiagram
+    title="Shifts statistic"
+    description="Shift attendance diagram"
+    data={ticketChartData}
+    series={[
+      { key: "accepted", color: "#7bf1a8", label: "On Time" },
+      { key: "rejected", color: "#ffdf20", label: "Late" },
+      { key: "late", color: "#ffa2a2", label: "Absent" },
+      { key: "onTime", color: "#3b82f6", label: "Permission" },
+    ]}
+  />
+</div>
     </div>
   );
 }

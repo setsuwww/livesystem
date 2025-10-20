@@ -21,8 +21,8 @@ function SidebarLink({ href, icon: Icon, children }) {
       href={href}
       className={`${linkBase} ${
         isActive
-          ? 'text-slate-600 bg-slate-50'
-          : 'text-slate-600 hover:text-slate-600 hover:bg-slate-50rounded-lg '
+          ? 'bg-slate-50 ring ring-slate-200 border-0 border-b-2 border-slate-200 text-slate-600 rounded-lg'
+          : 'text-slate-600 hover:text-slate-600 hover:bg-slate-50 rounded-lg '
       }`}
     >
       <Icon className="text-yellow-500" size={18} />
@@ -41,7 +41,7 @@ function SidebarSubLink({ href, children }) {
       className={`${subLinkBase} ${
         isActive
           ? 'text-slate-600 font-semibold'
-          : 'text-slate-500 hover:text-slate-600 hover:bg-slate-100/70 rounded-lg '
+          : 'text-slate-500 hover:text-slate-600 hover:bg-slate-100/70 rounded-lg'
       }`}
     >
       {children}
