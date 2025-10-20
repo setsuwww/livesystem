@@ -10,12 +10,10 @@ import { prisma } from "@/_lib/prisma";
 import FastActions from './page-action';
 
 export default async function AdminDashboardPage() {
-  // total
   const totalUsers = await prisma.user.count();
-  const totalShifts = await prisma.shift.count();
-  const totalSchedules = await prisma.schedule.count();
+  const totalSchedules = await prisma.user.count();
+  const totalShifts = await prisma.user.count();
 
-  // employees per shift
   const morningEmployees = await prisma.user.count({
     where: { shift: { type: "MORNING" } },
   });
@@ -28,7 +26,6 @@ export default async function AdminDashboardPage() {
     where: { shift: { type: "EVENING" } },
   });
 
-  // chart dummy data
   const salesChartData = [
     { name: "1", value: 10, negativeValue: 2 },
     { name: "2", value: 15, negativeValue: 5 },
@@ -54,14 +51,10 @@ export default async function AdminDashboardPage() {
     { name: "Sabtu", accepted: 10, rejected: 5, late: 8, onTime: 15 },
   ];
 
-  console.log(ticketChartData)
-
   return (
     <div className="space-y-6">
-      {/* Header */}
       <DashboardHeader title="Dashboard" />
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardStats
           dark={true}
@@ -95,47 +88,53 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      <div className="mt-4 mb-6 flex items-center space-x-3">
-        <div className="bg-white border border-slate-200 text-rose-500 p-2 rounded-lg">
-        <Zap strokeWidth={2} />
-        </div>
-        <ContentInformation heading="Fast action" subheading="Access your content in one click" autoMargin={false} />
-      </div>
-
-      <FastActions />
-
-      <div className="mt-4 mb-6 flex items-center justify-between space-x-2">
+      <div className="p-4 space-y-4 bg-white rounded-xl border border-slate-200 shadow-xs">
         <div className="flex items-center space-x-3">
-        <div className="bg-white border border-slate-200 text-purple-500 p-2 rounded-lg">
-        <ChartNoAxesCombined strokeWidth={2} />
+          <div className="bg-orange-50 border border-orange-100 text-orange-500 p-2 rounded-lg">
+            <Zap strokeWidth={2} />
+          </div>
+          <ContentInformation heading="Fast action" subheading="Access your content in one click" autoMargin={false} />
         </div>
-        <ContentInformation heading="Analytics" subheading="Views statistic in diagram views" autoMargin={false} />
-        </div>
-        <Button variant="secondary" className="flex items-center bg-white hover:bg-white/70 text-slate-600 border-slate-200 hover:border-slate-200 shadow-none" >
-          <FileClock strokeWidth={2} className="text-yellow-500" />
-          <span>Log activity</span>
-        </Button>
-      </div>
-<div className="grid gap-4 grid-cols-2">
-  <BarDiagram
-    title="Employee performance"
-    description="Bad and Good performance from Employee"
-    data={salesChartData}
-    series={[{ key: "value", color: "#1d293d", label: "Value" }]}
-  />
 
-  <AreaDiagram
-    title="Shifts statistic"
-    description="Shift attendance diagram"
-    data={ticketChartData}
-    series={[
-      { key: "accepted", color: "#7bf1a8", label: "On Time" },
-      { key: "rejected", color: "#ffdf20", label: "Late" },
-      { key: "late", color: "#ffa2a2", label: "Absent" },
-      { key: "onTime", color: "#3b82f6", label: "Permission" },
-    ]}
-  />
-</div>
-    </div>
+        <FastActions />
+      </div>
+
+      <div className="p-4 space-y-4 bg-white rounded-xl border border-slate-200 shadow-xs">
+        <div className="flex items-center justify-between space-x-2">
+          <div className="flex items-center space-x-3">
+            <div className="bg-purple-50 border border-purple-100 text-purple-500 p-2 rounded-lg">
+              <ChartNoAxesCombined strokeWidth={2} />
+            </div>
+            <ContentInformation heading="Analytics" subheading="Views statistic in diagram views" autoMargin={false} />
+          </div>
+          <Button variant="secondary" className="flex items-center bg-white hover:bg-white/70 text-slate-600 border-slate-200 hover:border-slate-200 shadow-none" >
+            <FileClock strokeWidth={2} className="text-yellow-500" />
+            <span>Log activity</span>
+          </Button>
+        </div>
+      </div>
+
+
+      <div className="grid gap-4 grid-cols-2">
+        <BarDiagram
+          title="Employee performance"
+          description="Bad and Good performance from Employee"
+          data={salesChartData}
+          series={[{ key: "value", color: "#1d293d", label: "Value" }]}
+        />
+
+        <AreaDiagram
+          title="Shifts statistic"
+          description="Shift attendance diagram"
+          data={ticketChartData}
+          series={[
+            { key: "accepted", color: "#7bf1a8", label: "On Time" },
+            { key: "rejected", color: "#ffdf20", label: "Late" },
+            { key: "late", color: "#ffa2a2", label: "Absent" },
+            { key: "onTime", color: "#3b82f6", label: "Permission" },
+          ]}
+        />
+      </div>
+    </div >
   );
 }
