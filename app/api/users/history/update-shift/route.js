@@ -2,21 +2,13 @@ import { prisma } from "@/_lib/prisma";
 import { getCurrentUser } from "@/_lib/auth";
 
 export async function POST(req) {
-  try {
-    const user = await getCurrentUser();
-    if (!user) {
-      return new Response("Unauthorized", { status: 401 });
-    }
+  try { const user = await getCurrentUser();
+    if (!user) { return new Response("Unauthorized", { status: 401 })}
 
     const { newShiftId } = await req.json();
 
-    const shift = await prisma.shift.findUnique({
-      where: { id: newShiftId },
-    });
-
-    if (!shift) {
-      return new Response("Shift not found", { status: 404 });
-    }
+    const shift = await prisma.shift.findUnique({ where: { id: newShiftId }});
+    if (!shift) { return new Response("Shift not found", { status: 404 })}
 
     await prisma.user.update({
       where: { id: user.id },
@@ -33,10 +25,9 @@ export async function POST(req) {
     return Response.json({
       message: "Shift updated and history recorded",
     });
-  } catch (error) {
-    console.error("❌ Error updating shift:", error);
-    return new Response(
-      JSON.stringify({ message: "Internal Server Error" }),
+  } 
+  catch (error) { console.error("❌ Error updating shift:", error);
+    return new Response(JSON.stringify({ message: "Internal Server Error" }),
       { status: 500 }
     );
   }

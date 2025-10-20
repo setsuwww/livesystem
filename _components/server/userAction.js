@@ -102,8 +102,8 @@ export async function updateUser(data) {
     });
 
     return { success: true };
-  } catch (err) {
-    console.error("❌ updateUserAction error:", err);
+  } catch (error) {
+    console.error(error);
     return { error: "Failed to update user." };
   }
 }
@@ -119,7 +119,35 @@ export async function deleteUsers(ids) {
     revalidatePath("/admin/users")
     return { success: true }
   } catch (error) {
-    console.error("❌ Error deleting users:", error)
+    console.error(error)
     throw new Error("Failed to delete users.")
   }
 }
+
+export async function getUserWithId(id) {
+  return prisma.user.findUnique({
+    where: { id: Number(id) },
+    select: { id: true, name: true, email: true, role: true },
+  });
+}
+
+export async function updateUserWithId(id, data) {
+  const { name, email, password, role, shiftId } = data;
+  if (!name || !email || !role) throw new Error("Name, email, and role required");
+
+  const dataToUpdate = { name, email, role, shiftId: shiftId ?? null };
+  if (password?.trim()) {
+    dataToUpdate.password = await bcrypt.hash(password, 10);
+  }
+
+  return prisma.user.update({
+    where: { id: Number(id) },
+    data: dataToUpdate,
+  });
+}
+
+export async function deleteUserWithId(id) {
+  await prisma.user.delete({ where: { id: Number(id) } });
+  return { success: true };
+}
+

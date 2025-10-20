@@ -8,7 +8,6 @@ export async function GET() {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    // 🔹 Ambil semua data absensi milik user saat ini
     const history = await prisma.attendance.findMany({
       where: { userId: user.id },
       orderBy: { date: "desc" },
@@ -19,7 +18,6 @@ export async function GET() {
       },
     });
 
-    // 🔹 Format hasilnya biar rapi
     const formatted = history.map((record) => ({
       id: record.id,
       date: record.date,

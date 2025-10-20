@@ -17,37 +17,6 @@ export async function GET(req, { params }) {
   }
 }
 
-export async function PATCH( request, { params }) {
-  try { const body = await request.json();
-    const { name, email, password, role, shiftId } = body;
-
-    if (!name || !email || !role) { return NextResponse.json(
-        { message: "Name, email, and role are required" },
-        { status: 400 }
-      );
-    }
-
-    const dataToUpdate = { name, email, role, shiftId: shiftId ?? null};
-    if (password && password.trim() !== "") {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      dataToUpdate.password = hashedPassword;
-    }
-
-    const updatedUser = await prisma.user.update({
-      where: { id: Number(params.id) },
-      data: dataToUpdate,
-    });
-
-    return NextResponse.json(updatedUser);
-  } 
-  catch (error) {
-    console.error("Failed to update user:", error);
-    return NextResponse.json({ message: "Failed to update user" },
-      { status: 500 }
-    );
-  }
-}
-
 export async function DELETE(req, { params }) {
   try { const id = parseInt(params.id, 10);
     if (isNaN(id)) return NextResponse.json({ error: "Invalid ID" }, { status: 400 });

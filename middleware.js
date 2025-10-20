@@ -1,7 +1,7 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
-import { JWT_SECRET_STRING } from "./lib/jwt";
+import { JWT_SECRET_STRING } from "./_lib/jwt";
 
 const roleRoutes = {
   ADMIN: "/admin/dashboard",

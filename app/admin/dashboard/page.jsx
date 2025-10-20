@@ -4,7 +4,7 @@ import { Clock, Sun, SunMoon, Moon } from "lucide-react";
 import { DashboardDiagram } from "./DashboardDiagram";
 import { prisma } from "@/_lib/prisma";
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({ action }) {
   // total
   const totalUsers = await prisma.user.count();
   const totalShifts = await prisma.shift.count();
@@ -83,6 +83,7 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
+      {action}
       {/* Diagrams */}
       <div className="grid gap-4 grid-cols-2">
         <DashboardDiagram

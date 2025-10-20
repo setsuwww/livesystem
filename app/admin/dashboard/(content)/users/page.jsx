@@ -57,8 +57,6 @@ export default async function Page({ searchParams }) {
   if (page > totalPages && totalPages > 0) return notFound();
 
   const tableData = users.map((u) => {
-    // 🧩 PRIORITAS WAKTU
-    // 1️⃣ Langsung dari shift user
     const userShift = u.shift
       ? {
           label: capitalize(u.shift.name || u.shift.type),
@@ -67,7 +65,6 @@ export default async function Page({ searchParams }) {
         }
       : null;
 
-    // 2️⃣ Kalau gak ada shift, coba ambil shift kantor (first active)
     const officeShift =
       !userShift && u.office?.shifts?.length
         ? {
@@ -77,7 +74,6 @@ export default async function Page({ searchParams }) {
           }
         : null;
 
-    // 3️⃣ Kalau gak ada juga, ambil jam kerja default dari kantor
     const officeTime =
       !userShift && !officeShift && u.office?.startTime && u.office?.endTime
         ? {
@@ -87,7 +83,6 @@ export default async function Page({ searchParams }) {
           }
         : null;
 
-    // 🔄 Tentukan final fallback (urutan prioritas)
     const finalShift = userShift || officeShift || officeTime;
 
     const shiftLabel = finalShift ? finalShift.label : "—";
