@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 import { OfficeShiftsCards } from "../../users/attendances/AttendancesCard";
 
 export default async function OfficePage({ params }) {

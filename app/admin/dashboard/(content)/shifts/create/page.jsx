@@ -1,6 +1,6 @@
 // app/admin/dashboard/shifts/create/page.jsx
 import CreateForm from "./CreateForm";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 
 export const revalidate = 60;
 

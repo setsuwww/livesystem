@@ -1,7 +1,7 @@
 "use client";
 
 import { RefreshCcw, Eye } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/_components/ui/Button";
 
 export const EmployeesActionButton = ({ onHistory, onSwitch, onEdit, onDelete }) => {
   return (

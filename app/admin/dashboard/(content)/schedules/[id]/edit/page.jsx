@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
-import { prisma } from "@/lib/prisma"
-import { getCurrentUser } from "@/lib/auth"
+import { prisma } from "@/_lib/prisma"
+import { getCurrentUser } from "@/_lib/auth"
 import EditForm from "./EditForm"
 
 export default async function Page({ params }) {

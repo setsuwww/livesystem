@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/_components/ui/Tabs"
 import RequestsTable from "./RequestsTable"
-import { cn } from "@/lib/utils"
+import { cn } from "@/_lib/utils"
 
 export default function RequestsTabs({ shiftRequests = [], permissionRequests = [] }) {
   const [tab, setTab] = useState("shift")

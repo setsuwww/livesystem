@@ -5,15 +5,15 @@ import { toast } from "sonner"
 
 import UpdateAssignUserShift from "./UpdateAssignUserShift"
 
-import { Label } from "@/components/ui/Label"
-import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select"
+import { Label } from "@/_components/ui/Label"
+import { Input } from "@/_components/ui/Input"
+import { Button } from "@/_components/ui/Button"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select"
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
-import ContentForm from "@/components/content/ContentForm"
-import { ContentInformation } from "@/components/content/ContentInformation"
+import ContentForm from "@/_components/content/ContentForm"
+import { ContentInformation } from "@/_components/content/ContentInformation"
 
-import { apiFetchData } from "@/function/helpers/fetch"
+import { apiFetchData } from "@/_function/helpers/fetch"
 
 export default function EditForm({ schedule, users, shifts }) {
   const [loading, setLoading] = useState(false)

@@ -1,6 +1,6 @@
 import LoadingWrapper from "./loading-wrapper"
-import { ToastProvider } from "@/components/ui/Toast-Provider"
-import "@/styles/globals.css"
+import { ToastProvider } from "@/_components/ui/Toast-Provider"
+import "@/_styles/globals.css"
 
 export const metadata = {
   title: "Livesystem",

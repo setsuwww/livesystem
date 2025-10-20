@@ -1,13 +1,13 @@
 "use client"
 
 import { useCallback } from "react"
-import { Button } from "@/components/ui/Button"
-import { Label } from "@/components/ui/Label"
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/Popover"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/Command"
-import { Badge } from "@/components/ui/Badge"
+import { Button } from "@/_components/ui/Button"
+import { Label } from "@/_components/ui/Label"
+import { Popover, PopoverTrigger, PopoverContent } from "@/_components/ui/Popover"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/_components/ui/Command"
+import { Badge } from "@/_components/ui/Badge"
 import { Check, ChevronsUpDown, CircleUserRound, X } from "lucide-react"
-import { ContentInformation } from "@/components/content/ContentInformation"
+import { ContentInformation } from "@/_components/content/ContentInformation"
 
 export default function UpdateAssignUserShift({ events, setEvents, users }) {
   const event = events[0] || {

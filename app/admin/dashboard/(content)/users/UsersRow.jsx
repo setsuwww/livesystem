@@ -4,9 +4,9 @@ import React, { useMemo } from "react"
 import { format } from "date-fns"
 import { CircleUserRound } from "lucide-react"
 
-import { TableCell, TableRow } from "@/components/ui/Table"
-import { Checkbox } from "@/components/ui/Checkbox"
-import { Badge } from "@/components/ui/Badge"
+import { TableCell, TableRow } from "@/_components/ui/Table"
+import { Checkbox } from "@/_components/ui/Checkbox"
+import { Badge } from "@/_components/ui/Badge"
 
 import { UsersActionButton } from "./UsersActionButton"
 

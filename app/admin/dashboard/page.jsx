@@ -2,7 +2,7 @@ import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { DashboardStats } from "@/app/admin/dashboard/DashboardStats";
 import { Clock, Sun, SunMoon, Moon } from "lucide-react";
 import { DashboardDiagram } from "./DashboardDiagram";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 
 export default async function AdminDashboardPage() {
   // total

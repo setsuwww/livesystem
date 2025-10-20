@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/Dialog"
-import { ScrollArea } from "@/components/ui/Scroll-area"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/_components/ui/Dialog"
+import { ScrollArea } from "@/_components/ui/Scroll-area"
 import { CalendarDays, CircleUserRound, UserCircle } from "lucide-react"
 import { ShiftAssignedUsersSearch } from "./ShiftAssignedUsersSearch"
-import { Badge } from "@/components/ui/Badge"
-import { shiftStyles } from "@/constants/shiftConstants"
+import { Badge } from "@/_components/ui/Badge"
+import { shiftStyles } from "@/_constants/shiftConstants"
 
 export function ShiftAssignedUsersModal({ shift }) {
   const [filteredUsers, setFilteredUsers] = useState(shift.users || [])

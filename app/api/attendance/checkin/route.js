@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
-import { getAttendanceStatus } from "@/function/services/shiftAttendance"; // aturan logic yang tadi
+import { prisma } from "@/_lib/prisma";
+import { getCurrentUser } from "@/_lib/auth";
+import { getAttendanceStatus } from "@/_function/services/shiftAttendance"; // aturan logic yang tadi
 
 export async function POST() {
   try {

@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { MoreVertical, CalendarDays } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown-menu";
+import { Card, CardContent, CardHeader, CardTitle } from "@/_components/ui/Card";
+import { Button } from "@/_components/ui/Button";
+import { Badge } from "@/_components/ui/Badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/_components/ui/Dropdown-menu";
 import { ShiftAssignedUsersModal } from "./ShiftAssignedUsersModal";
 
-import { capitalize } from "@/function/globalFunction";
-import { shiftStyles } from "@/constants/shiftConstants";
+import { capitalize } from "@/_function/globalFunction";
+import { shiftStyles } from "@/_constants/shiftConstants";
 
 export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
   return (

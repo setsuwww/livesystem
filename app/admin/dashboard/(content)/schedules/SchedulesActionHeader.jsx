@@ -1,8 +1,8 @@
 import { FolderInput, Trash2, Search } from "lucide-react";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
+import { Button } from "@/_components/ui/Button";
+import { Input } from "@/_components/ui/Input";
 
 export default function SchedulesActionHeader({
   search, setSearch,

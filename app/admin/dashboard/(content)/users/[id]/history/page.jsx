@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/_lib/prisma"
 import { CircleUserRound } from "lucide-react"
 
-import { ContentInformation } from "@/components/content/ContentInformation"
-import ContentForm from "@/components/content/ContentForm"
+import { ContentInformation } from "@/_components/content/ContentInformation"
+import ContentForm from "@/_components/content/ContentForm"
 import UserHistoryTable from "./HistoryTable"
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 import { Pagination } from "@/app/admin/dashboard/Pagination"
-import { minutesToTime } from '@/function/services/shiftAttendance';
+import { minutesToTime } from '@/_function/services/shiftAttendance';
 
 const PAGE_SIZE = 10
 

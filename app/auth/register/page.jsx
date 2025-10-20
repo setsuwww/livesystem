@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
-import { Button } from '@/components/ui/Button';
+import { Input } from '@/_components/ui/Input';
+import { Label } from '@/_components/ui/Label';
+import { Button } from '@/_components/ui/Button';
 import AuthForm from '../AuthForm';
 import AuthLink from '../AuthLink';
 
-import { api } from '@/lib/api';
+import { api } from '@/_lib/api';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');

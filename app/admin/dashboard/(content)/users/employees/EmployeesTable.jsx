@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { Checkbox } from "@/components/ui/Checkbox";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/_components/ui/Table";
+import { Checkbox } from "@/_components/ui/Checkbox";
 import { EmployeesActionHeader } from "./EmployeesActionHeader";
 import { EmployeesRow } from "./EmployeesRow";
-import { useEmployeesHooks } from "@/function/hooks/useEmployeesHooks";
+import { useEmployeesHooks } from "@/_function/hooks/useEmployeesHooks";
 
 export default function EmployeesTable({ users, offices, shifts }) {
   const {

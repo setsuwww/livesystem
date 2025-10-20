@@ -1,12 +1,12 @@
 "use client"
 
-import { Badge } from "@/components/ui/Badge"
-import { Checkbox } from "@/components/ui/Checkbox"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { attedancesStyles } from "@/constants/attedanceConstants"
-import { shiftStyles } from "@/constants/shiftConstants"
+import { Badge } from "@/_components/ui/Badge"
+import { Checkbox } from "@/_components/ui/Checkbox"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
+import { attedancesStyles } from "@/_constants/attedanceConstants"
+import { shiftStyles } from "@/_constants/shiftConstants"
 
-import { capitalize } from "@/function/globalFunction";
+import { capitalize } from "@/_function/globalFunction";
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
 

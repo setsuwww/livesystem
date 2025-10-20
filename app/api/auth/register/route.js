@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 import { Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
-import { signToken, setAuthCookie } from "@/lib/auth";
+import { signToken, setAuthCookie } from "@/_lib/auth";
 
 export async function POST(req) {
   try {

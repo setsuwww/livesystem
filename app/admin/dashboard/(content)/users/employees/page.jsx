@@ -1,10 +1,10 @@
-import { prisma } from "@/lib/prisma";
-import { ContentInformation } from "@/components/content/ContentInformation";
-import ContentForm from "@/components/content/ContentForm";
+import { prisma } from "@/_lib/prisma";
+import { ContentInformation } from "@/_components/content/ContentInformation";
+import ContentForm from "@/_components/content/ContentForm";
 import EmployeesTable from "./EmployeesTable";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
-import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
+import { minutesToTime } from "@/_function/services/shiftAttendanceHelpers";
 
 const PAGE_SIZE = 100;
 

@@ -2,17 +2,17 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { RadioButton } from "@/components/ui/RadioButton";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import ContentForm from "@/components/content/ContentForm";
-import { ContentInformation } from "@/components/content/ContentInformation";
-import { Label } from "@/components/ui/Label";
+import { Button } from "@/_components/ui/Button";
+import { Input } from "@/_components/ui/Input";
+import { RadioButton } from "@/_components/ui/RadioButton";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
+import ContentForm from "@/_components/content/ContentForm";
+import { ContentInformation } from "@/_components/content/ContentInformation";
+import { Label } from "@/_components/ui/Label";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import { capitalize } from "@/function/globalFunction";
-import { roleOptions } from "@/constants/roleOptions";
-import { updateUser } from "@/components/server/userAction.js";
+import { capitalize } from "@/_function/globalFunction";
+import { roleOptions } from "@/_constants/roleOptions";
+import { updateUser } from "@/_components/server/userAction.js";
 
 export default function EditForm({ user, offices, shifts }) {
   const router = useRouter();

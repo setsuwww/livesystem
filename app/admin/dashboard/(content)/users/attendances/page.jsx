@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import ContentForm from "@/components/content/ContentForm";
-import { ContentInformation } from "@/components/content/ContentInformation";
+import ContentForm from "@/_components/content/ContentForm";
+import { ContentInformation } from "@/_components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import { AttendancesCard } from "./AttendancesCard";
 import AttendancesTable from "./AttendancesTable";
-import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
-import { safeToISOString } from "@/function/globalFunction";
+import { minutesToTime } from "@/_function/services/shiftAttendanceHelpers";
+import { safeToISOString } from "@/_function/globalFunction";
 
 const PAGE_SIZE = 5;
 

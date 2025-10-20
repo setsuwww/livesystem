@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CircleUserRound } from "lucide-react";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table";
+import { Button } from "@/_components/ui/Button";
+import { Badge } from "@/_components/ui/Badge";
 
-import { capitalize } from "@/function/globalFunction";
-import { apiFetchData } from "@/function/helpers/fetch";
-import { shiftStyles, shiftIcons } from "@/constants/shiftConstants";
+import { capitalize } from "@/_function/globalFunction";
+import { apiFetchData } from "@/_function/helpers/fetch";
+import { shiftStyles, shiftIcons } from "@/_constants/shiftConstants";
 
 export function ShiftsView({ data }) {
   const router = useRouter();

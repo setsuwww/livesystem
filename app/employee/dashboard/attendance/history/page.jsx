@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card"
-import { Badge } from "@/components/ui/Badge"
+import { Card, CardHeader, CardTitle, CardContent } from "@/_components/ui/Card"
+import { Badge } from "@/_components/ui/Badge"
 import { Loader2, Clock, CalendarDays } from "lucide-react"
 
 export default function AttendanceHistoryPage() {

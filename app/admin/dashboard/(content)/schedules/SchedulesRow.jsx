@@ -3,11 +3,11 @@ import { format } from "date-fns";
 import { CalendarClock } from "lucide-react";
 
 import ScheduleActionsButtons from "./SchedulesActionButton";
-import { TableRow, TableCell } from "@/components/ui/Table";
-import { Checkbox } from "@/components/ui/Checkbox";
+import { TableRow, TableCell } from "@/_components/ui/Table";
+import { Checkbox } from "@/_components/ui/Checkbox";
 
-import { capitalize } from "@/function/globalFunction";
-import { frequencyStyles } from "@/constants/frequencyStyles";
+import { capitalize } from "@/_function/globalFunction";
+import { frequencyStyles } from "@/_constants/frequencyStyles";
 
 export const SchedulesRow = React.memo(function ({
   schedule,

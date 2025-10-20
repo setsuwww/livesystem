@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+/* 🎨 Background grid */
+.fc .fc-daygrid-day-frame {
+  @apply bg-slate-50; /* soft gray */
+}
+
+.fc .fc-toolbar-chunk button {
+  @apply text-white bg-slate-700 px-4 py-1.5 rounded-md font-medium capitalize transition-colors duration-200;
+}
+
+.fc .fc-toolbar-chunk button:hover {
+  @apply bg-slate-600;
+}
+
+.fc .fc-toolbar-title {
+  @apply font-bold text-xl;
+}
+
+.fc-daygrid-day-top {
+  @apply p-1;
+}
+
+.fc-daygrid-day-number {
+  @apply text-slate-700 text-sm font-bold;
+}
+
+.fc-daygrid-day.today-highlight {
+  background-color: #e0f2fe !important; 
+}
+.fc-day-today {
+  background-color: #e0f2fe !important;
+}
+
+.fc .fc-more-link {
+  @apply mt-1 block; /* kasih jarak ke atas */
+}
+

@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Badge } from "@/components/ui/Badge";
+import { Badge } from "@/_components/ui/Badge";
 
 const demoRows = [
   {

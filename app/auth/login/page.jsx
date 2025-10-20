@@ -3,13 +3,13 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
-import { Label } from "@/components/ui/Label"
-import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
-import { Checkbox } from "@/components/ui/Checkbox"
+import { Label } from "@/_components/ui/Label"
+import { Input } from "@/_components/ui/Input"
+import { Button } from "@/_components/ui/Button"
+import { Checkbox } from "@/_components/ui/Checkbox"
 import AuthForm from "../AuthForm"
 import AuthLink from "../AuthLink"
-import { api } from "@/lib/api"
+import { api } from "@/_lib/api"
 
 const LoginPage = () => {
   const [email, setEmail] = useState("")

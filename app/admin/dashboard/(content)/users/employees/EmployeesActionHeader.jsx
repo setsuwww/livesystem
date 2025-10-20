@@ -2,9 +2,9 @@
 
 import React from "react";
 import { FolderInput, Trash2 } from "lucide-react";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/Select";
+import { Input } from "@/_components/ui/Input";
+import { Button } from "@/_components/ui/Button";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select";
 
 export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
   search, setSearch,

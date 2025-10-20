@@ -1,6 +1,6 @@
-import { EmployeeSidebar } from "@/components/EmployeeSidebar"
+import { EmployeeSidebar } from "@/_components/EmployeeSidebar"
 import { Toaster } from "sonner"
-import '@/styles/globals.css'
+import '@/_styles/globals.css'
 
 export const metadata = {
   title: "Employee | Dashboard",

@@ -1,15 +1,15 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Button } from "@/components/ui/Button"
-import { Label } from "@/components/ui/Label"
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/Popover"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/Command"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
-import { Badge } from "@/components/ui/Badge"
-import { ContentInformation } from "@/components/content/ContentInformation"
+import { Button } from "@/_components/ui/Button"
+import { Label } from "@/_components/ui/Label"
+import { Popover, PopoverTrigger, PopoverContent } from "@/_components/ui/Popover"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/_components/ui/Command"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/_components/ui/Dialog"
+import { Badge } from "@/_components/ui/Badge"
+import { ContentInformation } from "@/_components/content/ContentInformation"
 import { Check, ChevronsUpDown, CircleUserRound, X, CalendarArrowUp, CalendarArrowDown, Clock } from "lucide-react"
-import { apiFetchData } from "@/function/helpers/fetch"
+import { apiFetchData } from "@/_function/helpers/fetch"
 
 export default function InputAssignUserShift({ events, setEvents, users }) {
   const [startDate, setStartDate] = useState("")

@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { User, Mail, Briefcase, Clock, CalendarDays, Shield, LogIn, LogOut, Plane, Bell } from "lucide-react"
-import { roleStyles } from "@/constants/roleStyles"
-import { Badge } from "@/components/ui/Badge"
-import { capitalize } from "@/function/globalFunction"
+import { roleStyles } from "@/_constants/roleStyles"
+import { Badge } from "@/_components/ui/Badge"
+import { capitalize } from "@/_function/globalFunction"
 
 export default function DashboardPage() {
   const [user, setUser] = useState(null)

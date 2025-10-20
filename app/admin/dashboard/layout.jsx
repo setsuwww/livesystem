@@ -1,6 +1,6 @@
-import SidebarServer from "@/components/SidebarServer"
-import '@/styles/globals.css'
-import { ReactQueryProvider } from '@/context/useQueryClient';
+import SidebarServer from "@/_components/SidebarServer"
+import '@/_styles/globals.css'
+import { ReactQueryProvider } from '@/_context/useQueryClient';
 
 export const metadata = {
   title: "Admin | Dashboard",

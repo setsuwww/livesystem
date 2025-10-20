@@ -4,15 +4,15 @@ import React, { useState } from "react"
 import { CircleUserRound, Search } from "lucide-react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/Dialog"
-import { Checkbox } from "@/components/ui/Checkbox"
-import { Label } from "@/components/ui/Label"
-import { Input } from "@/components/ui/Input"
-import { Button } from "@/components/ui/Button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/_components/ui/Dialog"
+import { Checkbox } from "@/_components/ui/Checkbox"
+import { Label } from "@/_components/ui/Label"
+import { Input } from "@/_components/ui/Input"
+import { Button } from "@/_components/ui/Button"
 
-import { apiFetchData } from "@/function/helpers/fetch"
-import { capitalize } from "@/function/globalFunction"
-import { shiftStyles } from "@/constants/shiftConstants"
+import { apiFetchData } from "@/_function/helpers/fetch"
+import { capitalize } from "@/_function/globalFunction"
+import { shiftStyles } from "@/_constants/shiftConstants"
 
 export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({
   open,

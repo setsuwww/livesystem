@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
-import { Input } from "@/components/ui/Input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/Popover"
+import { Input } from "@/_components/ui/Input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/_components/ui/Popover"
 import { Filter } from "lucide-react"
 
 export function ShiftAssignedUsersSearch({ users = [], onFilter }) {

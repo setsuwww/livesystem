@@ -1,9 +1,9 @@
 "use client";
 
 import { Trash2, FolderInput } from "lucide-react";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
+import { Input } from "@/_components/ui/Input";
+import { Button } from "@/_components/ui/Button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
 
 export const UsersActionHeader = ({
   search, onSearchChange,

@@ -1,10 +1,10 @@
 "use client";;
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/Button";
+import { Input } from "@/_components/ui/Input";
+import { Button } from "@/_components/ui/Button";
 import { toast } from "sonner";
-import { apiFetchData } from "@/function/helpers/fetch";
+import { apiFetchData } from "@/_function/helpers/fetch";
 
 export default function EditForm({
   shift

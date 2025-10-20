@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import ContentForm from "@/components/content/ContentForm";
-import { ContentInformation } from "@/components/content/ContentInformation";
-import { Label } from "@/components/ui/Label";
+import { Button } from "@/_components/ui/Button";
+import { Input } from "@/_components/ui/Input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
+import ContentForm from "@/_components/content/ContentForm";
+import { ContentInformation } from "@/_components/content/ContentInformation";
+import { Label } from "@/_components/ui/Label";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 
-import { apiFetchData } from "@/function/helpers/fetch";
-import { timeToInt } from "@/function/services/shiftAttendance";
-import { capitalize } from "@/function/globalFunction";
+import { apiFetchData } from "@/_function/helpers/fetch";
+import { timeToInt } from "@/_function/services/shiftAttendance";
+import { capitalize } from "@/_function/globalFunction";
 
 export default function CreateShiftForm({ offices }) {
   const router = useRouter();

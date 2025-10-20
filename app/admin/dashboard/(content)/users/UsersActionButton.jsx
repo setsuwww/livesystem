@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/Button"
+import { Button } from "@/_components/ui/Button"
 
 export const UsersActionButton = ({ userId, onEdit, onDelete }) => {
   return (

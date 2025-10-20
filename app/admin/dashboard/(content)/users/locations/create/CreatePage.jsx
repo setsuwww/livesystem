@@ -3,17 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { Label } from "@/components/ui/Label";
+import { Button } from "@/_components/ui/Button";
+import { Input } from "@/_components/ui/Input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
+import { Label } from "@/_components/ui/Label";
 
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import ContentForm from "@/components/content/ContentForm";
-import { ContentInformation } from "@/components/content/ContentInformation";
+import ContentForm from "@/_components/content/ContentForm";
+import { ContentInformation } from "@/_components/content/ContentInformation";
 
-import { apiFetchData } from "@/function/helpers/fetch";
-import { capitalize, timeToMinutes } from "@/function/globalFunction";
+import { apiFetchData } from "@/_function/helpers/fetch";
+import { capitalize, timeToMinutes } from "@/_function/globalFunction";
 
 const typeOptions = [
   { label: "WFO (Work From Office)", value: "WFO" },

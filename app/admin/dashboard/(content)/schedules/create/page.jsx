@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth";
+import { prisma } from "@/_lib/prisma";
+import { getCurrentUser } from "@/_lib/auth";
 import CreateForm from "./CreateForm";
 
 export default async function Page() {

@@ -3,14 +3,14 @@
 import React, { useState } from "react";
 import { CircleUserRound } from "lucide-react";
 
-import { TableRow, TableCell } from "@/components/ui/Table";
-import { Checkbox } from "@/components/ui/Checkbox";
-import { Badge } from "@/components/ui/Badge";
+import { TableRow, TableCell } from "@/_components/ui/Table";
+import { Checkbox } from "@/_components/ui/Checkbox";
+import { Badge } from "@/_components/ui/Badge";
 import { EmployeesActionButton } from "./EmployeesActionButton";
 import { EmployeesSwitchModal } from "./EmployeesSwitchModal";
 
 import { format } from "date-fns";
-import { capitalize } from "@/function/globalFunction";
+import { capitalize } from "@/_function/globalFunction";
 
 export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, toggleSelect, onHistory, onEdit, onDelete }) {
   const [switchOpen, setSwitchOpen] = useState(false);

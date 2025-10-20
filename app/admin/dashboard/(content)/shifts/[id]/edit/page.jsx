@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 import EditForm from "./EditForm";
-import ContentForm from '@/components/content/ContentForm';
-import { ContentInformation } from '@/components/content/ContentInformation';
+import ContentForm from '@/_components/content/ContentForm';
+import { ContentInformation } from '@/_components/content/ContentInformation';
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
   
 export const revalidate = 60;

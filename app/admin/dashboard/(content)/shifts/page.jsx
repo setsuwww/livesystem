@@ -1,10 +1,10 @@
-import ContentForm from "@/components/content/ContentForm";
+import ContentForm from "@/_components/content/ContentForm";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import { ContentInformation } from "@/components/content/ContentInformation";
+import { ContentInformation } from "@/_components/content/ContentInformation";
 import { ShiftsView } from "./ShiftsView";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 
-import { minutesToTime } from "@/function/services/shiftAttendanceHelpers";
+import { minutesToTime } from "@/_function/services/shiftAttendanceHelpers";
 
 export const revalidate = 60;
 

@@ -1,13 +1,13 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 
 import { Tag } from "lucide-react";
 import ScheduleCard from "./SchedulesCard";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import ContentForm from "@/components/content/ContentForm";
-import { ContentInformation } from "@/components/content/ContentInformation";
+import ContentForm from "@/_components/content/ContentForm";
+import { ContentInformation } from "@/_components/content/ContentInformation";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 
-import { frequenciesLabel } from "@/constants/frequencyStyles";
+import { frequenciesLabel } from "@/_constants/frequencyStyles";
 
 const PAGE_SIZE = 5;
 

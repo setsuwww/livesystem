@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
 import { Users } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/Dialog";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/_components/ui/Dialog";
+import { Button } from "@/_components/ui/Button";
+import { Badge } from "@/_components/ui/Badge";
 
-import { capitalize } from "@/function/globalFunction";
-import { statusColorsClass } from "@/constants/attedanceConstants";
+import { capitalize } from "@/_function/globalFunction";
+import { statusColorsClass } from "@/_constants/attedanceConstants";
 
 export function AttendancesCard({ shifts }) {
   const [selectedStatus, setSelectedStatus] = useState(null);

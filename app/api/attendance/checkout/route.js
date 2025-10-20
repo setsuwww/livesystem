@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/_lib/prisma";
 
 function toMinutes(date) {
   return date.getHours() * 60 + date.getMinutes();

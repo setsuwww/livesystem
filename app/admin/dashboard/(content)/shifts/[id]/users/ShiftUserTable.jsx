@@ -3,14 +3,14 @@
 import { useState, useMemo } from "react";
 import { CircleUserRound, Trash2, FolderInput, RefreshCcw } from "lucide-react";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/Table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
-import { Checkbox } from "@/components/ui/Checkbox";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/_components/ui/Table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
+import { Checkbox } from "@/_components/ui/Checkbox";
+import { Button } from "@/_components/ui/Button";
+import { Input } from "@/_components/ui/Input";
 
-import { capitalize } from "@/function/globalFunction";
-import { roleStyles } from "@/constants/roleStyles";
+import { capitalize } from "@/_function/globalFunction";
+import { roleStyles } from "@/_constants/roleStyles";
 import { format } from "date-fns";
 
 import { EmployeesSwitchModal } from "../../../users/employees/EmployeesSwitchModal";

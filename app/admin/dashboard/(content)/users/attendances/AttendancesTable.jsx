@@ -1,10 +1,10 @@
 "use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table"
-import { Badge } from '@/components/ui/Badge';
-import { shiftStyles } from "@/constants/shiftConstants"
-import { attedancesStyles } from '@/constants/attedanceConstants';
-import { safeFormat, capitalize } from "@/function/globalFunction";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
+import { Badge } from '@/_components/ui/Badge';
+import { shiftStyles } from "@/_constants/shiftConstants"
+import { attedancesStyles } from '@/_constants/attedanceConstants';
+import { safeFormat, capitalize } from "@/_function/globalFunction";
 
 export default function AttendancesTable({ data }) {
   return (

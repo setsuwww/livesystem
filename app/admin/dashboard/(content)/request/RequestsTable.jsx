@@ -1,9 +1,9 @@
 "use client"
 
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/Table"
-import { cn } from "@/lib/utils"
+import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/_components/ui/Table"
+import { cn } from "@/_lib/utils"
 import { ArrowRightLeft, RefreshCcw } from "lucide-react"
-import { capitalize } from "@/function/globalFunction"
+import { capitalize } from "@/_function/globalFunction"
 
 export default function RequestsTable({ data = [], type }) {
   return (

@@ -1,0 +1,125 @@
+"use server"
+
+import { prisma } from "@/_lib/prisma"
+import bcrypt from "bcryptjs"
+import { revalidatePath } from "next/cache"
+
+export async function getUsers() {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        updatedAt: true,
+        shift: {
+          select: {
+            id: true,
+            type: true,
+            startTime: true,
+            endTime: true,
+          },
+        },
+      },
+      orderBy: { updatedAt: "desc" },
+      where: { role: "EMPLOYEE" },
+    })
+    return users
+  } catch (error) {
+    console.error("❌ Error fetching users:", error)
+    throw new Error("Failed to fetch users.")
+  }
+}
+
+export async function createUser(formData) {
+  try {
+    const name = formData.get("name")
+    const email = formData.get("email")
+    const password = formData.get("password")
+    const role = formData.get("role") || "USER"
+    const officeId = formData.get("officeId") !== "NONE" ? parseInt(formData.get("officeId")) : null
+    const workMode = formData.get("workMode")
+    const shiftId =
+      workMode === "SHIFT" && formData.get("shiftId") !== "NONE"
+        ? parseInt(formData.get("shiftId"))
+        : null
+
+    if (!name || !email || !password) {
+      throw new Error("Name, email, and password are required.")
+    }
+
+    const existingUser = await prisma.user.findUnique({ where: { email } })
+    if (existingUser) {
+      throw new Error("User with this email already exists.")
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12)
+
+    await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role,
+        officeId,
+        shiftId,
+      },
+    })
+
+    revalidatePath("/admin/dashboard/users")
+    return { success: true, message: "User created successfully ✅" }
+  } catch (error) {
+    console.error("❌ Error creating user:", error)
+    return { success: false, message: error.message || "Failed to create user ❌" }
+  }
+}
+
+export async function updateUser(data) {
+  try {
+    const { id, name, email, password, role, shiftId, officeId } = data;
+
+    if (!id) {
+      return { error: "User ID is required." };
+    }
+
+    const updateData = {
+      name,
+      email,
+      role,
+      officeId: officeId ? parseInt(officeId) : null,
+      shiftId: shiftId ? parseInt(shiftId) : null,
+    };
+
+    if (password && password.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      updateData.password = hashedPassword;
+    }
+
+    await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error("❌ updateUserAction error:", err);
+    return { error: "Failed to update user." };
+  }
+}
+
+export async function deleteUsers(ids) {
+  try {
+    if (!ids || !Array.isArray(ids)) throw new Error("Invalid request")
+
+    await prisma.user.deleteMany({
+      where: { id: { in: ids } },
+    })
+
+    revalidatePath("/admin/users")
+    return { success: true }
+  } catch (error) {
+    console.error("❌ Error deleting users:", error)
+    throw new Error("Failed to delete users.")
+  }
+}

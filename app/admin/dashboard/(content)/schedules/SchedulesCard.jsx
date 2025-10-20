@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import { CalendarClock, MoreHorizontal, User2 } from "lucide-react";
 import { format } from "date-fns";
 
-import { Checkbox } from "@/components/ui/Checkbox";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/Card";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/Dropdown-menu";
+import { Checkbox } from "@/_components/ui/Checkbox";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/_components/ui/Card";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/_components/ui/Dropdown-menu";
 
 import SchedulesActionHeader from "./SchedulesActionHeader";
 import ScheduleUsersDialog from "./SchedulesUsersDialog";
-import { handleSchedules } from "@/function/handlers/handleSchedules";
-import { capitalize } from "@/function/globalFunction";
-import { frequencyStyles } from "@/constants/frequencyStyles";
+import { handleSchedules } from "@/_function/handlers/handleSchedules";
+import { capitalize } from "@/_function/globalFunction";
+import { frequencyStyles } from "@/_constants/frequencyStyles";
 
 export default function SchedulesCard({ data }) {
   const [search, setSearch] = useState("");

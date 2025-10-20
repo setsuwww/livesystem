@@ -1,5 +1,5 @@
 // app/employee/dashboard/attendance/change-shift/page.jsx
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/_lib/prisma"
 import ChangeShiftForm from "./ChangeShiftForm"
 
 export const revalidate = 30 // ISR setiap 30 detik (optional)

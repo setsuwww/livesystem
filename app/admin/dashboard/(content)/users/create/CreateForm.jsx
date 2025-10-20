@@ -5,18 +5,18 @@ import { useRouter } from "next/navigation"
 
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 
-import { Button } from "@/components/ui/Button"
-import { Input } from "@/components/ui/Input"
-import { RadioButton } from "@/components/ui/RadioButton"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select"
-import ContentForm from "@/components/content/ContentForm"
-import { ContentInformation } from "@/components/content/ContentInformation"
-import { ContentList } from "@/components/content/ContentList"
-import { Label } from "@/components/ui/Label"
+import { Button } from "@/_components/ui/Button"
+import { Input } from "@/_components/ui/Input"
+import { RadioButton } from "@/_components/ui/RadioButton"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
+import ContentForm from "@/_components/content/ContentForm"
+import { ContentInformation } from "@/_components/content/ContentInformation"
+import { ContentList } from "@/_components/content/ContentList"
+import { Label } from "@/_components/ui/Label"
 
-import { createUser } from "@/components/server/userAction.js"
-import { capitalize, formatIntToTime } from "@/function/globalFunction"
-import { roleOptions } from "@/constants/roleOptions"
+import { createUser } from "@/_components/server/userAction.js"
+import { capitalize, formatIntToTime } from "@/_function/globalFunction"
+import { roleOptions } from "@/_constants/roleOptions"
 
 export default function CreateForm({ offices, shifts }) {
   const router = useRouter()

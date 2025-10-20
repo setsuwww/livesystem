@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/Card"
+} from "@/_components/ui/Card"
 import {
   ChartConfig,
   ChartContainer,
@@ -16,14 +16,14 @@ import {
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/Chart"
+} from "@/_components/ui/Chart"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/Select"
+} from "@/_components/ui/Select"
 
 export function DashboardAreaChart({
   title,

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/auth"; // helper kamu
+import { prisma } from "@/_lib/prisma";
+import { getCurrentUser } from "@/_lib/auth"; // helper kamu
 
 export async function POST(req) {
   try {
