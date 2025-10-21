@@ -91,7 +91,7 @@ function SidebarCollapsible({ title, items, icon: Icon }) {
       >
         <div
           ref={contentRef}
-          className="border-l-2 border-dashed border-slate-300 ml-4 flex flex-col space-y-1 p-2"
+          className="border-l-2 border-dashed border-slate-300 ml-5 flex flex-col space-y-1 p-2"
         >
           {items.map((item) => (
             <SidebarSubLink key={item.href} href={item.href}>

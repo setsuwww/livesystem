@@ -25,7 +25,7 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
   }
 
   const filtered = rows.filter(
-    (r) => r.targetUserId === currentUserId && r.status === "PENDING"
+    (r) => r.targetUserId === currentUserId && r.status === "PENDING_TARGET"
   )
 
   return (

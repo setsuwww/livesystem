@@ -51,12 +51,12 @@ export async function POST(req) {
           date: todayDate,
         },
       },
-      update: { status: "PENDING", reason },
+      update: { status: "PERMISSION", reason },
       create: {
         userId: user.id,
         shiftId: user.shiftId,
         date: todayDate,
-        status: "PENDING",
+        status: "PERMISSION",
         reason,
       },
     })

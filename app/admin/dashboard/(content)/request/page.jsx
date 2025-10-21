@@ -21,7 +21,7 @@ export default async function Page() {
         <ContentForm.Header>
           <ContentInformation
             heading="Pending Requests"
-            subheading="Switch between Shift Change and Permission requests"
+            subheading="Switch betweex  n Shift Change and Permission requests"
             show={false}
           />
         </ContentForm.Header>
@@ -40,7 +40,7 @@ export default async function Page() {
 async function getRequests() {
   const [shiftRequests, permissionRequests] = await Promise.all([
     prisma.shiftChangeRequest.findMany({
-      where: { status: "PENDING" },
+      where: { status: "PENDING_TARGET" },
       orderBy: { createdAt: "desc" },
       include: {
         requestedBy: true,
@@ -60,22 +60,28 @@ async function getRequests() {
     shift: shiftRequests.map((r) => ({
       id: `shift-${r.id}`,
       type: "Shift Change",
-      requestedBy: `${r.requestedBy?.name || "-"} (${r.requestedBy?.email || "-"})`,
-      user: `${r.targetUser?.name || "-"} (${r.targetUser?.email || "-"})`,
+      requestedBy: r.requestedBy
+        ? `${r.requestedBy.name || "-"} (${r.requestedBy.email || "-"})`
+        : "-",
+      user: r.targetUser
+        ? `${r.targetUser.name || "-"} (${r.targetUser.email || "-"})`
+        : "-",
       reason: r.reason || "-",
       info: `${r.oldShift?.name || "?"} → ${r.targetShift?.name || "?"}`,
-      date: new Date(r.createdAt).toLocaleDateString(),
-      status: r.status,
+      date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-",
+      status: r.status || "PENDING",
     })),
     permission: permissionRequests.map((r) => ({
       id: `perm-${r.id}`,
       type: "Permission",
-      requestedBy: `${r.user?.name || "-"} (${r.user?.email || "-"})`,
-      user: `-`,
+      requestedBy: r.user
+        ? `${r.user.name || "-"} (${r.user.email || "-"})`
+        : "-",
+      user: "-",
       reason: r.reason || "-",
       info: r.shift?.name || "-",
-      date: new Date(r.createdAt).toLocaleDateString(),
-      status: r.status,
+      date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-",
+      status: r.status || "PENDING",
     })),
   }
 }
