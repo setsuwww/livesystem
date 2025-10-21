@@ -15,7 +15,7 @@ async function main() {
   // === 1️⃣ Seed Offices ===
   const officesData = [
     {
-      name: "Head Office",
+      name: "Lintasarta",
       location: "Jakarta",
       type: LocationType.WFO,
       status: LocationStatus.ACTIVE,
@@ -26,10 +26,10 @@ async function main() {
       endTime: 17 * 60,
     },
     {
-      name: "Branch A",
-      location: "Bandung",
-      type: LocationType.WFO,
-      status: LocationStatus.ACTIVE,
+      name: "Warung Mursidi",
+      location: "Kp. Siluman, Mangunjaya",
+      type: LocationType.WFA,
+      status: LocationStatus.INACTIVE,
       longitude: 107.6191,
       latitude: -6.9175,
       radius: 100,
@@ -37,8 +37,8 @@ async function main() {
       endTime: 17 * 60,
     },
     {
-      name: "Branch B",
-      location: "Surabaya",
+      name: "Rumah",
+      location: "Rumah",
       type: LocationType.WFA,
       status: LocationStatus.INACTIVE,
       longitude: 112.7508,
@@ -57,23 +57,27 @@ async function main() {
 
   // === 2️⃣ Seed Shifts (3 per Office) ===
   const shiftTemplates = [
-    { type: ShiftType.MORNING, name: "Morning", startTime: 8 * 60, endTime: 16 * 60 },
-    { type: ShiftType.AFTERNOON, name: "Afternoon", startTime: 16 * 60, endTime: 24 * 60 },
-    { type: ShiftType.EVENING, name: "Evening", startTime: 0, endTime: 8 * 60 },
-  ];
+    { type: ShiftType.MORNING, baseName: "Morning", startTime: 8 * 60, endTime: 16 * 60 },
+    { type: ShiftType.AFTERNOON, baseName: "Afternoon", startTime: 16 * 60, endTime: 24 * 60 },
+    { type: ShiftType.EVENING, baseName: "Evening", startTime: 0, endTime: 8 * 60 },
+  ]
 
-  const allShifts = [];
+  const allShifts = []
 
   for (const office of offices) {
     for (const template of shiftTemplates) {
       const shift = await prisma.shift.create({
         data: {
-          ...template,
+          type: template.type,
+          // 🔥 Tambahkan nama office di nama shift biar unik
+          name: `${template.baseName} (${office.name})`,
+          startTime: template.startTime,
+          endTime: template.endTime,
           officeId: office.id,
           isActive: true,
         },
-      });
-      allShifts.push(shift);
+      })
+      allShifts.push(shift)
     }
   }
 

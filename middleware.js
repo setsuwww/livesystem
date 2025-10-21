@@ -1,7 +1,8 @@
 // middleware.ts
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
-import { JWT_SECRET_STRING } from "./_lib/jwt";
+
+const JWT_SECRET_STRING = process.env.JWT_SECRET || "dirmanMalingKancut2025";
 
 const roleRoutes = {
   ADMIN: "/admin/dashboard",
