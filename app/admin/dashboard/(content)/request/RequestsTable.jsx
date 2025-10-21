@@ -1,93 +1,102 @@
 "use client"
 
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/_components/ui/Table"
+import { useState } from "react"
+import { TableRow, TableCell } from "@/_components/ui/Table"
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select"
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/_components/ui/Alert-dialog"
+import { Textarea } from "@/_components/ui/Textarea"
+import { Button } from "@/_components/ui/Button"
 import { cn } from "@/_lib/utils"
-import { ArrowRightLeft, RefreshCcw } from "lucide-react"
-import { capitalize } from "@/_function/globalFunction"
+import { updatePermissionStatus } from "@/_components/server/attendanceAction"
 
-export default function RequestsTable({ data = [], type }) {
-  return (
-    <div className="rounded-md overflow-hidden border border-slate-200">
-      <Table>
-        <TableHeader className="bg-slate-50/80 backdrop-blur-sm">
-          <TableRow>
-            <TableHead>Type</TableHead>
-            <TableHead>Requester</TableHead>
-            <TableHead>Target</TableHead>
-            <TableHead>Shift Info</TableHead>
-            <TableHead>Reason</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date</TableHead>
-          </TableRow>
-        </TableHeader>
+export default function RequestTable({ id, type, requestedBy, user, info, reason, status, date }) {
+  const [showRejectDialog, setShowRejectDialog] = useState(false)
+  const [rejectReason, setRejectReason] = useState("")
 
-        <TableBody>
-          {data.length === 0 ? (
-            <EmptyRow label={type} />
-          ) : (
-            data.map((req) => <RequestRow key={req.id} {...req} />)
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  )
-}
-
-function EmptyRow({ label }) {
-  return (
-    <TableRow>
-      <TableCell colSpan={7} className="py-6 text-center text-slate-400 italic">
-        No {label.toLowerCase()} requests found.
-      </TableCell>
-    </TableRow>
-  )
-}
-
-function RequestRow({ id, type, requestedBy, user, info, reason, status, date }) {
-  const Icon = type === "Shift Change" ? ArrowRightLeft : RefreshCcw
-  const iconColor = type === "Shift Change" ? "text-sky-500" : "text-purple-500"
-
-  return (
-    <TableRow key={id} className="hover:bg-slate-50/70 transition-colors duration-150 ease-in-out">
-      <TableCell>
-        <div className={cn("inline-flex items-center gap-2 px-2.5 py-1.5 text-sm font-medium",
-          type === "Shift Change" ? "text-sky-600" : "text-purple-600"
-        )}>
-          <Icon className={cn("h-4 w-4", iconColor)} />
-          {type}
-        </div>
-      </TableCell>
-
-      <TableCell className="font-medium text-slate-800">{requestedBy}</TableCell>
-      <TableCell className="text-slate-600">{user}</TableCell>
-      <TableCell className="text-slate-600">{info}</TableCell>
-      <TableCell className="text-slate-500 line-clamp-2 max-w-[220px]">{reason || "-"}</TableCell>
-
-      <TableCell>
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-slate-200">
-          <span className={cn("h-2.5 w-2.5 rounded-full", statusDotColor(status))} />
-          <span className="text-sm font-semibold text-slate-600">
-            {capitalize(status.replace("_", " ").toLowerCase())}
-          </span>
-        </div>
-      </TableCell>
-
-      <TableCell className="text-right text-slate-400 text-sm whitespace-nowrap">{date}</TableCell>
-    </TableRow>
-  )
-}
-
-function statusDotColor(status) {
-  switch (status) {
-    case "PENDING":
-    case "PENDING_TARGET":
-    case "PENDING_ADMIN":
-      return "bg-yellow-400"
-    case "APPROVED":
-      return "bg-teal-400"
-    case "REJECTED":
-      return "bg-rose-400"
-    default:
-      return "bg-slate-400"
+  // form action async server handler
+  const handleFormAction = async (formData) => {
+    const id = formData.get("id")
+    const newStatus = formData.get("status")
+    const reason = formData.get("reason") || null
+    await updatePermissionStatus(id, newStatus, reason)
   }
+
+  return (
+    <>
+      <form action={handleFormAction}>
+        <input type="hidden" name="id" value={id.replace("perm-", "")} />
+
+        <TableRow className="hover:bg-slate-50/70 transition-colors">
+          <TableCell>{type}</TableCell>
+          <TableCell>{requestedBy}</TableCell>
+          <TableCell>{user}</TableCell>
+          <TableCell>{info}</TableCell>
+          <TableCell>{reason || "-"}</TableCell>
+
+          <TableCell>
+            <Select
+              name="status"
+              defaultValue={status}
+              onValueChange={(val) => {
+                if (val === "REJECTED") setShowRejectDialog(true)
+              }}
+            >
+              <SelectTrigger
+                className={cn(
+                  "w-[130px] text-xs font-semibold border px-2 py-1 transition rounded-md",
+                  status === "PENDING"
+                    ? "border-yellow-300 bg-yellow-50 text-yellow-700"
+                    : status === "ACCEPTED"
+                    ? "border-teal-300 bg-teal-50 text-teal-700"
+                    : "border-rose-300 bg-rose-50 text-rose-700"
+                )}
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDING">Pending</SelectItem>
+                <SelectItem value="ACCEPTED">Accepted</SelectItem>
+                <SelectItem value="REJECTED">Rejected</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button type="submit" variant="ghost" size="sm" className="mt-2 text-xs">
+              Save
+            </Button>
+          </TableCell>
+
+          <TableCell className="text-slate-400 text-sm whitespace-nowrap">{date}</TableCell>
+        </TableRow>
+      </form>
+
+      {/* Reject reason dialog */}
+      <AlertDialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Reject Permission Request</AlertDialogTitle>
+          </AlertDialogHeader>
+          <form action={handleFormAction}>
+            <input type="hidden" name="id" value={id?.replace?.("perm-", "") || ""} />
+            <input type="hidden" name="status" value="REJECTED" />
+            <Textarea
+              name="reason"
+              placeholder="Type the reason for rejection..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              className="mt-2"
+            />
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setShowRejectDialog(false)}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                type="submit"
+                disabled={!rejectReason.trim()}
+                onClick={() => setShowRejectDialog(false)}
+              >
+                Submit
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </form>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  )
 }

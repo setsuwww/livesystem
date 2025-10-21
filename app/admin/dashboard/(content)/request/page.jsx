@@ -70,8 +70,8 @@ async function getRequests() {
     permission: permissionRequests.map((r) => ({
       id: `perm-${r.id}`,
       type: "Permission",
-      requestedBy: "-",
-      user: `${r.user?.name || "-"} (${r.user?.email || "-"})`,
+      requestedBy: `${r.user?.name || "-"} (${r.user?.email || "-"})`,
+      user: `-`,
       reason: r.reason || "-",
       info: r.shift?.name || "-",
       date: new Date(r.createdAt).toLocaleDateString(),

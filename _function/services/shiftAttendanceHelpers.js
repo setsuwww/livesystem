@@ -14,18 +14,19 @@ export function minutesToTime(minutes) {
 
 export const isCrossDayShift = (shift) => shift.endMinutes <= shift.startMinutes
 
-export function getAttendanceStatus({ checkIn, permissionReason, shift }) {
-  if (permissionReason && permissionReason.trim().length > 0) { return "PERMISSION" }
-  if (!checkIn) { return "ABSENT" }
+export function getAttendanceStatus({ checkIn, permission, shift }) {
+  if (permission) { if (permission.status === "REJECTED") { return "ABSENT" } return "PERMISSION"}
+  if (!checkIn) return "ABSENT"
 
-  const checkInMinutes = checkIn.getHours() * 60 + checkIn.getMinutes();
-  const lateThreshold = shift.startTime + 10;
-  const absentThreshold = shift.startTime + 20;
+  const checkInMinutes = checkIn.getHours() * 60 + checkIn.getMinutes()
+  const lateThreshold = shift.startTime + 10
+  const absentThreshold = shift.startTime + 20
 
-  if (checkInMinutes > absentThreshold) { return "ABSENT" } 
-  else if (checkInMinutes > lateThreshold) { return "LATE" }
-  return "PRESENT";
+  if (checkInMinutes > absentThreshold) return "ABSENT"
+  if (checkInMinutes > lateThreshold) return "LATE"
+  return "PRESENT"
 }
+
 
 export function canCheckout(now, shift) { const nowMinutes = toMinutes(now);
   const checkoutOpenMinutes = shift.endMinutes - 10;

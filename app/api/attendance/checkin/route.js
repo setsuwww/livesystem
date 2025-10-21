@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/_lib/prisma";
 import { getCurrentUser } from "@/_lib/auth";
-import { getAttendanceStatus } from "@/_function/services/shiftAttendance"; // aturan logic yang tadi
+import { getAttendanceStatus } from "@/_function/services/shiftAttendanceHelpers"; // aturan logic yang tadi
 
 export async function POST() {
   try {
@@ -13,7 +13,6 @@ export async function POST() {
     const today = new Date();
     const todayDate = new Date(today.toDateString());
 
-    // ambil shift
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
       include: { shift: true },

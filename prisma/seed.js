@@ -79,13 +79,12 @@ async function main() {
 
   // === 3️⃣ Seed Users ===
   const usersData = [
-    { name: "Admin", email: "admin@example.com", password: "admin123", role: Role.ADMIN },
-    { name: "Coordinator", email: "coordinator@example.com", password: "coordinator123", role: Role.COORDINATOR },
-    { name: "Dirman", email: "dirman@example.com", password: "dirman123", role: Role.EMPLOYEE },
-    { name: "Herman", email: "herman@example.com", password: "herman123", role: Role.EMPLOYEE },
-    { name: "Buyung", email: "buyung@example.com", password: "buyung123", role: Role.EMPLOYEE },
-    { name: "Surya", email: "surya@example.com", password: "surya123", role: Role.EMPLOYEE },
-    { name: "Agus", email: "agus@example.com", password: "agus123", role: Role.EMPLOYEE },
+    { name: "Mikasa", email: "mikasa@g.com", password: "mikasa123", role: Role.ADMIN },
+    { name: "Dirman", email: "dirman@g.com", password: "dirman123", role: Role.EMPLOYEE },
+    { name: "Buyung", email: "buyung@g.com", password: "buyung123", role: Role.EMPLOYEE },
+    { name: "Mursidi", email: "mursidi@g.com", password: "mursidi123", role: Role.EMPLOYEE },
+    { name: "Surya", email: "surya@g.com", password: "surya123", role: Role.EMPLOYEE },
+    { name: "Agus", email: "agus@g.com", password: "agus123", role: Role.EMPLOYEE },
   ];
 
   for (const [i, u] of usersData.entries()) {

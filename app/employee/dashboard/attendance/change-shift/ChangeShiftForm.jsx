@@ -7,7 +7,7 @@ import { Textarea } from "@/_components/ui/Textarea"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select"
 import { CalendarDays, Loader2 } from "lucide-react"
 import { toast } from "sonner"
-import { fetch as apiFetch } from "@/_function/helpers/fetch"
+import { apiFetchData } from "@/_function/helpers/fetch"
 
 function toDateOnlyIso(s) {
   if (!s) return null
@@ -51,7 +51,7 @@ export default function ChangeShiftForm({ employees = [] }) {
       reason: reason.trim(),
     }
 
-    await apiapiFetchData({
+    await apiFetchData({
       url: "/shifts/user-side-change",
       method: "post",
       data: payload,
@@ -74,7 +74,7 @@ export default function ChangeShiftForm({ employees = [] }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-6 bg-white p-6 rounded-xl shadow-md border border-slate-200"
+      className="space-y-6 bg-white p-6 rounded-xl border border-slate-200"
     >
       {/* Employee select */}
       <div className="space-y-2">
@@ -122,7 +122,7 @@ export default function ChangeShiftForm({ employees = [] }) {
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
-              min={startDate || todayIso}
+              min={startDate || todayIso} 
             />
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function ChangeShiftForm({ employees = [] }) {
       {/* Reason */}
       <div className="space-y-2">
         <Label>Reason for Change</Label>
-        <Textarea
+        <Textarea className="bg-white"
           placeholder="Explain why this shift change is needed..."
           value={reason}
           onChange={(e) => setReason(e.target.value)}

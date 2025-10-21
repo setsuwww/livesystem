@@ -1,4 +1,4 @@
-import { EmployeeSidebar } from "@/_components/EmployeeSidebar"
+import EmployeeSidebarServer from "@/_components/EmployeeSidebarServer"
 import { Toaster } from "sonner"
 import '@/_styles/globals.css'
 
@@ -12,7 +12,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen">
-      <EmployeeSidebar />
+      <EmployeeSidebarServer />
 
       <div className="flex-1 flex flex-col"> 
         <Toaster position="top-right" richColors expand duration={3000} closeButton toastOptions={{

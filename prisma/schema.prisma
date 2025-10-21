@@ -228,18 +228,21 @@ model Attendance {
 
 /// Izin
 model PermissionRequest {
-  id      Int              @id @default(autoincrement())
-  reason  String
-  status  PermissionStatus @default(PENDING)
-  userId  Int
-  shiftId Int?
-  date    DateTime
+  id          Int              @id @default(autoincrement())
+  reason      String
+  adminReason String?
+  status      PermissionStatus @default(PENDING)
+  userId      Int
+  shiftId     Int?
+  date        DateTime
 
   user  User   @relation(fields: [userId], references: [id])
   shift Shift? @relation(fields: [shiftId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
 }
 
 model ShiftChangeRequest {
@@ -266,7 +269,7 @@ model ShiftChangeRequest {
   reason          String
   startDate       DateTime
   endDate         DateTime?
-  status          ShiftChangeStatus @default(PENDING)
+  status          ShiftChangeStatus @default(PENDING_TARGET)
 
   verifiedByTarget Boolean  @default(false)
   verifiedByAdmin  Boolean  @default(false)

@@ -1,34 +1,48 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/_lib/prisma";
-import { getCurrentUser } from "@/_lib/auth"; // helper kamu
+import { NextResponse } from "next/server"
+import { prisma } from "@/_lib/prisma"
+import { getCurrentUser } from "@/_lib/auth"
 
 export async function POST(req) {
   try {
-    const user = await getCurrentUser(); // 🔑 ambil user dari cookie
+    const user = await getCurrentUser()
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { reason } = await req.json();
+    const { reason } = await req.json()
+    if (!reason || reason.trim() === "") {
+      return NextResponse.json({ error: "Reason is required" }, { status: 400 })
+    }
 
-    const today = new Date();
-    const todayDate = new Date(today.toDateString());
+    const today = new Date()
+    const todayDate = new Date(today.toDateString())
 
     if (!user.shiftId) {
-      return NextResponse.json({ error: "No shift assigned" }, { status: 400 });
+      return NextResponse.json({ error: "No shift assigned" }, { status: 400 })
     }
 
-    // Simpan permission
-    const permission = await prisma.permissionRequest.create({
-      data: {
+    // ✅ Buat atau update PermissionRequest (biar gak dobel)
+    const permission = await prisma.permissionRequest.upsert({
+      where: {
+        userId_date: {
+          userId: user.id,
+          date: todayDate,
+        },
+      },
+      update: {
+        reason,
+        status: "PENDING",
+      },
+      create: {
         userId: user.id,
         shiftId: user.shiftId,
         date: todayDate,
         reason,
+        status: "PENDING",
       },
-    });
+    })
 
-    // Update attendance jadi PERMISSION
+    // ✅ Update Attendance status ke PENDING (belum disetujui)
     const attendance = await prisma.attendance.upsert({
       where: {
         userId_shiftId_date: {
@@ -37,19 +51,19 @@ export async function POST(req) {
           date: todayDate,
         },
       },
-      update: { status: "PERMISSION", reason },
+      update: { status: "PENDING", reason },
       create: {
         userId: user.id,
         shiftId: user.shiftId,
         date: todayDate,
-        status: "PERMISSION",
+        status: "PENDING",
         reason,
       },
-    });
+    })
 
-    return NextResponse.json({ success: true, permission, attendance });
+    return NextResponse.json({ success: true, permission, attendance })
   } catch (err) {
-    console.error("permission API error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    console.error("permission API error:", err)
+    return NextResponse.json({ error: "Server error" }, { status: 500 })
   }
 }
