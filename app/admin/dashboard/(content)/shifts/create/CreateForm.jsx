@@ -12,7 +12,7 @@ import { Label } from "@/_components/ui/Label";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 
 import { apiFetchData } from "@/_function/helpers/fetch";
-import { timeToInt } from "@/_function/services/shiftAttendance";
+import { timeToInt } from "@/_function/services/shiftAttendanceHelpers";
 import { capitalize } from "@/_function/globalFunction";
 
 export default function CreateShiftForm({ offices }) {

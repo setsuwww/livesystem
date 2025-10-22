@@ -14,35 +14,14 @@ export async function POST(req) {
       return NextResponse.json({ error: "Reason is required" }, { status: 400 })
     }
 
-    const today = new Date()
-    const todayDate = new Date(today.toDateString())
-
     if (!user.shiftId) {
       return NextResponse.json({ error: "No shift assigned" }, { status: 400 })
     }
 
-    // ✅ Buat atau update PermissionRequest (biar gak dobel)
-    const permission = await prisma.permissionRequest.upsert({
-      where: {
-        userId_date: {
-          userId: user.id,
-          date: todayDate,
-        },
-      },
-      update: {
-        reason,
-        status: "PENDING",
-      },
-      create: {
-        userId: user.id,
-        shiftId: user.shiftId,
-        date: todayDate,
-        reason,
-        status: "PENDING",
-      },
-    })
+    const today = new Date()
+    const todayDate = new Date(today.toDateString())
 
-    // ✅ Update Attendance status ke PENDING (belum disetujui)
+    // ✅ Upsert langsung ke tabel Attendance
     const attendance = await prisma.attendance.upsert({
       where: {
         userId_shiftId_date: {
@@ -51,19 +30,24 @@ export async function POST(req) {
           date: todayDate,
         },
       },
-      update: { status: "PERMISSION", reason },
+      update: {
+        reason,
+        status: "PERMISSION",
+        approval: "PENDING",
+      },
       create: {
         userId: user.id,
         shiftId: user.shiftId,
         date: todayDate,
-        status: "PERMISSION",
         reason,
+        status: "PERMISSION",
+        approval: "PENDING",
       },
     })
 
-    return NextResponse.json({ success: true, permission, attendance })
+    return NextResponse.json({ success: true, data: attendance })
   } catch (err) {
-    console.error("permission API error:", err)
+    console.error("❌ permission API error:", err)
     return NextResponse.json({ error: "Server error" }, { status: 500 })
   }
 }

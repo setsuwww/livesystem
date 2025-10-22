@@ -81,20 +81,20 @@ export default function SchedulesCard({ data }) {
                       <div className={`p-2 rounded-md ${frequencyStyles[capitalize(schedule.frequency)]}`}>
                         <CalendarClock strokeWidth={1.5} size={20} />
                       </div>
-                      <div className="flex font-semibold text-zinc-600">
+                      <div className="flex font-semibold text-slate-600">
                         <h2 className="leading-snug">{schedule.title}</h2>
                       </div>
                     </div>
                   </CardTitle>
 
                   <div className="flex items-center gap-2">
-                    <Checkbox checked={selectedIds.includes(schedule.id)} className="border-zinc-300"
+                    <Checkbox checked={selectedIds.includes(schedule.id)} className="border-slate-300"
                       onCheckedChange={(checked) => toggleSelect(schedule.id, checked === true)}
                     />
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button className="p-1 rounded-md bg-zinc-50 hover:bg-zinc-100">
-                          <MoreHorizontal className="w-5 h-5 text-zinc-500" />
+                        <button className="p-1 rounded-md bg-slate-50 hover:bg-slate-100">
+                          <MoreHorizontal className="w-5 h-5 text-slate-500" />
                         </button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-28">
@@ -112,14 +112,14 @@ export default function SchedulesCard({ data }) {
                 </CardHeader>
 
                 <CardContent className="space-y-3">
-                  <p className="text-sm font-semibold text-zinc-600">Assigned Users:</p>
+                  <p className="text-sm font-semibold text-slate-600">Assigned Users:</p>
                   <ScheduleUsersDialog users={schedule.users} schedules={schedule} />
                 </CardContent>
 
-                <CardFooter className="flex justify-between items-center text-xs text-zinc-500">
+                <CardFooter className="flex justify-between items-center text-xs text-slate-500">
                   <div>
-                    <div className="font-semibold text-zinc-600">{formatedCreatedDate}</div>
-                    <div className="text-zinc-400">{formatedUpdatedDate}</div>
+                    <div className="font-semibold text-slate-600">{formatedCreatedDate}</div>
+                    <div className="text-slate-400">{formatedUpdatedDate}</div>
                   </div>
                 </CardFooter>
               </Card>

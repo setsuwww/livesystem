@@ -1,5 +1,10 @@
 import AttendanceForm from "./CheckinForm"
+import ContentForm from '@/_components/content/ContentForm';
 
 export default function page() {
-  return <AttendanceForm />
+  return (
+    <ContentForm>
+      <AttendanceForm />
+    </ContentForm>
+  )
 }

@@ -2,33 +2,51 @@
 
 import { useState } from "react"
 import { TableRow, TableCell } from "@/_components/ui/Table"
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/_components/ui/Alert-dialog"
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/_components/ui/Alert-dialog"
 import { Textarea } from "@/_components/ui/Textarea"
 import { Badge } from "@/_components/ui/Badge"
-import { Loader2 } from "lucide-react"
+import { Loader2, CircleUserRound, ArrowDown, Ban } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { shiftStyles } from "@/_constants/shiftConstants"
+import RequestStatusChangerToggle from "./RequestStatusChangerToggle"
 
-export default function RequestsTableRow({ id, type, requestedBy, user, info, reason, status, date, requestType }) {
+export default function RequestsTableRow({
+  id,
+  type,
+  requestedBy,
+  user,
+  oldShift,
+  targetShift,
+  info,
+  reason,
+  status,
+  date,
+  requestType,
+  typeShift,
+}) {
   const router = useRouter()
   const [currentStatus, setCurrentStatus] = useState(status)
   const [showRejectDialog, setShowRejectDialog] = useState(false)
   const [rejectReason, setRejectReason] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const extractId = (fullId) => {
-    if (!fullId) return ""
-    return fullId.replace(/^(shift-|perm-)/, "")
-  }
-
+  const extractId = (fullId) => fullId?.replace(/^(shift-|perm-)/, "") || ""
   const actualId = extractId(id)
 
   const handleStatusChange = async (newStatus, adminReason = null) => {
     setIsLoading(true)
-
     try {
-      const response = await fetch(`/api/admin/requests/${actualId}`, {
+      const res = await fetch(`/api/admin/requests/${actualId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -37,18 +55,14 @@ export default function RequestsTableRow({ id, type, requestedBy, user, info, re
           type: requestType,
         }),
       })
-
-      const result = await response.json()
-
+      const result = await res.json()
       if (result.success) {
         setCurrentStatus(newStatus)
         toast.success(`Request ${newStatus.toLowerCase()} successfully`)
         router.refresh()
-      } else {
-        toast.error(result.message || "Failed to update request")
-      }
-    } catch (error) {
-      console.error("Error updating request:", error)
+      } else toast.error(result.message || "Failed to update request")
+    } catch (err) {
+      console.error(err)
       toast.error("An error occurred while updating the request")
     } finally {
       setIsLoading(false)
@@ -62,27 +76,67 @@ export default function RequestsTableRow({ id, type, requestedBy, user, info, re
     setRejectReason("")
   }
 
-  const getStatusBadge = (status) => {
-    const variants = {
-      PENDING: "warning",
-      ACCEPTED: "success",
-      REJECTED: "destructive",
+  const renderUserInfo = (person) =>
+    person ? (
+      <div className="flex items-center gap-2">
+        <div className="bg-slate-200 p-2 rounded-full">
+          <CircleUserRound className="h-5 w-5 text-slate-600" strokeWidth={1} />
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-slate-600">{person.name}</p>
+          <p className="text-xs text-slate-400">{person.email}</p>
+        </div>
+      </div>
+    ) : (
+      "-"
+    )
+
+  const renderShiftInfo = () => {
+    if (requestType !== "shift") {
+      return (
+        <Badge className={`border-none px-3 py-1 ${ type === "Permission"
+            ? shiftStyles[typeShift] : "bg-slate-50 text-slate-600"
+          }`}
+        >
+          {info}
+        </Badge>
+      )
     }
 
     return (
-      <Badge variant={variants[status] || "default"} className="capitalize">
-        {status.toLowerCase()}
-      </Badge>
+      <div className="flex flex-col items-start justify-start gap-1 text-left">
+        <div className="flex items-center space-x-1">
+        <span className="font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">From : {""} </span>
+        <Badge className={`border-none px-3 py-1 text-xs font-medium ${shiftStyles[oldShift?.type] || "bg-slate-100 text-slate-700"}`}>
+           {oldShift?.name || "-"}
+        </Badge>
+        </div>
+        
+        <div className="flex items-center space-x-1 ">
+        <span className="font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">To : {""} </span>
+        <Badge className={`border-none px-3 py-1 text-xs font-medium ${shiftStyles[targetShift?.type] || "bg-slate-100 text-slate-700"}`}>
+          {targetShift?.name || "-"}
+        </Badge>
+        </div>
+      </div>
     )
   }
 
   return (
     <>
-      <TableRow className="hover:bg-muted/50 transition-colors">
+      <TableRow>
         <TableCell className="font-medium">{type}</TableCell>
-        <TableCell>{requestedBy}</TableCell>
-        {requestType === "shift" && <TableCell>{user}</TableCell>}
-        <TableCell className="max-w-xs truncate">{info}</TableCell>
+
+        <TableCell>
+          {renderUserInfo(requestedBy)}
+        </TableCell>
+
+        {requestType === "shift" && <TableCell>{renderUserInfo(user)}</TableCell>}
+
+        <TableCell className="max-w-xs text-left">
+          {renderShiftInfo()}
+        </TableCell>
+
         <TableCell className="max-w-xs">
           <span className="line-clamp-2 text-sm text-muted-foreground">
             {reason || "-"}
@@ -90,29 +144,14 @@ export default function RequestsTableRow({ id, type, requestedBy, user, info, re
         </TableCell>
 
         <TableCell>
-          <div className="flex items-center gap-2">
-            <Select
-              value={currentStatus}
-              onValueChange={(val) => {
-                if (val === "REJECTED") {
-                  setShowRejectDialog(true)
-                } else if (val !== currentStatus) {
-                  handleStatusChange(val)
-                }
-              }}
-              disabled={isLoading}
-            >
-              <SelectTrigger className="w-[140px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="ACCEPTED">Accept</SelectItem>
-                <SelectItem value="REJECTED">Reject</SelectItem>
-              </SelectContent>
-            </Select>
-            {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-          </div>
+          <RequestStatusChangerToggle
+            status={currentStatus}
+            disabled={isLoading}
+            onChange={(newStatus) => {
+              if (newStatus === "REJECTED") setShowRejectDialog(true)
+              else handleStatusChange(newStatus)
+            }}
+          />
         </TableCell>
 
         <TableCell className="text-muted-foreground whitespace-nowrap text-sm">
@@ -120,14 +159,19 @@ export default function RequestsTableRow({ id, type, requestedBy, user, info, re
         </TableCell>
       </TableRow>
 
-      {/* Reject Dialog */}
       <AlertDialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Reject Request</AlertDialogTitle>
+            <AlertDialogTitle>
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-rose-50 text-rose-700 rounded-full border border-red-100">
+                  <Ban size={24}/>
+                </div>
+                <span>Reject Request</span> 
+              </div>
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              Please provide a reason for rejecting this request. This will be visible to the
-              user.
+              Please provide a reason for rejecting this request.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

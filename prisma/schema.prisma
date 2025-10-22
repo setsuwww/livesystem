@@ -40,7 +40,7 @@ enum FrequencyType {
   ONCE
 }
 
-enum PermissionStatus {
+enum ApprovalStatus {
   PENDING
   ACCEPTED
   REJECTED
@@ -109,7 +109,6 @@ model User {
   customShifts       UserShiftAssignment[]
   schedules          SchedulesOnUsers[]
   attendances        Attendance[]
-  permissionRequests PermissionRequest[]
 
   shiftRequests        ShiftChangeRequest[] @relation("RequestedUser")     
   createdRequests      ShiftChangeRequest[] @relation("RequestedByAdmin")  
@@ -134,7 +133,6 @@ model Shift {
   users              User[]                @relation("ShiftUsers")
   assignments        UserShiftAssignment[]
   attendances        Attendance[]
-  permissionRequests PermissionRequest[]
 
   scheduleDatesPrimary   ScheduleDate[] @relation("PrimaryShift")
   scheduleDatesSecondary ScheduleDate[] @relation("SecondaryShift")
@@ -206,12 +204,14 @@ model UserShiftAssignment {
   @@unique([userId, shiftId])
 }
 
-/// Absensi Harian
+/// Absensi
 model Attendance {
   id           Int              @id @default(autoincrement())
   date         DateTime
   status       AttendanceStatus @default(ABSENT)
+  approval     ApprovalStatus?  // hanya relevan jika status = PERMISSION
   reason       String?
+  adminReason  String?
   checkInTime  DateTime?
   checkOutTime DateTime?
   userId       Int
@@ -224,25 +224,6 @@ model Attendance {
   updatedAt DateTime @updatedAt
 
   @@unique([userId, shiftId, date])
-}
-
-/// Izin
-model PermissionRequest {
-  id          Int              @id @default(autoincrement())
-  reason      String
-  adminReason String?
-  status      PermissionStatus @default(PENDING)
-  userId      Int
-  shiftId     Int?
-  date        DateTime
-
-  user  User   @relation(fields: [userId], references: [id])
-  shift Shift? @relation(fields: [shiftId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, date])
 }
 
 model ShiftChangeRequest {

@@ -69,7 +69,6 @@ async function main() {
       const shift = await prisma.shift.create({
         data: {
           type: template.type,
-          // 🔥 Tambahkan nama office di nama shift biar unik
           name: `${template.baseName} (${office.name})`,
           startTime: template.startTime,
           endTime: template.endTime,

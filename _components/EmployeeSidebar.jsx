@@ -38,36 +38,11 @@ function SidebarLink({ href, icon: Icon, children }) {
   )
 }
 
-export default function EmployeeSidebar({ employee }) {
+export default function EmployeeSidebar() {
   return (
     <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-r border-slate-200">
       <div className="text-2xl font-bold px-7 text-sky-800 py-6 border-b border-slate-200">
         Live<span className="text-sky-600">system.</span>
-      </div>
-
-      <div className="flex items-center gap-3 p-4 border-b border-slate-200 bg-sky-50/50">
-        <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-300 shadow-sm">
-          {employee?.image ? (
-            <Image
-              src={employee.image}
-              alt={employee.name}
-              fill
-              className="object-cover"
-            />
-          ) : (
-            <div className="flex items-center justify-center w-full h-full bg-slate-200 text-slate-700 border border-slate-200 font-bold">
-              {employee?.name?.charAt(0)?.toUpperCase() || "U"}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col">
-          <span className="text-sm font-semibold text-slate-800">
-            {employee?.name || "Employee"}
-          </span>
-          <span className="text-xs text-slate-500 truncate max-w-[150px]">
-            {employee?.email || "user@example.com"}
-          </span>
-        </div>
       </div>
 
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">

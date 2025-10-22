@@ -1,4 +1,3 @@
-import LoadingWrapper from "./loading-wrapper"
 import { ToastProvider } from "@/_components/ui/Toast-Provider"
 import "@/_styles/globals.css"
 
@@ -17,9 +16,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="relative">
         <ToastProvider>
-          <LoadingWrapper>
             {children}
-          </LoadingWrapper>
         </ToastProvider>
       </body>
     </html>

@@ -23,7 +23,7 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
             <p className="text-muted-foreground">No pending shift change requests</p>
           </div>
         ) : (
-          <div className="rounded-lg border bg-card">
+          <div>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -52,7 +52,7 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
             <p className="text-muted-foreground">No pending permission requests</p>
           </div>
         ) : (
-          <div className="rounded-lg border bg-card">
+          <div>
             <Table>
               <TableHeader>
                 <TableRow>

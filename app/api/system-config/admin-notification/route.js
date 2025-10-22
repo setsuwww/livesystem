@@ -3,15 +3,38 @@ import { prisma } from "@/_lib/prisma";
 import { getCurrentUser } from "@/_lib/auth";
 
 export async function GET() {
-  const user = await getCurrentUser();
-  if (!user) return NextResponse.json({ hasNotifications: false });
+  try {
+    const user = await getCurrentUser();
+    if (!user) return NextResponse.json({ hasNotifications: false });
 
-  const [permissionRequest, shiftChangeRequest] = await Promise.all([
-    prisma.permissionRequest.count({ where: { status: "PENDING" } }),
-    prisma.shiftChangeRequest.count({ where: { status: "PENDING" } }),
-  ]);
+    // ✅ Cek izin (permission) yang masih pending di Attendance
+    const pendingPermissions = await prisma.attendance.count({
+      where: {
+        status: "PERMISSION",
+        approval: "PENDING",
+      },
+    });
 
-  const hasNotifications = permissionRequest > 0 || shiftChangeRequest > 0;
+    // ✅ Cek shift change yang masih pending
+    const pendingShiftChanges = await prisma.shiftChangeRequest.count({
+      where: {
+        status: "PENDING",
+      },
+    });
 
-  return NextResponse.json({ hasNotifications });
+    const hasNotifications =
+      pendingPermissions > 0 || pendingShiftChanges > 0;
+
+    return NextResponse.json({
+      hasNotifications,
+      pendingPermissions,
+      pendingShiftChanges,
+    });
+  } catch (error) {
+    console.error("❌ Notification fetch error:", error);
+    return NextResponse.json(
+      { error: "Server error", hasNotifications: false },
+      { status: 500 }
+    );
+  }
 }

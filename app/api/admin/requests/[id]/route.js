@@ -1,41 +1,32 @@
-
 import { NextResponse } from "next/server"
 import { prisma } from "@/_lib/prisma"
 import { revalidatePath } from "next/cache"
 
 export async function PATCH(request, { params }) {
-  try { const { id } = params 
+  try {
+    const { id } = params
     const body = await request.json()
     const { status: newStatus, reason: adminReason, type } = body
 
-    if (type === "permission") {
-      const permission = await prisma.permissionRequest.update({
+    // 🌀 HANDLE PERMISSION (ATTENDANCE)
+    if (type === "permission" || type === "attendance") {
+      const record = await prisma.attendance.update({
         where: { id: Number(id) },
         data: {
-          status: newStatus,
+          approval: newStatus, // 🔥 pakai approval, bukan status
           adminReason: adminReason || null,
         },
-        include: { user: true },
-      })
-
-      await prisma.attendance.updateMany({
-        where: {
-          userId: permission.userId,
-          date: permission.date,
-        },
-        data: {
-          status: newStatus === "ACCEPTED" ? "PERMISSION" : "ABSENT",
-          reason:
-            newStatus === "REJECTED"
-              ? adminReason || "Permission request rejected"
-              : undefined,
+        include: {
+          user: true,
+          shift: true,
         },
       })
 
       revalidatePath("/admin/dashboard/request")
-      return NextResponse.json({ success: true, data: permission })
+      return NextResponse.json({ success: true, data: record })
     }
 
+    // 🌀 HANDLE SHIFT CHANGE REQUEST
     if (type === "shift") {
       const shiftChange = await prisma.shiftChangeRequest.update({
         where: { id: Number(id) },
@@ -51,7 +42,8 @@ export async function PATCH(request, { params }) {
         },
       })
 
-      if (newStatus === "ACCEPTED") {
+      // 🔄 Update shift user hanya kalau diterima
+      if (newStatus === "ACCEPTED" && shiftChange.targetUserId && shiftChange.targetShiftId) {
         await prisma.user.update({
           where: { id: shiftChange.targetUserId },
           data: { shiftId: shiftChange.targetShiftId },
@@ -67,7 +59,7 @@ export async function PATCH(request, { params }) {
       { status: 400 }
     )
   } catch (error) {
-    console.error("Update request status failed:", error)
+    console.error("❌ Update request status failed:", error)
     return NextResponse.json(
       { success: false, message: error.message },
       { status: 500 }

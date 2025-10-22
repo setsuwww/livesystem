@@ -8,50 +8,41 @@ export async function GET() {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    // Ambil dua data sekaligus
-    const [attendance, permissions] = await Promise.all([
-      prisma.attendance.findMany({
-        where: { userId: user.id },
-        include: {
-          shift: { select: { id: true, name: true, type: true } },
-        },
-      }),
-      prisma.permissionRequest.findMany({
-        where: { userId: user.id },
-      }),
-    ]);
+    // ✅ Ambil semua attendance user (termasuk izin)
+    const attendance = await prisma.attendance.findMany({
+      where: { userId: user.id },
+      include: {
+        shift: { select: { id: true, name: true, type: true } },
+      },
+      orderBy: { date: "desc" },
+    });
 
-    // Format biar bentuknya konsisten
-    const attendanceData = attendance.map((a) => ({
-      id: `att-${a.id}`,
-      date: a.date,
-      status: a.status,
-      reason: a.reason || null,
-      shift: a.shift,
-      source: "attendance",
-      checkInTime: a.checkInTime,
-      checkOutTime: a.checkOutTime,
-    }));
+    // ✅ Format data agar konsisten
+    const formatted = attendance.map((a) => {
+      let statusLabel = a.status;
 
-    const permissionData = permissions.map((p) => ({
-      id: `perm-${p.id}`,
-      date: p.date,
-      status: p.status === "ACCEPTED" ? "PERMISSION" : p.status === "REJECTED" ? "REJECTED" : "PENDING",
-      reason: p.reason || null,
-      shift: null,
-      source: "permission",
-      checkInTime: null,
-      checkOutTime: null,
-    }));
+      // Untuk status izin, tampilkan sesuai approval-nya
+      if (a.status === "PERMISSION") {
+        if (a.approval === "PENDING") statusLabel = "PENDING";
+        else if (a.approval === "REJECTED") statusLabel = "REJECTED";
+        else statusLabel = "PERMISSION"; // accepted
+      }
 
-    // Gabungkan & urutkan berdasarkan tanggal (terbaru dulu)
-    const combined = [...attendanceData, ...permissionData].sort(
-      (a, b) => new Date(b.date) - new Date(a.date)
-    );
+      return {
+        id: `att-${a.id}`,
+        date: a.date,
+        status: statusLabel,
+        reason: a.reason || null,
+        shift: a.shift,
+        source: a.status === "PERMISSION" ? "permission" : "attendance",
+        checkInTime: a.checkInTime,
+        checkOutTime: a.checkOutTime,
+      };
+    });
 
-    return Response.json(combined);
+    return Response.json(formatted);
   } catch (error) {
-    console.error("❌ Error fetching attendance + permission history:", error);
+    console.error("❌ Error fetching attendance history:", error);
     return new Response(
       JSON.stringify({ message: "Internal Server Error" }),
       { status: 500 }

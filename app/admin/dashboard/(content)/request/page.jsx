@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic"
 export const runtime = "nodejs"
-export const revalidate = 0
+export const revalidate = 20
 
 import { prisma } from "@/_lib/prisma"
 import RequestsTabs from "./RequestsTabs"
@@ -9,7 +9,7 @@ import ContentForm from "@/_components/content/ContentForm"
 import { ContentInformation } from "@/_components/content/ContentInformation"
 
 export default async function Page() {
-  const { shift, permission } = await getRequests()
+  const { shift, attendance } = await getRequests()
 
   return (
     <section>
@@ -17,20 +17,18 @@ export default async function Page() {
         title="Requests"
         subtitle="Manage pending requests by type"
       />
+
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation
             heading="Pending Requests"
-            subheading="Switch betweex  n Shift Change and Permission requests"
+            subheading="Switch between Shift Change and Permission requests"
             show={false}
           />
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <RequestsTabs
-            shiftRequests={shift}
-            permissionRequests={permission}
-          />
+          <RequestsTabs shiftRequests={shift} permissionRequests={attendance} />
         </ContentForm.Body>
       </ContentForm>
     </section>
@@ -38,9 +36,9 @@ export default async function Page() {
 }
 
 async function getRequests() {
-  const [shiftRequests, permissionRequests] = await Promise.all([
+  const [shiftRequests, attendanceRequests] = await Promise.all([
     prisma.shiftChangeRequest.findMany({
-      where: { status: "PENDING_TARGET" },
+      where: { status: "PENDING_ADMIN"},
       orderBy: { createdAt: "desc" },
       include: {
         requestedBy: true,
@@ -49,10 +47,17 @@ async function getRequests() {
         targetShift: true,
       },
     }),
-    prisma.permissionRequest.findMany({
-      where: { status: "PENDING" },
-      orderBy: { createdAt: "desc" },
-      include: { user: true, shift: true },
+
+    prisma.attendance.findMany({
+      where: {
+        status: "PERMISSION",
+        approval: "PENDING",
+      },
+      orderBy: { date: "desc" },
+      include: {
+        user: true,
+        shift: true,
+      },
     }),
   ])
 
@@ -60,28 +65,57 @@ async function getRequests() {
     shift: shiftRequests.map((r) => ({
       id: `shift-${r.id}`,
       type: "Shift Change",
-      requestedBy: r.requestedBy
-        ? `${r.requestedBy.name || "-"} (${r.requestedBy.email || "-"})`
-        : "-",
-      user: r.targetUser
-        ? `${r.targetUser.name || "-"} (${r.targetUser.email || "-"})`
-        : "-",
+      requestedBy: {
+        name: r.requestedBy?.name || "-",
+        email: r.requestedBy?.email || "-",
+      },
+      user: {
+        name: r.targetUser?.name || "-",
+        email: r.targetUser?.email || "-",
+      },
+      // ✅ tambahkan oldShift & targetShift
+      oldShift: {
+        name: r.oldShift?.name || "-",
+        type: r.oldShift?.type || "-",
+      },
+      targetShift: {
+        name: r.targetShift?.name || "-",
+        type: r.targetShift?.type || "-",
+      },
+      // ✅ gabung jadi info gabungan juga biar gampang dipakai
+      info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${r.targetShift?.name || "?"} (${r.targetShift?.type || "-"})`,
       reason: r.reason || "-",
-      info: `${r.oldShift?.name || "?"} → ${r.targetShift?.name || "?"}`,
-      date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-",
+      date: r.createdAt
+        ? new Date(r.createdAt).toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        : "-",
       status: r.status || "PENDING",
     })),
-    permission: permissionRequests.map((r) => ({
+
+    attendance: attendanceRequests.map((r) => ({
       id: `perm-${r.id}`,
       type: "Permission",
-      requestedBy: r.user
-        ? `${r.user.name || "-"} (${r.user.email || "-"})`
-        : "-",
-      user: "-",
+      requestedBy: {
+        name: r.user?.name || "-",
+        email: r.user?.email || "-",
+      },
+      user: null,
       reason: r.reason || "-",
       info: r.shift?.name || "-",
-      date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "-",
-      status: r.status || "PENDING",
+      typeShift: r.shift?.type || "-",
+      date: r.date
+        ? new Date(r.date).toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            weekday: "long",
+          })
+        : "-",
+      status: r.approval || "PENDING",
     })),
   }
 }

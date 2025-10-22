@@ -1,6 +1,7 @@
-import EmployeeSidebarServer from "@/_components/EmployeeSidebarServer"
+import EmployeeSidebar from "@/_components/EmployeeSidebar"
 import { Toaster } from "sonner"
 import '@/_styles/globals.css'
+import DashboardHeader from './DashboardHeader';
 
 export const metadata = {
   title: "Employee | Dashboard",
@@ -12,7 +13,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen">
-      <EmployeeSidebarServer />
+      <EmployeeSidebar />
 
       <div className="flex-1 flex flex-col"> 
         <Toaster position="top-right" richColors expand duration={3000} closeButton toastOptions={{
@@ -20,6 +21,7 @@ export default function DashboardLayout({
             style: { fontSize: "14px", padding: "12px 16px" },
           }}
         />
+        <DashboardHeader />
         <main className="flex-1 overflow-y-auto p-6 bg-slate-100">
           {children}
         </main>
