@@ -124,13 +124,9 @@ export default function RequestsTableRow({
 
         <TableCell>
           <RequestStatusChangerToggle
-            status={currentStatus}
-            disabled={isLoading}
-            onChange={(newStatus) => {
-              if (newStatus === "REJECTED") setShowRejectDialog(true)
-              else handleStatusChange(newStatus)
-            }}
-          />
+            status={currentStatus} requestId={actualId}
+            disabled={isLoading} onReject={}
+            onStatusChange={(newStatus) => handleStatusChange(newStatus)} >
         </TableCell>
 
         <TableCell className="text-muted-foreground whitespace-nowrap text-sm">
