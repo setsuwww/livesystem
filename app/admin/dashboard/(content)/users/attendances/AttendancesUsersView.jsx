@@ -1,0 +1,86 @@
+"use client";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/_components/ui/Dialog";
+import { Button } from "@/_components/ui/Button";
+import { Badge } from "@/_components/ui/Badge";
+import { capitalize } from "@/_function/globalFunction";
+import { attedancesStyles } from "@/_constants/attedanceConstants";
+
+export default function AttendancesUsersView({ selectedStatus, shifts, allUsers, onClose }) {
+  if (!selectedStatus) return null;
+
+  return (
+    <Dialog open={true} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl p-6 rounded-2xl shadow-lg border border-slate-200">
+        <DialogHeader className="mb-6">
+          <DialogTitle className="flex flex-col gap-2">
+            <span className="text-lg font-semibold text-slate-900">
+              Attendance Detail
+            </span>
+            <span className="text-sm text-slate-400">
+              {allUsers.filter((u) => u.attendanceStatus === selectedStatus).length} Employees
+            </span>
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-3">
+          {shifts.map((shift) => {
+            const usersInShift = (shift.users || [])
+              .map((u) => ({
+                ...u,
+                attendanceStatus: String(u?.attendanceStatus || "PRESENT").toUpperCase(),
+                approval: u?.approval ? String(u.approval).toUpperCase() : "",
+              }))
+              .filter((u) => u.attendanceStatus === selectedStatus);
+
+            if (!usersInShift.length) return null;
+
+            return (
+              <div key={shift.id} className="border rounded-lg overflow-hidden bg-white">
+                <div className="px-4 py-2 font-medium bg-slate-50 border-b text-slate-800">
+                  {capitalize(String(shift.type || shift.name || "-"))} - {shift.officeName || "-"}
+                </div>
+                {usersInShift.map((u) => (
+                  <div key={u.id} className="px-4 py-3 flex justify-between transition">
+                    <div className="flex flex-col w-full">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium text-slate-600">{u.name}</span>
+                          <div className="text-xs text-slate-400">{u.email}</div>
+                        </div>
+
+                        <div className="flex flex-col items-end">
+                         <Badge className={`border-none ${attedancesStyles[capitalize(u.attendanceStatus)]}`}>
+                            {capitalize(u.attendanceStatus)}
+                         </Badge>
+
+{u.attendanceStatus === "PERMISSION" && (
+  <span className="text-xs mt-1">
+    <Badge
+      className={`border-0 px-2 py-0.5 ${
+        attedancesStyles[capitalize(u.approval)] || ""
+      }`}
+    >
+      {capitalize(u.approval) || "Pending"}
+    </Badge>
+  </span>
+)}
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
+
+        <DialogFooter className="mt-6">
+          <Button onClick={onClose} variant="outline" className="w-full md:w-auto">
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

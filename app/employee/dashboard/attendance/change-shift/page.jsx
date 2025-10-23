@@ -27,7 +27,7 @@ export default async function Page() {
     include: {
       user: true, // pengirim
       oldShift: true,
-      newShift: true,
+      targetShift: true,
     },
     orderBy: { createdAt: "desc" },
   })

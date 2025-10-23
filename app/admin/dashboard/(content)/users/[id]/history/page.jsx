@@ -6,7 +6,7 @@ import ContentForm from "@/_components/content/ContentForm"
 import UserHistoryTable from "./HistoryTable"
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 import { Pagination } from "@/app/admin/dashboard/Pagination"
-import { minutesToTime } from '@/_function/services/shiftAttendance';
+import { minutesToTime } from '@/_function/services/shiftAttendanceHelpers';
 
 const PAGE_SIZE = 10
 
@@ -38,7 +38,7 @@ async function getHistoryCount(userId) {
 export const revalidate = 60
 
 export default async function UserHistoryPage({ params, searchParams }) {
-  const { id } = await params
+  const { id } = await params 
   const page = Number(searchParams?.page) || 1
 
   const [history, total, profile] = await Promise.all([

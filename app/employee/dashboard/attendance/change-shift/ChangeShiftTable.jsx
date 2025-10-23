@@ -1,12 +1,17 @@
 "use client"
 
 import { useTransition, useState } from "react"
-import { updateShiftChangeStatus } from "@/_components/server/attendanceAction"
+import { updateShiftChangeStatus } from "@/_components/server/shiftAction"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/_components/ui/Table"
 import { Button } from "@/_components/ui/Button"
 import { ArrowRightLeft, CircleUserRound } from "lucide-react"
 import { cn } from "@/_lib/utils"
 import { capitalize } from '@/_function/globalFunction';
+import { Badge } from '@/_components/ui/Badge';
+import { shiftStyles } from '@/_constants/shiftConstants';
+import ContentForm from '@/_components/content/ContentForm';
+import { ContentInformation } from '@/_components/content/ContentInformation';
+import { attedancesStyles } from '@/_constants/attedanceConstants';
 
 export default function ChangeShiftTable({ requests = [], currentUserId }) {
   const [isPending, startTransition] = useTransition()
@@ -30,12 +35,18 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
 
   return (
     <div className="rounded-md overflow-hidden">
+      <ContentForm>
+        <ContentForm.Header>
+          <ContentInformation heading="Shift Change page" subheading="Send a request for shift change every employee"/>
+        </ContentForm.Header>
+
+        <ContentForm.Body>
       <Table>
         <TableHeader className="bg-slate-50">
           <TableRow>
             <TableHead>Requester</TableHead>
-            <TableHead>Old Shift</TableHead>
-            <TableHead>Requested Shift</TableHead>
+            <TableHead>From</TableHead>
+            <TableHead>To</TableHead>
             <TableHead>Reason</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Action</TableHead>
@@ -69,12 +80,16 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                   </div>
                 </TableCell>
 
-                <TableCell className="text-sm text-slate-600">
-                  {req.oldShift?.name || "-"}
+                <TableCell>
+                  <Badge className={`border-none ${shiftStyles[req.oldShift?.type]}`}>
+                    {req.oldShift?.name || "-"}
+                  </Badge>
                 </TableCell>
 
-                <TableCell className="text-sm text-slate-600">
-                  {req.newShift?.name || "-"}
+                <TableCell>
+                  <Badge className={`border-none ${shiftStyles[req.targetShift?.type]}`}>
+                    {req.targetShift?.name || "-"}
+                  </Badge>
                 </TableCell>
 
                 <TableCell className="max-w-[240px] text-sm text-slate-500">
@@ -82,18 +97,9 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                 </TableCell>
 
                 <TableCell>
-                  <span
-                    className={cn(
-                      "inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold",
-                      req.status === "PENDING_TARGET"
-                        ? "bg-yellow-50 text-yellow-700 border border-yellow-200"
-                        : req.status === "REJECTED"
-                        ? "bg-rose-50 text-rose-700 border border-rose-200"
-                        : "bg-teal-50 text-teal-700 border border-teal-200"
-                    )}
-                  >
+                  <Badge className={`${attedancesStyles[capitalize(req.status.replace("_", " "))]}`}>
                     {capitalize(req.status.replace("_", " "))}
-                  </span>
+                  </Badge>
                 </TableCell>
 
                 <TableCell>
@@ -124,6 +130,8 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
           )}
         </TableBody>
       </Table>
+        </ContentForm.Body>
+      </ContentForm>
     </div>
   )
 }

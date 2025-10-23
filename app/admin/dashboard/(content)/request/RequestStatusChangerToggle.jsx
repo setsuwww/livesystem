@@ -1,49 +1,56 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/_components/ui/Button"
+import { useState, useTransition } from "react";
+import { Button } from "@/_components/ui/Button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/_components/ui/Dropdown-menu"
-import { ChevronDown, Loader2 } from "lucide-react"
-import { toast } from "sonner"
+} from "@/_components/ui/Dropdown-menu";
+import { ChevronDown, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
-export default function RequestStatusChangerToggle({ status, onChange, disabled }) {
-  const [current, setCurrent] = useState(status)
-  const [isLoading, setIsLoading] = useState(false)
+export default function RequestStatusChangerToggle({
+  requestId,
+  status,
+  disabled,
+  onReject, // ⬅️ callback dari parent untuk buka dialog
+  onStatusChange, // opsional callback biar parent refresh
+}) {
+  const [current, setCurrent] = useState(status);
+  const [isPending, startTransition] = useTransition();
 
-  const handleChange = async (newStatus) => {
-    if (newStatus === current) return
-    setIsLoading(true)
-    try {
-      await onChange(newStatus)
-      setCurrent(newStatus)
-      toast.success(`Status updated to ${newStatus}`)
-    } catch (e) {
-      toast.error("Failed to update status")
-    } finally {
-      setIsLoading(false)
+  const handleChange = (newStatus) => {
+    if (newStatus === "REJECTED") {
+      onReject?.();
+      return;
     }
-  }
 
-  const statusColor = {
+    if (newStatus === current) return;
+    onStatusChange?.(newStatus);
+  };
+
+  const dotStatusColor = {
     PENDING: "bg-yellow-500",
     PENDING_TARGET: "bg-slate-500",
     PENDING_ADMIN: "bg-slate-500",
     ACCEPTED: "bg-teal-500",
     REJECTED: "bg-rose-500",
-  }
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" disabled={disabled || isLoading} className="rounded-full flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${statusColor[current]}`}/>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={disabled || isPending}
+          className="rounded-full flex items-center gap-2"
+        >
+          <span className={`w-2 h-2 rounded-full ${dotStatusColor[current]}`} />
           <span className="capitalize">{current.toLowerCase().replace("_", " ")}</span>
-          {isLoading ? (
+          {isPending ? (
             <Loader2 className="w-3.5 h-3.5 animate-spin" />
           ) : (
             <ChevronDown className="w-4 h-4 text-muted-foreground" />
@@ -55,9 +62,9 @@ export default function RequestStatusChangerToggle({ status, onChange, disabled 
         <DropdownMenuItem onClick={() => handleChange("PENDING")}>
           Pending
         </DropdownMenuItem>
-        <DropdownMenuItem 
-            onClick={() => handleChange("ACCEPTED")}
-            className="text-teal-500 focus:bg-teal-50 focus:text-teal-700"
+        <DropdownMenuItem
+          onClick={() => handleChange("ACCEPTED")}
+          className="text-teal-500 focus:bg-teal-50 focus:text-teal-700"
         >
           Accept
         </DropdownMenuItem>
@@ -69,5 +76,5 @@ export default function RequestStatusChangerToggle({ status, onChange, disabled 
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

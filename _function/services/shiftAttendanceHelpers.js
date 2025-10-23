@@ -1,9 +1,16 @@
 export const toMinutes = (date) => date.getHours() * 60 + date.getMinutes();
 
-
 export function timeToInt(time) {
+  if (!time || typeof time !== "string" || !time.includes(":")) return 0;
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
+}
+
+export function intToTime(totalMinutes) {
+  if (totalMinutes == null || isNaN(totalMinutes)) return "";
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
 }
 
 export function minutesToTime(minutes) {
@@ -27,7 +34,6 @@ export function getAttendanceStatus({ checkIn, permission, shift }) {
   return "PRESENT"
 }
 
-
 export function canCheckout(now, shift) { const nowMinutes = toMinutes(now);
   const checkoutOpenMinutes = shift.endMinutes - 10;
 
@@ -35,3 +41,4 @@ export function canCheckout(now, shift) { const nowMinutes = toMinutes(now);
   else { if (nowMinutes >= checkoutOpenMinutes) return true }
   return false;
 }
+

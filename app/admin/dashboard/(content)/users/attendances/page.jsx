@@ -18,7 +18,7 @@ async function getAttendanceData(page = 1) {
       take: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true } },
-        shift: { select: { id: true, name: true, type:true, startTime: true, endTime: true, officeId: true } },
+        shift: { select: { id: true, name: true, type: true, startTime: true, endTime: true, officeId: true } },
       },
       orderBy: { date: "desc" },
     }),
@@ -31,15 +31,15 @@ async function getAttendanceData(page = 1) {
 // Ambil shift beserta users & attendance hari ini
 async function getShifts() {
   const startOfDay = new Date();
-startOfDay.setHours(0, 0, 0, 0);
+  startOfDay.setHours(0, 0, 0, 0);
 
-const endOfDay = new Date();
-endOfDay.setHours(23, 59, 59, 999);
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
 
   const allowedShiftTypes = ["MORNING", "AFTERNOON", "EVENING"];
 
   const shifts = await prisma.shift.findMany({
-    where: { name: { in: allowedShiftTypes } },
+    where: { type: { in: allowedShiftTypes } },
     include: {
       office: { select: { id: true, name: true } },
       users: {
@@ -48,20 +48,19 @@ endOfDay.setHours(23, 59, 59, 999);
           name: true,
           email: true,
           attendances: {
-  where: {
-    date: {
-      gte: startOfDay,
-      lte: endOfDay,
-    },
-  },
-  select: { status: true },
-  take: 1,
-},
+            where: {
+              date: { gte: startOfDay, lte: endOfDay },
+            },
+            select: { status: true, approval: true },
+            orderBy: { date: "desc" },
+            take: 1,
+          },
         },
       },
     },
   });
 
+  // mapping
   return shifts.map((shift) => ({
     id: shift.id,
     name: shift.name,
@@ -73,10 +72,15 @@ endOfDay.setHours(23, 59, 59, 999);
       id: user.id,
       name: user.name,
       email: user.email,
-      attendanceStatus: user.attendances[0]?.status || "PRESENT",
+      attendanceStatus:
+        user.attendances[0]?.status && ["ABSENT", "LATE", "PERMISSION"].includes(user.attendances[0].status)
+          ? user.attendances[0].status
+          : "PRESENT",
+      approval: user.attendances[0]?.approval || ""
     })),
   }));
 }
+
 
 export const revalidate = 60;
 
@@ -127,13 +131,6 @@ export default async function AttendancesPage({ searchParams }) {
 
         <ContentForm.Body>
           <AttendancesCard shifts={shifts} />
-
-          <div className="my-8">
-            <ContentInformation
-              heading="List Attendances"
-              subheading="Manage and review all attendance records"
-            />
-          </div>
 
           <AttendancesTable data={serializedAttendances} />
         </ContentForm.Body>

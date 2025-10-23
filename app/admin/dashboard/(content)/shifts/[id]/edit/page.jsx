@@ -1,40 +1,31 @@
-import { prisma } from "@/_lib/prisma";
 import EditForm from "./EditForm";
-import ContentForm from '@/_components/content/ContentForm';
-import { ContentInformation } from '@/_components/content/ContentInformation';
-import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-  
+import { prisma } from "@/_lib/prisma";
+import { notFound } from "next/navigation";
+
 export const revalidate = 60;
 
-export default async function Page({
-  params
-}) {
-  const shift = await prisma.shift.findUnique({
-    where: { id: parseInt(params.id) },
-  });
+export default async function EditShiftPage({ params }) {
+  const shiftId = parseInt(params.id);
 
-  if (!shift) return <div>Shift not found</div>;
+  const [shift, offices] = await Promise.all([
+    prisma.shift.findUnique({
+      where: { id: shiftId },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        startTime: true,
+        endTime: true,
+        officeId: true,
+      },
+    }),
+    prisma.office.findMany({
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+  ]);
 
-  const safeShift = {
-    ...shift,
-    startTime: shift.startTime.toISOString(),
-    endTime: shift.endTime.toISOString(),
-  };
+  if (!shift) return notFound();
 
-  return (
-    <section className="space-y-6">
-        <DashboardHeader title="Edit Shift" subtitle="Update shift type and time range" />
-    
-        <ContentForm>
-          <ContentForm.Header>
-            <ContentInformation heading="Shift Information" subheading="Update shift type and time range" />
-          </ContentForm.Header>
-          
-          <ContentForm.Body>
-            <EditForm shift={safeShift} />
-          </ContentForm.Body>
-        </ContentForm>
-    </section>
-  );
+  return <EditForm shift={shift} offices={offices} />;
 }
-

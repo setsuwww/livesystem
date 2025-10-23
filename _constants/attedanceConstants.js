@@ -5,10 +5,15 @@ export const attedancesStyles = {
   Late: "text-yellow-600 bg-yellow-100 border-yellow-300",
   Permission: "text-blue-600 bg-blue-100 border-blue-300",
   Absent: "text-rose-600 bg-rose-100 border-rose-300",
+
   Rejected: "text-white bg-rose-500 border-rose-500",
   Accepted: "text-white bg-teal-500 border-teal-500",
   Pending: "text-white bg-yellow-500 border-yellow-500",
+
+  "Pending target": "text-slate-600 bg-slate-100 border-slate-300",
+  "Pending admin": "text-white bg-slate-500 border-slate-500",
 };
+
 
 export const statusColorsClass = {
   PRESENT: { 

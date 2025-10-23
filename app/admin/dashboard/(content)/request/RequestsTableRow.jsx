@@ -1,38 +1,26 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+
 import { TableRow, TableCell } from "@/_components/ui/Table"
-import {
-  AlertDialog,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/_components/ui/Alert-dialog"
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/_components/ui/Alert-dialog"
 import { Textarea } from "@/_components/ui/Textarea"
 import { Badge } from "@/_components/ui/Badge"
 import { Loader2, CircleUserRound, ArrowDown, Ban } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { shiftStyles } from "@/_constants/shiftConstants"
+
 import RequestStatusChangerToggle from "./RequestStatusChangerToggle"
+import { updateRequestStatus } from "@/_components/server/shiftAction";
 
 export default function RequestsTableRow({
-  id,
-  type,
-  requestedBy,
-  user,
-  oldShift,
-  targetShift,
-  info,
-  reason,
+  id, type, requestedBy, user,
+  oldShift, targetShift,
+  info, reason,
   status,
   date,
-  requestType,
-  typeShift,
+  requestType, typeShift,
 }) {
   const router = useRouter()
   const [currentStatus, setCurrentStatus] = useState(status)
@@ -43,31 +31,22 @@ export default function RequestsTableRow({
   const extractId = (fullId) => fullId?.replace(/^(shift-|perm-)/, "") || ""
   const actualId = extractId(id)
 
-  const handleStatusChange = async (newStatus, adminReason = null) => {
-    setIsLoading(true)
+  const handleStatusChange = async (newStatus, reason = null) => {
+    setIsLoading(true);
     try {
-      const res = await fetch(`/api/admin/requests/${actualId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: newStatus,
-          reason: adminReason,
-          type: requestType,
-        }),
-      })
-      const result = await res.json()
-      if (result.success) {
-        setCurrentStatus(newStatus)
-        toast.success(`Request ${newStatus.toLowerCase()} successfully`)
-        router.refresh()
-      } else toast.error(result.message || "Failed to update request")
+      const res = await updateRequestStatus(Number(actualId), newStatus, reason);
+      if (res.success) {
+        setCurrentStatus(newStatus);
+        toast.success(`Request ${newStatus.toLowerCase()} successfully`);
+        router.refresh();
+      } else toast.error(res.message || "Failed to update request");
     } catch (err) {
-      console.error(err)
-      toast.error("An error occurred while updating the request")
+        console.error(err);
+        toast.error("An error occurred while updating the request");
     } finally {
-      setIsLoading(false)
+        setIsLoading(false);
     }
-  }
+  };
 
   const handleReject = () => {
     if (!rejectReason.trim()) return
