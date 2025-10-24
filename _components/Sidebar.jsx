@@ -141,8 +141,8 @@ export function Sidebar({ user }) {
           onOpenChange={setEmployeesOpen}
           icon={Building2}
           items={[
-            { label: 'Offices', href: '/admin/dashboard/users/locations' },
-            { label: 'Add Offices', href: '/admin/dashboard/users/locations/create' },
+            { label: 'Offices', href: '/admin/dashboard/users/offices' },
+            { label: 'Add Offices', href: '/admin/dashboard/users/offices/create' },
             { label: 'Employees', href: '/admin/dashboard/users/employees' },
             { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
           ]}

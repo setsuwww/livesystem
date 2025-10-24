@@ -24,7 +24,6 @@ export const UsersActionHeader = ({
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="ADMIN">Admin</SelectItem>
-            <SelectItem value="COORDINATOR">Coordinator</SelectItem>
             <SelectItem value="EMPLOYEE">Employee</SelectItem>
             <SelectItem value="USER">User</SelectItem>
           </SelectContent>

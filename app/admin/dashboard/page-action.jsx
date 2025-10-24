@@ -47,13 +47,13 @@ export default function FastActions() {
         {actions.map((action) => (
           <div key={action.label} className="flex items-center">
             <Link href={action.hrefView}>
-              <Button variant="outline" className="bg-white hover:bg-white/70 border-slate-200 flex items-center gap-2 rounded-r-none text-xs">
+              <Button variant="outline" className="bg-white hover:bg-slate-100/70 border-slate-200 flex items-center gap-2 rounded-r-none text-xs">
                 <Eye className="text-sky-500 w-4 h-4" />
                 <span className="text-slate-600">View {action.label}</span>
               </Button>
             </Link>
             <Link href={action.hrefCreate}>
-              <Button variant="outline" className="bg-white hover:bg-white/70 border-slate-200 rounded-l-none border-l-0"
+              <Button variant="outline" className="bg-white hover:bg-slate-100/70 border-slate-200 rounded-l-none border-l-0"
               >
                 <Plus className="w-4 h-4 text-slate-400" />
               </Button>

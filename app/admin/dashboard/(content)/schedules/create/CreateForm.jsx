@@ -83,7 +83,6 @@ export default function CreateForm({ users, shifts }) {
                   value={form.title}
                   onChange={(e) => handleChange("title", e.target.value)}
                   placeholder="Enter schedule title"
-                  className="border-slate-200 focus:border-slate-400 focus:ring-slate-400"
                   required
                 />
               </div>
@@ -95,7 +94,6 @@ export default function CreateForm({ users, shifts }) {
                   value={form.description}
                   onChange={(e) => handleChange("description", e.target.value)}
                   placeholder="Enter schedule description"
-                  className="border-slate-200 focus:border-slate-400 focus:ring-slate-400"
                   required
                 />
               </div>
@@ -107,10 +105,10 @@ export default function CreateForm({ users, shifts }) {
                 value={form.frequency}
                 onValueChange={(value) => handleChange("frequency", value)}
               >
-                <SelectTrigger className="border-slate-200 focus:border-slate-400">
+                <SelectTrigger>
                   <SelectValue placeholder="Select Frequency" />
                 </SelectTrigger>
-                <SelectContent className="bg-white border-slate-200">
+                <SelectContent>
                   <SelectItem value="DAILY">Daily</SelectItem>
                   <SelectItem value="WEEKLY">Weekly</SelectItem>
                   <SelectItem value="MONTHLY">Monthly</SelectItem>
@@ -138,15 +136,10 @@ export default function CreateForm({ users, shifts }) {
                   type="button"
                   variant="outline"
                   disabled={loading}
-                  className="border-slate-200 text-slate-700 hover:bg-slate-50"
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-slate-900 hover:bg-slate-800 text-white"
-                >
+                <Button type="submit" disabled={loading}>
                   {loading ? "Saving..." : "Save Schedule"}
                 </Button>
               </div>

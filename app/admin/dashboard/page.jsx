@@ -100,20 +100,13 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="p-4 space-y-4 bg-white rounded-xl border border-slate-200 shadow-xs">
-        <div className="flex items-center justify-between space-x-2">
-          <div className="flex items-center space-x-3">
-            <div className="bg-purple-50 border border-purple-100 text-purple-500 p-2 rounded-lg">
-              <ChartNoAxesCombined strokeWidth={2} />
-            </div>
-            <ContentInformation heading="Analytics" subheading="Views statistic in diagram views" autoMargin={false} />
+        <div className="flex items-center space-x-3">
+          <div className="bg-purple-50 border border-purple-100 text-purple-500 p-2 rounded-lg">
+            <ChartNoAxesCombined strokeWidth={2} />
           </div>
-          <Button variant="secondary" className="flex items-center bg-white hover:bg-white/70 text-slate-600 border-slate-200 hover:border-slate-200 shadow-none" >
-            <FileClock strokeWidth={2} className="text-yellow-500" />
-            <span>Log activity</span>
-          </Button>
+          <ContentInformation heading="Analytics" subheading="Views statistic in diagram views" autoMargin={false} />
         </div>
       </div>
-
 
       <div className="grid gap-4 grid-cols-2">
         <BarDiagram
