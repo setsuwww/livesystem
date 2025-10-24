@@ -2,15 +2,19 @@
 
 import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { User, Mail, Briefcase, Clock, CalendarDays, Shield, LogIn, LogOut, Plane } from "lucide-react"
-import { roleStyles } from "@/_constants/roleStyles"
-import { Badge } from "@/_components/ui/Badge"
-import { capitalize } from "@/_function/globalFunction"
+import { Clock, LogIn, LogOut, Plane, Shuffle, Loader2, CheckCircle2, XCircle, AlertTriangle, Circle } from "lucide-react"
+import { Card, CardHeader, CardTitle, CardContent } from "@/_components/ui/Card"
 import { userSendCheckIn, userSendCheckOut, userSendPermissionRequest } from "@/_components/server/attendanceAction"
-import { apiFetchData } from '@/_function/helpers/fetch';
+import { apiFetchData } from "@/_function/helpers/fetch"
+import { Button } from "@/_components/ui/Button"
+import { ContentInformation } from '@/_components/content/ContentInformation';
+import Link from 'next/link';
+import { Label } from '@/_components/ui/Label';
+import LoadingStates from '@/_components/content/LoadingStates';
 
-export default function DashboardPage() {
+export default function CheckinForm() {
   const [user, setUser] = useState(null)
+  const [stats, setStats] = useState(null)
   const [reason, setReason] = useState("")
   const [showPermission, setShowPermission] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -18,40 +22,37 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const data = await apiFetchData({
-          url: "/me",              
-          successMessage: "User data loaded!",
-          errorMessage: "Failed to load user data",
+      try { const data = await apiFetchData({ url: "/me",
+          successMessage: null, errorMessage: "Failed to load user data",
         })
-
         setUser(data)
-      } catch (err) {
-        console.error("Failed to fetch user:", err)
-      } finally {
-        setLoading(false)
-      }
+
+        const statsData = await apiFetchData({ url: `/attendance/stats?userId=${data.id}`,
+          successMessage: null,
+          errorMessage: "Failed to load stats",
+        })
+        setStats(statsData)
+      } 
+      catch (err) { console.error("Failed to fetch user:", err)} 
+      finally { setLoading(false)}
     }
 
     fetchUser()
   }, [])
 
-  const handleCheckIn = () =>
-    startTransition(async () => {
+  const handleCheckIn = () => startTransition(async () => {
       const result = await userSendCheckIn()
       if (result?.error) toast.error(result.error)
       else toast.success("Checked in successfully")
     })
 
-  const handleCheckOut = () =>
-    startTransition(async () => {
+  const handleCheckOut = () => startTransition(async () => {
       const result = await userSendCheckOut()
       if (result?.error) toast.error(result.error)
       else toast.success("Checked out successfully")
     })
 
-  const handlePermission = () =>
-    startTransition(async () => {
+  const handlePermission = () => startTransition(async () => {
       const result = await userSendPermissionRequest(reason)
       if (result?.error) toast.error(result.error)
       else {
@@ -62,135 +63,117 @@ export default function DashboardPage() {
     })
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-slate-200 border-t-sky-500 rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 text-sm">Loading your dashboard...</p>
-        </div>
-      </div>
-    )
+    return <LoadingStates />
   }
 
   return (
-    <div className="p-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-300 overflow-hidden">
-            <div className="bg-slate-200 px-6 py-4 border-b border-slate-300">
-              <h2 className="text-lg font-semibold text-slate-600 flex items-center gap-2">
-                <User className="w-5 h-5" />
-                Profile Information
-              </h2>
-            </div>
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InfoItem icon={<Mail className="w-5 h-5 text-slate-400" />} label="Email Address" value={user.email} />
-                <InfoItem
-                  icon={<Shield className="w-5 h-5 text-slate-400" />}
-                  label="Role"
-                  value={<Badge className={roleStyles[capitalize(user.role)]}>{capitalize(user.role)}</Badge>}
-                />
-                <InfoItem
-                  icon={<Clock className="w-5 h-5 text-slate-400" />}
-                  label="Work Shift"
-                  value={user.shift?.name || "-"}
-                />
-                <InfoItem
-                  icon={<CalendarDays className="w-5 h-5 text-slate-400" />}
-                  label="Join Date"
-                  value={new Date(user.createdAt).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Attendance Card */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-full">
-            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 px-6 py-4">
-              <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Clock className="w-5 h-5" />
-                Quick Actions
-              </h2>
-            </div>
-            <div className="p-6 space-y-4">
-              <div className="space-y-3">
-                <button
-                  onClick={handleCheckIn}
-                  disabled={isPending}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
-                >
-                  <LogIn className="w-4 h-4" />
-                  Check In
-                </button>
-                <button
-                  onClick={handleCheckOut}
-                  disabled={isPending}
-                  className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Check Out
-                </button>
-              </div>
-
-              <div className="pt-4 border-t border-slate-200">
-                {!showPermission ? (
-                  <button
-                    onClick={() => setShowPermission(true)}
-                    className="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
-                  >
-                    <Plane className="w-4 h-4" />
-                    Request Permission
-                  </button>
-                ) : (
-                  <div className="space-y-3">
-                    <input
-                      type="text"
-                      placeholder="Enter your reason..."
-                      value={reason}
-                      onChange={(e) => setReason(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={handlePermission}
-                        disabled={isPending || !reason.trim()}
-                        className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm disabled:opacity-60"
-                      >
-                        Submit
-                      </button>
-                      <button
-                        onClick={() => setShowPermission(false)}
-                        className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-lg transition-colors text-sm"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="p-8 space-y-8">
+      <ContentInformation heading="Your Statistic" subheading="Views your attendance" />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+        <StatCard
+          iconClassName="bg-gradient-to-tr from-teal-100 to-teal-50 text-teal-500 border-teal-100"
+          icon={<CheckCircle2 />}
+          label="Present"
+          value={stats?.PRESENT ?? 0}
+        />
+        <StatCard
+          iconClassName="bg-gradient-to-tr from-rose-100 to-rose-50 text-rose-500 border-rose-100"
+          icon={<XCircle />}
+          label="Absent"
+          value={stats?.ABSENT ?? 0}
+        />
+        <StatCard
+          iconClassName="bg-gradient-to-tr from-yellow-100 to-yellow-50 text-yellow-500 border-yellow-100"
+          icon={<AlertTriangle />}
+          label="Permission"
+          value={stats?.PERMISSION ?? 0}
+        />
+        <StatCard
+          iconClassName="bg-gradient-to-tr from-slate-100 to-slate-50 text-slate-500 border-slate-100"
+          icon={<Circle />}
+          label="Late"
+          value={stats?.LATE ?? 0}
+        />
       </div>
+
+      <Button size="sm" variant="outline">
+        <Clock />
+        <span>Track Attendance</span>
+      </Button>
+
+      <Card className="border border-slate-200 shadow-sm">
+        <CardHeader>
+          <CardTitle>
+            <div className="flex items-center space-x-2">
+              <div className="p-2 bg-slate-100 text-slate-700 rounded-full">
+                <Clock size={24} />
+              </div>
+              <ContentInformation heading="Quick Actions" subheading="Make your actions more faster here" autoMargin={false} />
+            </div> 
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Button onClick={handleCheckIn} disabled={isPending}
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
+              <LogIn className="w-4 h-4" />
+              Check In
+            </Button>
+
+            <Button onClick={handleCheckOut} disabled={isPending}
+              className="w-full bg-rose-600 hover:bg-rose-700 text-white flex items-center gap-2">
+              <LogOut className="w-4 h-4" />
+              Check Out
+            </Button>
+
+            <Button onClick={() => setShowPermission(true)} variant="outline" className="w-full flex items-center gap-2 text-yellow-600 hover:bg-yellow-500/5 hover:text-yellow-700 hover:border-yellow-500/20">
+              <Plane className="w-4 h-4" />
+              Permission
+            </Button>
+
+            <Button asChild variant="outline" className="w-full flex items-center gap-2 text-slate-600">
+              <Link href="/employee/dashboard/attendance/change-shift">
+                <Shuffle className="w-4 h-4" />
+                Change Shift
+              </Link>
+            </Button>
+          </div>
+
+          {showPermission && (
+            <div className="mt-4 space-y-3">
+              <Label>Reason <span className="text-red-500">*</span></Label>
+              <input type="text" placeholder="Enter your reason..." value={reason} onChange={(e) => setReason(e.target.value)}
+                className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
+              />
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setShowPermission(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handlePermission} disabled={isPending || !reason.trim()} className="bg-amber-600 hover:bg-amber-700 text-white">
+                  Submit
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }
 
-function InfoItem({ icon, label, value }) {
+/* --- Subcomponents --- */
+function StatCard({ iconClassName ,icon, label, value }) {
   return (
-    <div className="space-y-1">
-      <div className="flex items-center gap-2 text-sm text-slate-500">
-        {icon}
-        <span className="font-medium">{label}</span>
-      </div>
-      <div className="text-sm text-slate-900 font-medium pl-7">{value}</div>
-    </div>
+    <Card className="border border-slate-200 shadow-xs">
+      <CardContent className="flex items-center justify-between p-5">
+        <div className="space-y-1">
+          <p className="text-sm text-slate-500">{label}</p>
+          <h3 className="text-3xl font-semibold text-slate-800">{value}</h3>
+        </div>
+        <div className={`p-3 flex items-center justify-center border rounded-full ${iconClassName}`}>
+          {icon}
+        </div>
+      </CardContent>
+    </Card>
   )
 }

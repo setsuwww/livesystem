@@ -248,6 +248,7 @@ model ShiftChangeRequest {
   targetShiftId   Int?
 
   reason          String
+  rejectReason    String?
   startDate       DateTime
   endDate         DateTime?
   status          ShiftChangeStatus @default(PENDING_TARGET)

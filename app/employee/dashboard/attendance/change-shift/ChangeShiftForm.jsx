@@ -8,6 +8,8 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@
 import { CalendarDays, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { apiFetchData } from "@/_function/helpers/fetch"
+import ContentForm from '@/_components/content/ContentForm';
+import { ContentInformation } from '@/_components/content/ContentInformation';
 
 function toDateOnlyIso(s) {
   if (!s) return null
@@ -72,16 +74,16 @@ export default function ChangeShiftForm({ employees = [] }) {
 
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6 bg-white p-6 rounded-xl border border-slate-200"
-    >
-      {/* Employee select */}
+    <ContentForm>
+    <ContentForm.Header>
+      <ContentInformation heading="Change shift form" subheading="Send a change shift request to another Employees" />
+    </ContentForm.Header>
+
+    <ContentForm.Body>
+    <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl border border-slate-200">
       <div className="space-y-2">
         <Label>Select Employee</Label>
-        <Select
-          value={String(selectedUser)}
-          onValueChange={(v) => setSelectedUser(String(v))}
+        <Select value={String(selectedUser)} onValueChange={(v) => setSelectedUser(String(v))}
           disabled={loading}
         >
           <SelectTrigger>
@@ -103,10 +105,7 @@ export default function ChangeShiftForm({ employees = [] }) {
           <Label>Start Date</Label>
           <div className="flex items-center gap-2">
             <CalendarDays className="text-slate-400" />
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
               className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
               min={todayIso}
             />
@@ -117,10 +116,7 @@ export default function ChangeShiftForm({ employees = [] }) {
           <Label>End Date (optional)</Label>
           <div className="flex items-center gap-2">
             <CalendarDays className="text-slate-400" />
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
               className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
               min={startDate || todayIso} 
             />
@@ -144,5 +140,7 @@ export default function ChangeShiftForm({ employees = [] }) {
         Submit Request
       </Button>
     </form>
+    </ContentForm.Body>
+    </ContentForm>
   )
 }

@@ -18,7 +18,8 @@ async function getAttendanceHistory(userId) {
       adminReason: true,
       approval: true,
       shift: { select: { type: true, name: true } },
-      createdAt: true,
+      checkInTime: true,
+      checkOutTime: true,
     },
     orderBy: { date: "desc" },
   })
@@ -57,7 +58,8 @@ export default async function Page({ searchParams }) {
           : a.status,
       reason: a.reason || "—",
       adminNote: a.adminReason || "-",
-      createdAt: a.createdAt.toISOString(),
+      checkInTime: a.checkInTime || "-",
+      checkOutTime: a.checkOutTime || "-",
     }))
 
   return (

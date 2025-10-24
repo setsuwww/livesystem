@@ -11,12 +11,12 @@ import {
 } from "@/_components/ui/Table"
 import { Badge } from "@/_components/ui/Badge"
 import { Button } from "@/_components/ui/Button"
-import { ArrowUpDown, CalendarDays } from "lucide-react"
+import { ArrowUpDown, ArrowDownUp, CalendarDays } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 
 import { attedancesStyles } from "@/_constants/attedanceConstants"
 import { shiftStyles } from "@/_constants/shiftConstants"
-import { capitalize } from "@/_function/globalFunction"
+import { capitalize, safeFormat } from "@/_function/globalFunction"
 
 export default function HistoryTable({ data, initialOrder }) {
   const router = useRouter()
@@ -42,10 +42,21 @@ export default function HistoryTable({ data, initialOrder }) {
   return (
     <div className="space-y-2">
       {/* Header Action */}
-      <div className="flex justify-start">
-        <Button variant="outline" size="sm" onClick={toggleOrder} className="flex items-center gap-2 text-slate-600">
-          <ArrowUpDown className="w-4 h-4 text-yellow-500" />
-          {order === "asc" ? "Oldest First" : "Newest First"}
+      <div className="flex justify-start mb-4">
+        <Button variant="outline" size="sm" onClick={toggleOrder} className="flex items-center gap-2">
+          {order === "asc" ? (
+            <>
+              <ArrowUpDown className="w-4 h-4 text-yellow-500" />
+              <span className="font-semibold text-slate-600">Sort by :</span>
+              <span className="text-slate-400">Oldest</span>
+            </>
+          ) : (
+            <>
+              <ArrowDownUp className="w-4 h-4 text-yellow-500" />
+              <span className="font-semibold text-slate-600">Sort by :</span>
+              <span className="text-slate-400">Newest</span>
+            </>
+          )}
         </Button>
       </div>
 
@@ -58,18 +69,14 @@ export default function HistoryTable({ data, initialOrder }) {
               <TableHead>Shift</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Reason</TableHead>
-              <TableHead>Created At</TableHead>
+              <TableHead>Checkin & Out time</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {sortedData.length > 0 ? (
               sortedData.map((att) => (
-                <TableRow
-                  key={att.id}
-                  className="hover:bg-slate-50/80 transition-colors"
-                >
-                  {/* Date */}
+                <TableRow key={att.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="bg-slate-100 p-2 rounded-full">
@@ -90,7 +97,7 @@ export default function HistoryTable({ data, initialOrder }) {
                   {/* Shift */}
                   <TableCell>
                     <Badge
-                      className={`border-none px-4 py-1 ${shiftStyles[att.shift?.toUpperCase()]} text-xs`}
+                      className={`border-none px-3 py-1 ${shiftStyles[att.shift?.toUpperCase()]} text-sm`}
                     >
                       {capitalize(att.shift)}
                     </Badge>
@@ -98,7 +105,7 @@ export default function HistoryTable({ data, initialOrder }) {
 
                   {/* Status */}
                   <TableCell>
-                    <Badge className={`border-none px-4 py-1 ${attedancesStyles[capitalize(att.status)]} text-xs`}>
+                    <Badge className={`border-none px-3 py-1 ${attedancesStyles[capitalize(att.status)]} text-sm`}>
                       {capitalize(att.status)}
                     </Badge>
                   </TableCell>
@@ -118,8 +125,11 @@ export default function HistoryTable({ data, initialOrder }) {
                   </TableCell>
 
                   {/* Created At */}
-                  <TableCell className="text-xs text-slate-500">
-                    {new Date(att.createdAt).toLocaleString()}
+                  <TableCell className="text-sm font-semibold">
+                    <div className="flex flex-col">
+                      <span className="text-teal-600">Checkin at: {safeFormat(att.checkInTime, "HH:mm")}</span> 
+                      <span className="text-rose-600">Checkout at: {safeFormat(att.checkOutTime, "HH:mm")}</span>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

@@ -17,7 +17,7 @@ export async function updateShiftChangeStatus(id, action, actorRole) {
   }
 
   if (actorRole === "ADMIN") {
-    if (action === "APPROVE") {
+    if (action === "APPROVED") {
       newStatus = "APPROVED"
     } else if (action === "REJECT") {
       newStatus = "REJECTED"
@@ -34,24 +34,38 @@ export async function updateRequestStatus(requestId, newStatus, reason = null) {
   try {
     const request = await prisma.shiftChangeRequest.findUnique({
       where: { id: requestId },
-      select: { userId: true, targetShiftId: true },
+      select: {
+        userId: true,
+        targetUserId: true,
+        oldShiftId: true,
+        targetShiftId: true,
+        status: true,
+      },
     });
 
     if (!request) throw new Error("Request not found");
 
-    // Kalau diterima, update shift user
-    if (newStatus === "ACCEPTED") {
-      await prisma.user.update({
-        where: { id: request.userId },
-        data: { shiftId: request.targetShiftId },
-      });
+    if (newStatus === "APPROVED") {
+      const { userId, targetUserId, oldShiftId, targetShiftId } = request;
+      if (!targetUserId) throw new Error("No target user — cannot swap shifts");
+
+      await prisma.$transaction([
+        prisma.user.update({
+          where: { id: userId },
+          data: { shiftId: targetShiftId },
+        }),
+        prisma.user.update({
+          where: { id: targetUserId },
+          data: { shiftId: oldShiftId },
+        }),
+      ]);
     }
 
     const updated = await prisma.shiftChangeRequest.update({
       where: { id: requestId },
       data: {
         status: newStatus,
-        ...(reason ? { reason } : {}), // kalau REJECTED, simpan reason
+        ...(rejectReason ? { rejectReason } : {}),
       },
     });
 
@@ -61,3 +75,4 @@ export async function updateRequestStatus(requestId, newStatus, reason = null) {
     return { success: false, message: error.message };
   }
 }
+

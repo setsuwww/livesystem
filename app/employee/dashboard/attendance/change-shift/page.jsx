@@ -1,8 +1,7 @@
-// app/employee/dashboard/attendance/change-shift/page.jsx
 import { prisma } from "@/_lib/prisma"
 import ChangeShiftForm from "./ChangeShiftForm"
 import ChangeShiftTable from "./ChangeShiftTable"
-import { getCurrentUser } from "@/_lib/auth" // pastikan path benar
+import { getCurrentUser } from "@/_lib/auth"
 import { ContentInformation } from '@/_components/content/ContentInformation';
 
 export const revalidate = 30
@@ -33,16 +32,9 @@ export default async function Page() {
   })
 
   return (
-    <main className="mx-auto p-6 space-y-6">
-      <div className="mb-6">
-      <ContentInformation heading="Change Shift" subheading="Send a change a shift request, accept or reject" />
-</div>
+    <main className="space-y-4">
       <ChangeShiftForm employees={employees} />
-      <ChangeShiftTable
-  requests={JSON.parse(JSON.stringify(requests))}
-  currentUserId={user.id}
-/>
-
+      <ChangeShiftTable requests={JSON.parse(JSON.stringify(requests))} currentUserId={user.id}/>
     </main>
   )
 }

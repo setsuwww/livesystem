@@ -8,33 +8,6 @@ import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 import ContentForm from "@/_components/content/ContentForm"
 import { ContentInformation } from "@/_components/content/ContentInformation"
 
-export default async function Page() {
-  const { shift, attendance } = await getRequests()
-
-  return (
-    <section>
-      <DashboardHeader
-        title="Requests"
-        subtitle="Manage pending requests by type"
-      />
-
-      <ContentForm>
-        <ContentForm.Header>
-          <ContentInformation
-            heading="Pending Requests"
-            subheading="Switch between Shift Change and Permission requests"
-            show={false}
-          />
-        </ContentForm.Header>
-
-        <ContentForm.Body>
-          <RequestsTabs shiftRequests={shift} permissionRequests={attendance} />
-        </ContentForm.Body>
-      </ContentForm>
-    </section>
-  )
-}
-
 async function getRequests() {
   const [shiftRequests, attendanceRequests] = await Promise.all([
     prisma.shiftChangeRequest.findMany({
@@ -73,7 +46,6 @@ async function getRequests() {
         name: r.targetUser?.name || "-",
         email: r.targetUser?.email || "-",
       },
-      // ✅ tambahkan oldShift & targetShift
       oldShift: {
         name: r.oldShift?.name || "-",
         type: r.oldShift?.type || "-",
@@ -82,7 +54,6 @@ async function getRequests() {
         name: r.targetShift?.name || "-",
         type: r.targetShift?.type || "-",
       },
-      // ✅ gabung jadi info gabungan juga biar gampang dipakai
       info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${r.targetShift?.name || "?"} (${r.targetShift?.type || "-"})`,
       reason: r.reason || "-",
       date: r.createdAt
@@ -119,3 +90,32 @@ async function getRequests() {
     })),
   }
 }
+
+export default async function Page() {
+  const { shift, attendance } = await getRequests()
+
+  return (
+    <section>
+      <DashboardHeader
+        title="Requests"
+        subtitle="Manage pending requests by type"
+      />
+
+      <ContentForm>
+        <ContentForm.Header>
+          <ContentInformation
+            heading="Pending Requests"
+            subheading="Switch between Shift Change and Permission requests"
+            show={false}
+          />
+        </ContentForm.Header>
+
+        <ContentForm.Body>
+          <RequestsTabs shiftRequests={shift} permissionRequests={attendance} />
+        </ContentForm.Body>
+      </ContentForm>
+    </section>
+  )
+}
+
+

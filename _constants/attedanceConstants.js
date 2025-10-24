@@ -14,6 +14,13 @@ export const attedancesStyles = {
   "Pending admin": "text-white bg-slate-500 border-slate-500",
 };
 
+export const dotStatusColor = {
+  PENDING: "bg-yellow-500",
+  PENDING_TARGET: "bg-slate-500",
+  PENDING_ADMIN: "bg-slate-500",
+  APPROVED: "bg-teal-500",
+  REJECTED: "bg-rose-500",
+};
 
 export const statusColorsClass = {
   PRESENT: { 
