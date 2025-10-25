@@ -37,7 +37,6 @@ async function getRequests() {
   return {
     shift: shiftRequests.map((r) => ({
       id: `shift-${r.id}`,
-      type: "Shift Change",
       requestedBy: {
         name: r.requestedBy?.name || "-",
         email: r.requestedBy?.email || "-",
@@ -55,6 +54,7 @@ async function getRequests() {
         type: r.targetShift?.type || "-",
       },
       info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${r.targetShift?.name || "?"} (${r.targetShift?.type || "-"})`,
+      typeShift: r.shift?.type,
       reason: r.reason || "-",
       date: r.createdAt
         ? new Date(r.createdAt).toLocaleDateString("en-US", {
@@ -69,7 +69,6 @@ async function getRequests() {
 
     attendance: attendanceRequests.map((r) => ({
       id: `perm-${r.id}`,
-      type: "Permission",
       requestedBy: {
         name: r.user?.name || "-",
         email: r.user?.email || "-",

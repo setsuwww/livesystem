@@ -42,7 +42,7 @@ enum FrequencyType {
 
 enum ApprovalStatus {
   PENDING
-  ACCEPTED
+  APPROVED
   REJECTED
 }
 
@@ -209,7 +209,7 @@ model Attendance {
   id           Int              @id @default(autoincrement())
   date         DateTime
   status       AttendanceStatus @default(ABSENT)
-  approval     ApprovalStatus?  // hanya relevan jika status = PERMISSION
+  approval     ApprovalStatus?  
   reason       String?
   adminReason  String?
   checkInTime  DateTime?

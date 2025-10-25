@@ -27,7 +27,6 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Type</TableHead>
                   <TableHead>Requested By</TableHead>
                   <TableHead>Target User</TableHead>
                   <TableHead>Shift Change</TableHead>
@@ -56,7 +55,6 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Type</TableHead>
                   <TableHead>Requested By</TableHead>
                   <TableHead>Shift</TableHead>
                   <TableHead>Reason</TableHead>

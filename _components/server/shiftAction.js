@@ -31,9 +31,12 @@ export async function updateShiftChangeStatus(id, action, actorRole) {
 }
 
 export async function updateRequestStatus(requestId, newStatus, reason = null) {
+  const cleanId = Number(String(requestId).replace(/^(shift-|perm-)/, ""))
+  if (isNaN(cleanId)) throw new Error("Invalid ID")
+
   try {
     const request = await prisma.shiftChangeRequest.findUnique({
-      where: { id: requestId },
+      where: { id: cleanId },
       select: {
         userId: true,
         targetUserId: true,
@@ -65,7 +68,7 @@ export async function updateRequestStatus(requestId, newStatus, reason = null) {
       where: { id: requestId },
       data: {
         status: newStatus,
-        ...(rejectReason ? { rejectReason } : {}),
+        ...(reason ? { rejectReason: reason } : {}),
       },
     });
 
@@ -73,6 +76,40 @@ export async function updateRequestStatus(requestId, newStatus, reason = null) {
   } catch (error) {
     console.error("Error updating request:", error);
     return { success: false, message: error.message };
+  }
+}
+
+export async function updatePermissionStatus(requestId, newStatus, reason = null) {
+  const cleanId = Number(String(requestId).replace(/^(perm-)/, ""))
+  if (isNaN(cleanId)) throw new Error("Invalid permission ID")
+
+  try {
+    const attendance = await prisma.attendance.findUnique({
+      where: { id: cleanId },
+    })
+
+    if (!attendance) throw new Error("Permission request not found")
+
+    // ✅ Convert string ke enum valid
+    const mappedStatus = newStatus.toUpperCase()
+    const validStatuses = ["PENDING", "APPROVED", "REJECTED"]
+
+    if (!validStatuses.includes(mappedStatus)) {
+      throw new Error(`Invalid approval status: ${newStatus}`)
+    }
+
+    const updated = await prisma.attendance.update({
+      where: { id: cleanId },
+      data: {
+        approval: mappedStatus,
+        ...(reason ? { adminReason: reason } : {}),
+      },
+    })
+
+    return { success: true, data: updated }
+  } catch (error) {
+    console.error("Error updating permission:", error)
+    return { success: false, message: error.message }
   }
 }
 

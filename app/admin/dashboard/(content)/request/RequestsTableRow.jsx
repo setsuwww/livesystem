@@ -10,7 +10,7 @@ import { toast } from "sonner"
 import { shiftStyles } from "@/_constants/shiftConstants"
 import RequestStatusChangerToggle from "./RequestStatusChangerToggle"
 import RequestRejectedAlert from "./RequestRejectedAlert"
-import { updateRequestStatus } from "@/_components/server/shiftAction"
+import { updateRequestStatus, updatePermissionStatus } from "@/_components/server/shiftAction"
 
 export default function RequestsTableRow({
   id, type, requestedBy, user, 
@@ -37,14 +37,19 @@ export default function RequestsTableRow({
   const handleStatusChange = useCallback(
     async (newStatus, reason = null) => {
       setIsLoading(true)
-      try {
-        const res = await updateRequestStatus(Number(actualId), newStatus, reason)
-        if (res.success) {
+      try { let res
+        if (requestType === "shift") {
+          res = await updateRequestStatus(Number(actualId), newStatus, reason)
+        } else if (requestType === "permission") {
+          res = await updatePermissionStatus(Number(actualId), newStatus, reason)
+        }
+
+        if (res?.success) {
           setCurrentStatus(newStatus)
           toast.success(`Request ${newStatus.toLowerCase()} successfully`)
           router.refresh()
         } else {
-          toast.error(res.message || "Failed to update request")
+          toast.error(res?.message || "Failed to update request")
         }
       } catch (err) {
         console.error(err)
@@ -53,8 +58,9 @@ export default function RequestsTableRow({
         setIsLoading(false)
       }
     },
-    [actualId, router]
+    [actualId, router, requestType]
   )
+
 
   const handleReject = useCallback(() => {
     if (!rejectReason.trim()) return
@@ -88,7 +94,7 @@ export default function RequestsTableRow({
           className={`border-none px-3 py-1 ${
             type === "Permission"
               ? shiftStyles[typeShift]
-              : "bg-slate-50 text-slate-600"
+              : "bg-slate-50 text-sky-600"
           }`}
         >
           {info}
@@ -125,11 +131,10 @@ export default function RequestsTableRow({
   return (
     <>
       <TableRow>
-        <TableCell className="font-medium">{type}</TableCell>
         <TableCell>{renderUserInfo(requestedBy)}</TableCell>
         {requestType === "shift" && <TableCell>{renderUserInfo(user)}</TableCell>}
-        <TableCell className="max-w-xs text-left">{renderShiftInfo}</TableCell>
-        <TableCell className="max-w-xs">
+        <TableCell className="max-w-xs">{renderShiftInfo}</TableCell>
+        <TableCell className="max-w-2xs">
           <span className="line-clamp-2 text-sm text-muted-foreground">
             {reason || "-"}
           </span>

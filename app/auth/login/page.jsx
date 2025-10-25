@@ -79,7 +79,6 @@ const LoginPage = () => {
               Remember Me
             </Label>
           </div>
-
           <AuthLink href="/forgot-password" link="Forgot Password?" question=""/>
         </div>
 
@@ -90,8 +89,6 @@ const LoginPage = () => {
       </form>
 
       {error && <p className="text-rose-500 mt-2 text-center">{error}</p>}
-
-      <AuthLink question="Don't have an account?" link="Register" href="/auth/register" className="text-sm mt-4"/>
     </AuthForm>
   )
 }

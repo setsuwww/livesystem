@@ -64,22 +64,10 @@ export default function EmployeeSidebar() {
         >
           Change Shift
         </SidebarLink>
-        <SidebarLink
-          href="/employee/dashboard/my-schedules"
-          icon={CalendarDays}
-        >
-          My Schedule
-        </SidebarLink>
-        <SidebarLink href="/employee/dashboard/inbox" icon={Inbox}>
-          Inbox
-        </SidebarLink>
 
         <SubHeading title="Account" />
         <SidebarLink href="/employee/dashboard/profile" icon={User}>
           Profile
-        </SidebarLink>
-        <SidebarLink href="/logout" icon={LogOut}>
-          Logout
         </SidebarLink>
       </nav>
     </aside>

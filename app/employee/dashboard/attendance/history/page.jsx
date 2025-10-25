@@ -51,7 +51,7 @@ export default async function Page({ searchParams }) {
         month: "long",
         year: "numeric",
       }),
-      shift: a.shift?.type || "-",
+      shift: `${a.shift?.type || "-"} - ${a.shift?.name}`,
       status:
         a.status === "PERMISSION"
           ? `${a.status} (${a.approval || "PENDING"})`
