@@ -1,17 +1,4 @@
-PR : input schedule {
-    /title
-    /description
-    /frequency
-
-    /users[]
-    /periode (from-to)
-} 
-
-input schedule secara massal, kalau ada perubahan, tinggal cek user yang akan diubah, edit
-kalau yang diubah schedule, cek schedule, edit
-
-office dan lokasi ganti menjadi divisi
-
+office dan lokasi ganti menjadi divisi, 
+masa periode mulai dan akhir shift otomatis, jika sudah berakhir, maka user akan balik ke shift awal sebelum ganti
 admin sebagai perantara dari user antar user
-
 office ganti divisi
