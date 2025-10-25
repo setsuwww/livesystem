@@ -57,7 +57,6 @@ const LoginPage = () => {
           )}
         </div>
 
-        {/* Password */}
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" value={password} className="h-10"
@@ -69,7 +68,6 @@ const LoginPage = () => {
           )}
         </div>
 
-        {/* Remember me + Forgot password */}
         <div className="flex items-center justify-between w-full text-sm">
           <div className="flex items-center space-x-2">
             <Checkbox id="remember" checked={rememberMe} className="border-slate-400"
@@ -82,7 +80,6 @@ const LoginPage = () => {
           <AuthLink href="/forgot-password" link="Forgot Password?" question=""/>
         </div>
 
-        {/* Button */}
         <Button type="submit" className="w-full text-base font-semibold inset-shadow-sky-200 from-sky-600 to-sky-500 hover:inset-shadow-sky-300 hover:from-sky-700 hover:to-sky-600" disabled={isSubmitting}>
           {isSubmitting ? "Logging in..." : "Login"}
         </Button>

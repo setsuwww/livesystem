@@ -14,7 +14,6 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-// ================= Bar Diagram =================
 export function BarDiagram({ title, description, data, series }) {
   const seriesToUse = series ?? [{ key: "value", color: "#4f46e5", label: "Value" }];
 
@@ -59,7 +58,6 @@ export function BarDiagram({ title, description, data, series }) {
   );
 }
 
-// ================= Area Diagram =================
 export function AreaDiagram({ title, description, data, series }) {
   const seriesToUse = series ?? [{ key: "value", color: "#4f46e5", label: "Value" }];
 

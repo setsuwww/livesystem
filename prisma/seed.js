@@ -57,9 +57,9 @@ async function main() {
 
   // === 2️⃣ Seed Shifts (3 per Office) ===
   const shiftTemplates = [
-    { type: ShiftType.MORNING, baseName: "Morning", startTime: 8 * 60, endTime: 16 * 60 },
-    { type: ShiftType.AFTERNOON, baseName: "Afternoon", startTime: 16 * 60, endTime: 24 * 60 },
-    { type: ShiftType.EVENING, baseName: "Evening", startTime: 0, endTime: 8 * 60 },
+    { type: ShiftType.MORNING, baseName: "Pagi", startTime: 8 * 60, endTime: 16 * 60 },
+    { type: ShiftType.AFTERNOON, baseName: "Sore", startTime: 16 * 60, endTime: 24 * 60 },
+    { type: ShiftType.EVENING, baseName: "Malem", startTime: 0, endTime: 8 * 60 },
   ]
 
   const allShifts = []
@@ -69,7 +69,7 @@ async function main() {
       const shift = await prisma.shift.create({
         data: {
           type: template.type,
-          name: `${template.baseName} (${office.name})`,
+          name: `${template.baseName} - (${office.name})`,
           startTime: template.startTime,
           endTime: template.endTime,
           officeId: office.id,
