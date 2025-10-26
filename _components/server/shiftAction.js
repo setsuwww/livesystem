@@ -31,7 +31,7 @@ export async function updateShiftChangeStatus(id, action, actorRole) {
 }
 
 export async function updateShiftChangeRequestStatus(requestId, newStatus, reason = null) {
-  const cleanId = Number(String(requestId).replace(/^(shift-|perm-)/, ""))
+  const cleanId = Number(String(requestId).replace(/^(shift-)/, ""))
   if (isNaN(cleanId)) throw new Error("Invalid ID")
 
   try {
@@ -90,7 +90,6 @@ export async function updatePermissionStatus(requestId, newStatus, reason = null
 
     if (!attendance) throw new Error("Permission request not found")
 
-    // ✅ Convert string ke enum valid
     const mappedStatus = newStatus.toUpperCase()
     const validStatuses = ["PENDING", "APPROVED", "REJECTED"]
 
