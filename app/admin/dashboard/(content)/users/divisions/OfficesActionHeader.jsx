@@ -1,11 +1,11 @@
 "use client"
 
-import { Trash2, FolderInput, Building2 } from "lucide-react"
+import { Trash2, FolderInput } from "lucide-react"
 import { Input } from "@/_components/ui/Input"
 import { Button } from "@/_components/ui/Button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
 
-export const OfficesActionHeader = ({
+export const DivisionsActionHeader = ({
   search, onSearchChange,
   typeFilter, onTypeFilterChange,
   statusFilter, onStatusFilterChange,
@@ -15,9 +15,7 @@ export const OfficesActionHeader = ({
 }) => {
   return (
     <div className="flex items-center justify-between gap-2 flex-wrap">
-      {/* LEFT: Filters & Search */}
       <div className="flex items-center gap-2 flex-wrap">
-        {/* Type Filter */}
         <Select value={typeFilter} onValueChange={onTypeFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
             <span className="font-semibold text-slate-600 mr-1">Type:</span>
@@ -30,7 +28,6 @@ export const OfficesActionHeader = ({
           </SelectContent>
         </Select>
 
-        {/* Status Filter */}
         <Select value={statusFilter} onValueChange={onStatusFilterChange}>
           <SelectTrigger className="w-auto px-3 whitespace-nowrap">
             <span className="font-semibold text-slate-600 mr-1">Status:</span>
@@ -43,17 +40,15 @@ export const OfficesActionHeader = ({
           </SelectContent>
         </Select>
 
-        {/* Search Input */}
         <Input
           ref={searchInputRef}
-          placeholder="Search office..."
+          placeholder="Search division..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           className="w-full sm:w-64 bg-white py-2"
         />
       </div>
 
-      {/* RIGHT: Action Buttons */}
       <div className="flex items-center gap-2 flex-wrap">
         <Button
           variant="ghost"

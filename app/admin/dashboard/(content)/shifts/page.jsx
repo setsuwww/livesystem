@@ -34,7 +34,7 @@ export default async function ShiftsPage({ searchParams }) {
           },
         },
       },
-      office: {
+      division: {
         select: { name: true }
       }
     },
@@ -69,7 +69,7 @@ const tableData = mainShifts.map((s) => {
     timeRange: `${start} - ${end}`,
     usersCount: usersWithStatus.length,
     users: usersWithStatus,
-    office: s.office ? s.office.name : "-", // ✅ Masukin office name di sini
+    division: s.division ? s.division.name : "-",
   };
 });
 

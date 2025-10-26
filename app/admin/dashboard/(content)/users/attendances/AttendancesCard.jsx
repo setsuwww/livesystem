@@ -19,7 +19,7 @@ export function AttendancesCard({ shifts = [] }) {
         approval: u?.approval ? String(u.approval).toUpperCase() : "",
         _shiftId: shift.id,
         _shiftType: shift.type,
-        _shiftOffice: shift.officeName,
+        _shiftDivision: shift.divisionName,
       }))
     );
   }, [shifts]);

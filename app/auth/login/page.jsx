@@ -22,22 +22,25 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!email || !password) { setError("Both fields are required")
+    if (!email || !password) {
+      setError("Both fields are required")
       return
     }
 
     setIsSubmitting(true)
-    try { const { data } = await api.post("/auth/login", { email, password }, { withCredentials: true })
+    try {
+      const { data } = await api.post("/auth/login", { email, password }, { withCredentials: true })
 
-      if (data.success) { if (data.role === "ADMIN") router.push("/admin/dashboard")
+      if (data.success) {
+        if (data.role === "ADMIN") router.push("/admin/dashboard")
         else if (data.role === "USER") router.push("/user/dashboard")
         else if (data.role === "COORDINATOR") router.push("/coordinator/dashboard")
         else if (data.role === "EMPLOYEE") router.push("/employee/dashboard")
       }
-    } 
+    }
     catch (err) {
       setError(err.response?.data?.message || "Login failed")
-    } 
+    }
     finally {
       setIsSubmitting(false)
     }
@@ -77,12 +80,16 @@ const LoginPage = () => {
               Remember Me
             </Label>
           </div>
-          <AuthLink href="/forgot-password" link="Forgot Password?" question=""/>
+          <AuthLink href="/forgot-password" link="Forgot Password?" />
         </div>
 
         <Button type="submit" className="w-full text-base font-semibold inset-shadow-sky-200 from-sky-600 to-sky-500 hover:inset-shadow-sky-300 hover:from-sky-700 hover:to-sky-600" disabled={isSubmitting}>
           {isSubmitting ? "Logging in..." : "Login"}
         </Button>
+
+        <div className="text-center text-xs italic text-slate-400 font-semibold">
+          <span>Liveshift presented</span>
+        </div>
       </form>
 
       {error && <p className="text-rose-500 mt-2 text-center">{error}</p>}

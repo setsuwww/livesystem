@@ -12,14 +12,14 @@ import { Label } from "@/_components/ui/Label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/_components/ui/Popover"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/_components/ui/Dialog"
 
-import { officeStyles } from "@/_constants/officeStyles"
-import { OfficesStatusBadge } from "./OfficesStatusBadge"
-import { OfficesActionHeader } from "./OfficesActionHeader"
-import { useOfficesHooks } from "@/_function/hooks/useOfficesHooks"
-import { handleOffices } from "@/_function/handlers/handleOffices"
+import { divisionStyles } from "@/_constants/divisionStyles"
+import { DivisionsStatusBadge } from "./DivisionsStatusBadge"
+import { DivisionsActionHeader } from "./DivisionsActionHeader"
+import { useDivisionsHooks } from "@/_function/hooks/useDivisionsHooks"
+import { handleDivisions } from "@/_function/handlers/handleDivisions"
 import { minutesToTime } from "@/_function/globalFunction"
 
-export default function OfficesTable({ data }) {
+export default function DivisionsTable({ data }) {
   const {
     search, setSearch,
     typeFilter, setTypeFilter,
@@ -29,7 +29,7 @@ export default function OfficesTable({ data }) {
     handleDeleteSelected, handleDeleteAll,
     handleExportPDF,
     searchRef, mutate
-  } = useOfficesHooks(data)
+  } = useDivisionsHooks(data)
 
   const [allActive, setAllActive] = useState(false)
   const [loadingConfig, setLoadingConfig] = useState(true)
@@ -38,15 +38,12 @@ export default function OfficesTable({ data }) {
 
   useEffect(() => {
     async function fetchConfig() {
-      try {
-        const res = await fetch("/api/system-config")
+      try { const res = await fetch("/api/system-config")
         const data = await res.json()
         setAllActive(data.allWfaActive)
-      } catch (err) {
-        console.error("❌ Failed to fetch config:", err)
-      } finally {
-        setLoadingConfig(false)
-      }
+      } 
+      catch (err) {console.error("❌ Failed to fetch config:", err)} 
+      finally {setLoadingConfig(false)}
     }
     fetchConfig()
   }, [])
@@ -68,7 +65,7 @@ export default function OfficesTable({ data }) {
         body: JSON.stringify({ allWfaActive: pendingStatus }),
       })
 
-      await handleOffices.onBulkUpdate({
+      await handleDivisions.onBulkUpdate({
         activateType: "WFA",
         deactivateType: "WFO",
         isActive: pendingStatus,
@@ -94,7 +91,7 @@ export default function OfficesTable({ data }) {
           </Label>
         </div>
 
-        <OfficesActionHeader
+        <DivisionsActionHeader
           search={search}
           onSearchChange={setSearch}
           typeFilter={typeFilter}
@@ -130,9 +127,8 @@ export default function OfficesTable({ data }) {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredData.map((office) => (
-                  <TableRow key={office.id}>
-                    {/* Name + Location */}
+                filteredData.map((division) => (
+                  <TableRow key={division.id}>
                     <TableCell>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -141,8 +137,8 @@ export default function OfficesTable({ data }) {
                               <MapPin strokeWidth={1} />
                             </div>
                             <div className="flex flex-col p-1 rounded-md">
-                              <span className="text-sm text-slate-600 group-hover:text-slate-700 font-semibold">{office.name}</span>
-                              <span className="text-xs text-slate-400 group-hover:text-slate-500 ">{office.location}</span>
+                              <span className="text-sm text-slate-600 group-hover:text-slate-700 font-semibold">{division.name}</span>
+                              <span className="text-xs text-slate-400 group-hover:text-slate-500 ">{division.location}</span>
                             </div>
                           </div>
                         </PopoverTrigger>
@@ -153,17 +149,17 @@ export default function OfficesTable({ data }) {
                             <p className="flex items-center space-x-1">
                               <Radar size={20} strokeWidth={1.5} className="text-sky-600" />
                               <span className="font-medium text-slate-700">Radius:</span>{" "}
-                              <span className="text-slate-500">{office.radius ?? "-"}</span>
+                              <span className="text-slate-500">{division.radius ?? "-"}</span>
                             </p>
                             <p className="flex items-center space-x-1">
                               <Locate size={20} strokeWidth={1.5} className="text-sky-600" />
                               <span className="font-medium text-slate-700">Latitude:</span>{" "}
-                              <span className="text-slate-500">{office.latitude ?? "-"}</span>
+                              <span className="text-slate-500">{division.latitude ?? "-"}</span>
                             </p>
                             <p className="flex items-center space-x-1">
                               <LocateFixed size={20} strokeWidth={1.5} className="text-sky-600" />
                               <span className="font-medium text-slate-700">Longitude:</span>{" "}
-                              <span className="text-slate-500">{office.longitude ?? "-"}</span>
+                              <span className="text-slate-500">{division.longitude ?? "-"}</span>
                             </p>
                           </div>
                         </PopoverContent>
@@ -171,21 +167,21 @@ export default function OfficesTable({ data }) {
                     </TableCell>
 
                     <TableCell>
-                      <Badge variant="outline" className={officeStyles[office.type]}>
-                        {office.type}
+                      <Badge variant="outline" className={divisionStyles[division.type]}>
+                        {division.type}
                       </Badge>
                     </TableCell>
 
                     <TableCell>
-                      <OfficesStatusBadge status={office.status} onToggle={() => handleOffices.onToggleStatus(office, mutate)} />
+                      <DivisionsStatusBadge status={division.status} onToggle={() => handleDivisions.onToggleStatus(division, mutate)} />
                     </TableCell>
 
                     <TableCell>
                       <div className="text-slate-600 flex items-center space-x-2">
                         <AlarmClock strokeWidth={1.5} size={16} />
                         <span>
-                          {office.startTime != null && office.endTime != null
-                            ? `${minutesToTime(office.startTime)} - ${minutesToTime(office.endTime)}`
+                          {division.startTime != null && division.endTime != null
+                            ? `${minutesToTime(division.startTime)} - ${minutesToTime(division.endTime)}`
                             : "-"}
                         </span>
                       </div>
@@ -194,20 +190,20 @@ export default function OfficesTable({ data }) {
                     <TableCell>
                       <div className="flex flex-col">
                         <span className="text-sm text-slate-600 font-semibold">
-                          {format(new Date(office.createdAt), "dd MMM yyyy")}
+                          {format(new Date(division.createdAt), "dd MMM yyyy")}
                         </span>
                         <span className="text-xs text-slate-400">
-                          {format(new Date(office.updatedAt), "dd MMM yyyy")}
+                          {format(new Date(division.updatedAt), "dd MMM yyyy")}
                         </span>
                       </div>
                     </TableCell>
 
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => handleOffices.onEdit(office)}>
+                        <Button size="sm" variant="outline" onClick={() => handleDivisions.onEdit(division)}>
                           Edit
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleOffices.onDelete(office)}>
+                        <Button size="sm" variant="destructive" onClick={() => handleDivisions.onDelete(division)}>
                           Delete
                         </Button>
                       </div>
@@ -220,7 +216,6 @@ export default function OfficesTable({ data }) {
         </div>
       </div>
 
-      {/* Dialog Konfirmasi */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="max-w-[500px]">
           <DialogHeader>
@@ -228,7 +223,7 @@ export default function OfficesTable({ data }) {
           </DialogHeader>
           <p className="text-sm text-slate-600">
             {pendingStatus
-              ? "Are you sure you want to activate all WFA (Work From Home) and inactivate all WFO (Work From Office)?"
+              ? "Are you sure you want to activate all WFA (Work From Anywhere) and inactivate all WFO (Work From Office)?"
               : "Are you sure you want to deactivate all WFA and activate all WFO?"}
           </p>
           <DialogFooter className="mt-4">

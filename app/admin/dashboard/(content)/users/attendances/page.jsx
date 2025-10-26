@@ -18,7 +18,7 @@ async function getAttendanceData(page = 1) {
       take: PAGE_SIZE,
       include: {
         user: { select: { id: true, name: true, email: true } },
-        shift: { select: { id: true, name: true, type: true, startTime: true, endTime: true, officeId: true } },
+        shift: { select: { id: true, name: true, type: true, startTime: true, endTime: true, divisionId: true } },
       },
       orderBy: { date: "desc" },
     }),
@@ -41,7 +41,7 @@ async function getShifts() {
   const shifts = await prisma.shift.findMany({
     where: { type: { in: allowedShiftTypes } },
     include: {
-      office: { select: { id: true, name: true } },
+      division: { select: { id: true, name: true } },
       users: {
         select: {
           id: true,
@@ -65,7 +65,7 @@ async function getShifts() {
     id: shift.id,
     name: shift.name,
     type: shift.type,
-    officeName: shift.office?.name || "-",
+    divisionName: shift.division?.name || "-",
     startTime: minutesToTime(shift.startTime),
     endTime: minutesToTime(shift.endTime),
     users: shift.users.map((user) => ({

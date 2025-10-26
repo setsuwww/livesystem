@@ -23,7 +23,7 @@ export async function PUT(req, context) {
 
   try {
     const body = await req.json();
-    const { type, name, startTime, endTime, officeId } = body;
+    const { type, name, startTime, endTime, divisionId } = body;
 
     const updated = await prisma.shift.update({
       where: { id: parseInt(params.id) },
@@ -32,7 +32,7 @@ export async function PUT(req, context) {
         name,
         startTime: timeToInt(startTime),
         endTime: timeToInt(endTime),
-        officeId: parseInt(officeId),
+        divisionId: parseInt(divisionId),
       },
     });
 

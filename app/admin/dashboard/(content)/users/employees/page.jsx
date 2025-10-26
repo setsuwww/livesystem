@@ -16,7 +16,7 @@ async function getEmployees(page = 1) {
     },
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
-    include: { shift: true, office: true },
+    include: { shift: true, division: true },
     orderBy: { createdAt: "desc" },
   });
 }
@@ -31,8 +31,8 @@ async function getEmployeeCount() {
 }
 
 async function getFilterData() {
-  const [offices, shifts] = await Promise.all([
-    prisma.office.findMany({
+  const [divisions, shifts] = await Promise.all([
+    prisma.division.findMany({
       where: { status: "ACTIVE" },
       orderBy: { name: "asc" },
     }),
@@ -41,7 +41,7 @@ async function getFilterData() {
       orderBy: { name: "asc" },
     }),
   ]);
-  return { offices, shifts };
+  return { divisions, shifts };
 }
 
 export const revalidate = 30;
@@ -49,7 +49,7 @@ export const revalidate = 30;
 export default async function EmployeesPage({ searchParams }) {
   const page = Number(searchParams?.page) || 1;
 
-  const [[users, total], { offices, shifts }] = await Promise.all([
+  const [[users, total], { divisions, shifts }] = await Promise.all([
     Promise.all([getEmployees(page), getEmployeeCount()]),
     getFilterData(),
   ]);
@@ -85,7 +85,7 @@ export default async function EmployeesPage({ searchParams }) {
         <ContentForm.Body>
           <EmployeesTable
             users={serializedUsers}
-            offices={offices}
+            divisions={divisions}
             shifts={shifts}
           />
           <Pagination

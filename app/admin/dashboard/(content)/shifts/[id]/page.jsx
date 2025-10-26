@@ -1,11 +1,11 @@
 import { prisma } from "@/_lib/prisma";
-import { OfficeShiftsCards } from "../../users/attendances/AttendancesCard";
+import { DivisionShiftsCards } from "../../users/attendances/AttendancesCard";
 
-export default async function OfficePage({ params }) {
-  const officeId = parseInt(params.id);
+export default async function DivisionPage({ params }) {
+  const divisionId = parseInt(params.id);
 
-  const office = await prisma.office.findUnique({
-    where: { id: officeId },
+  const division = await prisma.division.findUnique({
+    where: { id: divisionId },
     include: {
       shifts: {
         include: {
@@ -19,9 +19,9 @@ export default async function OfficePage({ params }) {
     },
   });
 
-  if (!office) return <p>Office not found</p>;
+  if (!division) return <p>division not found</p>;
 
-  const shiftsWithAttendance = office.shifts.map((shift) => {
+  const shiftsWithAttendance = division.shifts.map((shift) => {
     const usersWithStatus = shift.users.map((user) => {
       const today = new Date();
       const attendance = user.attendances.find(
@@ -58,12 +58,12 @@ export default async function OfficePage({ params }) {
     };
   });
 
-  const officeData = {
-    id: office.id,
-    name: office.name,
-    location: office.location,
+  const divisionData = {
+    id: division.id,
+    name: division.name,
+    location: division.location,
     shifts: shiftsWithAttendance,
   };
 
-  return <OfficeShiftsCards office={officeData} />;
+  return <DivisionShiftsCards division={divisionData} />;
 }

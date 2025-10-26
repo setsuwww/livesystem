@@ -1,4 +1,3 @@
-// prisma/seed.js
 import { PrismaClient, Role, ShiftType, LocationType, LocationStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -7,13 +6,11 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🚀 Starting seed...");
 
-  // Bersihkan data lama
   await prisma.user.deleteMany();
   await prisma.shift.deleteMany();
-  await prisma.office.deleteMany();
+  await prisma.division.deleteMany();
 
-  // === 1️⃣ Seed Offices ===
-  const officesData = [
+  const divisionsData = [
     {
       name: "Lintasarta",
       location: "Jakarta",
@@ -49,13 +46,12 @@ async function main() {
     },
   ];
 
-  const offices = [];
-  for (const data of officesData) {
-    const office = await prisma.office.create({ data });
-    offices.push(office);
+  const divisions = [];
+  for (const data of divisionsData) {
+    const division = await prisma.division.create({ data });
+    divisions.push(division);
   }
 
-  // === 2️⃣ Seed Shifts (3 per Office) ===
   const shiftTemplates = [
     { type: ShiftType.MORNING, baseName: "Pagi", startTime: 8 * 60, endTime: 16 * 60 },
     { type: ShiftType.AFTERNOON, baseName: "Sore", startTime: 16 * 60, endTime: 24 * 60 },
@@ -64,15 +60,15 @@ async function main() {
 
   const allShifts = []
 
-  for (const office of offices) {
+  for (const division of divisions) {
     for (const template of shiftTemplates) {
       const shift = await prisma.shift.create({
         data: {
           type: template.type,
-          name: `${template.baseName} - (${office.name})`,
+          name: `${template.baseName} - (${division.name})`,
           startTime: template.startTime,
           endTime: template.endTime,
-          officeId: office.id,
+          divisionId: division.id,
           isActive: true,
         },
       })
@@ -80,7 +76,6 @@ async function main() {
     }
   }
 
-  // === 3️⃣ Seed Users ===
   const usersData = [
     { name: "Mikasa", email: "mikasa@g.com", password: "mikasa123", role: Role.ADMIN },
     { name: "Dirman", email: "dirman@g.com", password: "dirman123", role: Role.EMPLOYEE },
@@ -93,8 +88,7 @@ async function main() {
   for (const [i, u] of usersData.entries()) {
     const hashed = await bcrypt.hash(u.password, 10);
 
-    // Assign random office & shift
-    const assignedOffice = offices[i % offices.length];
+    const assignedDivision = divisions[i % divisions.length];
     const assignedShift = allShifts[i % allShifts.length];
 
     await prisma.user.create({
@@ -103,7 +97,7 @@ async function main() {
         email: u.email,
         password: hashed,
         role: u.role,
-        officeId: assignedOffice.id,
+        divisionId: assignedDivision.id,
         shiftId: assignedShift.id,
       },
     });

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/_lib/prisma";  // pastikan path prisma client bener
+import { prisma } from "@/_lib/prisma";
 
 export async function POST(req) {
   try {
@@ -13,14 +13,13 @@ export async function POST(req) {
       );
     }
 
-    // 1. Buat shift baru
     const newShift = await prisma.shift.create({
       data: {
         type,
         name,
         startTime,
         endTime,
-        officeId: body.officeId
+        divisionId: body.divisionId
       },
     });
 

@@ -136,13 +136,13 @@ export function Sidebar({ user }) {
         />
 
         <SidebarCollapsible
-          title="Offices"
+          title="Division"
           open={employeesOpen}
           onOpenChange={setEmployeesOpen}
           icon={Building2}
           items={[
-            { label: 'Offices', href: '/admin/dashboard/users/offices' },
-            { label: 'Add Offices', href: '/admin/dashboard/users/offices/create' },
+            { label: 'Divisions', href: '/admin/dashboard/users/divisions' },
+            { label: 'Add Divisions', href: '/admin/dashboard/users/divisions/create' },
             { label: 'Employees', href: '/admin/dashboard/users/employees' },
             { label: 'Attendances', href: '/admin/dashboard/users/attendances' },
           ]}

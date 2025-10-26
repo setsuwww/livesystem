@@ -2,11 +2,11 @@ import { prisma } from "@/_lib/prisma";
 import CreateForm from "./CreateForm";
 
 export default async function Page() {
-  const [shifts, offices] = await Promise.all([
+  const [shifts, divisions] = await Promise.all([
     prisma.shift.findMany({
       select: { id: true, type: true, startTime: true, endTime: true },
     }),
-    prisma.office.findMany({
+    prisma.division.findMany({
       select: { id: true, name: true, startTime: true, endTime: true,
         shifts: {
           select: {
@@ -20,5 +20,5 @@ export default async function Page() {
     }),
   ]);
 
-  return <CreateForm shifts={shifts} offices={offices} />;
+  return <CreateForm shifts={shifts} divisions={divisions} />;
 }

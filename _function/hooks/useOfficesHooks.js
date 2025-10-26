@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useRef } from "react"
 import useSWR from "swr"
-import { handleOffices } from "../handlers/handleOffices"
+import { handleDivisions } from "../handlers/handleDivisions"
 
 const fetcher = async (url) => {
   const res = await fetch(url)
@@ -10,8 +10,8 @@ const fetcher = async (url) => {
   return Array.isArray(data) ? data : data.data || []
 }
 
-export function useOfficesHooks(initialData = []) {
-  const { data: offices = [], mutate } = useSWR("/api/office", fetcher)
+export function useDivisionsHooks(initialData = []) {
+  const { data: divisions = [], mutate } = useSWR("/api/division", fetcher)
 
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState("all")
@@ -20,21 +20,19 @@ export function useOfficesHooks(initialData = []) {
 
   const searchRef = useRef(null)
 
-  // Filtering lokal
   const filteredData = useMemo(() => {
-    return offices.filter((office) => {
+    return divisions.filter((division) => {
       const matchesSearch =
-        office.name.toLowerCase().includes(search.toLowerCase()) ||
-        office.location.toLowerCase().includes(search.toLowerCase())
+        division.name.toLowerCase().includes(search.toLowerCase()) ||
+        division.location.toLowerCase().includes(search.toLowerCase())
 
-      const matchesType = typeFilter === "all" || office.type === typeFilter
-      const matchesStatus = statusFilter === "all" || office.status === statusFilter
+      const matchesType = typeFilter === "all" || division.type === typeFilter
+      const matchesStatus = statusFilter === "all" || division.status === statusFilter
 
       return matchesSearch && matchesType && matchesStatus
     })
-  }, [offices, search, typeFilter, statusFilter])
+  }, [divisions, search, typeFilter, statusFilter])
 
-  // Bulk action handlers
   const toggleSelect = useCallback((id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -42,15 +40,15 @@ export function useOfficesHooks(initialData = []) {
   }, [])
 
   const handleDeleteAll = useCallback(() => {
-    handleOffices.onDeleteAll?.(mutate)
+    handleDivisions.onDeleteAll?.(mutate)
   }, [mutate])
 
   const handleDeleteSelected = useCallback(() => {
-    handleOffices.onDeleteSelected?.(selectedIds, mutate)
+    handleDivisions.onDeleteSelected?.(selectedIds, mutate)
   }, [selectedIds, mutate])
 
   const handleExportPDF = useCallback(() => {
-    handleOffices.onExportPDF?.(filteredData)
+    handleDivisions.onExportPDF?.(filteredData)
   }, [filteredData])
 
   return {

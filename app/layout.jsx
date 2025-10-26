@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="relative">
         <ToastProvider>
-            {children}
+          {children}
         </ToastProvider>
       </body>
     </html>

@@ -7,7 +7,7 @@ export const revalidate = 60;
 export default async function EditShiftPage({ params }) {
   const shiftId = parseInt(params.id);
 
-  const [shift, offices] = await Promise.all([
+  const [shift, divisions] = await Promise.all([
     prisma.shift.findUnique({
       where: { id: shiftId },
       select: {
@@ -16,10 +16,10 @@ export default async function EditShiftPage({ params }) {
         type: true,
         startTime: true,
         endTime: true,
-        officeId: true,
+        divisionId: true,
       },
     }),
-    prisma.office.findMany({
+    prisma.division.findMany({
       orderBy: { name: "asc" },
       select: { id: true, name: true },
     }),
@@ -27,5 +27,5 @@ export default async function EditShiftPage({ params }) {
 
   if (!shift) return notFound();
 
-  return <EditForm shift={shift} offices={offices} />;
+  return <EditForm shift={shift} divisions={divisions} />;
 }

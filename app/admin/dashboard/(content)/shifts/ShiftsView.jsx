@@ -18,10 +18,7 @@ export function ShiftsView({ data }) {
   const handleEdit = (id) => router.push(`/admin/dashboard/shifts/${id}/edit`);
 
   const handleDelete = async (id) => {
-    try {
-      await apiFetchData({
-        url: `/shifts/${id}`,
-        method: "delete",
+    try { await apiFetchData({ url: `/shifts/${id}`, method: "delete",
         successMessage: "Shift deleted successfully",
         errorMessage: "Failed to delete shift",
       });
@@ -39,7 +36,7 @@ export function ShiftsView({ data }) {
             <TableHead>Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Time Range</TableHead>
-            <TableHead>Office</TableHead>
+            <TableHead>Division</TableHead>
             <TableHead>Users</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
@@ -48,7 +45,6 @@ export function ShiftsView({ data }) {
         <TableBody>
           {data.map((shift) => (
             <TableRow key={shift.id}>
-              {/* Name */}
               <TableCell className="font-semibold text-slate-700">
                 <div className="flex items-center space-x-2">
                   <div className={`p-2 rounded-lg ${shiftStyles[shift.type]}`}>
@@ -58,14 +54,12 @@ export function ShiftsView({ data }) {
                 </div>
               </TableCell>
 
-              {/* Type */}
               <TableCell className="text-slate-600">
                 <Badge className={shiftStyles[shift.type]}>
                   {capitalize(shift.type)}
                 </Badge>
               </TableCell>
 
-              {/* Time Range */}
               <TableCell>
                 <Badge variant="outline" className="text-slate-600 border-slate-300">
                   {shift.timeRange}
@@ -73,19 +67,14 @@ export function ShiftsView({ data }) {
               </TableCell>
 
               <TableCell className="text-slate-700">
-        {shift.office}
-      </TableCell>
+                {shift.division}
+              </TableCell>
 
-              {/* Users */}
               <TableCell>
-                <Link
-                  href={`/admin/dashboard/shifts/${shift.id}/users`}
-                  className="text-sky-500 hover:underline flex items-center gap-x-1"
-                >
+                <Link href={`/admin/dashboard/shifts/${shift.id}/users`} className="text-sky-500 hover:underline flex items-center gap-x-1">
                   <CircleUserRound strokeWidth={1.5} size={15} /> {shift.usersCount} Users
                 </Link>
               </TableCell>
-              {/* Actions */}
               <TableCell className="space-x-2">
                 <Button size="sm" variant="outline" onClick={() => handleEdit(shift.id)}>
                   Edit

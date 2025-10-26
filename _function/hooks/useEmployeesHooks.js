@@ -7,32 +7,29 @@ export function useEmployeesHooks(users, shifts) {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
-  const [officeFilter, setOfficeFilter] = useState("all");
+  const [divisionFilter, setDivisionFilter] = useState("all");
   const [shiftFilter, setShiftFilter] = useState("all");
 
-  // Load employee data only
   useEffect(() => {
     setData((users || []).filter((u) => u.role === "EMPLOYEE"));
   }, [users]);
 
-  // Filter logic
   const filteredData = useMemo(() => {
     return data.filter((u) => {
       const matchSearch =
         u.name.toLowerCase().includes(search.toLowerCase()) ||
         u.email.toLowerCase().includes(search.toLowerCase());
 
-      const matchOffice =
-        officeFilter === "all" || u.office?.type?.toLowerCase() === officeFilter;
+      const matchDivision =
+        divisionFilter === "all" || u.division?.type?.toLowerCase() === divisionFilter;
 
       const matchShift =
         shiftFilter === "all" || u.shift?.type?.toLowerCase() === shiftFilter;
 
-      return matchSearch && matchOffice && matchShift;
+      return matchSearch && matchDivision && matchShift;
     });
-  }, [data, search, officeFilter, shiftFilter]);
+  }, [data, search, divisionFilter, shiftFilter]);
 
-  // Select / Deselect
   const toggleSelect = useCallback(
     (id) =>
       setSelected((prev) =>
@@ -43,7 +40,6 @@ export function useEmployeesHooks(users, shifts) {
     []
   );
 
-  // Delete selected
   const deleteSelected = useCallback(() => {
     if (!selected.length) return alert("No employees selected.");
     if (!confirm("Are you sure to delete selected employees?")) return;
@@ -52,14 +48,12 @@ export function useEmployeesHooks(users, shifts) {
     setSelected([]);
   }, [selected]);
 
-  // Delete all
   const deleteAll = useCallback(() => {
     if (!confirm("Are you sure to delete all employees?")) return;
     setData([]);
     setSelected([]);
   }, []);
 
-  // Export CSV
   const exportCSV = useCallback(() => {
     const csv = [
       ["ID", "Name", "Email", "Role"],
@@ -76,7 +70,6 @@ export function useEmployeesHooks(users, shifts) {
     a.click();
   }, [filteredData]);
 
-  // On switch (aktif/nonaktif)
   const onSwitch = useCallback(
     async (id, newActiveState) => {
       try {
@@ -93,7 +86,6 @@ export function useEmployeesHooks(users, shifts) {
     []
   );
 
-  // On delete single
   const onDelete = useCallback(async (id) => {
     if (!confirm("Are you sure to delete this user?")) return;
     try {
@@ -111,8 +103,8 @@ export function useEmployeesHooks(users, shifts) {
     setSelected,
     data,
     filteredData,
-    officeFilter,
-    setOfficeFilter,
+    divisionFilter,
+    setDivisionFilter,
     shiftFilter,
     setShiftFilter,
     toggleSelect,

@@ -33,7 +33,7 @@ export async function createUser(formData) {
     const email = formData.get("email")
     const password = formData.get("password")
     const role = formData.get("role") || "USER"
-    const officeId = formData.get("officeId") !== "NONE" ? parseInt(formData.get("officeId")) : null
+    const divisionId = formData.get("divisionId") !== "NONE" ? parseInt(formData.get("divisionId")) : null
     const workMode = formData.get("workMode")
     const shiftId =
       workMode === "SHIFT" && formData.get("shiftId") !== "NONE"
@@ -52,7 +52,7 @@ export async function createUser(formData) {
         name, email,
         password: hashedPassword,
         role,
-        officeId, shiftId,
+        divisionId, shiftId,
       },
     })
 
@@ -65,13 +65,13 @@ export async function createUser(formData) {
 }
 
 export async function updateUser(data) {
-  try { const { id, name, email, password, role, shiftId, officeId } = data;
+  try { const { id, name, email, password, role, shiftId, divisionId } = data;
 
     if (!id) { return { error: "User ID is required." }}
 
     const updateData = {
       name, email, role,
-      officeId: officeId ? parseInt(officeId) : null, shiftId: shiftId ? parseInt(shiftId) : null,
+      divisionId: divisionId ? parseInt(divisionId) : null, shiftId: shiftId ? parseInt(shiftId) : null,
     };
 
     if (password && password.trim() !== "") { const hashedPassword = await bcrypt.hash(password, 12);

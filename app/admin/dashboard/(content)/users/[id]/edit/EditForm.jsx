@@ -14,17 +14,14 @@ import { capitalize } from "@/_function/globalFunction";
 import { roleOptions } from "@/_constants/roleOptions";
 import { updateUser } from "@/_components/server/userAction.js";
 
-export default function EditForm({ user, offices, shifts }) {
+export default function EditForm({ user, divisions, shifts }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const [form, setForm] = useState({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    password: "",
-    role: user.role,
-    officeId: user.officeId ? String(user.officeId) : "",
+    id: user.id, name: user.name, email: user.email, 
+    password: "", role: user.role,
+    divisionId: user.divisionId ? String(user.divisionId) : "",
     shiftId: user.shiftId ? String(user.shiftId) : "",
   });
 
@@ -42,16 +39,13 @@ export default function EditForm({ user, offices, shifts }) {
 
     startTransition(async () => {
       const result = await updateUser(form);
-      if (result?.success) {
-        router.push("/admin/dashboard/users");
-      } else {
-        alert(result?.error || "Failed to update user ❌");
-      }
+        if (result?.success) { router.push("/admin/dashboard/users")} 
+          else { alert(result?.error || "Failed to update user ❌")}
     });
   }
 
-  const selectedOffice = offices.find((o) => String(o.id) === form.officeId);
-  const availableShifts = selectedOffice?.shifts || [];
+  const selectedDivision = divisions.find((o) => String(o.id) === form.divisionId);
+  const availableShifts = selectedDivision?.shifts || [];
 
   return (
     <section>
@@ -82,10 +76,7 @@ export default function EditForm({ user, offices, shifts }) {
 
               <div className="space-y-2 mt-6">
                 <Label>Password</Label>
-                <Input
-                  type="password"
-                  name="password"
-                  value={form.password}
+                <Input type="password" name="password" value={form.password}
                   placeholder="Leave blank to keep current"
                   onChange={handleChange}
                 />
@@ -93,22 +84,19 @@ export default function EditForm({ user, offices, shifts }) {
 
               <div className="space-y-2">
                 <Label>Role</Label>
-                <RadioButton
-                  name="role"
-                  options={roleOptions}
-                  value={form.role}
-                  onChange={(v) => handleCustomChange("role", v)}
+                <RadioButton name="role" options={roleOptions}
+                  value={form.role} onChange={(v) => handleCustomChange("role", v)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>Office Assignment</Label>
-                <Select value={form.officeId} onValueChange={(v) => handleCustomChange("officeId", v)}>
+                <Label>Division Assignment</Label>
+                <Select value={form.divisionId} onValueChange={(v) => handleCustomChange("divisionId", v)}>
                   <SelectTrigger className="w-1/2">
-                    <SelectValue placeholder="Select an Office" />
+                    <SelectValue placeholder="Select an division" />
                   </SelectTrigger>
                   <SelectContent>
-                    {offices.map((o) => (
+                    {divisions.map((o) => (
                       <SelectItem key={o.id} value={String(o.id)}>
                         {capitalize(o.name)}
                       </SelectItem>
@@ -119,9 +107,7 @@ export default function EditForm({ user, offices, shifts }) {
 
               <div className="space-y-2">
                 <Label>Shift Assignment</Label>
-                <Select
-                  value={form.shiftId}
-                  onValueChange={(v) => handleCustomChange("shiftId", v)}
+                <Select value={form.shiftId} onValueChange={(v) => handleCustomChange("shiftId", v)}
                   disabled={availableShifts.length === 0}
                 >
                   <SelectTrigger className="w-1/2">

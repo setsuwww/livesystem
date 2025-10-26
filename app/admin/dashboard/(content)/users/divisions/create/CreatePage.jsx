@@ -16,7 +16,7 @@ import { apiFetchData } from "@/_function/helpers/fetch";
 import { capitalize, timeToMinutes } from "@/_function/globalFunction";
 
 const typeOptions = [
-  { label: "WFO (Work From Office)", value: "WFO" },
+  { label: "WFO (Work From division)", value: "WFO" },
   { label: "WFA (Work From Anywhere)", value: "WFA" },
 ];
 
@@ -25,7 +25,7 @@ const statusOptions = [
   { label: "INACTIVE", value: "INACTIVE" },
 ];
 
-export default function CreateOfficeForm() {
+export default function CreateDivisionForm() {
   const router = useRouter();
   const [form, setForm] = useState({
     name: "",
@@ -64,11 +64,11 @@ export default function CreateOfficeForm() {
 
     try {
       await apiFetchData({
-        url: "/office",
+        url: "/division",
         method: "post",
         data: payload,
-        successMessage: "Office created successfully ✅",
-        errorMessage: "Failed to create office ❌",
+        successMessage: "Division created successfully ✅",
+        errorMessage: "Failed to create division ❌",
         onSuccess: () => router.push("/admin/dashboard/users/locations"),
       });
     } finally {
@@ -79,108 +79,82 @@ export default function CreateOfficeForm() {
   return (
     <section>
       <DashboardHeader
-        title="Create Office"
-        subtitle="Fill in office details to register a new office location"
+        title="Create division"
+        subtitle="Fill in division details to register a new division location"
       />
 
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
             <ContentInformation
-              heading="Office Info"
-              subheading="Office details & location"
+              heading="Division Info"
+              subheading="Division details & location"
               show={true}
               variant="outline"
               buttonText="Back"
-              href="/admin/dashboard/offices"
+              href="/admin/dashboard/divisions"
             />
           </ContentForm.Header>
 
           <ContentForm.Body>
             <div className="space-y-6">
-              {/* Name */}
               <div className="space-y-2">
                 <Label htmlFor="name">
                   Name <span className="text-rose-500">*</span>
                 </Label>
-                <Input
-                  name="name"
-                  placeholder="Head Office"
-                  value={form.name}
-                  onChange={handleChange}
+                <Input name="name" placeholder="Head division"
+                  value={form.name} onChange={handleChange}
                   required
                 />
               </div>
 
-              {/* Location */}
               <div className="space-y-2">
                 <Label htmlFor="location">
                   Location <span className="text-rose-500">*</span>
                 </Label>
-                <Input
-                  name="location"
-                  placeholder="Jakarta"
-                  value={form.location}
-                  onChange={handleChange}
+                <Input name="location" placeholder="Jakarta"
+                  value={form.location} onChange={handleChange}
                   required
                 />
               </div>
 
-              {/* Coordinates */}
-              <ContentInformation
-                heading="Offices Coordinate"
-                subheading="Insert latitude and longitude for activate office location"
-              />
+              <ContentInformation heading="divisions Coordinate" subheading="Insert latitude and longitude for activate division location"/>
 
               <div className="grid grid-cols-2 gap-4 mt-8">
                 <div className="space-y-2">
                   <Label htmlFor="longitude">
                     Longitude<span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    name="longitude"
-                    placeholder="106.8456"
-                    value={form.longitude}
-                    onChange={handleChange}
+                  <Input name="longitude" placeholder="106.8456"
+                    value={form.longitude} onChange={handleChange}
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="latitude">
                     Latitude<span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    name="latitude"
-                    placeholder="-6.2088"
-                    value={form.latitude}
-                    onChange={handleChange}
+                  <Input name="latitude" placeholder="-6.2088"
+                    value={form.latitude} onChange={handleChange}
                   />
                 </div>
               </div>
 
-              {/* Radius */}
               <div className="space-y-2">
                 <Label htmlFor="radius">
                   Radius (meter)<span className="text-rose-500">*</span>
                 </Label>
-                <Input
-                  name="radius"
-                  placeholder="100"
-                  value={form.radius}
-                  onChange={handleChange}
+                <Input name="radius" placeholder="100"
+                  value={form.radius} onChange={handleChange}
                 />
               </div>
 
-              {/* Time picker UX fix */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="startTime">
                     Start Time <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    type="time"
-                    name="startTime"
-                    value={form.startTime}
-                    onChange={handleChange}
+                  <Input type="time" name="startTime"
+                    value={form.startTime} onChange={handleChange}
                     required
                   />
                 </div>
@@ -188,22 +162,17 @@ export default function CreateOfficeForm() {
                   <Label htmlFor="endTime">
                     End Time <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    type="time"
-                    name="endTime"
-                    value={form.endTime}
-                    onChange={handleChange}
+                  <Input type="time" name="endTime"
+                    value={form.endTime} onChange={handleChange}
                     required
                   />
                 </div>
               </div>
 
-              {/* Type + Status */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Type<span className="text-rose-500">*</span></Label>
-                  <Select
-                    value={form.type}
+                  <Select value={form.type}
                     onValueChange={(value) =>
                       handleCustomChange("type", value)
                     }
@@ -226,8 +195,7 @@ export default function CreateOfficeForm() {
 
                 <div className="space-y-2">
                   <Label>Status<span className="text-rose-500">*</span></Label>
-                  <Select
-                    value={form.status}
+                  <Select value={form.status}
                     onValueChange={(value) =>
                       handleCustomChange("status", value)
                     }
@@ -253,7 +221,7 @@ export default function CreateOfficeForm() {
 
           <ContentForm.Footer>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create Office"}
+              {loading ? "Creating..." : "Create division"}
             </Button>
           </ContentForm.Footer>
         </form>

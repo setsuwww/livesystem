@@ -28,7 +28,7 @@ async function getUsers(page = 1) {
       shift: {
         select: { name: true, type: true, startTime: true, endTime: true },
       },
-      office: {
+      division: {
         select: { name: true,
           startTime: true, endTime: true,
           shifts: {
@@ -65,25 +65,25 @@ export default async function Page({ searchParams }) {
         }
       : null;
 
-    const officeShift =
-      !userShift && u.office?.shifts?.length
+    const divisionShift =
+      !userShift && u.division?.shifts?.length
         ? {
-            label: `${u.office.shifts[0].name} (Office)`,
-            start: u.office.shifts[0].startTime,
-            end: u.office.shifts[0].endTime,
+            label: `${u.division.shifts[0].name} - (Division)`,
+            start: u.division.shifts[0].startTime,
+            end: u.division.shifts[0].endTime,
           }
         : null;
 
-    const officeTime =
-      !userShift && !officeShift && u.office?.startTime && u.office?.endTime
+    const divisionTime =
+      !userShift && !divisionShift && u.division?.startTime && u.division?.endTime
         ? {
-            label: u.office.name,
-            start: u.office.startTime,
-            end: u.office.endTime,
+            label: u.division.name,
+            start: u.division.startTime,
+            end: u.division.endTime,
           }
         : null;
 
-    const finalShift = userShift || officeShift || officeTime;
+    const finalShift = userShift || divisionShift || divisionTime;
 
     const shiftLabel = finalShift ? finalShift.label : "—";
     const shiftTime = finalShift
@@ -107,12 +107,8 @@ export default async function Page({ searchParams }) {
       <DashboardHeader title="Users" subtitle="Users data detail" />
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation
-            heading="List users"
-            subheading="Manage all users data in this table"
-            show
-            buttonText="Create Users"
-            href="/admin/dashboard/users/create"
+          <ContentInformation heading="List users" subheading="Manage all users data in this table"
+            show buttonText="Create Users" href="/admin/dashboard/users/create"
           />
         </ContentForm.Header>
 

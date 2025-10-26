@@ -68,8 +68,8 @@ model SystemConfig {
   updatedAt    DateTime @updatedAt
 }
 
-/// Office / Lokasi Kerja
-model Office {
+/// Division / Lokasi Kerja
+model Division {
   id        Int            @id @default(autoincrement())
   name      String
   location  String?
@@ -80,9 +80,9 @@ model Office {
   status    LocationStatus @default(INACTIVE)
   startTime Int?
   endTime   Int?
-  parentId  Int? // Parent Office (untuk hierarki cabang)
-  parent    Office?        @relation("OfficeHierarchy", fields: [parentId], references: [id])
-  branches  Office[]       @relation("OfficeHierarchy")
+  parentId  Int?
+  parent    Division?        @relation("DivisionHierarchy", fields: [parentId], references: [id])
+  branches  Division[]       @relation("DivisionHierarchy")
 
   users     User[]
   shifts    Shift[]
@@ -100,10 +100,10 @@ model User {
   password String
   role     Role   @default(USER)
 
-  officeId Int?
+  divisionId Int?
   shiftId  Int?
 
-  office Office? @relation(fields: [officeId], references: [id], onDelete: SetNull)
+  division Division? @relation(fields: [divisionId], references: [id], onDelete: SetNull)
   shift  Shift?  @relation("ShiftUsers", fields: [shiftId], references: [id])
 
   customShifts       UserShiftAssignment[]
@@ -127,8 +127,8 @@ model Shift {
   endTime   Int
   isActive  Boolean   @default(true)
 
-  officeId Int?
-  office   Office? @relation(fields: [officeId], references: [id])
+  divisionId Int?
+  division   Division? @relation(fields: [divisionId], references: [id])
 
   users              User[]                @relation("ShiftUsers")
   assignments        UserShiftAssignment[]
@@ -155,9 +155,9 @@ model Schedule {
   startTime   String?
   endDate     DateTime?
   endTime     String?
-  officeId    Int?
+  divisionId    Int?
 
-  office  Office? @relation(fields: [officeId], references: [id])
+  division  Division? @relation(fields: [divisionId], references: [id])
   
   users   SchedulesOnUsers[]
 

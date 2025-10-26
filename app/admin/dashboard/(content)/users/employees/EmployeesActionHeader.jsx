@@ -10,9 +10,9 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
   search, setSearch,
   selected, onDeleteSelected,
   onDeleteAll, onExport,
-  officeFilter, setOfficeFilter,
+  divisionFilter, setDivisionFilter,
   shiftFilter, setShiftFilter,
-  offices = [], shifts = [],
+  divisions = [], shifts = [],
 }) {
   return (
     <div className="flex flex-wrap justify-between items-center gap-2">
@@ -22,15 +22,15 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
           className="w-1/3 min-w-[160px]"
         />
 
-        <Select value={officeFilter} onValueChange={(value) => setOfficeFilter(value)}>
+        <Select value={divisionFilter} onValueChange={(value) => setDivisionFilter(value)}>
           <SelectTrigger className="w-44">
-            <SelectValue placeholder="Filter Office" />
+            <SelectValue placeholder="Filter division" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Offices</SelectItem>
-            {offices.map((office) => (
-              <SelectItem key={office.id} value={String(office.id)}>
-                {office.name}
+            <SelectItem value="all">All divisions</SelectItem>
+            {divisions.map((d) => (
+              <SelectItem key={d.id} value={String(d.id)}>
+                {d.name}
               </SelectItem>
             ))}
           </SelectContent>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/_components/ui/Button";
@@ -15,47 +15,40 @@ import { apiFetchData } from "@/_function/helpers/fetch";
 import { timeToInt, intToTime } from "@/_function/services/shiftAttendanceHelpers";
 import { capitalize } from "@/_function/globalFunction";
 
-export default function EditShiftForm({ offices, shift }) {
+export default function EditShiftForm({ divisions, shift }) {
   const router = useRouter();
 
   const [type, setType] = useState(shift.type);
   const [name, setName] = useState(shift.name);
   const [startTime, setStartTime] = useState(intToTime(shift.startTime));
   const [endTime, setEndTime] = useState(intToTime(shift.endTime));
-  const [officeId, setOfficeId] = useState(String(shift.officeId));
+  const [divisionId, setDivisionId] = useState(String(shift.divisionId));
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (officeId === "NONE") {
-      alert("Please select an office for this shift!");
+    if (divisionId === "NONE") {
+      alert("Please select an division for this shift!");
       return;
     }
 
     const payload = {
-      type,
-      name,
+      type, name,
       startTime: timeToInt(startTime),
       endTime: timeToInt(endTime),
-      officeId: parseInt(officeId),
+      divisionId: parseInt(divisionId),
     };
 
     try {
       setLoading(true);
-      await apiFetchData({
-        url: `/shifts/${shift.id}`,
-        method: "put",
-        data: payload,
+      await apiFetchData({ url: `/shifts/${shift.id}`, method: "put", data: payload,
         successMessage: "Shift updated successfully!",
         errorMessage: "Failed to update shift",
-        onSuccess: () => {
-          router.push("/admin/dashboard/shifts");
-        },
+        onSuccess: () => {router.push("/admin/dashboard/shifts")},
       });
-    } finally {
-      setLoading(false);
-    }
+    } 
+    finally {setLoading(false)}
   };
 
   return (
@@ -77,27 +70,25 @@ export default function EditShiftForm({ offices, shift }) {
 
           <ContentForm.Body>
             <div className="flex flex-col space-y-4">
-              {/* Office */}
               <div className="space-y-2">
-                <Label htmlFor="office-select">
-                  Office <span className="text-rose-500">*</span>
+                <Label htmlFor="division-select">
+                  Division <span className="text-rose-500">*</span>
                 </Label>
-                <Select value={officeId} onValueChange={setOfficeId}>
-                  <SelectTrigger id="office-select" className="w-full mt-1">
-                    <SelectValue placeholder="Select an office" />
+                <Select value={divisionId} onValueChange={setDivisionId}>
+                  <SelectTrigger id="division-select" className="w-full mt-1">
+                    <SelectValue placeholder="Select an division" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="NONE">-</SelectItem>
-                    {offices.map((office) => (
-                      <SelectItem key={office.id} value={String(office.id)}>
-                        {capitalize(office.name)}
+                    {divisions.map((division) => (
+                      <SelectItem key={division.id} value={String(division.id)}>
+                        {capitalize(division.name)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* Shift Type and Name */}
               <div className="flex space-x-4">
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="shift-type">Shift Type</Label>
@@ -117,11 +108,8 @@ export default function EditShiftForm({ offices, shift }) {
                   <Label htmlFor="shift-name">
                     Shift Name <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    id="shift-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    type="text"
+                  <Input id="shift-name" value={name}
+                    onChange={(e) => setName(e.target.value)} type="text"
                     placeholder="Example: Morning Shift"
                     className="mt-1"
                     required
@@ -129,17 +117,13 @@ export default function EditShiftForm({ offices, shift }) {
                 </div>
               </div>
 
-              {/* Start & End Time */}
               <div className="flex space-x-4">
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="start-time">
                     Start Time <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    id="start-time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    type="time"
+                  <Input id="start-time" value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)} type="time"
                     className="mt-1"
                     required
                   />
@@ -149,11 +133,8 @@ export default function EditShiftForm({ offices, shift }) {
                   <Label htmlFor="end-time">
                     End Time <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    id="end-time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    type="time"
+                  <Input id="end-time" value={endTime} 
+                    onChange={(e) => setEndTime(e.target.value)} type="time"
                     className="mt-1"
                     required
                   />

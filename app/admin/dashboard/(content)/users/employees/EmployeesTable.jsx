@@ -7,12 +7,12 @@ import { EmployeesActionHeader } from "./EmployeesActionHeader";
 import { EmployeesRow } from "./EmployeesRow";
 import { useEmployeesHooks } from "@/_function/hooks/useEmployeesHooks";
 
-export default function EmployeesTable({ users, offices, shifts }) {
+export default function EmployeesTable({ users, divisions, shifts }) {
   const {
     search, setSearch,
     selected, setSelected,
     data, filteredData,
-    officeFilter, setOfficeFilter,
+    divisionFilter, setDivisionFilter,
     shiftFilter, setShiftFilter,
     toggleSelect, deleteSelected,
     deleteAll, exportCSV,
@@ -27,9 +27,9 @@ export default function EmployeesTable({ users, offices, shifts }) {
         search={search} setSearch={setSearch}
         selected={selected} onDeleteSelected={deleteSelected}
         onDeleteAll={deleteAll} onExport={exportCSV}
-        officeFilter={officeFilter} setOfficeFilter={setOfficeFilter}
+        divisionFilter={divisionFilter} setDivisionFilter={setDivisionFilter}
         shiftFilter={shiftFilter} setShiftFilter={setShiftFilter}
-        offices={offices}
+        divisions={divisions}
         shifts={shifts}
       />
 

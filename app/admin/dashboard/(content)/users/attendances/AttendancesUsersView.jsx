@@ -37,7 +37,7 @@ export default function AttendancesUsersView({ selectedStatus, shifts, allUsers,
             return (
               <div key={shift.id} className="border rounded-lg overflow-hidden bg-white">
                 <div className="px-4 py-2 font-medium bg-slate-50 border-b text-slate-800">
-                  {capitalize(String(shift.type || shift.name || "-"))} - {shift.officeName || "-"}
+                  {capitalize(String(shift.type || shift.name || "-"))} - {shift.divisionName || "-"}
                 </div>
                 {usersInShift.map((u) => (
                   <div key={u.id} className="px-4 py-3 flex justify-between transition">

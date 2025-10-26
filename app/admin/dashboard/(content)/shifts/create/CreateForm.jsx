@@ -15,38 +15,33 @@ import { apiFetchData } from "@/_function/helpers/fetch";
 import { timeToInt } from "@/_function/services/shiftAttendanceHelpers";
 import { capitalize } from "@/_function/globalFunction";
 
-export default function CreateShiftForm({ offices }) {
+export default function CreateShiftForm({ divisions }) {
   const router = useRouter();
 
   const [type, setType] = useState("MORNING");
   const [name, setName] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [officeId, setOfficeId] = useState("NONE");
+  const [divisionId, setDivisionId] = useState("NONE");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (officeId === "NONE") {
-      alert("Please select an office for this shift!");
+    if (divisionId === "NONE") {
+      alert("Please select an division for this shift!");
       return;
     }
 
     const payload = {
-      type,
-      name,
+      type, name,
       startTime: timeToInt(startTime),
       endTime: timeToInt(endTime),
-      officeId: parseInt(officeId),
+      divisionId: parseInt(divisionId),
     };
 
-    try {
-      setLoading(true);
-      await apiFetchData({
-        url: "/shifts",
-        method: "post",
-        data: payload,
+    try { setLoading(true);
+      await apiFetchData({ url: "/shifts", method: "post", data: payload,
         successMessage: "Shift created successfully!",
         errorMessage: "Failed to create shift",
         onSuccess: () => {
@@ -54,55 +49,47 @@ export default function CreateShiftForm({ offices }) {
           setName("");
           setStartTime("");
           setEndTime("");
-          setOfficeId("NONE");
+          setDivisionId("NONE");
           router.push("/admin/dashboard/shifts");
         },
       });
-    } finally {
-      setLoading(false);
-    }
+    } 
+    finally {setLoading(false)}
   };
 
   return (
     <section>
-      <DashboardHeader title="Create Shift" subtitle="Assign a shift to an office" />
+      <DashboardHeader title="Create Shift" subtitle="Assign a shift to an division" />
 
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-4">
           <ContentForm.Header>
-            <ContentInformation
-              heading="Shift Form"
-              subheading="Create a new shift and assign it to an office"
-              show={true}
-              buttonText="Back"
-              variant="outline"
-              href="/admin/dashboard/shifts"
+            <ContentInformation heading="Shift Form" subheading="Create a new shift and assign it to an division"
+              show={true} buttonText="Back" variant="outline" href="/admin/dashboard/shifts"
             />
           </ContentForm.Header>
 
           <ContentForm.Body>
             <div className="flex flex-col space-y-4">
-              {/* Office */}
               <div className="space-y-2">
-                <Label htmlFor="office-select">
-                  Office <span className="text-rose-500">*</span>
+                <Label htmlFor="division-select">
+                  Division <span className="text-rose-500">*</span>
                 </Label>
-                <Select value={officeId} onValueChange={setOfficeId}>
-                  <SelectTrigger id="office-select" className="w-full mt-1">
-                    <SelectValue placeholder="Select an office" />
+                <Select value={divisionId} onValueChange={setDivisionId}>
+                  <SelectTrigger id="division-select" className="w-full mt-1">
+                    <SelectValue placeholder="Select an division" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="NONE">-</SelectItem>
-                    {offices.map((office) => (
-                      <SelectItem key={office.id} value={String(office.id)}>
-                        {capitalize(office.name)}
+                    {divisions.map((division) => (
+                      <SelectItem key={division.id} value={String(division.id)}>
+                        {capitalize(division.name)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              {/* Shift Type and Name */}
               <div className="flex space-x-4">
               <div className="flex-1 space-y-2">
                 <Label htmlFor="shift-type">Shift Type</Label>
@@ -122,11 +109,7 @@ export default function CreateShiftForm({ offices }) {
                 <Label htmlFor="shift-name">
                   Shift Name <span className="text-rose-500">*</span>
                 </Label>
-                <Input
-                  id="shift-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  type="text"
+                <Input id="shift-name" value={name} onChange={(e) => setName(e.target.value)} type="text"
                   placeholder="Example: Morning Shift"
                   className="mt-1"
                   required
@@ -134,17 +117,12 @@ export default function CreateShiftForm({ offices }) {
               </div>
               </div>
 
-              {/* Start & End Time */}
               <div className="flex space-x-4">
                 <div className="flex-1 space-y-2">
                   <Label htmlFor="start-time">
                     Start Time <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    id="start-time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    type="time"
+                  <Input id="start-time" value={startTime} onChange={(e) => setStartTime(e.target.value)} type="time"
                     className="mt-1"
                     required
                   />
@@ -154,11 +132,7 @@ export default function CreateShiftForm({ offices }) {
                   <Label htmlFor="end-time">
                     End Time <span className="text-rose-500">*</span>
                   </Label>
-                  <Input
-                    id="end-time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    type="time"
+                  <Input id="end-time" value={endTime} onChange={(e) => setEndTime(e.target.value)} type="time"
                     className="mt-1"
                     required
                   />

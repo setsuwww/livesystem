@@ -50,7 +50,7 @@ export async function getCurrentUser() {
       where: { id: Number(decoded.id) },
       include: {
         shift: true,
-        office: true,
+        division: true,
       }
     })
 

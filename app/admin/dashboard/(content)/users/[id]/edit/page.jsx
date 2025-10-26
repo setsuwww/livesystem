@@ -5,7 +5,7 @@ export default async function Page({ params }) {
   const userId = parseInt(params.id);
 
   // ambil data paralel
-  const [user, shifts, offices] = await Promise.all([
+  const [user, shifts, divisions] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -13,7 +13,7 @@ export default async function Page({ params }) {
         name: true,
         email: true,
         role: true,
-        officeId: true,
+        divisionId: true,
         shiftId: true,
       },
     }),
@@ -25,7 +25,7 @@ export default async function Page({ params }) {
         endTime: true,
       },
     }),
-    prisma.office.findMany({
+    prisma.division.findMany({
       select: {
         id: true,
         name: true,
@@ -55,7 +55,7 @@ export default async function Page({ params }) {
   // FIX: serialize semua data biar aman dikirim ke client component
   const safeUser = JSON.parse(JSON.stringify(user));
   const safeShifts = JSON.parse(JSON.stringify(shifts));
-  const safeOffices = JSON.parse(JSON.stringify(offices));
+  const safeDivisions = JSON.parse(JSON.stringify(divisions));
 
-  return <EditForm user={safeUser} shifts={safeShifts} offices={safeOffices} />;
+  return <EditForm user={safeUser} shifts={safeShifts} divisions={safeDivisions} />;
 }
