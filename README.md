@@ -17,36 +17,30 @@ Sistem ini dibuat dengan **Next.js (App Router)** di sisi frontend/backend, meng
 | **Frontend & Backend** | [Next.js 14+](https://nextjs.org/) (Fullstack React Framework) |
 | **UI Components** | [Shadcn/UI](https://ui.shadcn.com/) + [Tailwind CSS](https://tailwindcss.com/) |
 | **Database** | [MySQL](https://www.mysql.com/) with [Prisma ORM](https://www.prisma.io/) |
-| **Authentication** | JSON Web Token (JWT) |
 | **Icons** | [Lucide Icons](https://lucide.dev/) |
+
 ---
 
 ## Features
 
+✅ **Helpers Feature**  
+Search, Filter, Sort, Selecting, Select All, Delete Selected, Delete All, Export, Pagination.
+Create, Read, Update, Delete, Views detail.
+
 ✅ **Role-based Access Control**  
-Admin
-Employee
-User  
-
-✅ **Shift Scheduling System**  
-Auto Scheduling System
-
-✅ **Attendance Tracking**  
-Views Attedance in detail in 1 page, or by-user 
-
-✅ **Employee Dashboard**  
-Personal Dashboard for daily activity
-Personal fast action for attedance 
+Admin, Employee, User
 
 ---
 
 ### 1. Clone Repository
+
 ```bash
 git clone https://github.com/yourusername/shift-management-system.git
 cd shift-management-system
 ```
 
 ## 2. Installation
+
 ```bash
 npm install
 # or
@@ -57,11 +51,17 @@ yarn install
 bun install
 ```
 
+---
+
 ### 3. Setup Environtment
+
 DATABASE_URL="mysql://username:password@localhost:3306/your_db_name"
 JWT_SECRET="your-secret-key"
 
+---
+
 ## 4. Run Application
+
 ```bash
 npm run dev
 # or
@@ -71,3 +71,7 @@ yarn run dev
 # or 
 bun run dev
 ```
+
+---
+
+# Thankyou
