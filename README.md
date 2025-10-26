@@ -35,8 +35,8 @@ Admin, Employee, User
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/shift-management-system.git
-cd shift-management-system
+git clone https://github.com/setsuwww/livesystem.git
+cd livesystem
 ```
 
 ## 2. Installation
