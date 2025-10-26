@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/_lib/prisma";
-import bcrypt from "bcryptjs";
 
 export async function GET(req, { params }) {
   try { const id = parseInt(params.id);

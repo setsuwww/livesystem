@@ -15,10 +15,8 @@ export async function POST(req) {
 
     const newShift = await prisma.shift.create({
       data: {
-        type,
-        name,
-        startTime,
-        endTime,
+        type, name,
+        startTime, endTime,
         divisionId: body.divisionId
       },
     });

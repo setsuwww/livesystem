@@ -28,7 +28,6 @@ export async function GET(req, { params }) {
   }
 }
 
-// POST tuker shift
 export async function POST(req, { params }) {
   try {
     const userAId = parseInt(params.id)

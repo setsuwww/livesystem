@@ -23,7 +23,7 @@ async function main() {
       endTime: 17 * 60,
     },
     {
-      name: "Warung Mursidi",
+      name: "Rumah Mursidi",
       location: "Kp. Siluman, Mangunjaya",
       type: LocationType.WFA,
       status: LocationStatus.INACTIVE,
@@ -34,8 +34,8 @@ async function main() {
       endTime: 17 * 60,
     },
     {
-      name: "Rumah",
-      location: "Rumah",
+      name: "Rumah Dirman",
+      location: "Kp. Siluman, Mangunjaya",
       type: LocationType.WFA,
       status: LocationStatus.INACTIVE,
       longitude: 112.7508,

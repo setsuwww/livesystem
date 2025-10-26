@@ -73,8 +73,6 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -120,75 +118,6 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  .fc {
-    font-family: inherit;
-  }
-
-  .fc-header-toolbar {
-    margin-bottom: 1.5rem !important;
-  }
-
-  .fc-toolbar-title {
-    font-size: 1.5rem !important;
-    font-weight: 600 !important;
-    color: #18181b !important;
-  }
-
-  .fc-button {
-    background: white !important;
-    border: 1px solid #e4e4e7 !important;
-    color: #52525b !important;
-    font-weight: 500 !important;
-    border-radius: 0.5rem !important;
-    padding: 0.5rem 1rem !important;
-    transition: all 0.2s !important;
-  }
-
-  .fc-button:hover {
-    background: #f4f4f5 !important;
-    border-color: #d4d4d8 !important;
-  }
-
-  .fc-button:focus {
-    box-shadow: 0 0 0 2px #a1a1aa !important;
-  }
-
-  .fc-button-active {
-    background: #18181b !important;
-    border-color: #18181b !important;
-    color: white !important;
-  }
-
-  .fc-daygrid-day {
-    border: 1px solid #3636c7 !important;
-  }
-
-  .fc-daygrid-day:hover {
-    background: #fafafa !important;
-  }
-
-  .fc-col-header-cell {
-    background: #fafafa !important;
-    border: 1px solid #f4f4f5 !important;
-    font-weight: 600 !important;
-    color: #52525b !important;
-    text-transform: uppercase !important;
-    font-size: 0.75rem !important;
-    letter-spacing: 0.05em !important;
-    padding: 1rem 0.5rem !important;
-  }
-
-  .fc-scrollgrid {
-    border: 1px solid #e4e4e7 !important;
-    border-radius: 0.75rem !important;
-    overflow: hidden !important;
-  }
-
-  .fc-theme-standard td,
-  .fc-theme-standard th {
-    border-color: #f4f4f5 !important;
-  }
 }
 
 @layer components {
@@ -211,6 +140,7 @@
   * {
     font-family: 'Lexend';
   }
+
   button, a {
     @apply cursor-pointer;
   }

@@ -20,7 +20,7 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
       <TabsContent value="shift" className="mt-6">
         {shiftRequests.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-muted-foreground">No pending shift change requests</p>
+            <p className="text-slate-400">No pending shift change requests</p>
           </div>
         ) : (
           <div>
@@ -48,7 +48,7 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
       <TabsContent value="permission" className="mt-6">
         {permissionRequests.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-muted-foreground">No pending permission requests</p>
+            <p className="text-slate-400">No pending permission requests</p>
           </div>
         ) : (
           <div>

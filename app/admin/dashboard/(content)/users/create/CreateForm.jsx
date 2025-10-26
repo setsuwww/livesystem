@@ -147,7 +147,7 @@ export default function CreateForm({ divisions, shifts }) {
               </div>
 
               {form.workMode === "WORK_HOURS" && defaultdivisionHour && (
-                <div className="p-3 rounded-md bg-muted/30 border text-sm">
+                <div className="p-3 rounded-md bg-white/30 border text-sm">
                   <p>
                     <strong>Division Hours : </strong> {formatIntToTime(defaultdivisionHour.startTime)} - {formatIntToTime(defaultdivisionHour.endTime)}
                   </p>

@@ -9,32 +9,23 @@ export async function POST(req) {
 
     const { targetUserId, startDate, endDate, reason } = await req.json()
 
-    // pastikan target user valid
     const targetUser = await prisma.user.findUnique({ where: { id: Number(targetUserId) } })
-    if (!targetUser) {
-      return NextResponse.json({ message: "Target user not found" }, { status: 400 })
-    }
+    if (!targetUser) { return NextResponse.json({ message: "Target user not found" }, { status: 400 })}
 
     const oldShiftId = user.shiftId
     const targetShiftId = targetUser.shiftId
 
-    // buat request
     const changeRequest = await prisma.shiftChangeRequest.create({
       data: {
-        userId: user.id,           // user yang minta tukar shift
-        requestedById: user.id,    // sama karena dia sendiri yang ajukan
-        targetUserId: targetUser.id,
-        oldShiftId,                // shift sekarang si user
-        targetShiftId,             // shift milik target user
+        userId: user.id,           
+        requestedById: user.id, targetUserId: targetUser.id,
+        oldShiftId, targetShiftId,
         reason,
-        startDate: new Date(startDate),
-        endDate: endDate ? new Date(endDate) : null,
+        startDate: new Date(startDate), endDate: endDate ? new Date(endDate) : null,
       },
       include: {
-        user: true,
-        targetUser: true,
-        oldShift: true,
-        targetShift: true,
+        user: true, targetUser: true,
+        oldShift: true, targetShift: true,
       },
     })
 

@@ -3,8 +3,7 @@ import { prisma } from "@/_lib/prisma";
 import { getCurrentUser } from "@/_lib/auth";
 
 export async function POST(req) {
-  try {
-    const body = await req.json();
+  try { const body = await req.json();
     const { title, description, frequency, startDate, startTime, endDate, endTime, userIds } = body;
 
     if (!title || !userIds?.length || !startDate || !endDate) {
@@ -25,13 +24,9 @@ export async function POST(req) {
 
     const schedule = await prisma.schedule.create({
       data: {
-        title,
-        description,
-        frequency,
-        startDate: new Date(startDate),
-        startTime,
-        endDate: new Date(endDate),
-        endTime,
+        title, description, frequency,
+        startDate: new Date(startDate), startTime,
+        endDate: new Date(endDate), endTime,
         users: {
           create: validUsers.map((u) => ({
             user: { connect: { id: u.id } },
@@ -58,11 +53,11 @@ export async function DELETE(req) {
 
     if (ids && ids.length > 0) {
       await prisma.schedule.deleteMany({
-        where: { id: { in: ids.map(Number) } }, // ✅ pastikan id di-convert ke number juga
+        where: { id: { in: ids.map(Number) } },
       });
       return NextResponse.json({ message: "Selected schedules deleted" });
-    } else {
-      await prisma.schedule.deleteMany();
+    } 
+    else { await prisma.schedule.deleteMany();
       return NextResponse.json({ message: "All schedules deleted" });
     }
   } catch (err) {

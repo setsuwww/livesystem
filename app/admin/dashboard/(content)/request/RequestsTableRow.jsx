@@ -135,7 +135,7 @@ export default function RequestsTableRow({
         {requestType === "shift" && <TableCell>{renderUserInfo(user)}</TableCell>}
         <TableCell className="max-w-xs">{renderShiftInfo}</TableCell>
         <TableCell className="max-w-2xs">
-          <span className="line-clamp-2 text-sm text-muted-foreground">
+          <span className="line-clamp-2 text-sm text-slate-400">
             {reason || "-"}
           </span>
         </TableCell>
@@ -144,7 +144,7 @@ export default function RequestsTableRow({
             onReject={() => setShowRejectDialog(true)} onStatusChange={(newStatus) => handleStatusChange(newStatus)}
           />
         </TableCell>
-        <TableCell className="text-muted-foreground whitespace-nowrap text-sm">
+        <TableCell className="text-slate-400 whitespace-nowrap text-sm">
           {date}
         </TableCell>
       </TableRow>

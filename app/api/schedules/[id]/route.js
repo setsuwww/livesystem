@@ -2,10 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/_lib/prisma";
 import { getCurrentUser } from "@/_lib/auth";
 
-// Update schedule
-export async function PUT(req, {
-  params
-}) {
+export async function PUT(req, { params }) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -17,7 +14,7 @@ export async function PUT(req, {
       title: String(body.title),
       description: String(body.description),
       date: new Date(body.date),
-      shiftId: body.shiftId ? Number(body.shiftId) : null, // 👈 tambahkan ini
+      shiftId: body.shiftId ? Number(body.shiftId) : null,
     },
   });
 
@@ -31,8 +28,6 @@ export async function PUT(req, {
   return NextResponse.json({ message: "Updated" });
 }
 
-
-// Delete schedule
 export async function DELETE(req, {
   params
 }) {

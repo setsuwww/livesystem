@@ -28,7 +28,7 @@ export default function RequestStatusChangerToggle({ requestId, status, disabled
           <span className="capitalize">{current.toLowerCase().replace("_", " ")}</span>
           {isPending 
             ? (<Loader2 className="w-3.5 h-3.5 animate-spin" />) 
-            : (<ChevronDown className="w-4 h-4 text-muted-foreground" />)
+            : (<ChevronDown className="w-4 h-4 text-slate-400" />)
           }
         </Button>
       </DropdownMenuTrigger>

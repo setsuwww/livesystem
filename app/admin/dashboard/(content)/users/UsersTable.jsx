@@ -43,7 +43,7 @@ export default function UsersTable({ data }) { const {
         <TableBody>
           {filteredData.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="text-center text-muted-foreground">
+              <TableCell colSpan={7} className="text-center text-slate-400">
                 No data found
               </TableCell>
             </TableRow>
