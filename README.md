@@ -14,10 +14,10 @@ Sistem ini dibuat dengan **Next.js (App Router)** di sisi frontend/backend, meng
 
 | Layer | Technology |
 |:------|:------------|
-| **Frontend & Backend** | [Next.js 14+](https://nextjs.org/) (Fullstack React Framework) |
+| **Frontend & Backend** | [Next.js 14+](https://nextjs.org/) |
 | **UI Components** | [Shadcn/UI](https://ui.shadcn.com/) + [Tailwind CSS](https://tailwindcss.com/) |
-| **Database** | [MySQL](https://www.mysql.com/) with [Prisma ORM](https://www.prisma.io/) |
-| **Icons** | [Lucide Icons](https://lucide.dev/) |
+| **Database** | [MySQL](https://www.mysql.com/) [Prisma ORM](https://www.prisma.io/) |
+| **Icons** | [Lucide](https://lucide.dev/) |
 
 ---
 
