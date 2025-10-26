@@ -96,11 +96,6 @@ export default function CheckinForm() {
         />
       </div>
 
-      <Button size="sm" variant="outline">
-        <Clock />
-        <span>Track Attendance</span>
-      </Button>
-
       <Card className="border border-slate-200 shadow-sm">
         <CardHeader>
           <CardTitle>
@@ -113,7 +108,7 @@ export default function CheckinForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
             <Button onClick={handleCheckIn} disabled={isPending}
               className="w-full bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
               <LogIn className="w-4 h-4" />
@@ -126,9 +121,9 @@ export default function CheckinForm() {
               Check Out
             </Button>
 
-            <Button onClick={() => setShowPermission(true)} variant="outline" className="w-full flex items-center gap-2 text-yellow-600 hover:bg-yellow-500/5 hover:text-yellow-700 hover:border-yellow-500/20">
+            <Button onClick={() => setShowPermission((close) => !close)} variant="outline" className="w-full flex items-center gap-2 text-yellow-600 hover:bg-yellow-500/5 hover:text-yellow-700 hover:border-yellow-500/20">
               <Plane className="w-4 h-4" />
-              Permission
+              {showPermission ? "Cancel Permission" : "Permission"}
             </Button>
 
             <Button asChild variant="outline" className="w-full flex items-center gap-2 text-slate-600">
@@ -140,7 +135,7 @@ export default function CheckinForm() {
           </div>
 
           {showPermission && (
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-3 mb-2">
               <Label>Reason <span className="text-red-500">*</span></Label>
               <input type="text" placeholder="Enter your reason..." value={reason} onChange={(e) => setReason(e.target.value)}
                 className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"

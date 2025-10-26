@@ -5,11 +5,12 @@ import { Button } from "@/_components/ui/Button"
 import { Label } from "@/_components/ui/Label"
 import { Textarea } from "@/_components/ui/Textarea"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select"
-import { CalendarDays, Loader2 } from "lucide-react"
+import { CalendarDays, CircleUserRound, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { apiFetchData } from "@/_function/helpers/fetch"
 import ContentForm from '@/_components/content/ContentForm';
 import { ContentInformation } from '@/_components/content/ContentInformation';
+import { shiftStyles } from "@/_constants/shiftConstants"
 
 function toDateOnlyIso(s) {
   if (!s) return null
@@ -79,23 +80,56 @@ export default function ChangeShiftForm({ employees = [] }) {
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl border border-slate-200">
           <div className="space-y-2">
             <Label>Select Employee</Label>
-            <Select value={String(selectedUser)} onValueChange={(v) => setSelectedUser(String(v))}
+            <Select
+              value={String(selectedUser)}
+              onValueChange={(v) => setSelectedUser(String(v))}
               disabled={loading}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Choose an employee" />
+                <SelectValue>
+                  {selectedUser ? (
+                    (() => {
+                      const emp = employees.find(
+                        (e) => String(e.id) === String(selectedUser)
+                      )
+                      if (!emp) return "Choose an employee"
+                      return (
+                        <div className="flex items-center text-left space-x-2">
+                          <span className="text-xs font-medium text-white bg-slate-600 px-2 py-0.5 rounded-sm">
+                            {emp.name}
+                          </span> 
+                          <span className={`${shiftStyles[emp.shift.type]} text-xs px-2 rounded-sm border`}>
+                            {emp.email}
+                          </span>
+                        </div>
+                      )
+                    })()
+                  ) : (
+                    "Choose an employee"
+                  )}
+                </SelectValue>
               </SelectTrigger>
+
               <SelectContent>
                 {employees.map((emp) => (
                   <SelectItem key={emp.id} value={String(emp.id)}>
-                    {emp.name} — {emp.shift?.name || "No Shift"}
+                    <div className="flex items-center space-x-2">
+                      <div className="bg-slate-200 text-slate-600 p-2 rounded-full">
+                        <CircleUserRound strokeWidth={1} />
+                      </div>
+                      <div className="flex flex-col p-1">
+                        <span className="text-xs text-slate-600">
+                          {emp.name} - {emp.shift?.name || "No Shift"}
+                        </span>
+                        <span className="text-xs text-slate-400">{emp.email}</span>
+                      </div>
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
-          {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Start Date</Label>
@@ -120,7 +154,6 @@ export default function ChangeShiftForm({ employees = [] }) {
             </div>
           </div>
 
-          {/* Reason */}
           <div className="space-y-2">
             <Label>Reason for Change</Label>
             <Textarea className="bg-white"
@@ -140,3 +173,10 @@ export default function ChangeShiftForm({ employees = [] }) {
     </ContentForm>
   )
 }
+
+/**
+Nah kalau disini buat periode mulai dan berakhirnya itu berfungsi,
+jadi kalau mulainya tanggal sekian + udah di acc admin maka shift dari user yang request menjadi shift user yang ditargetkan
+tapi kalau mulainya tanggal sekian belum di acc, status nya tetap stay
+periode juga berfungsi, terutama periode akhir, kalo sudah deadline maka user akan kembali ke shift awal dimana user pertama kali dijadwalkan shift
+*/

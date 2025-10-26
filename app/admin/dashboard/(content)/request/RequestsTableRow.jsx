@@ -10,7 +10,7 @@ import { toast } from "sonner"
 import { shiftStyles } from "@/_constants/shiftConstants"
 import RequestStatusChangerToggle from "./RequestStatusChangerToggle"
 import RequestRejectedAlert from "./RequestRejectedAlert"
-import { updateRequestStatus, updatePermissionStatus } from "@/_components/server/shiftAction"
+import { updateShiftChangeRequestStatus, updatePermissionStatus } from "@/_components/server/shiftAction"
 
 export default function RequestsTableRow({
   id, type, requestedBy, user, 
@@ -39,7 +39,7 @@ export default function RequestsTableRow({
       setIsLoading(true)
       try { let res
         if (requestType === "shift") {
-          res = await updateRequestStatus(Number(actualId), newStatus, reason)
+          res = await updateShiftChangeRequestStatus(Number(actualId), newStatus, reason)
         } else if (requestType === "permission") {
           res = await updatePermissionStatus(Number(actualId), newStatus, reason)
         }

@@ -36,7 +36,6 @@ export default function HistoryTable({ data, initialOrder }) {
     setOrder(newOrder)
     const params = new URLSearchParams(searchParams)
     params.set("order", newOrder)
-    router.push(`?${params.toString()}`)
   }
 
   return (
@@ -79,7 +78,7 @@ export default function HistoryTable({ data, initialOrder }) {
                 <TableRow key={att.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="bg-slate-100 p-2 rounded-full">
+                      <div className="bg-slate-200 p-2 rounded-full">
                         <CalendarDays
                           className="h-5 w-5 text-slate-600"
                           strokeWidth={1.5}

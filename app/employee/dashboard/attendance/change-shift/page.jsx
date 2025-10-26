@@ -2,7 +2,6 @@ import { prisma } from "@/_lib/prisma"
 import ChangeShiftForm from "./ChangeShiftForm"
 import ChangeShiftTable from "./ChangeShiftTable"
 import { getCurrentUser } from "@/_lib/auth"
-import { ContentInformation } from '@/_components/content/ContentInformation';
 
 export const revalidate = 30
 
@@ -12,9 +11,13 @@ export default async function Page() {
   if (!user) {
     return <p className="text-center text-rose-500">Unauthorized</p>
   }
+  const id = user.id;
 
   const employees = await prisma.user.findMany({
-    where: { role: "EMPLOYEE" },
+    where: { 
+      role: "EMPLOYEE", 
+      NOT: { id: parseInt(id) }, 
+    },
     include: { shift: true },
     orderBy: { name: "asc" },
   })

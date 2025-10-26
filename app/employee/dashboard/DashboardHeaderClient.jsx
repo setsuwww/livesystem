@@ -30,12 +30,9 @@ export default function DashboardHeaderClient({ user }) {
           <span>{today}</span>
         </div>
 
-        <button
-          onClick={handleLogout}
-          className="text-sm flex items-center font-semibold gap-2 px-4 py-1 rounded-lg text-red-500 border border-slate-200 transition-colors"
-        >
+        <button onClick={handleLogout} className="text-sm flex items-center font-semibold space-x-1 px-3 py-1.5 rounded-lg text-red-500 border border-slate-200 transition-colors">
           <LogOut size={14} />
-          <span className="hidden sm:inline text-slate-600">Logout</span>
+          <span className="text-slate-600">Logout</span>
         </button>
       </div>
     </header>

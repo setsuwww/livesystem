@@ -1,38 +1,31 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   Clock,
-  CalendarDays,
   QrCode,
   User,
-  LogOut,
-  Inbox,
   RefreshCcw,
 } from "lucide-react"
 import SubHeading from "./content/SubHeading"
 import { cn } from "@/_lib/utils"
 
 const linkBase =
-  "flex items-center gap-2 text-md px-3 py-2 rounded-lg transition-colors"
+  "flex items-center gap-2 px-3 py-2 rounded-lg transition-colors"
 
 function SidebarLink({ href, icon: Icon, children }) {
   const pathname = usePathname()
   const isActive = pathname === href
 
   return (
-    <Link
-      href={href}
-      className={cn(
-        linkBase,
-        isActive
-          ? "bg-sky-100 text-sky-700"
-          : "text-slate-600 hover:bg-sky-100 hover:text-sky-700"
+    <Link href={href} className={cn(
+      linkBase, isActive
+        ? "bg-slate-100 text-slate-700 font-semibold ring-1 ring-slate-200 border-0 border-b-2 border-slate-300"
+        : "text-slate-500 hover:text-slate-800"
       )}
     >
-      <Icon size={18} />
+      <Icon size={18} className="text-yellow-500" />
       {children}
     </Link>
   )
@@ -40,7 +33,7 @@ function SidebarLink({ href, icon: Icon, children }) {
 
 export default function EmployeeSidebar() {
   return (
-    <aside className="w-64 h-screen bg-white font-semibold flex flex-col border-r border-slate-200">
+    <aside className="w-64 h-screen bg-white text-sm flex flex-col border-r border-slate-200">
       <div className="text-2xl font-bold px-7 text-sky-800 py-6 border-b border-slate-200">
         Live<span className="text-sky-600">system.</span>
       </div>

@@ -30,7 +30,7 @@ export async function updateShiftChangeStatus(id, action, actorRole) {
   })
 }
 
-export async function updateRequestStatus(requestId, newStatus, reason = null) {
+export async function updateShiftChangeRequestStatus(requestId, newStatus, reason = null) {
   const cleanId = Number(String(requestId).replace(/^(shift-|perm-)/, ""))
   if (isNaN(cleanId)) throw new Error("Invalid ID")
 

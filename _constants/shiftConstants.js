@@ -1,4 +1,4 @@
-import { Sun, SunMoon, Moon, CircleOff } from "lucide-react";
+import { Sun, SunMoon, Moon } from "lucide-react";
 
 export const shiftStyles = {
   MORNING: "text-yellow-600 bg-yellow-100 border-yellow-400",

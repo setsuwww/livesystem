@@ -42,3 +42,9 @@ export function canCheckout(now, shift) { const nowMinutes = toMinutes(now);
   return false;
 }
 
+/**  
+jadi nanti kalau user masuk di jam shift tepat atau belum lewat 10 menit dari jam masuk shift status nya present,
+kalau user masuk lewat 10 menit dari jam masuk shift telat, kalo 20 menit ga absen statusnya absent,
+untuk checkout buat dia gabisa checkout sebelum waktu akhir jam shift, dan checkout dibuka kalau udah 10 menit sebelum akhir jam shift
+*/
+

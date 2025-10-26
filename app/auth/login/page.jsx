@@ -8,7 +8,7 @@ import { Button } from "@/_components/ui/Button"
 import { Checkbox } from "@/_components/ui/Checkbox"
 import AuthForm from "../AuthForm"
 import AuthLink from "../AuthLink"
-import { AuthAction } from "./AuthAction"
+import { AuthAction } from "./action"
 import { Loader2 } from "lucide-react"
 
 const LoginPage = () => {
