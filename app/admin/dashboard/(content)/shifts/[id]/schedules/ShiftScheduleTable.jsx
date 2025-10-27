@@ -1,9 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table";
 import { format } from "date-fns";
 
-export default function ShiftUserTable({
-  data
-}) {
+export default function ShiftUserTable({ data }) {
   return (
     <Table>
       <TableHeader>

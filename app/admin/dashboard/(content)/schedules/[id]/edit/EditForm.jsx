@@ -28,17 +28,14 @@ export default function EditForm({ schedule, users, shifts }) {
   useEffect(() => {
     if (schedule) {
       setForm({
-        title: schedule.title ?? "",
-        description: schedule.description ?? "",
+        title: schedule.title ?? "", description: schedule.description ?? "",
         frequency: schedule.frequency ?? "ONCE",
       })
 
       setEvents([
         {
-          startDate: schedule.startDate || "",
-          endDate: schedule.endDate || "",
-          startTime: schedule.startTime || "",
-          endTime: schedule.endTime || "",
+          startDate: schedule.startDate || "", endDate: schedule.endDate || "",
+          startTime: schedule.startTime || "", endTime: schedule.endTime || "",
           users: schedule.users || [],
         },
       ])
@@ -57,37 +54,28 @@ export default function EditForm({ schedule, users, shifts }) {
     }
 
     setLoading(true)
-    try {
-      const userIds = Array.from(
+    try { const userIds = Array.from(
         new Set(events.flatMap((e) => e.users.map((u) => u.id).filter(Boolean)))
       )
 
       const payload = {
-        title: form.title,
-        description: form.description,
-        frequency: form.frequency,
-        startDate: events[0]?.startDate ?? null,
-        endDate: events[0]?.endDate ?? null,
-        startTime: events[0]?.startTime ?? null,
-        endTime: events[0]?.endTime ?? null,
+        title: form.title, description: form.description, frequency: form.frequency,
+        startDate: events[0]?.startDate ?? null, endDate: events[0]?.endDate ?? null,
+        startTime: events[0]?.startTime ?? null, endTime: events[0]?.endTime ?? null,
         userIds,
       }
 
-      await apiFetchData({
-        url: `/schedules/${schedule.id}`,
-        method: "put",
-        data: payload,
+      await apiFetchData({ url: `/schedules/${schedule.id}`, method: "put", data: payload,
         successMessage: "Schedule updated successfully",
         errorMessage: "Failed to update schedule",
       })
 
       toast.success("Schedule updated successfully")
-    } catch (error) {
-      console.error("Error updating schedule:", error)
+    } 
+    catch (error) { console.error("Error updating schedule:", error)
       toast.error("Error updating schedule")
-    } finally {
-      setLoading(false)
-    }
+    } 
+    finally { setLoading(false)}
   }
 
   return (
@@ -104,38 +92,25 @@ export default function EditForm({ schedule, users, shifts }) {
 
         <ContentForm.Body>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Basic Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={form.title}
-                  onChange={(e) => handleChange("title", e.target.value)}
-                  placeholder="Enter schedule title"
-                  required
+                <Input value={form.title} onChange={(e) => handleChange("title", e.target.value)}
+                  id="title" placeholder="Enter schedule title" required
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={form.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                  placeholder="Enter schedule description"
-                  required
+                <Input value={form.description} onChange={(e) => handleChange("description", e.target.value)}
+                  id="description" placeholder="Enter schedule description" required
                 />
               </div>
             </div>
 
-            {/* Frequency */}
             <div className="space-y-2">
               <Label htmlFor="frequency">Select Frequency</Label>
-              <Select
-                value={form.frequency}
-                onValueChange={(value) => handleChange("frequency", value)}
-              >
+              <Select value={form.frequency} onValueChange={(value) => handleChange("frequency", value)}>
                 <SelectTrigger className="border-slate-200 focus:border-slate-400">
                   <SelectValue placeholder="Select Frequency" />
                 </SelectTrigger>
@@ -149,29 +124,18 @@ export default function EditForm({ schedule, users, shifts }) {
               </Select>
             </div>
 
-            {/* Update User Assignments */}
             <UpdateAssignUserShift events={events} setEvents={setEvents} users={users} />
 
-            {/* Footer */}
             <div className="flex items-center justify-between pt-6 border-t border-slate-200">
               <div className="text-sm text-slate-600">
                 {events.reduce((acc, e) => acc + e.users.length, 0)} users assigned •{" "}
                 {events.length} dates scheduled
               </div>
               <div className="flex items-center space-x-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={loading}
-                  className="border-slate-200 text-slate-700 hover:bg-slate-50"
-                >
+                <Button type="button" variant="outline" disabled={loading}>
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="bg-slate-900 hover:bg-slate-800 text-white"
-                >
+                <Button type="submit" disabled={loading}>
                   {loading ? "Updating..." : "Update Schedule"}
                 </Button>
               </div>

@@ -12,14 +12,12 @@ export function useUsersHooks(data) {
   const deferredSearch = useDeferredValue(search);
   const searchInputRef = useRef(null);
 
-  // Extract shift type untuk normalisasi
   const extractShiftType = useCallback((shift) => { if (!shift || shift === "-") return "NO_SHIFT";
     const match = shift.match(/^(\w+)/);
     const type = match ? match[1].toUpperCase() : "NO_SHIFT";
     return type === "OFF" ? "NO_SHIFT" : type;
   }, []);
 
-  // Filtering data
   const filteredData = useMemo(() => {
     return data.filter((user) => {
       const matchSearch = deferredSearch === "" ||
@@ -42,26 +40,13 @@ export function useUsersHooks(data) {
 
   const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
-  // Actions
-  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = 
-    handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
+  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
 
-  // Handlers
-  const handleSearchChange = useCallback((value) => {
-    setSearch(value);
-  }, []);
+  const handleSearchChange = useCallback((value) => { setSearch(value)}, []);
+  const handleRoleFilterChange = useCallback((value) => { setRoleFilter(value)}, []);
+  const handleShiftFilterChange = useCallback((value) => { setShiftFilter(value)}, []);
 
-  const handleRoleFilterChange = useCallback((value) => {
-    setRoleFilter(value);
-  }, []);
-
-  const handleShiftFilterChange = useCallback((value) => {
-    setShiftFilter(value);
-  }, []);
-
-  const isAllSelected = useMemo(() => selectedIds.length > 0 && selectedIds.length === filteredData.length,
-    [selectedIds, filteredData]
-  );
+  const isAllSelected = useMemo(() => selectedIds.length > 0 && selectedIds.length === filteredData.length, [selectedIds, filteredData]);
 
   return {
     search, roleFilter, shiftFilter,
@@ -71,21 +56,5 @@ export function useUsersHooks(data) {
     handleEditUser, handleDeleteUser,
     onExportPDF,
   };
-}
-
-export function useSearchUsers(users, query, fields = ["name", "email"]) {
-  const filteredUsers = useMemo(() => {
-    if (!query) return users;
-
-    const lowerQuery = query.toLowerCase();
-
-    return users.filter((user) =>
-      fields.some((field) =>
-        String(user[field] ?? "").toLowerCase().includes(lowerQuery)
-      )
-    );
-  }, [users, query, fields]);
-
-  return filteredUsers;
 }
 

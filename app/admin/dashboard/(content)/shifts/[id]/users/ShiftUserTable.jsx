@@ -23,11 +23,8 @@ export default function UserShiftTable({ data }) {
   const [currentUserId, setCurrentUserId] = useState(null);
 
   const toggleSelectAll = () => {
-    if (selectedIds.length === filteredData.length) {
-      setSelectedIds([]);
-    } else {
-      setSelectedIds(filteredData.map((u) => u.id));
-    }
+    if (selectedIds.length === filteredData.length) { setSelectedIds([])} 
+    else { setSelectedIds(filteredData.map((u) => u.id)) }
   };
 
   const filteredData = useMemo(() => {
@@ -42,8 +39,7 @@ export default function UserShiftTable({ data }) {
     });
   }, [data, search, filterRole]);
 
-  const handleDeleteSelected = () => {
-    console.log("Delete selected:", selectedIds);
+  const handleDeleteSelected = () => { console.log("Delete selected:", selectedIds);
     setSelectedIds([]);
   };
 
@@ -55,7 +51,6 @@ export default function UserShiftTable({ data }) {
   };
 
   const handleEditUser = (userId) => console.log("Edit user:", userId);
-
   const handleDeleteUser = (userId) => console.log("Delete user:", userId);
 
   return (
@@ -79,7 +74,6 @@ export default function UserShiftTable({ data }) {
           <Input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
 
-        {/* Right: Actions */}
         <div className="flex items-center gap-2">
           <Button size="sm" variant="ghost" className="text-rose-500" disabled={selectedIds.length === 0} onClick={handleDeleteSelected}>
             Delete Selected
@@ -98,9 +92,7 @@ export default function UserShiftTable({ data }) {
         <TableHeader>
           <TableRow>
             <TableHead>
-              <Checkbox
-                checked={
-                  selectedIds.length > 0 &&
+              <Checkbox checked={ selectedIds.length > 0 &&
                   selectedIds.length === filteredData.length
                 }
                 onCheckedChange={toggleSelectAll}
@@ -125,7 +117,7 @@ export default function UserShiftTable({ data }) {
                     onCheckedChange={() =>
                       setSelectedIds(selectedIds.includes(user.id)
                         ? selectedIds.filter((id) => id !== user.id)
-                        : [...selectedIds, user.id]
+                          : [...selectedIds, user.id]
                       )
                     }
                   />

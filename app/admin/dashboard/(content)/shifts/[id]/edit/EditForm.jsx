@@ -40,8 +40,7 @@ export default function EditShiftForm({ divisions, shift }) {
       divisionId: parseInt(divisionId),
     };
 
-    try {
-      setLoading(true);
+    try { setLoading(true);
       await apiFetchData({ url: `/shifts/${shift.id}`, method: "put", data: payload,
         successMessage: "Shift updated successfully!",
         errorMessage: "Failed to update shift",
@@ -59,12 +58,8 @@ export default function EditShiftForm({ divisions, shift }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <ContentForm.Header>
             <ContentInformation
-              heading="Shift Form"
-              subheading="Edit the selected shift"
-              show={true}
-              buttonText="Back"
-              variant="outline"
-              href="/admin/dashboard/shifts"
+              heading="Shift Form" subheading="Edit the selected shift"
+              show={true} buttonText="Back" variant="outline" href="/admin/dashboard/shifts"
             />
           </ContentForm.Header>
 
@@ -108,11 +103,8 @@ export default function EditShiftForm({ divisions, shift }) {
                   <Label htmlFor="shift-name">
                     Shift Name <span className="text-rose-500">*</span>
                   </Label>
-                  <Input id="shift-name" value={name}
-                    onChange={(e) => setName(e.target.value)} type="text"
-                    placeholder="Example: Morning Shift"
-                    className="mt-1"
-                    required
+                  <Input id="shift-name" value={name} onChange={(e) => setName(e.target.value)} type="text"
+                    placeholder="Example: Morning Shift" className="mt-1" required
                   />
                 </div>
               </div>
@@ -124,8 +116,7 @@ export default function EditShiftForm({ divisions, shift }) {
                   </Label>
                   <Input id="start-time" value={startTime}
                     onChange={(e) => setStartTime(e.target.value)} type="time"
-                    className="mt-1"
-                    required
+                    className="mt-1" required
                   />
                 </div>
 
@@ -135,8 +126,7 @@ export default function EditShiftForm({ divisions, shift }) {
                   </Label>
                   <Input id="end-time" value={endTime} 
                     onChange={(e) => setEndTime(e.target.value)} type="time"
-                    className="mt-1"
-                    required
+                    className="mt-1" required
                   />
                 </div>
               </div>

@@ -30,25 +30,15 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="p-0.5 bg-slate-50 hover:bg-sky-50 text-slate-600 hover:text-sky-600"
-                >
+                <Button variant="ghost" size="icon">
                   <MoreVertical className="h-3 w-3" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => onEdit(shift.id)}
-                  className="hover:text-slate-600"
-                >
+                <DropdownMenuItem onClick={() => onEdit(shift.id)} className="hover:text-slate-600">
                   Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => onDelete(shift.id)}
-                  className="hover:bg-rose-50 text-rose-600"
-                >
+                <DropdownMenuItem onClick={() => onDelete(shift.id)} className="hover:bg-rose-50 text-rose-600">
                   Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -62,10 +52,7 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
               </p>
               <ul className="space-y-2">
                 {shift.users?.slice(0, 3).map((user) => (
-                  <li
-                    key={user.id}
-                    className="flex items-center gap-x-2 justify-between border-b border-slate-200 pb-2"
-                  >
+                  <li key={user.id} className="flex items-center gap-x-2 justify-between border-b border-slate-200 pb-2">
                     <span className="font-semibold text-slate-600 text-sm">
                       {user.name}
                     </span>
@@ -75,7 +62,6 @@ export function ShiftsDuplicateCard({ shifts, onEdit, onDelete }) {
               </ul>
             </div>
 
-            {/* Schedules count */}
             <div className="flex items-center justify-between space-x-2 pb-2">
               <div className="flex items-center justify-between space-x-2">
                 <div className="p-2 bg-slate-200 text-slate-600 rounded-lg">

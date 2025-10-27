@@ -1,10 +1,6 @@
 import { Button } from "@/_components/ui/Button";
 
-export default function ScheduleActionsButtons({
-  id,
-  onEdit,
-  onDelete
-}) {
+export default function ScheduleActionsButtons({ id, onEdit, onDelete }) {
   return (
     <div className="space-x-2">
       <Button type="submit" variant="outline" size="sm" onClick={() => onEdit?.(id)}>

@@ -13,17 +13,13 @@ import ContentForm from '@/_components/content/ContentForm';
 
 export const revalidate = 60;
 
-export default async function ShiftUsersPage({
-  params,
-  searchParams
-}) {
+export default async function ShiftUsersPage({ params, searchParams }) {
   const shiftId = parseInt(params.id);
   const page = Number(searchParams?.page) || 1;
   const PAGE_SIZE = 10;
 
   const [shift, totalUsers] = await Promise.all([
-    prisma.shift.findUnique({
-      where: { id: shiftId },
+    prisma.shift.findUnique({ where: { id: shiftId },
       include: { users: true },
     }),
     prisma.schedule.count({
@@ -34,18 +30,12 @@ export default async function ShiftUsersPage({
   if (!shift) return <div className="p-4">Shift not found</div>;
 
   const schedulesData = await prisma.schedule.findMany({
-    where: { shiftId },
-    skip: (page - 1) * PAGE_SIZE,
-    take: PAGE_SIZE,
+    where: { shiftId }, skip: (page - 1) * PAGE_SIZE, take: PAGE_SIZE,
   });
 
   const schedulesDataMapped = schedulesData.map(s => ({
-    id: s.id,
-    title: s.title,
-    description: s.description,
-    date: s.date.toISOString(),
-    createdAt: s.createdAt.toISOString(),
-    updatedAt: s.updatedAt.toISOString(),
+    id: s.id, title: s.title, description: s.description, date: s.date.toISOString(),
+    createdAt: s.createdAt.toISOString(), updatedAt: s.updatedAt.toISOString(),
     shift: shift.type,
   }));
 

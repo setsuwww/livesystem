@@ -14,23 +14,15 @@ async function getRequests() {
       where: { status: "PENDING_ADMIN"},
       orderBy: { createdAt: "desc" },
       include: {
-        requestedBy: true,
-        targetUser: true,
-        oldShift: true,
-        targetShift: true,
+        requestedBy: true, targetUser: true,
+        oldShift: true, targetShift: true,
       },
     }),
 
     prisma.attendance.findMany({
-      where: {
-        status: "PERMISSION",
-        approval: "PENDING",
-      },
+      where: { status: "PERMISSION", approval: "PENDING"},
       orderBy: { date: "desc" },
-      include: {
-        user: true,
-        shift: true,
-      },
+      include: { user: true, shift: true },
     }),
   ])
 
@@ -58,10 +50,7 @@ async function getRequests() {
       reason: r.reason || "-",
       date: r.createdAt
         ? new Date(r.createdAt).toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
+            weekday: "long", day: "numeric", month: "long", year: "numeric",
           })
         : "-",
       status: r.status || "PENDING",
@@ -79,10 +68,7 @@ async function getRequests() {
       typeShift: r.shift?.type || "-",
       date: r.date
         ? new Date(r.date).toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            weekday: "long",
+            weekday: "long", day: "numeric", month: "long", year: "numeric",
           })
         : "-",
       status: r.approval || "PENDING",
@@ -95,16 +81,12 @@ export default async function Page() {
 
   return (
     <section>
-      <DashboardHeader
-        title="Requests"
-        subtitle="Manage pending requests by type"
-      />
+      <DashboardHeader title="Requests" subtitle="Manage pending requests by type"/>
 
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation
-            heading="Pending Requests"
-            subheading="Switch between Shift Change and Permission requests"
+            heading="Pending Requests" subheading="Switch between Shift Change and Permission requests"
             show={false}
           />
         </ContentForm.Header>

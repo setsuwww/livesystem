@@ -11,15 +11,12 @@ export async function userSendCheckIn(currentCoords) {
 
   const today = dayjs().startOf("day").toDate()
 
-  const shift = await prisma.shift.findUnique({
-    where: { id: user.shiftId },
+  const shift = await prisma.shift.findUnique({ where: { id: user.shiftId },
     include: { division: true },
   })
 
   if (shift?.division?.type === "WFO") { const allowed = isUserWithinLocation(shift.division, currentCoords)
-    if (!allowed) {
-      return { error: "Kamu berada di luar jangkauan lokasi kantor." }
-    }
+    if (!allowed) { return { error: "Kamu berada di luar jangkauan" }}
   }
 
   const status = await determineAttendanceStatus(user.shiftId)
@@ -27,8 +24,7 @@ export async function userSendCheckIn(currentCoords) {
   await prisma.attendance.upsert({
     where: {
       userId_shiftId_date: {
-        userId: user.id,
-        shiftId: user.shiftId ?? 0,
+        userId: user.id, shiftId: user.shiftId ?? 0,
         date: today,
       },
     },
@@ -37,10 +33,8 @@ export async function userSendCheckIn(currentCoords) {
       status,
     },
     create: {
-      userId: user.id,
-      shiftId: user.shiftId ?? 0,
-      date: today,
-      status,
+      userId: user.id, shiftId: user.shiftId ?? 0,
+      date: today, status,
       checkInTime: new Date(),
     },
   })

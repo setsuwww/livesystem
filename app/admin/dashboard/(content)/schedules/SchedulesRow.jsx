@@ -9,13 +9,7 @@ import { Checkbox } from "@/_components/ui/Checkbox";
 import { capitalize } from "@/_function/globalFunction";
 import { frequencyStyles } from "@/_constants/frequencyStyles";
 
-export const SchedulesRow = React.memo(function ({
-  schedule,
-  isSelected,
-  onSelect,
-  onEdit,
-  onDelete
-}) {
+export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelect, onEdit, onDelete }) {
 
   const formatedUpdatedDate = useMemo(() =>
     format(new Date(schedule.updatedAt), "dd-MMMM-yyyy"),

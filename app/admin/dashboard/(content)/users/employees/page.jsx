@@ -5,9 +5,11 @@ import EmployeesTable from "./EmployeesTable";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { Pagination } from "@/app/admin/dashboard/Pagination";
 import { minutesToTime } from "@/_function/services/shiftAttendanceHelpers";
+import EmployeesTableButton from "./EmployeesTableButton";
 
 const PAGE_SIZE = 100;
 
+// ⚡ hanya ambil field penting
 async function getEmployees(page = 1) {
   return prisma.user.findMany({
     where: {
@@ -16,8 +18,31 @@ async function getEmployees(page = 1) {
     },
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
-    include: { shift: true, division: true },
     orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
+      shift: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          startTime: true,
+          endTime: true,
+        },
+      },
+      division: {
+        select: {
+          id: true,
+          name: true,
+          type: true,
+        },
+      },
+    },
   });
 }
 
@@ -30,14 +55,16 @@ async function getEmployeeCount() {
   });
 }
 
+// ambil data dropdown ringan
 async function getFilterData() {
   const [divisions, shifts] = await Promise.all([
     prisma.division.findMany({
-      where: { status: "ACTIVE" },
+      select: { id: true, name: true, type: true },
       orderBy: { name: "asc" },
     }),
     prisma.shift.findMany({
       where: { isActive: true },
+      select: { id: true, name: true, type: true },
       orderBy: { name: "asc" },
     }),
   ]);
@@ -76,10 +103,13 @@ export default async function EmployeesPage({ searchParams }) {
       <DashboardHeader title="Employees" subtitle="Employees management" />
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation
-            heading="List Employees"
-            subheading="Manage all employees here"
-          />
+          <div className="flex items-center justify-between">
+            <ContentInformation
+              heading="List Employees"
+              subheading="Manage all employees here"
+            />
+            <EmployeesTableButton />
+          </div>
         </ContentForm.Header>
 
         <ContentForm.Body>

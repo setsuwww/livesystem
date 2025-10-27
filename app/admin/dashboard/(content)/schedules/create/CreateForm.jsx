@@ -21,9 +21,7 @@ export default function CreateForm({ users, shifts }) {
   const [events, setEvents] = useState([])
 
   const [form, setForm] = useState({
-    title: "",
-    description: "",
-    frequency: "ONCE",
+    title: "", description: "", frequency: "ONCE",
   })
 
   const handleChange = useCallback((field, value) => {
@@ -67,10 +65,7 @@ export default function CreateForm({ users, shifts }) {
 
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation
-            heading="Schedule Form"
-            subheading="Create a new schedule and assign users"
-          />
+          <ContentInformation heading="Schedule Form" subheading="Create a new schedule and assign users"/>
         </ContentForm.Header>
 
         <ContentForm.Body>
@@ -78,33 +73,22 @@ export default function CreateForm({ users, shifts }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={form.title}
-                  onChange={(e) => handleChange("title", e.target.value)}
-                  placeholder="Enter schedule title"
-                  required
+                <Input id="title" value={form.title} onChange={(e) => handleChange("title", e.target.value)}
+                  placeholder="Enter schedule title" required
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={form.description}
-                  onChange={(e) => handleChange("description", e.target.value)}
-                  placeholder="Enter schedule description"
-                  required
+                <Input id="description" value={form.description} onChange={(e) => handleChange("description", e.target.value)}
+                  placeholder="Enter schedule description" required
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="frequency">Select Frequency</Label>
-              <Select
-                value={form.frequency}
-                onValueChange={(value) => handleChange("frequency", value)}
-              >
+              <Select value={form.frequency} onValueChange={(value) => handleChange("frequency", value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Frequency" />
                 </SelectTrigger>
@@ -119,11 +103,9 @@ export default function CreateForm({ users, shifts }) {
             </div>
 
             <InputAssignUserShift
-              events={events}
-              setEvents={setEvents}
+              events={events} setEvents={setEvents}
               users={users}
-              activeDate={activeDate}
-              setActiveDate={setActiveDate}
+              activeDate={activeDate} setActiveDate={setActiveDate}
             />
 
             <div className="flex items-center justify-between pt-6 border-t border-slate-200">
@@ -132,11 +114,7 @@ export default function CreateForm({ users, shifts }) {
                 {events.length} dates scheduled
               </div>
               <div className="flex items-center space-x-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={loading}
-                >
+                <Button type="button" variant="outline" disabled={loading}>
                   Cancel
                 </Button>
                 <Button type="submit" disabled={loading}>

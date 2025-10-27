@@ -120,15 +120,6 @@
   }
 }
 
-@layer components {
-  .text-head {
-    @apply text-[var(--text-head)];
-  }
-  .text-subhead {
-    @apply text-[var(--text-subhead)];
-  }
-}
-
 @font-face {
   font-family: 'Lexend';
   src: url('/fonts/Lexend-VariableFont_wght.ttf') format('truetype');

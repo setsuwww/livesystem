@@ -29,14 +29,11 @@ export default async function Page({ params }) {
         title: schedule.title,
         description: schedule.description,
         frequency: schedule.frequency,
-        startDate: schedule.startDate ? schedule.startDate.toISOString().split("T")[0] : "",
-        endDate: schedule.endDate ? schedule.endDate.toISOString().split("T")[0] : "",
-        startTime: schedule.startTime ?? "",
-        endTime: schedule.endTime ?? "",
+        startDate: schedule.startDate ? schedule.startDate.toISOString().split("T")[0] : "", startTime: schedule.startTime ?? "",
+        endDate: schedule.endDate ? schedule.endDate.toISOString().split("T")[0] : "", endTime: schedule.endTime ?? "",
         users: schedule.users.map((u) => u.user),
       }}
-      users={users}
-      shifts={shifts}
+      users={users} shifts={shifts}
     />
   )
 }

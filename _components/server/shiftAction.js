@@ -35,10 +35,8 @@ export async function updateShiftChangeRequestStatus(requestId, newStatus, reaso
     const request = await prisma.shiftChangeRequest.findUnique({
       where: { id: cleanId },
       select: {
-        userId: true,
-        targetUserId: true,
-        oldShiftId: true,
-        targetShiftId: true,
+        userId: true, targetUserId: true,
+        oldShiftId: true, targetShiftId: true,
         status: true,
       },
     })
@@ -63,8 +61,7 @@ export async function updateShiftChangeRequestStatus(requestId, newStatus, reaso
 
     const updated = await prisma.shiftChangeRequest.update({
       where: { id: cleanId },
-      data: {
-        status: newStatus,
+      data: { status: newStatus,
         ...(reason ? { rejectReason: reason } : {}),
       },
     })
@@ -90,14 +87,11 @@ export async function updatePermissionStatus(requestId, newStatus, reason = null
     const mappedStatus = newStatus.toUpperCase()
     const validStatuses = ["PENDING", "APPROVED", "REJECTED"]
 
-    if (!validStatuses.includes(mappedStatus)) {
-      throw new Error(`Invalid approval status: ${newStatus}`)
-    }
+    if (!validStatuses.includes(mappedStatus)) { throw new Error(`Invalid approval status: ${newStatus}`)}
 
     const updated = await prisma.attendance.update({
       where: { id: cleanId },
-      data: {
-        approval: mappedStatus,
+      data: { approval: mappedStatus,
         ...(reason ? { adminReason: reason } : {}),
       },
     })
@@ -113,16 +107,13 @@ export async function resetExpiredShiftChanges() {
   const now = dayjs()
 
   const expiredRequests = await prisma.shiftChangeRequest.findMany({
-    where: {
-      endDate: { lt: now.toDate() },
+    where: { endDate: { lt: now.toDate() },
       status: "APPROVED",
     },
     select: {
       id: true,
-      userId: true,
-      targetUserId: true,
-      oldShiftId: true,
-      targetShiftId: true,
+      userId: true, targetUserId: true,
+      oldShiftId: true, targetShiftId: true,
     },
   })
 

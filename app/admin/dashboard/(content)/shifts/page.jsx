@@ -25,11 +25,8 @@ export default async function ShiftsPage({ searchParams }) {
       },
       assignments: {
         include: {
-          user: {
-            select: { id: true, name: true, email: true,
-              attendances: {
-                select: { shiftId: true, status: true, reason: true },
-              },
+          user: { select: { id: true, name: true, email: true,
+              attendances: { select: { shiftId: true, status: true, reason: true }},
             },
           },
         },
@@ -61,14 +58,10 @@ const tableData = mainShifts.map((s) => {
   });
 
   return {
-    id: s.id,
-    type: s.type,
-    name: s.name,
-    startTime: start,
-    endTime: end,
+    id: s.id, type: s.type, name: s.name,
+    startTime: start, endTime: end,
     timeRange: `${start} - ${end}`,
-    usersCount: usersWithStatus.length,
-    users: usersWithStatus,
+    usersCount: usersWithStatus.length, users: usersWithStatus,
     division: s.division ? s.division.name : "-",
   };
 });

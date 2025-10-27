@@ -50,6 +50,11 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
         </Badge>
       </TableCell>
       <TableCell>
+        <Badge className="bg-sky-50 text-sky-700 border-sky-100">
+          {capitalize(user.division?.name)}
+        </Badge>
+      </TableCell>
+      <TableCell>
         <div className="flex flex-col">
           <span className="text-sm font-semibold text-slate-600">
             {user.createdAt ? format(new Date(user.createdAt), "dd MMMM yyyy") : "-"}

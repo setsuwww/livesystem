@@ -9,41 +9,29 @@ export default async function Page({ params }) {
     prisma.user.findUnique({
       where: { id: userId },
       select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        divisionId: true,
-        shiftId: true,
+        id: true, name: true, email: true, role: true,
+        divisionId: true, shiftId: true,
       },
     }),
     prisma.shift.findMany({
-      select: {
-        id: true,
-        name: true,
-        startTime: true,
-        endTime: true,
+      select: { id: true, name: true,
+        startTime: true, endTime: true,
       },
     }),
     prisma.division.findMany({
       select: {
-        id: true,
-        name: true,
-        startTime: true,
-        endTime: true,
+        id: true, name: true,
+        startTime: true, endTime: true,
         shifts: {
           select: {
-            id: true,
-            name: true,
-            startTime: true,
-            endTime: true,
+            id: true, name: true,
+            startTime: true, endTime: true,
           },
         },
       },
     }),
   ]);
 
-  // kalau user gak ketemu, bisa balikin 404 (opsional)
   if (!user) {
     return (
       <div className="p-6">
@@ -52,7 +40,6 @@ export default async function Page({ params }) {
     );
   }
 
-  // FIX: serialize semua data biar aman dikirim ke client component
   const safeUser = JSON.parse(JSON.stringify(user));
   const safeShifts = JSON.parse(JSON.stringify(shifts));
   const safeDivisions = JSON.parse(JSON.stringify(divisions));

@@ -26,10 +26,7 @@ export function ShiftAssignedUsersSearch({ users = [], onFilter }) {
   return (
     <div className="w-full max-w-md mb-4">
       <div className="group relative">
-        {/* Input */}
-        <Input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
+        <Input value={value} onChange={(e) => setValue(e.target.value)}
           placeholder="Search..."
           className="group pl-14 caret-sky-500 focus-visible:ring-transparent focus-visible:border-sky-400 focus-visible:outline-none" // kasih padding kiri lebih gede biar ga mepet
         />

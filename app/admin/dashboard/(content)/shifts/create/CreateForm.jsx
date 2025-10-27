@@ -42,8 +42,7 @@ export default function CreateShiftForm({ divisions }) {
 
     try { setLoading(true);
       await apiFetchData({ url: "/shifts", method: "post", data: payload,
-        successMessage: "Shift created successfully!",
-        errorMessage: "Failed to create shift",
+        successMessage: "Shift created successfully!", errorMessage: "Failed to create shift",
         onSuccess: () => {
           setType("MORNING");
           setName("");

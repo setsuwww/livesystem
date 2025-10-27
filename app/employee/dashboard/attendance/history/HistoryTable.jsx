@@ -24,9 +24,8 @@ export default function HistoryTable({ data, initialOrder }) {
   const [order, setOrder] = useState(initialOrder)
 
   const sortedData = useMemo(() => {
-    return [...data].sort((a, b) =>
-      order === "asc"
-        ? new Date(a.datePart) - new Date(b.datePart)
+    return [...data].sort((a, b) => order === "asc"
+      ? new Date(a.datePart) - new Date(b.datePart)
         : new Date(b.datePart) - new Date(a.datePart)
     )
   }, [data, order])
@@ -40,7 +39,6 @@ export default function HistoryTable({ data, initialOrder }) {
 
   return (
     <div className="space-y-2">
-      {/* Header Action */}
       <div className="flex justify-start mb-4">
         <Button variant="outline" size="sm" onClick={toggleOrder} className="flex items-center gap-2">
           {order === "asc" ? (
@@ -59,7 +57,6 @@ export default function HistoryTable({ data, initialOrder }) {
         </Button>
       </div>
 
-      {/* Table Wrapper */}
       <div className="overflow-hidden">
         <Table>
           <TableHeader className="bg-slate-50">
@@ -79,10 +76,7 @@ export default function HistoryTable({ data, initialOrder }) {
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="bg-slate-200 p-2 rounded-full">
-                        <CalendarDays
-                          className="h-5 w-5 text-slate-600"
-                          strokeWidth={1.5}
-                        />
+                        <CalendarDays className="h-5 w-5 text-slate-600" strokeWidth={1.5}/>
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-slate-700">
@@ -93,23 +87,18 @@ export default function HistoryTable({ data, initialOrder }) {
                     </div>
                   </TableCell>
 
-                  {/* Shift */}
                   <TableCell>
-                    <Badge
-                      className={`border-none px-3 py-1 ${shiftStyles[att.shift]} text-sm`}
-                    >
+                    <Badge className={`border-none px-3 py-1 ${shiftStyles[att.shift]} text-sm`}>
                       {capitalize(att.shift)}
                     </Badge>
                   </TableCell>
 
-                  {/* Status */}
                   <TableCell>
                     <Badge className={`border-none px-3 py-1 ${attedancesStyles[capitalize(att.status)]} text-sm`}>
                       {capitalize(att.status)}
                     </Badge>
                   </TableCell>
 
-                  {/* Reason + Admin Note */}
                   <TableCell>
                     <div className="flex flex-col">
                       <p className="text-sm text-slate-700">
@@ -123,7 +112,6 @@ export default function HistoryTable({ data, initialOrder }) {
                     </div>
                   </TableCell>
 
-                  {/* Created At */}
                   <TableCell className="text-sm font-semibold">
                     <div className="flex flex-col">
                       <span className="text-teal-600">Checkin at: {safeFormat(att.checkInTime, "HH:mm")}</span> 

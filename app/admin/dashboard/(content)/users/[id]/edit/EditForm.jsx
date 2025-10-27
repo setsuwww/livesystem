@@ -107,9 +107,7 @@ export default function EditForm({ user, divisions, shifts }) {
 
               <div className="space-y-2">
                 <Label>Shift Assignment</Label>
-                <Select value={form.shiftId} onValueChange={(v) => handleCustomChange("shiftId", v)}
-                  disabled={availableShifts.length === 0}
-                >
+                <Select value={form.shiftId} onValueChange={(v) => handleCustomChange("shiftId", v)} disabled={availableShifts.length === 0}>
                   <SelectTrigger className="w-1/2">
                     <SelectValue placeholder={availableShifts.length === 0 ? "No shifts found" : "Select a Shift"} />
                   </SelectTrigger>
