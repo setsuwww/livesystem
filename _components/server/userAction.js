@@ -4,29 +4,6 @@ import { prisma } from "@/_lib/prisma"
 import bcrypt from "bcryptjs"
 import { revalidatePath } from "next/cache"
 
-export async function getUsers() {
-  try {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true, name: true, email: true, role: true, updatedAt: true,
-        shift: {
-          select: {
-            id: true,
-            type: true,
-            startTime: true,
-            endTime: true,
-          },
-        },
-      },
-      orderBy: { updatedAt: "desc" },
-      where: { role: "EMPLOYEE" },
-    })
-    return users
-  } catch (error) { console.error("❌ Error fetching users:", error)
-    throw new Error("Failed to fetch users.")
-  }
-}
-
 export async function createUser(formData) {
   try {
     const name = formData.get("name")

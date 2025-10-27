@@ -49,10 +49,8 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
       title: "Scheduled Task",
       description: "Auto-generated schedule",
       frequency: "ONCE",
-      startDate,
-      startTime,
-      endDate,
-      endTime,
+      startDate, startTime,
+      endDate, endTime,
       userIds: selectedUsers,
     }
 
@@ -226,26 +224,10 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
                 {users.map((user) => {
                   const isSelected = selectedUsers.includes(user.id)
                   return (
-                    <CommandItem
-                      key={user.id}
-                      value={user.name}
-                      onSelect={() => toggleUser(user.id)}
-                      className="
-                        group cursor-pointer flex items-center justify-between py-1 px-2
-                        border border-transparent hover:border-slate-200 transition-colors
-                      "
-                    >
-                      <div
-                        className="
-                          flex items-center gap-3 w-full rounded-md p-1
-                          transition-colors
-                        "
-                      >
-                        <div
-                          className="
-                            p-2 rounded-lg bg-slate-100 transition-colors
-                          "
-                        >
+                    <CommandItem key={user.id} value={user.name} onSelect={() => toggleUser(user.id)}
+                      className="group cursor-pointer flex items-center justify-between py-1 px-2  border border-transparent hover:border-slate-200 transition-colors">
+                      <div className="flex items-center gap-3 w-full rounded-md p-1transition-colors">
+                        <div className="p-2 rounded-lg bg-slate-100 transition-colors">
                           <CircleUserRound className="h-5 w-5 text-slate-600 transition-colors" />
                         </div>
 
@@ -274,25 +256,20 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
       </div>
 
       <div className="flex justify-end pt-2">
-        <Button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!startDate || !endDate || selectedUsers.length === 0}
-          variant="secondary"
+        <Button type="button" onClick={handleSubmit} disabled={!startDate || !endDate || selectedUsers.length === 0}
+          variant="ghost"
         >
-          Create Schedule
+          Generate Schedule
         </Button>
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle
-              className={dialogType === "success" ? "text-teal-600" : "text-rose-600"}
-            >
+            <DialogTitle>
               {dialogType === "success" ? "Success" : "Error"}
             </DialogTitle>
-            <DialogDescription className="text-slate-500">
+            <DialogDescription>
               {dialogMessage}
             </DialogDescription>
           </DialogHeader>

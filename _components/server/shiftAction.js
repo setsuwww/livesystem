@@ -1,6 +1,7 @@
 "use server"
 
 import { prisma } from "@/_lib/prisma"
+import dayjs from "dayjs"
 
 export async function updateShiftChangeStatus(id, action, actorRole) {
   const request = await prisma.shiftChangeRequest.findUnique({ where: { id } })
@@ -9,25 +10,21 @@ export async function updateShiftChangeStatus(id, action, actorRole) {
   let newStatus = request.status
 
   if (actorRole === "TARGET") {
-    if (action === "ACCEPT") {
-      newStatus = "PENDING_ADMIN"
-    } else if (action === "REJECT") {
-      newStatus = "REJECTED"
-    }
+    if (action === "ACCEPT") newStatus = "PENDING_ADMIN"
+    if (action === "REJECT") newStatus = "REJECTED"
   }
 
   if (actorRole === "ADMIN") {
-    if (action === "APPROVED") {
-      newStatus = "APPROVED"
-    } else if (action === "REJECT") {
-      newStatus = "REJECTED"
-    }
+    if (action === "APPROVE") newStatus = "APPROVED"
+    if (action === "REJECT") newStatus = "REJECTED"
   }
 
-  await prisma.shiftChangeRequest.update({
+  const updated = await prisma.shiftChangeRequest.update({
     where: { id },
     data: { status: newStatus },
   })
+
+  return { success: true, data: updated }
 }
 
 export async function updateShiftChangeRequestStatus(requestId, newStatus, reason = null) {
@@ -44,13 +41,13 @@ export async function updateShiftChangeRequestStatus(requestId, newStatus, reaso
         targetShiftId: true,
         status: true,
       },
-    });
+    })
 
-    if (!request) throw new Error("Request not found");
+    if (!request) throw new Error("Request not found")
 
     if (newStatus === "APPROVED") {
-      const { userId, targetUserId, oldShiftId, targetShiftId } = request;
-      if (!targetUserId) throw new Error("No target user — cannot swap shifts");
+      const { userId, targetUserId, oldShiftId, targetShiftId } = request
+      if (!targetUserId) throw new Error("Target user tidak ditemukan")
 
       await prisma.$transaction([
         prisma.user.update({
@@ -61,21 +58,21 @@ export async function updateShiftChangeRequestStatus(requestId, newStatus, reaso
           where: { id: targetUserId },
           data: { shiftId: oldShiftId },
         }),
-      ]);
+      ])
     }
 
     const updated = await prisma.shiftChangeRequest.update({
-      where: { id: requestId },
+      where: { id: cleanId },
       data: {
         status: newStatus,
         ...(reason ? { rejectReason: reason } : {}),
       },
-    });
+    })
 
-    return { success: true, data: updated };
+    return { success: true, data: updated }
   } catch (error) {
-    console.error("Error updating request:", error);
-    return { success: false, message: error.message };
+    console.error("Error updating shift change request:", error)
+    return { success: false, message: error.message }
   }
 }
 
@@ -112,3 +109,39 @@ export async function updatePermissionStatus(requestId, newStatus, reason = null
   }
 }
 
+export async function resetExpiredShiftChanges() {
+  const now = dayjs()
+
+  const expiredRequests = await prisma.shiftChangeRequest.findMany({
+    where: {
+      endDate: { lt: now.toDate() },
+      status: "APPROVED",
+    },
+    select: {
+      id: true,
+      userId: true,
+      targetUserId: true,
+      oldShiftId: true,
+      targetShiftId: true,
+    },
+  })
+
+  for (const req of expiredRequests) {
+    await prisma.$transaction([
+      prisma.user.update({
+        where: { id: req.userId },
+        data: { shiftId: req.oldShiftId },
+      }),
+      prisma.user.update({
+        where: { id: req.targetUserId },
+        data: { shiftId: req.targetShiftId },
+      }),
+      prisma.shiftChangeRequest.update({
+        where: { id: req.id },
+        data: { status: "PENDING" },
+      }),
+    ])
+  }
+
+  return { success: true, count: expiredRequests.length }
+}

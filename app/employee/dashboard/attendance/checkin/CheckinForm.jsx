@@ -41,26 +41,47 @@ export default function CheckinForm() {
   }, [])
 
   const handleCheckIn = () => startTransition(async () => {
-      const result = await userSendCheckIn()
+    try { if (!navigator.geolocation) {
+        toast.error("Browser kamu tidak mendukung geolocation.")
+        return
+      }
+
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0,
+        })
+      })
+
+      const coords = {
+        lat: position.coords.latitude,
+        lon: position.coords.longitude,
+      }
+
+      const result = await userSendCheckIn(coords)
       if (result?.error) toast.error(result.error)
       else toast.success("Checked in successfully")
-    })
+    } catch (err) {
+      console.error("Location error:", err)
+      toast.error("Gagal mendapatkan lokasi. Pastikan GPS aktif dan izin lokasi diberikan.")
+    }
+  })
 
   const handleCheckOut = () => startTransition(async () => {
-      const result = await userSendCheckOut()
-      if (result?.error) toast.error(result.error)
-      else toast.success("Checked out successfully")
-    })
+    const result = await userSendCheckOut()
+    if (result?.error) toast.error(result.error)
+    else toast.success("Checked out successfully")
+  })
 
   const handlePermission = () => startTransition(async () => {
-      const result = await userSendPermissionRequest(reason)
-      if (result?.error) toast.error(result.error)
-      else {
-        toast.success("Permission request sent")
-        setReason("")
-        setShowPermission(false)
-      }
-    })
+    const result = await userSendPermissionRequest(reason)
+    if (result?.error) toast.error(result.error)
+    else { toast.success("Permission request sent")
+      setReason("")
+      setShowPermission(false)
+    }
+  })
 
   if (loading) {
     return <LoadingStates />

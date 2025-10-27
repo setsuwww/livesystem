@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs"
 import { cookies } from "next/headers"
 import { signToken } from "@/_lib/auth"
 import { redirect } from "next/navigation"
+import { removeAuthCookie } from "@/_lib/auth"
 
 export async function AuthAction(prevState, formData) {
   const email = formData.get("email")
@@ -34,4 +35,9 @@ export async function AuthAction(prevState, formData) {
   if (user.role === "EMPLOYEE") redirect("/employee/dashboard")
 
   return { success: true }
+}
+
+export async function LogoutAuthAction() {
+  try { await removeAuthCookie()} 
+  catch (error) { return { success: false, message: "Logout failed" }}
 }

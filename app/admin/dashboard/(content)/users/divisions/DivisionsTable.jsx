@@ -7,6 +7,7 @@ import { MapPin, AlarmClock, Radar, Locate, LocateFixed } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
 import { Badge } from "@/_components/ui/Badge"
 import { Button } from "@/_components/ui/Button"
+import { Checkbox } from "@/_components/ui/Checkbox"
 import { Switch } from "@/_components/ui/Switch"
 import { Label } from "@/_components/ui/Label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/_components/ui/Popover"
@@ -109,7 +110,17 @@ export default function DivisionsTable({ data }) {
         <div className="rounded-md overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow>                   
+<TableHead className="w-[40px] text-center">
+  <Checkbox
+    checked={
+      filteredData.length > 0 &&
+      selectedIds.length === filteredData.length
+    }
+    onCheckedChange={toggleSelectAll}
+    className="translate-y-[1px]"
+  />
+</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
@@ -129,6 +140,15 @@ export default function DivisionsTable({ data }) {
               ) : (
                 filteredData.map((division) => (
                   <TableRow key={division.id}>
+                    <TableCell className="text-center">
+  <Checkbox
+    checked={selectedIds.includes(division.id)}
+    onCheckedChange={() => toggleSelect(division.id)}
+    className="translate-y-[1px]"
+  />
+</TableCell>
+
+
                     <TableCell>
                       <Popover>
                         <PopoverTrigger asChild>

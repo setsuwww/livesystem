@@ -96,7 +96,7 @@ export default function HistoryTable({ data, initialOrder }) {
                   {/* Shift */}
                   <TableCell>
                     <Badge
-                      className={`border-none px-3 py-1 ${shiftStyles[att.shift?.toUpperCase()]} text-sm`}
+                      className={`border-none px-3 py-1 ${shiftStyles[att.shift]} text-sm`}
                     >
                       {capitalize(att.shift)}
                     </Badge>
