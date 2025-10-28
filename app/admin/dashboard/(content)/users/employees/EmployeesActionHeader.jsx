@@ -36,11 +36,11 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
         <Popover open={openDivision} onOpenChange={setOpenDivision}>
           <PopoverTrigger asChild>
             <Button variant="outline" role="combobox" aria-expanded={openDivision}
-              className="w-fit flex items-center justify-between hover:bg-transparent border-slate-200 shadox-xs"
+              className="w-fit flex items-center justify-between rounded-md hover:bg-transparent border-slate-200 shadox-sm"
             >
-              <div className="flex items-center text-slate-400">
+              <div className="flex items-center text-slate-500">
                 <span className="font-semibold text-slate-600 mr-2">Division:</span>
-                {selectedDivision}
+                <span className="font-light">{selectedDivision}</span>
               </div>
               <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
             </Button>

@@ -34,10 +34,10 @@ export async function createUser(formData) {
     })
 
     revalidatePath("/admin/dashboard/users")
-    return { success: true, message: "User created successfully ✅" }
+    return { success: true, message: "User created successfully" }
   } 
-  catch (error) { console.error("❌ Error creating user:", error)
-    return { success: false, message: error.message || "Failed to create user ❌" }
+  catch (error) { console.error("Error creating user:", error)
+    return { success: false, message: error.message || "Failed to create user" }
   }
 }
 

@@ -1,6 +1,7 @@
 import SidebarServer from "@/_components/SidebarServer"
 import '@/_styles/globals.css'
-import { ReactQueryProvider } from '@/_context/useQueryClient';
+import { ReactQueryProvider } from '@/_components/client/Query-Provider';
+import { ToastProvider } from '@/_components/client/Toast-Provider';
 
 export const metadata = {
   title: "Admin | Dashboard",
@@ -15,9 +16,11 @@ export default function DashboardLayout({ children, action }) {
       <div className="flex-1 flex flex-col">
         {action}
 
-        <main className="flex-1 overflow-y-auto p-4 bg-slate-100">
+        <main className="flex-1 overflow-y-auto p-[13px] bg-slate-100">
           <ReactQueryProvider>
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </ReactQueryProvider>
         </main>
       </div>

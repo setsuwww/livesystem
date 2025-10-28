@@ -8,10 +8,7 @@ function Table({
   ...props
 }) {
   return (
-    <div
-      data-slot="table-container"
-      className="bg-white relative w-full overflow-x-auto border-y border-slate-200"
-    >
+    <div data-slot="table-container" className="bg-white relative w-full overflow-x-auto border-y border-slate-200/60">
       <table
         data-slot="table"
         className={cn("w-full caption-bottom text-sm text-slate-700", className)}
@@ -27,7 +24,7 @@ function TableHeader({
 }) {
   return (
     <thead data-slot="table-header" className={cn(
-        "[&_tr]:border-b border-slate-100 bg-slate-50",
+        "[&_tr]:border-b border-slate-100/50 bg-slate-50 shadow-xs",
         className
       )}
       {...props}
@@ -88,7 +85,7 @@ function TableHead({
     <th
       data-slot="table-head"
       className={cn(
-        "h-10 px-3 text-left align-middle whitespace-nowrap tracking-tight text-slate-600 text-sm uppercase font-semibold",
+        "h-10 px-3 text-left align-middle whitespace-nowrap uppercase tracking-tight text-slate-500/80 text-sm font-semibold",
         className
       )}
       {...props}

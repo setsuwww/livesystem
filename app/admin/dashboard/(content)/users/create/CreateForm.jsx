@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo, useTransition } from "react"
+import { useToast } from "@/_components/client/Toast-Provider"
 import { useRouter } from "next/navigation"
 
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
@@ -20,6 +21,8 @@ import { roleOptions } from "@/_constants/roleOptions"
 
 export default function CreateForm({ divisions, shifts }) {
   const router = useRouter()
+  const { addToast } = useToast()
+
   const [form, setForm] = useState({
     name: "", email: "", password: "", role: "USER",
     divisionId: "", workMode: "WORK_HOURS", shiftId: "",
@@ -41,7 +44,20 @@ export default function CreateForm({ divisions, shifts }) {
 
     startTransition(async () => {
       const res = await createUser(fd)
-      if (res.success) router.push("/admin/dashboard/users")
+      if (res.success) {
+        addToast(res.message || "User created successfully!", {
+          type: "success",
+          title: "Success",
+        })
+        e.target.reset()
+        router.push("/admin/dashboard/users")
+      } 
+      else {
+        addToast(res.message || "Failed to create user.", {
+          type: "error",
+          title: "Error",
+        })
+      }
     })
   }
 
@@ -149,7 +165,7 @@ export default function CreateForm({ divisions, shifts }) {
               {form.workMode === "WORK_HOURS" && defaultdivisionHour && (
                 <div className="p-3 rounded-md bg-white/30 border text-sm">
                   <p>
-                    <strong>Division Hours : </strong> {formatIntToTime(defaultdivisionHour.startTime)} - {formatIntToTime(defaultdivisionHour.endTime)}
+                    <strong className="text-slate-600">Division Hours : </strong> {formatIntToTime(defaultdivisionHour.startTime)} - {formatIntToTime(defaultdivisionHour.endTime)}
                   </p>
                 </div>
               )}
@@ -170,7 +186,7 @@ export default function CreateForm({ divisions, shifts }) {
                         <SelectItem value="NONE">-</SelectItem>
                         {availableShifts.map((s) => (
                           <SelectItem key={s.id} value={String(s.id)}>
-                            {capitalize(s.name)} ({formatIntToTime(s.startTime)} - {formatIntToTime(s.endTime)})
+                            {capitalize(s.name)}
                           </SelectItem>
                         ))}
                       </SelectContent>
