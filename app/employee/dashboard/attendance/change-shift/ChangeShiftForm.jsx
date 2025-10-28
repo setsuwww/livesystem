@@ -54,8 +54,7 @@ export default function ChangeShiftForm({ employees = [] }) {
         reason: reason.trim(),
       }
 
-      await apiFetchData({
-        url: "/shifts/user-side-change", method: "post", data: payload,
+      await apiFetchData({ url: "/shifts/user-side-change", method: "post", data: payload,
         successMessage: "Shift change request submitted successfully.",
         errorMessage: "Failed to submit shift change request.",
       })
@@ -80,18 +79,11 @@ export default function ChangeShiftForm({ employees = [] }) {
         <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl border border-slate-200">
           <div className="space-y-2">
             <Label>Select Employee</Label>
-            <Select
-              value={String(selectedUser)}
-              onValueChange={(v) => setSelectedUser(String(v))}
-              disabled={loading}
-            >
-              <SelectTrigger>
+            <Select value={String(selectedUser)} onValueChange={(v) => setSelectedUser(String(v))} disabled={loading}>
+              <SelectTrigger className="border-slate-200">
                 <SelectValue>
                   {selectedUser ? (
-                    (() => {
-                      const emp = employees.find(
-                        (e) => String(e.id) === String(selectedUser)
-                      )
+                    (() => {const emp = employees.find((e) => String(e.id) === String(selectedUser))
                       if (!emp) return "Choose an employee"
                       return (
                         <div className="flex items-center text-left space-x-2">
@@ -104,11 +96,12 @@ export default function ChangeShiftForm({ employees = [] }) {
                         </div>
                       )
                     })()
-                  ) : (
-                    "Choose an employee"
-                  )}
+                  ) : ("Choose an employee")}
                 </SelectValue>
               </SelectTrigger>
+              <div className="text-xs text-slate-400">
+                Select the employee whose shift you want to change.
+              </div>
 
               <SelectContent>
                 {employees.map((emp) => (

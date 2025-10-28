@@ -2,21 +2,8 @@
 
 import { useState, useTransition } from "react"
 import { updateShiftChangeStatus } from "@/_components/server/shiftAction"
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-} from "@/_components/ui/Table"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/_components/ui/Dialog"
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/_components/ui/Table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/_components/ui/Dialog"
 import { Button } from "@/_components/ui/Button"
 import { CircleUserRound } from "lucide-react"
 import { Badge } from "@/_components/ui/Badge"
@@ -60,20 +47,13 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
             <TableBody>
               {filtered.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="text-center py-6 text-slate-400 italic"
-                  >
+                  <TableCell colSpan={6} className="text-center py-6 text-slate-400 italic">
                     No incoming shift change requests.
                   </TableCell>
                 </TableRow>
               ) : (
                 filtered.map((req) => (
-                  <TableRow
-                    key={req.id}
-                    className="hover:bg-slate-50 transition-colors duration-150"
-                  >
-                    {/* Requester */}
+                  <TableRow key={req.id} className="hover:bg-slate-50 transition-colors duration-150">
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <div className="bg-slate-200 p-2 rounded-full">
@@ -93,21 +73,18 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                       </div>
                     </TableCell>
 
-                    {/* From */}
                     <TableCell>
                       <Badge className={`border-none ${shiftStyles[req.oldShift?.type]}`}>
                         {req.oldShift?.name || "-"}
                       </Badge>
                     </TableCell>
 
-                    {/* To */}
                     <TableCell>
                       <Badge className={`border-none ${shiftStyles[req.targetShift?.type]}`}>
                         {req.targetShift?.name || "-"}
                       </Badge>
                     </TableCell>
 
-                    {/* Reason */}
                     <TableCell>
                       <Dialog>
                         <DialogTrigger asChild>
@@ -119,21 +96,19 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                           <DialogHeader>
                             <DialogTitle>Reason</DialogTitle>
                           </DialogHeader>
-                          <p className="text-slate-700 text-sm">
+                          <p className="text-sm">
                             {req.reason || "No reason provided."}
                           </p>
                         </DialogContent>
                       </Dialog>
                     </TableCell>
 
-                    {/* Status */}
                     <TableCell>
                       <Badge className={`${attedancesStyles[capitalize(req.status.replace("_", " "))]}`}>
                         {capitalize(req.status.replace("_", " "))}
                       </Badge>
                     </TableCell>
 
-                    {/* Action */}
                     <TableCell>
                       <div className="flex gap-2">
                         <Button size="sm" variant="outline" disabled={isPending} onClick={() => handleAction(req.id, "ACCEPT")}

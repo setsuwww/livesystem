@@ -9,37 +9,23 @@ import EmployeesTableButton from "./EmployeesTableButton";
 
 const PAGE_SIZE = 100;
 
-// ⚡ hanya ambil field penting
 async function getEmployees(page = 1) {
   return prisma.user.findMany({
-    where: {
-      role: "EMPLOYEE",
-      shiftId: { not: null },
-    },
-    skip: (page - 1) * PAGE_SIZE,
-    take: PAGE_SIZE,
+    where: { role: "EMPLOYEE", shiftId: { not: null }},
+    skip: (page - 1) * PAGE_SIZE, take: PAGE_SIZE,
     orderBy: { createdAt: "desc" },
     select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
+      id: true, name: true, email: true, role: true,
+      createdAt: true, updatedAt: true,
       shift: {
         select: {
-          id: true,
-          name: true,
-          type: true,
-          startTime: true,
-          endTime: true,
+          id: true, name: true, type: true,
+          startTime: true, endTime: true,
         },
       },
       division: {
         select: {
-          id: true,
-          name: true,
-          type: true,
+          id: true, name: true, type: true,
         },
       },
     },
@@ -48,14 +34,10 @@ async function getEmployees(page = 1) {
 
 async function getEmployeeCount() {
   return prisma.user.count({
-    where: {
-      role: "EMPLOYEE",
-      shiftId: { not: null },
-    },
+    where: { role: "EMPLOYEE", shiftId: { not: null }},
   });
 }
 
-// ambil data dropdown ringan
 async function getFilterData() {
   const [divisions, shifts] = await Promise.all([
     prisma.division.findMany({
@@ -86,8 +68,7 @@ export default async function EmployeesPage({ searchParams }) {
     createdAt: u.createdAt.toISOString(),
     updatedAt: u.updatedAt.toISOString(),
     shift: u.shift
-      ? {
-          ...u.shift,
+      ? { ...u.shift,
           startTime: minutesToTime(u.shift.startTime),
           endTime: minutesToTime(u.shift.endTime),
         }
@@ -103,8 +84,9 @@ export default async function EmployeesPage({ searchParams }) {
       <DashboardHeader title="Employees" subtitle="Employees management" />
       <ContentForm>
         <ContentForm.Header>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pb-3">
             <ContentInformation
+              autoMargin={false}
               heading="List Employees"
               subheading="Manage all employees here"
             />

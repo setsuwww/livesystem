@@ -26,7 +26,7 @@ export default function DivisionsTable({ data }) {
     typeFilter, setTypeFilter,
     statusFilter, setStatusFilter,
     filteredData,
-    selectedIds,
+    selectedIds, toggleSelect, toggleSelectAll,
     handleDeleteSelected, handleDeleteAll,
     handleExportPDF,
     searchRef, mutate

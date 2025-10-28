@@ -45,7 +45,7 @@ export const DivisionsActionHeader = ({
           placeholder="Search division..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full sm:w-64 bg-white py-2"
+          className="w-full sm:w-64 py-2" typeSearch={true}
         />
       </div>
 

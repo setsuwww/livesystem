@@ -15,7 +15,6 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
   search, setSearch,
   selected, onDeleteSelected, onDeleteAll, onExport,
   divisionFilter, setDivisionFilter,
-  shiftFilter, setShiftFilter,
   divisions = [], shifts = [],
 }) {
   const [openDivision, setOpenDivision] = useState(false)
@@ -23,10 +22,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
   const [statusFilter, setStatusFilter] = useState([])
 
   const selectedDivision =
-    divisionFilter === "all" ? "All Divisions" : divisions.find((d) => String(d.id) === divisionFilter)?.name ?? "Select Division"
-
-  const selectedShift =
-    shiftFilter === "all" ? "All Shifts" : shifts.find((s) => String(s.id) === shiftFilter)?.name ?? "Select Shift"
+    divisionFilter === "all" ? "All" : divisions.find((d) => String(d.id) === divisionFilter)?.name ?? "Select Division"
 
   const toggleStatus = (status) => {
     setStatusFilter((prev) =>
@@ -37,19 +33,15 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
   return (
     <div className="flex flex-wrap justify-between items-center gap-2">
       <div className="flex items-center gap-2 w-full md:w-2/3">
-        <Input
-          placeholder="Search employees..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-1/3 min-w-[160px]"
-        />
-
         <Popover open={openDivision} onOpenChange={setOpenDivision}>
           <PopoverTrigger asChild>
             <Button variant="outline" role="combobox" aria-expanded={openDivision}
-              className="w-52 justify-between"
+              className="w-fit flex items-center justify-between hover:bg-transparent border-slate-200 shadox-xs"
             >
-              {selectedDivision}
+              <div className="flex items-center text-slate-400">
+                <span className="font-semibold text-slate-600 mr-2">Division:</span>
+                {selectedDivision}
+              </div>
               <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
             </Button>
           </PopoverTrigger>
@@ -99,49 +91,9 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
           </PopoverContent>
         </Popover>
 
-        <Popover open={openShift} onOpenChange={setOpenShift}>
-          <PopoverTrigger asChild>
-            <Button variant="outline" role="combobox" aria-expanded={openShift} className="w-52 justify-between">
-              {selectedShift}
-              <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="p-0 w-72">
-            <Command>
-              <CommandInput placeholder="Search shift..." />
-              <CommandList>
-                <CommandEmpty>No shift found.</CommandEmpty>
-                <CommandGroup>
-                  <CommandItem value="all" onSelect={() => {
-                      setShiftFilter("all")
-                      setOpenShift(false)
-                    }}
-                  >
-                    <Check className={cn("h-4 w-4", shiftFilter === "all" ? "opacity-100" : "opacity-0")}/>
-                    All
-                  </CommandItem>
-
-                  {shifts.map((shift) => (
-                    <CommandItem key={shift.id} value={shift.name} onSelect={() => {
-                        setShiftFilter(String(shift.id))
-                        setOpenShift(false)
-                      }}
-                      className="flex flex-col items-start py-2"
-                    >
-                      <div className="flex items-center">
-                        <Check className={cn("mr-2 h-4 w-4", shiftFilter === String(shift.id) ? "opacity-100" : "opacity-0")}/>
-                        <span className="font-medium text-slate-600">{shift.name}</span>
-                      </div>
-                      <span className="text-xs text-slate-400 ml-6">
-                        {capitalize(shift.type)}
-                      </span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
+        <Input placeholder="Search employees..." value={search} onChange={(e) => setSearch(e.target.value)}
+          className="w-1/3 min-w-[160px]" typeSearch={true}
+        />
       </div>
 
       <div className="flex items-center gap-x-2">

@@ -8,7 +8,6 @@ export function useEmployeesHooks(users, shifts) {
   const [selected, setSelected] = useState([]);
   const [data, setData] = useState([]);
   const [divisionFilter, setDivisionFilter] = useState("all");
-  const [shiftFilter, setShiftFilter] = useState("all");
 
   useEffect(() => {
     setData((users || []).filter((u) => u.role === "EMPLOYEE"));
@@ -21,11 +20,10 @@ export function useEmployeesHooks(users, shifts) {
         u.email.toLowerCase().includes(search.toLowerCase());
 
       const matchDivision = divisionFilter === "all" || u.division?.id === Number(divisionFilter);
-      const matchShift = shiftFilter === "all" || u.shift?.id === Number(shiftFilter);
 
-      return matchSearch && matchDivision && matchShift;
+      return matchSearch && matchDivision;
     });
-  }, [data, search, divisionFilter, shiftFilter]);
+  }, [data, search, divisionFilter]);
 
   const toggleSelect = useCallback((id) =>
     setSelected((prev) => prev.includes(id)
@@ -85,7 +83,6 @@ export function useEmployeesHooks(users, shifts) {
     selected, setSelected,
     data, filteredData,
     divisionFilter, setDivisionFilter,
-    shiftFilter, setShiftFilter,
     toggleSelect,
     deleteSelected, deleteAll,
     exportCSV,

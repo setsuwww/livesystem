@@ -13,7 +13,6 @@ export default function EmployeesTable({ users, divisions, shifts }) {
     selected, setSelected,
     data, filteredData,
     divisionFilter, setDivisionFilter,
-    shiftFilter, setShiftFilter,
     toggleSelect, deleteSelected,
     deleteAll, exportCSV,
     onSwitch, onDelete,
@@ -28,7 +27,6 @@ export default function EmployeesTable({ users, divisions, shifts }) {
         selected={selected} onDeleteSelected={deleteSelected}
         onDeleteAll={deleteAll} onExport={exportCSV}
         divisionFilter={divisionFilter} setDivisionFilter={setDivisionFilter}
-        shiftFilter={shiftFilter} setShiftFilter={setShiftFilter}
         divisions={divisions}
         shifts={shifts}
       />
@@ -37,11 +35,14 @@ export default function EmployeesTable({ users, divisions, shifts }) {
         <TableHeader>
           <TableRow>
             <TableHead className="flex items-center">
-              <Checkbox checked={selected.length === data.length && data.length > 0} onCheckedChange={(value) => setSelected(value ? data.map((u) => u.id) : [])}/>
+              <Checkbox checked={selected.length === data.length && data.length > 0} 
+                onCheckedChange={(value) => setSelected(value ? data.map((u) => u.id) : [])}
+              />
             </TableHead>
             <TableHead>Employees</TableHead>
             <TableHead>Shifts</TableHead>
             <TableHead>Role</TableHead>
+            <TableHead>Division</TableHead>
             <TableHead>Created & Updated</TableHead>
             <TableHead>Action</TableHead>
           </TableRow>

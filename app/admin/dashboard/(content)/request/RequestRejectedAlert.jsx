@@ -5,12 +5,7 @@ import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, A
 import { Textarea } from "@/_components/ui/Textarea"
 import { Loader2 } from "lucide-react"
 
-function RequestRejectedAlert({
-  open, onOpenChange,
-  rejectReason, setRejectReason,
-  isLoading,
-  onConfirmReject,
-}) {
+function RequestRejectedAlert({ open, onOpenChange, rejectReason, setRejectReason, isLoading, onConfirmReject }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent variant="danger">
@@ -27,7 +22,7 @@ function RequestRejectedAlert({
         />
 
         <AlertDialogFooter>
-          <AlertDialogCancel
+          <AlertDialogCancel 
             onClick={() => { onOpenChange(false)
               setRejectReason("")
             }}

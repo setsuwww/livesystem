@@ -57,6 +57,7 @@ export default function RequestsTabs({ shiftRequests = [], permissionRequests = 
                 <TableRow>
                   <TableHead>Requested By</TableHead>
                   <TableHead>Shift</TableHead>
+                  <TableHead>Division</TableHead>
                   <TableHead>Reason</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Date</TableHead>

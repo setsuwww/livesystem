@@ -11,18 +11,25 @@ import { ContentInformation } from "@/_components/content/ContentInformation"
 async function getRequests() {
   const [shiftRequests, attendanceRequests] = await Promise.all([
     prisma.shiftChangeRequest.findMany({
-      where: { status: "PENDING_ADMIN"},
+      where: { status: "PENDING_ADMIN" },
       orderBy: { createdAt: "desc" },
       include: {
-        requestedBy: true, targetUser: true,
-        oldShift: true, targetShift: true,
+        requestedBy: true,
+        targetUser: true,
+        oldShift: true,
+        targetShift: true,
       },
     }),
 
     prisma.attendance.findMany({
-      where: { status: "PERMISSION", approval: "PENDING"},
+      where: { status: "PERMISSION", approval: "PENDING" },
       orderBy: { date: "desc" },
-      include: { user: true, shift: true },
+      include: {
+        user: {
+          include: { division: true },
+        },
+        shift: true,
+      },
     }),
   ])
 
@@ -45,8 +52,10 @@ async function getRequests() {
         name: r.targetShift?.name || "-",
         type: r.targetShift?.type || "-",
       },
-      info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${r.targetShift?.name || "?"} (${r.targetShift?.type || "-"})`,
-      typeShift: r.shift?.type,
+      info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${
+        r.targetShift?.name || "?"
+      } (${r.targetShift?.type || "-"})`,
+      typeShift: r.targetShift?.type || r.oldShift?.type || "-",
       reason: r.reason || "-",
       date: r.createdAt
         ? new Date(r.createdAt).toLocaleDateString("en-US", {
@@ -61,10 +70,11 @@ async function getRequests() {
       requestedBy: {
         name: r.user?.name || "-",
         email: r.user?.email || "-",
+        division: r.user?.division?.name || "-",
       },
       user: null,
       reason: r.reason || "-",
-      info: r.shift?.name || "-",
+      info: r.shift?.type || "-",
       typeShift: r.shift?.type || "-",
       date: r.date
         ? new Date(r.date).toLocaleDateString("en-US", {
@@ -81,22 +91,27 @@ export default async function Page() {
 
   return (
     <section>
-      <DashboardHeader title="Requests" subtitle="Manage pending requests by type"/>
+      <DashboardHeader
+        title="Requests"
+        subtitle="Manage pending requests by type"
+      />
 
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation
-            heading="Pending Requests" subheading="Switch between Shift Change and Permission requests"
+            heading="Pending Requests"
+            subheading="Switch between Shift Change and Permission requests"
             show={false}
           />
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <RequestsTabs shiftRequests={shift} permissionRequests={attendance} />
+          <RequestsTabs
+            shiftRequests={shift}
+            permissionRequests={attendance}
+          />
         </ContentForm.Body>
       </ContentForm>
     </section>
   )
 }
-
-

@@ -34,34 +34,38 @@ export function useDivisionsHooks(initialData = []) {
   }, [divisions, search, typeFilter, statusFilter])
 
   const toggleSelect = useCallback((id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    )
+    setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])
   }, [])
 
-  const handleDeleteAll = useCallback(() => {handleDivisions.onDeleteAll?.(mutate)}, [mutate])
-  const handleDeleteSelected = useCallback(() => {handleDivisions.onDeleteSelected?.(selectedIds, mutate)}, [selectedIds, mutate])
-  const handleExportPDF = useCallback(() => {handleDivisions.onExportPDF?.(filteredData)}, [filteredData])
+  const toggleSelectAll = useCallback(() => {
+    if (selectedIds.length === filteredData.length) { setSelectedIds([])} 
+    else { setSelectedIds(filteredData.map((d) => d.id))}
+  }, [selectedIds, filteredData])
 
-  const toggleSelect = (id) => {setSelectedIds((prev) =>
-    prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+  const handleDeleteAll = useCallback(() => handleDivisions.onDeleteAll?.(mutate),
+    [mutate]
   )
-}
 
-const toggleSelectAll = () => {
-  if (selectedIds.length === filteredData.length) {
-    setSelectedIds([])
-  } 
-  else { setSelectedIds(filteredData.map((d) => d.id))}
-}
+  const handleDeleteSelected = useCallback(() => handleDivisions.onDeleteSelected?.(selectedIds, mutate),
+    [selectedIds, mutate]
+  )
+
+  const handleExportPDF = useCallback(() => handleDivisions.onExportPDF?.(filteredData),
+    [filteredData]
+  )
 
   return {
     search, setSearch,
     typeFilter, setTypeFilter,
     statusFilter, setStatusFilter,
     filteredData,
-    selectedIds, toggleSelect,
-    handleDeleteSelected, handleDeleteAll, handleExportPDF,
-    searchRef, mutate,
+    selectedIds,
+    toggleSelect,
+    toggleSelectAll,
+    handleDeleteSelected,
+    handleDeleteAll,
+    handleExportPDF,
+    searchRef,
+    mutate,
   }
 }

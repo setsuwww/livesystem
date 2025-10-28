@@ -10,13 +10,24 @@ import { toast } from "sonner"
 import { shiftStyles } from "@/_constants/shiftConstants"
 import RequestStatusChangerToggle from "./RequestStatusChangerToggle"
 import RequestRejectedAlert from "./RequestRejectedAlert"
-import { updateShiftChangeRequestStatus, updatePermissionStatus } from "@/_components/server/shiftAction"
+import {
+  updateShiftChangeRequestStatus,
+  updatePermissionStatus,
+} from "@/_components/server/shiftAction"
 
 export default function RequestsTableRow({
-  id, type, requestedBy, user, 
-  oldShift, targetShift, info,
-  reason, status, date,
-  requestType, typeShift,
+  id,
+  type,
+  requestedBy,
+  user,
+  oldShift,
+  targetShift,
+  info,
+  reason,
+  status,
+  date,
+  requestType,
+  typeShift,
 }) {
   const router = useRouter()
   const [currentStatus, setCurrentStatus] = useState(status)
@@ -24,24 +35,23 @@ export default function RequestsTableRow({
   const [rejectReason, setRejectReason] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  const extractId = (fullId) => {
-    const clean = fullId?.replace(/^(shift-|perm-)/, "");
-    return clean && !isNaN(clean) ? Number(clean) : null;
-  };
+  // Clean up ID
+  const actualId = useMemo(() => {
+    const clean = id?.replace(/^(shift-|perm-)/, "")
+    return clean && !isNaN(clean) ? Number(clean) : null
+  }, [id])
 
-  const actualId = useMemo(
-    () => id?.replace(/^(shift-|perm-)/, "") || "",
-    [id]
-  )
-
+  // 🔄 Handle status change (Approve/Reject)
   const handleStatusChange = useCallback(
     async (newStatus, reason = null) => {
+      if (!actualId) return
       setIsLoading(true)
-      try { let res
+      try {
+        let res
         if (requestType === "shift") {
-          res = await updateShiftChangeRequestStatus(Number(actualId), newStatus, reason)
+          res = await updateShiftChangeRequestStatus(actualId, newStatus, reason)
         } else if (requestType === "permission") {
-          res = await updatePermissionStatus(Number(actualId), newStatus, reason)
+          res = await updatePermissionStatus(actualId, newStatus, reason)
         }
 
         if (res?.success) {
@@ -61,7 +71,7 @@ export default function RequestsTableRow({
     [actualId, router, requestType]
   )
 
-
+  // ❌ Handle reject
   const handleReject = useCallback(() => {
     if (!rejectReason.trim()) return
     handleStatusChange("REJECTED", rejectReason)
@@ -69,16 +79,24 @@ export default function RequestsTableRow({
     setRejectReason("")
   }, [rejectReason, handleStatusChange])
 
+  // 👤 Render user info + division
   const renderUserInfo = useCallback(
     (person) =>
       person ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-start gap-2">
           <div className="bg-slate-200 p-2 rounded-full">
             <CircleUserRound className="h-5 w-5 text-slate-600" strokeWidth={1} />
           </div>
           <div>
-            <p className="text-sm font-semibold text-slate-600">{person.name}</p>
+            <p className="text-sm font-semibold text-slate-600">
+              {person.name}
+            </p>
             <p className="text-xs text-slate-400">{person.email}</p>
+            {person.division?.name && (
+              <p className="text-xs font-medium text-indigo-500">
+                {person.division.name}
+              </p>
+            )}
           </div>
         </div>
       ) : (
@@ -87,14 +105,13 @@ export default function RequestsTableRow({
     []
   )
 
+  // 🕓 Render shift info or permission info
   const renderShiftInfo = useMemo(() => {
-    if (requestType !== "shift") {
+    if (requestType === "permission") {
       return (
         <Badge
-          className={`border-none px-3 py-1 ${
-            type === "Permission"
-              ? shiftStyles[typeShift]
-              : "bg-slate-50 text-sky-600"
+          className={`border-none px-3 py-1 text-xs font-medium ${
+            shiftStyles[typeShift] || "bg-slate-100 text-slate-600"
           }`}
         >
           {info}
@@ -105,7 +122,9 @@ export default function RequestsTableRow({
     return (
       <div className="flex flex-col items-start justify-start gap-1 text-left">
         <div className="flex items-center space-x-1">
-          <span className="font-semibold px-2 py-0.5 text-sky-500 border border-slate-200 shadow-xs rounded-md">From :</span>
+          <span className="font-semibold px-2 py-0.5 text-sky-500 border border-slate-200 shadow-xs rounded-md">
+            From :
+          </span>
           <Badge
             className={`border-none px-3 py-1 text-xs font-medium ${
               shiftStyles[oldShift?.type] || "bg-slate-100 text-slate-700"
@@ -115,7 +134,9 @@ export default function RequestsTableRow({
           </Badge>
         </div>
         <div className="flex items-center space-x-1">
-          <span className="font-semibold px-2 py-0.5 text-sky-500 border border-slate-200 shadow-xs rounded-md">To :</span>
+          <span className="font-semibold px-2 py-0.5 text-sky-500 border border-slate-200 shadow-xs rounded-md">
+            To :
+          </span>
           <Badge
             className={`border-none px-3 py-1 text-xs font-medium ${
               shiftStyles[targetShift?.type] || "bg-slate-100 text-slate-700"
@@ -126,33 +147,47 @@ export default function RequestsTableRow({
         </div>
       </div>
     )
-  }, [requestType, type, typeShift, info, oldShift, targetShift])
+  }, [requestType, typeShift, info, oldShift, targetShift])
 
   return (
     <>
       <TableRow>
         <TableCell>{renderUserInfo(requestedBy)}</TableCell>
-        {requestType === "shift" && <TableCell>{renderUserInfo(user)}</TableCell>}
+
+        {requestType === "shift" && (
+          <TableCell>{renderUserInfo(user)}</TableCell>
+        )}
+
         <TableCell className="max-w-xs">{renderShiftInfo}</TableCell>
+
         <TableCell className="max-w-2xs">
           <span className="line-clamp-2 text-sm text-slate-400">
             {reason || "-"}
           </span>
         </TableCell>
+
         <TableCell>
-          <RequestStatusChangerToggle status={currentStatus} requestId={actualId} disabled={isLoading}
-            onReject={() => setShowRejectDialog(true)} onStatusChange={(newStatus) => handleStatusChange(newStatus)}
+          <RequestStatusChangerToggle
+            status={currentStatus}
+            requestId={actualId}
+            disabled={isLoading}
+            onReject={() => setShowRejectDialog(true)}
+            onStatusChange={(newStatus) => handleStatusChange(newStatus)}
           />
         </TableCell>
+
         <TableCell className="text-slate-400 whitespace-nowrap text-sm">
           {date}
         </TableCell>
       </TableRow>
 
       <RequestRejectedAlert
-        open={showRejectDialog} onOpenChange={setShowRejectDialog}
-        rejectReason={rejectReason} setRejectReason={setRejectReason}
-        isLoading={isLoading} onConfirmReject={handleReject}
+        open={showRejectDialog}
+        onOpenChange={setShowRejectDialog}
+        rejectReason={rejectReason}
+        setRejectReason={setRejectReason}
+        isLoading={isLoading}
+        onConfirmReject={handleReject}
       />
     </>
   )
