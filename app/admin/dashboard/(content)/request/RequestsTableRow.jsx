@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { TableRow, TableCell } from "@/_components/ui/Table"
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/_components/ui/Dialog"
 import { Badge } from "@/_components/ui/Badge"
 import { CircleUserRound } from "lucide-react"
 import { toast } from "sonner"
@@ -10,24 +11,15 @@ import { toast } from "sonner"
 import { shiftStyles } from "@/_constants/shiftConstants"
 import RequestStatusChangerToggle from "./RequestStatusChangerToggle"
 import RequestRejectedAlert from "./RequestRejectedAlert"
-import {
-  updateShiftChangeRequestStatus,
-  updatePermissionStatus,
-} from "@/_components/server/shiftAction"
+import { capitalize } from '@/_function/globalFunction';
+import { updateShiftChangeRequestStatus, updatePermissionStatus } from "@/_components/server/shiftAction"
 
 export default function RequestsTableRow({
-  id,
-  type,
-  requestedBy,
-  user,
-  oldShift,
-  targetShift,
-  info,
-  reason,
-  status,
-  date,
-  requestType,
-  typeShift,
+  id, type, requestedBy, user,
+  oldShift, targetShift,
+  info, reason, status,
+  date, startDate, endDate,   
+  requestType, typeShift,
 }) {
   const router = useRouter()
   const [currentStatus, setCurrentStatus] = useState(status)
@@ -35,24 +27,20 @@ export default function RequestsTableRow({
   const [rejectReason, setRejectReason] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
-  // Clean up ID
   const actualId = useMemo(() => {
     const clean = id?.replace(/^(shift-|perm-)/, "")
     return clean && !isNaN(clean) ? Number(clean) : null
   }, [id])
 
-  // 🔄 Handle status change (Approve/Reject)
   const handleStatusChange = useCallback(
     async (newStatus, reason = null) => {
       if (!actualId) return
       setIsLoading(true)
       try {
-        let res
-        if (requestType === "shift") {
-          res = await updateShiftChangeRequestStatus(actualId, newStatus, reason)
-        } else if (requestType === "permission") {
-          res = await updatePermissionStatus(actualId, newStatus, reason)
-        }
+        const res =
+          requestType === "shift"
+            ? await updateShiftChangeRequestStatus(actualId, newStatus, reason)
+            : await updatePermissionStatus(actualId, newStatus, reason)
 
         if (res?.success) {
           setCurrentStatus(newStatus)
@@ -71,7 +59,6 @@ export default function RequestsTableRow({
     [actualId, router, requestType]
   )
 
-  // ❌ Handle reject
   const handleReject = useCallback(() => {
     if (!rejectReason.trim()) return
     handleStatusChange("REJECTED", rejectReason)
@@ -79,7 +66,6 @@ export default function RequestsTableRow({
     setRejectReason("")
   }, [rejectReason, handleStatusChange])
 
-  // 👤 Render user info + division
   const renderUserInfo = useCallback(
     (person) =>
       person ? (
@@ -88,9 +74,7 @@ export default function RequestsTableRow({
             <CircleUserRound className="h-5 w-5 text-slate-600" strokeWidth={1} />
           </div>
           <div>
-            <p className="text-sm font-semibold text-slate-600">
-              {person.name}
-            </p>
+            <p className="text-sm font-semibold text-slate-600">{person.name}</p>
             <p className="text-xs text-slate-400">{person.email}</p>
             {person.division?.name && (
               <p className="text-xs font-medium text-indigo-500">
@@ -105,7 +89,6 @@ export default function RequestsTableRow({
     []
   )
 
-  // 🕓 Render shift info or permission info
   const renderShiftInfo = useMemo(() => {
     if (requestType === "permission") {
       return (
@@ -114,7 +97,7 @@ export default function RequestsTableRow({
             shiftStyles[typeShift] || "bg-slate-100 text-slate-600"
           }`}
         >
-          {info}
+          {capitalize(info)}
         </Badge>
       )
     }
@@ -122,7 +105,7 @@ export default function RequestsTableRow({
     return (
       <div className="flex flex-col items-start justify-start gap-1 text-left">
         <div className="flex items-center space-x-1">
-          <span className="font-semibold px-2 py-0.5 text-sky-500 border border-slate-200 shadow-xs rounded-md">
+          <span className="font-semibold text-teal-400">
             From :
           </span>
           <Badge
@@ -134,7 +117,7 @@ export default function RequestsTableRow({
           </Badge>
         </div>
         <div className="flex items-center space-x-1">
-          <span className="font-semibold px-2 py-0.5 text-sky-500 border border-slate-200 shadow-xs rounded-md">
+          <span className="font-semibold text-rose-400">
             To :
           </span>
           <Badge
@@ -154,16 +137,37 @@ export default function RequestsTableRow({
       <TableRow>
         <TableCell>{renderUserInfo(requestedBy)}</TableCell>
 
-        {requestType === "shift" && (
-          <TableCell>{renderUserInfo(user)}</TableCell>
-        )}
+        {requestType === "shift" && <TableCell>{renderUserInfo(user)}</TableCell>}
 
         <TableCell className="max-w-xs">{renderShiftInfo}</TableCell>
 
-        <TableCell className="max-w-2xs">
-          <span className="line-clamp-2 text-sm text-slate-400">
-            {reason || "-"}
-          </span>
+        <TableCell className="max-w-[120px]">
+          {reason ? (
+            <Dialog>
+              <DialogTrigger asChild>
+                <div className="text-left">
+                  <p className="line-clamp-3 text-sm text-slate-400 cursor-pointer">
+                    {reason}
+                  </p>
+                  <span className="text-xs text-sky-500 hover:underline cursor-pointer">
+                    Read more
+                  </span>
+                </div>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg">
+                <DialogHeader>
+                  <DialogTitle>Reason detail</DialogTitle>
+                  <DialogDescription asChild>
+                    <p className="whitespace-pre-wrap text-slate-600 mt-2">
+                      {reason}
+                    </p>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <span className="text-sm text-slate-400">-</span>
+          )}
         </TableCell>
 
         <TableCell>
@@ -176,8 +180,16 @@ export default function RequestsTableRow({
           />
         </TableCell>
 
+        {/* ✅ Menampilkan tanggal sesuai tipe request */}
         <TableCell className="text-slate-400 whitespace-nowrap text-sm">
-          {date}
+          {requestType === "shift" ? (
+            <div>
+              <p className="text-teal-500">{startDate || "-"}</p>
+              <p className="text-rose-500">{endDate || "-"}</p>
+            </div>
+          ) : (
+            date || "-"
+          )}
         </TableCell>
       </TableRow>
 

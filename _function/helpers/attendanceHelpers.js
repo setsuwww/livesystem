@@ -1,4 +1,4 @@
-import dayjs from "dayjs"
+import dayjs from "@/_lib/day"
 import { prisma } from "@/_lib/prisma"
 
 const LATE_THRESHOLD_MINUTES = 10
@@ -102,3 +102,18 @@ export function shouldRemindForgotCheckout(attendance) {
   const checkIn = dayjs(attendance.checkInTime)
   return dayjs().diff(checkIn, "minute") >= FORGOT_CHECKOUT_REMINDER_MINUTES
 }
+
+export function calculateWorkHours(checkIn, checkOut, breakHours = 1) {
+  if (!checkIn || !checkOut) return 0
+
+  const inTime = new Date(checkIn)
+  const outTime = new Date(checkOut)
+
+  let diff = (outTime - inTime) / (1000 * 60 * 60)
+  diff -= breakHours
+
+  if (diff < 0) diff = 0
+
+  return Number(diff.toFixed(2))
+}
+

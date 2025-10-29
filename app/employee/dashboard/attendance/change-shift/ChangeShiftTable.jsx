@@ -5,7 +5,7 @@ import { updateShiftChangeStatus } from "@/_components/server/shiftAction"
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/_components/ui/Table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/_components/ui/Dialog"
 import { Button } from "@/_components/ui/Button"
-import { CircleUserRound } from "lucide-react"
+import { CircleUserRound, File } from "lucide-react"
 import { Badge } from "@/_components/ui/Badge"
 import { capitalize } from "@/_function/globalFunction"
 import { shiftStyles } from "@/_constants/shiftConstants"
@@ -38,7 +38,7 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                 <TableHead>Requester</TableHead>
                 <TableHead>From</TableHead>
                 <TableHead>To</TableHead>
-                <TableHead>Reason</TableHead>
+                <TableHead>Message</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Action</TableHead>
               </TableRow>
@@ -88,15 +88,15 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                     <TableCell>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <div className="max-w-[120px] truncate text-sm text-slate-500 cursor-pointer hover:underline" title={req.reason}>
+                          <div className="max-w-[160px] line-clamp-3 truncate text-sm text-slate-500 cursor-pointer hover:underline" title={req.reason}>
                             {req.reason || "-"}
                           </div>
                         </DialogTrigger>
                         <DialogContent className="max-w-lg">
                           <DialogHeader>
-                            <DialogTitle>Reason</DialogTitle>
+                            <DialogTitle>Message</DialogTitle>
                           </DialogHeader>
-                          <p className="text-sm">
+                          <p className="text-sm max-x-xs">
                             {req.reason || "No reason provided."}
                           </p>
                         </DialogContent>

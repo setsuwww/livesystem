@@ -243,7 +243,7 @@ export default function DivisionsTable({ data }) {
           </DialogHeader>
           <p className="text-sm text-slate-600">
             {pendingStatus
-              ? "Are you sure you want to activate all WFA (Work From Anywhere) and inactivate all WFO (Work From Office)?"
+              ? "Are you sure you want to activate all WFA and inactivate all WFO?"
               : "Are you sure you want to deactivate all WFA and activate all WFO?"}
           </p>
           <DialogFooter className="mt-4">

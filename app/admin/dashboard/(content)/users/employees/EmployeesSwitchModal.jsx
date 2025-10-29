@@ -75,7 +75,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
           </DialogTitle>
         </DialogHeader>
 
-        {loadingCurrent ? (<p className="flex items-center space-x-1 text-xs text-slate-400"><Loader2 className="animate-spin"/> Loading current user...</p>) 
+        {loadingCurrent ? (<p className="flex items-center space-x-1 text-xs text-slate-400"><Loader2 className="w-4 h-4 animate-spin mr-2"/> Loading current user...</p>) 
         : (currentUser && (
             <header>
               <Label htmlFor="past" className="mb-4">
@@ -98,12 +98,12 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
         <div className="relative mb-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-slate-400" />
           <Input placeholder="Search user..." value={search} onChange={(e) => setSearch(e.target.value)}
-            className="pl-8"
+            className="pl-8" typeSearch={true}
           />
         </div>
 
         <section className="max-h-80 overflow-y-auto border border-slate-100 shadow-xs rounded-lg p-3">
-          {loadingUsers ? (<p className="text-xs text-center text-slate-400">Loading users...</p>) 
+          {loadingUsers ? (<p className="flex items-center justify-center text-xs text-center text-slate-400"><Loader2 className="w-4 h-4 animate-spin mr-2" />Loading users...</p>) 
             : filteredUsers.length === 0 ? (<p className="text-xs text-center text-slate-400">No users found</p>) 
             : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

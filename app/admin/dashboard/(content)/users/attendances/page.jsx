@@ -1,45 +1,19 @@
-import { prisma } from "@/_lib/prisma";
-import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
-import ContentForm from "@/_components/content/ContentForm";
-import { ContentInformation } from "@/_components/content/ContentInformation";
-import { Pagination } from "@/app/admin/dashboard/Pagination";
-import { AttendancesCard } from "./AttendancesCard";
-import AttendancesTable from "./AttendancesTable";
-import { minutesToTime } from "@/_function/services/shiftAttendanceHelpers";
-import { safeToISOString } from "@/_function/globalFunction";
+import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
+import ContentForm from "@/_components/content/ContentForm"
+import { ContentInformation } from "@/_components/content/ContentInformation"
+import { AttendancesCard } from "./AttendancesCard"
+import AttendancesTableClient from "./AttendancesTableClient"
+import { prisma } from "@/_lib/prisma"
+import { minutesToTime } from "@/_function/services/shiftAttendanceHelpers"
 
-const PAGE_SIZE = 5;
-
-// Ambil attendance paginated
-async function getAttendanceData(page = 1) {
-  const [attendances, total] = await prisma.$transaction([
-    prisma.attendance.findMany({
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
-      include: {
-        user: { select: { id: true, name: true, email: true } },
-        shift: { select: { id: true, name: true, type: true, startTime: true, endTime: true, divisionId: true } },
-      },
-      orderBy: { date: "desc" },
-    }),
-    prisma.attendance.count(),
-  ]);
-
-  return { attendances, total };
-}
-
-// Ambil shift beserta users & attendance hari ini
 async function getShifts() {
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
-
-  const endOfDay = new Date();
-  endOfDay.setHours(23, 59, 59, 999);
-
-  const allowedShiftTypes = ["MORNING", "AFTERNOON", "EVENING"];
+  const startOfDay = new Date()
+  startOfDay.setHours(0, 0, 0, 0)
+  const endOfDay = new Date()
+  endOfDay.setHours(23, 59, 59, 999)
 
   const shifts = await prisma.shift.findMany({
-    where: { type: { in: allowedShiftTypes } },
+    where: { type: { in: ["MORNING", "AFTERNOON", "EVENING"] } },
     include: {
       division: { select: { id: true, name: true } },
       users: {
@@ -48,9 +22,7 @@ async function getShifts() {
           name: true,
           email: true,
           attendances: {
-            where: {
-              date: { gte: startOfDay, lte: endOfDay },
-            },
+            where: { date: { gte: startOfDay, lte: endOfDay } },
             select: { status: true, approval: true },
             orderBy: { date: "desc" },
             take: 1,
@@ -58,9 +30,8 @@ async function getShifts() {
         },
       },
     },
-  });
+  })
 
-  // mapping
   return shifts.map((shift) => ({
     id: shift.id,
     name: shift.name,
@@ -73,47 +44,17 @@ async function getShifts() {
       name: user.name,
       email: user.email,
       attendanceStatus:
-        user.attendances[0]?.status && ["ABSENT", "LATE", "PERMISSION"].includes(user.attendances[0].status)
+        user.attendances[0]?.status &&
+        ["ABSENT", "LATE", "PERMISSION"].includes(user.attendances[0].status)
           ? user.attendances[0].status
           : "PRESENT",
-      approval: user.attendances[0]?.approval || ""
+      approval: user.attendances[0]?.approval || "",
     })),
-  }));
+  }))
 }
 
-
-export const revalidate = 60;
-
-export default async function AttendancesPage({ searchParams }) {
-  const page = Number(searchParams?.page) || 1;
-
-  const [{ attendances, total }, shifts] = await Promise.all([
-    getAttendanceData(page),
-    getShifts(),
-  ]);
-
-  const serializedAttendances = attendances.map((a) => ({
-    ...a,
-    date: safeToISOString(a.date),
-    checkOutTime: safeToISOString(a.checkOutTime),
-    checkInTime: safeToISOString(a.checkInTime),
-    createdAt: safeToISOString(a.createdAt),
-    updatedAt: safeToISOString(a.updatedAt),
-    shift: a.shift
-      ? {
-          id: a.shift.id,
-          name: a.shift.name,
-          type: a.shift.type,
-          startTime: minutesToTime(a.shift.startTime),
-          endTime: minutesToTime(a.shift.endTime),
-        }
-      : null,
-  }));
-
-  const totalPages = Math.ceil(total / PAGE_SIZE);
-  if (page > totalPages && totalPages > 0) {
-    return <div className="p-4">Page not found</div>;
-  }
+export default async function AttendancesPage() {
+  const shifts = await getShifts()
 
   return (
     <section>
@@ -131,16 +72,9 @@ export default async function AttendancesPage({ searchParams }) {
 
         <ContentForm.Body>
           <AttendancesCard shifts={shifts} />
-
-          <AttendancesTable data={serializedAttendances} />
+          <AttendancesTableClient />
         </ContentForm.Body>
-
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          basePath="/admin/dashboard/attendances"
-        />
       </ContentForm>
     </section>
-  );
+  )
 }

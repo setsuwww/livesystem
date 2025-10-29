@@ -8,27 +8,60 @@ import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader"
 import ContentForm from "@/_components/content/ContentForm"
 import { ContentInformation } from "@/_components/content/ContentInformation"
 
-async function getRequests() {
+async function getRequests(mode = "pending") {
+  // Mode logic — kalo history, hapus semua filter
+  const isHistory = mode === "history"
+
   const [shiftRequests, attendanceRequests] = await Promise.all([
     prisma.shiftChangeRequest.findMany({
-      where: { status: "PENDING_ADMIN" },
+      where: isHistory
+        ? {} // ambil semua
+        : {
+            OR: [{ status: "PENDING_ADMIN" }, { status: "PENDING_TARGET" }],
+          },
       orderBy: { createdAt: "desc" },
-      include: {
-        requestedBy: true,
-        targetUser: true,
-        oldShift: true,
-        targetShift: true,
+      select: {
+        id: true,
+        reason: true,
+        status: true,
+        createdAt: true,
+        startDate: true,
+        endDate: true,
+        requestedBy: {
+          select: { name: true, email: true },
+        },
+        targetUser: {
+          select: { name: true, email: true },
+        },
+        oldShift: {
+          select: { name: true, type: true },
+        },
+        targetShift: {
+          select: { name: true, type: true },
+        },
       },
     }),
 
     prisma.attendance.findMany({
-      where: { status: "PERMISSION", approval: "PENDING" },
+      where: isHistory
+        ? {}
+        : { status: "PERMISSION", approval: "PENDING" },
       orderBy: { date: "desc" },
-      include: {
+      select: {
+        id: true,
+        date: true,
+        reason: true,
+        approval: true,
         user: {
-          include: { division: true },
+          select: {
+            name: true,
+            email: true,
+            division: { select: { name: true } },
+          },
         },
-        shift: true,
+        shift: {
+          select: { type: true },
+        },
       },
     }),
   ])
@@ -57,12 +90,34 @@ async function getRequests() {
       } (${r.targetShift?.type || "-"})`,
       typeShift: r.targetShift?.type || r.oldShift?.type || "-",
       reason: r.reason || "-",
-      date: r.createdAt
-        ? new Date(r.createdAt).toLocaleDateString("en-US", {
-            weekday: "long", day: "numeric", month: "long", year: "numeric",
+      startDate: r.startDate
+        ? new Date(r.startDate).toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
           })
         : "-",
-      status: r.status || "PENDING",
+      endDate: r.endDate
+        ? new Date(r.endDate).toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        : "-",
+      date: r.createdAt
+        ? new Date(r.createdAt).toLocaleDateString("en-US", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        : "-",
+      status:
+        r.status === "PENDING_ADMIN" || r.status === "PENDING_TARGET"
+          ? "PENDING"
+          : r.status,
     })),
 
     attendance: attendanceRequests.map((r) => ({
@@ -78,28 +133,33 @@ async function getRequests() {
       typeShift: r.shift?.type || "-",
       date: r.date
         ? new Date(r.date).toLocaleDateString("en-US", {
-            weekday: "long", day: "numeric", month: "long", year: "numeric",
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
           })
         : "-",
-      status: r.approval || "PENDING",
+      status:
+        r.approval === "PENDING" ? "PENDING" : r.approval || "UNKNOWN",
     })),
   }
 }
 
-export default async function Page() {
-  const { shift, attendance } = await getRequests()
+export default async function Page({ searchParams }) {
+  const mode = searchParams?.mode || "pending"
+  const { shift, attendance } = await getRequests(mode)
 
   return (
     <section>
       <DashboardHeader
         title="Requests"
-        subtitle="Manage pending requests by type"
+        subtitle={mode === "history" ? "All requests history" : "Manage pending requests by type"}
       />
 
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation
-            heading="Pending Requests"
+            heading={mode === "history" ? "Request History" : "Pending Requests"}
             subheading="Switch between Shift Change and Permission requests"
             show={false}
           />
@@ -109,6 +169,7 @@ export default async function Page() {
           <RequestsTabs
             shiftRequests={shift}
             permissionRequests={attendance}
+            mode={mode}
           />
         </ContentForm.Body>
       </ContentForm>

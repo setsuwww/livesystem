@@ -12,6 +12,15 @@ import ContentForm from '@/_components/content/ContentForm';
 import { ContentInformation } from '@/_components/content/ContentInformation';
 import { shiftStyles } from "@/_constants/shiftConstants"
 
+// Konversi tanggal ke ISO lokal tanpa geser timezone (hindari bug UTC -7 jam)
+function toLocalISOString(dateStr) {
+  if (!dateStr) return null
+  const date = new Date(dateStr + "T00:00:00")
+  date.setMinutes(date.getMinutes() - date.getTimezoneOffset())
+  return date.toISOString()
+}
+
+// Format YYYY-MM-DD
 function toDateOnlyIso(s) {
   if (!s) return null
   const d = new Date(s)
@@ -49,12 +58,15 @@ export default function ChangeShiftForm({ employees = [] }) {
       const payload = {
         targetUserId: Number(target.id),
         newShiftId: target.shiftId,
-        startDate: new Date(startDate + "T00:00:00").toISOString(),
-        endDate: endDate ? new Date(endDate + "T00:00:00").toISOString() : null,
+        startDate: toLocalISOString(startDate),   // ✅ FIXED
+        endDate: endDate ? toLocalISOString(endDate) : null,  // ✅ FIXED
         reason: reason.trim(),
       }
 
-      await apiFetchData({ url: "/shifts/user-side-change", method: "post", data: payload,
+      await apiFetchData({
+        url: "/shifts/user-side-change",
+        method: "post",
+        data: payload,
         successMessage: "Shift change request submitted successfully.",
         errorMessage: "Failed to submit shift change request.",
       })
@@ -63,42 +75,58 @@ export default function ChangeShiftForm({ employees = [] }) {
       setStartDate(todayIso)
       setEndDate(todayIso)
       setReason("")
+    } catch (err) {
+      console.error("Submit error:", err)
+    } finally {
+      setLoading(false)
     }
-    catch (err) { console.error("Submit error:", err) }
-    finally { setLoading(false) }
   }
-
 
   return (
     <ContentForm>
       <ContentForm.Header>
-        <ContentInformation heading="Change shift form" subheading="Send a change shift request to another Employees" />
+        <ContentInformation
+          heading="Change shift form"
+          subheading="Send a change shift request to another employee"
+        />
       </ContentForm.Header>
 
       <ContentForm.Body>
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl border border-slate-200">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-6 bg-white p-6 rounded-xl border border-slate-200"
+        >
+          {/* Select Employee */}
           <div className="space-y-2">
             <Label>Select Employee</Label>
-            <Select value={String(selectedUser)} onValueChange={(v) => setSelectedUser(String(v))} disabled={loading}>
+            <Select
+              value={String(selectedUser)}
+              onValueChange={(v) => setSelectedUser(String(v))}
+              disabled={loading}
+            >
               <SelectTrigger className="border-slate-200">
                 <SelectValue>
                   {selectedUser ? (
-                    (() => {const emp = employees.find((e) => String(e.id) === String(selectedUser))
+                    (() => {
+                      const emp = employees.find((e) => String(e.id) === String(selectedUser))
                       if (!emp) return "Choose an employee"
                       return (
                         <div className="flex items-center text-left space-x-2">
                           <span className="text-xs font-medium text-white bg-slate-600 px-2 py-0.5 rounded-sm">
                             {emp.name}
-                          </span> 
+                          </span>
                           <span className={`${shiftStyles[emp.shift.type]} text-xs px-2 rounded-sm border`}>
                             {emp.email}
                           </span>
                         </div>
                       )
                     })()
-                  ) : ("Choose an employee")}
+                  ) : (
+                    "Choose an employee"
+                  )}
                 </SelectValue>
               </SelectTrigger>
+
               <div className="text-xs text-slate-400">
                 Select the employee whose shift you want to change.
               </div>
@@ -123,12 +151,16 @@ export default function ChangeShiftForm({ employees = [] }) {
             </Select>
           </div>
 
+          {/* Date Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Start Date</Label>
               <div className="flex items-center gap-2">
                 <CalendarDays className="text-slate-400" />
-                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
                   min={todayIso}
                 />
@@ -139,7 +171,10 @@ export default function ChangeShiftForm({ employees = [] }) {
               <Label>End Date (optional)</Label>
               <div className="flex items-center gap-2">
                 <CalendarDays className="text-slate-400" />
-                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
                   min={startDate || todayIso}
                 />
@@ -147,9 +182,11 @@ export default function ChangeShiftForm({ employees = [] }) {
             </div>
           </div>
 
+          {/* Reason */}
           <div className="space-y-2">
             <Label>Reason for Change</Label>
-            <Textarea className="bg-white"
+            <Textarea
+              className="bg-white"
               placeholder="Explain why this shift change is needed..."
               value={reason}
               onChange={(e) => setReason(e.target.value)}
@@ -157,6 +194,7 @@ export default function ChangeShiftForm({ employees = [] }) {
             />
           </div>
 
+          {/* Submit */}
           <Button type="submit" className="w-full" disabled={disabled}>
             {loading && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
             Submit Request
@@ -166,10 +204,3 @@ export default function ChangeShiftForm({ employees = [] }) {
     </ContentForm>
   )
 }
-
-/**
-Nah kalau disini buat periode mulai dan berakhirnya itu berfungsi,
-jadi kalau mulainya tanggal sekian + udah di acc admin maka shift dari user yang request menjadi shift user yang ditargetkan
-tapi kalau mulainya tanggal sekian belum di acc, status nya tetap stay
-periode juga berfungsi, terutama periode akhir, kalo sudah deadline maka user akan kembali ke shift awal dimana user pertama kali dijadwalkan shift
-*/

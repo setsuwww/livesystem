@@ -40,7 +40,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
             >
               <div className="flex items-center text-slate-500">
                 <span className="font-semibold text-slate-600 mr-2">Division:</span>
-                <span className="font-light">{selectedDivision}</span>
+                <span className="text-slate-400">{selectedDivision}</span>
               </div>
               <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
             </Button>
@@ -52,7 +52,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
                 <div className="flex gap-1">
                   {["WFO", "WFA"].map((type) => (
                     <Badge key={type} onClick={() => toggleStatus(type)} variant={statusFilter.includes(type) ? "secondary" : "outline"}
-                      className={cn("cursor-pointer text-xs select-none",
+                      className={cn("cursor-pointer text-xs select-none text-slate-500",
                         statusFilter.includes(type) && divisionStyles[type]
                       )}
                     >

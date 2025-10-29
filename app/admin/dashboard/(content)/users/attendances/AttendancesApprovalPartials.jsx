@@ -11,7 +11,7 @@ export default function AttendancesApprovalPartials({
   onClick,
 }) {
   return (
-    <div onClick={onClick} className="relative bg-white border border-slate-200 p-4 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition">
+    <div onClick={onClick} className="relative bg-white border border-slate-200 p-4 rounded-lg shadow-xs cursor-pointer hover:scale-105 transition-all">
       {users.length > 0 && (
         <span className="absolute -top-1 -right-1 w-3 h-3 flex items-center justify-center">
           <span

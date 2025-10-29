@@ -2,7 +2,7 @@
 
 import { LogOut, CalendarDays } from "lucide-react"
 import { capitalize } from "@/_function/globalFunction"
-import dayjs from "dayjs"
+import dayjs from "@/_lib/day"
 import "dayjs/locale/en"
 import { useTransition } from "react"
 import { LogoutAuthAction } from "@/app/auth/login/action"

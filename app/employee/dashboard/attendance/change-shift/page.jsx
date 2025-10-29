@@ -37,7 +37,7 @@ export default async function Page() {
   return (
     <main className="space-y-4">
       <ChangeShiftForm employees={employees} />
-      <ChangeShiftTable requests={JSON.parse(JSON.stringify(requests))} currentUserId={user.id}/>
+      <ChangeShiftTable requests={requests} currentUserId={user.id}/>
     </main>
   )
 }

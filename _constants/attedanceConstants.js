@@ -9,18 +9,27 @@ export const attedancesStyles = {
   Rejected: "text-white bg-rose-500 border-rose-500",
   Accepted: "text-white bg-teal-500 border-teal-500",
   Pending: "text-white bg-yellow-500 border-yellow-500",
-
-  "Pending target": "text-slate-600 bg-slate-100 border-slate-300",
-  "Pending admin": "text-white bg-slate-500 border-slate-500",
 };
 
 export const dotStatusColor = {
   PENDING: "bg-yellow-500",
-  PENDING_TARGET: "bg-slate-500",
-  PENDING_ADMIN: "bg-slate-500",
+  PENDING_TARGET: "bg-yellow-500",
+  PENDING_ADMIN: "bg-yellow-500",
   APPROVED: "bg-teal-500",
   REJECTED: "bg-rose-500",
 };
+
+export const requestStatusDisplay = {
+  PENDING: "Pending",
+  PENDING_ADMIN: "Pending",
+  PENDING_TARGET: "Pending",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+};
+
+export function getDisplayStatus(status) {
+  return requestStatusDisplay[status] || status;
+}
 
 export const statusColorsClass = {
   PRESENT: { 
