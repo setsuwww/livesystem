@@ -9,7 +9,7 @@ import { Checkbox } from "@/_components/ui/Checkbox"
 import AuthForm from "../AuthForm"
 import AuthLink from "../AuthLink"
 import { AuthAction } from "./action"
-import { Loader2 } from "lucide-react"
+import { Loader } from "lucide-react"
 
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false)
@@ -60,7 +60,7 @@ const LoginPage = () => {
           {pending 
             ? (
                 <div className="flex items-center space-x-1 gap-x-1">
-                  <Loader2 className="animate-spin"/>Logging in...
+                  <Loader className="animate-spin"/>Logging in...
                 </div>
               ) 
             : "Login"

@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/shifts/auto-change-shift",
+      "schedule": "17 17 * * *"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 import { memo } from "react"
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/_components/ui/Alert-dialog"
 import { Textarea } from "@/_components/ui/Textarea"
-import { Loader2 } from "lucide-react"
+import { Loader } from "lucide-react"
 
 function RequestRejectedAlert({ open, onOpenChange, rejectReason, setRejectReason, isLoading, onConfirmReject }) {
   return (
@@ -31,7 +31,7 @@ function RequestRejectedAlert({ open, onOpenChange, rejectReason, setRejectReaso
           </AlertDialogCancel>
 
           <AlertDialogAction onClick={onConfirmReject} disabled={!rejectReason.trim() || isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
             Reject Request
           </AlertDialogAction>
         </AlertDialogFooter>

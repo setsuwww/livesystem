@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { Button } from "@/_components/ui/Button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/_components/ui/Dropdown-menu";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ChevronDown, Loader } from "lucide-react";
 import { dotStatusColor, getDisplayStatus } from "@/_constants/attedanceConstants";
 
 export default function RequestStatusChangerToggle({
@@ -35,7 +35,7 @@ export default function RequestStatusChangerToggle({
             {getDisplayStatus(current)}
           </span>
           {isPending 
-            ? (<Loader2 className="w-3.5 h-3.5 animate-spin" />) 
+            ? (<Loader className="w-3.5 h-3.5 animate-spin" />) 
             : (<ChevronDown className="w-4 h-4 text-slate-400" />)
           }
         </Button>

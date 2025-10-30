@@ -2,27 +2,27 @@ import { CircleCheckBig, CircleX, Info } from "lucide-react";
 
 const typeStyles = {
   p: {
-    text: "text-teal-600",
-    bg: "bg-teal-100",
+    text: "text-teal-500",
+    bg: "bg-teal-100/50",
     border: "border-teal-200",
     icon: CircleCheckBig
   },
   n: {
-    text: "text-rose-600",
-    bg: "bg-rose-100",
+    text: "text-rose-500",
+    bg: "bg-rose-100/50",
     border: "border-rose-200",
     icon: CircleX
   },
   i: {
-    text: "text-blue-600",
-    bg: "bg-blue-50",
-    border: "border-blue-200",
+    text: "text-blue-500",
+    bg: "bg-blue-50/50",
+    border: "border-blue-200/50",
     icon: Info
   },
   w: {
-    text: "text-yellow-600",
-    bg: "bg-yellow-50",
-    border: "border-yellow-200",
+    text: "text-yellow-500",
+    bg: "bg-yellow-50/50",
+    border: "border-yellow-200/50",
     icon: Info
   }
 };
@@ -44,7 +44,7 @@ export function ContentList({ items, type = "i" }) {
     >
       {items.map((item, idx) => (
         <div key={idx} className="flex items-center gap-x-2">
-          <Icon className={`${text}`} strokeWidth={1.5} size={16} />
+          <Icon className={`${text}`} strokeWidth={1.5} size={14} />
           <span className={`text-sm ${text}`}>{item}</span>
         </div>
       ))}

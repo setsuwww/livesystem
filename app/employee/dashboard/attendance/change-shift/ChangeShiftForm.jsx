@@ -5,7 +5,7 @@ import { Button } from "@/_components/ui/Button"
 import { Label } from "@/_components/ui/Label"
 import { Textarea } from "@/_components/ui/Textarea"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/_components/ui/Select"
-import { CalendarDays, CircleUserRound, Loader2 } from "lucide-react"
+import { CalendarDays, CircleUserRound, Loader } from "lucide-react"
 import { toast } from "sonner"
 import { apiFetchData } from "@/_function/helpers/fetch"
 import ContentForm from '@/_components/content/ContentForm';
@@ -196,7 +196,7 @@ export default function ChangeShiftForm({ employees = [] }) {
 
           {/* Submit */}
           <Button type="submit" className="w-full" disabled={disabled}>
-            {loading && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
+            {loading && <Loader className="animate-spin mr-2 h-4 w-4" />}
             Submit Request
           </Button>
         </form>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
-import { MapPin, AlarmClock, Radar, Locate, LocateFixed } from "lucide-react"
+import { MapPin, AlarmClock, Radar, Locate, LocateFixed, Loader } from "lucide-react"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
 import { Badge } from "@/_components/ui/Badge"
@@ -79,7 +79,7 @@ export default function DivisionsTable({ data }) {
   }
 
   if (loadingConfig) {
-    return <p className="text-sm text-slate-500">Loading configuration...</p>
+    return <p className="flex items-center gap-x-1 text-sm text-slate-500"><Loader size={14} className="animate-spin" /> Loading offices</p>
   }
 
   return (

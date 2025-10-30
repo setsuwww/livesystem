@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { Clock, LogIn, LogOut, Plane, Shuffle, Loader2, CheckCircle2, XCircle, AlertTriangle, Circle } from "lucide-react"
+import { Clock, LogIn, LogOut, Plane, Shuffle, Loader, CheckCircle2, XCircle, AlertTriangle, Circle } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/_components/ui/Card"
 import { userSendCheckIn, userSendCheckOut, userSendPermissionRequest } from "@/_components/server/attendanceAction"
 import { apiFetchData } from "@/_function/helpers/fetch"

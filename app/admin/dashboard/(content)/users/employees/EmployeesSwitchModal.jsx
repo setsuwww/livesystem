@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { CircleUserRound, Search, Loader2, CalendarSync } from "lucide-react"
+import { CircleUserRound, Search, Loader, CalendarSync } from "lucide-react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/_components/ui/Dialog"
@@ -75,7 +75,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
           </DialogTitle>
         </DialogHeader>
 
-        {loadingCurrent ? (<p className="flex items-center space-x-1 text-xs text-slate-400"><Loader2 className="w-4 h-4 animate-spin mr-2"/> Loading current user...</p>) 
+        {loadingCurrent ? (<p className="flex items-center space-x-1 text-xs text-slate-400"><Loader className="w-4 h-4 animate-spin mr-2"/> Loading current user...</p>) 
         : (currentUser && (
             <header>
               <Label htmlFor="past" className="mb-4">
@@ -103,7 +103,7 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
         </div>
 
         <section className="max-h-80 overflow-y-auto border border-slate-100 shadow-xs rounded-lg p-3">
-          {loadingUsers ? (<p className="flex items-center justify-center text-xs text-center text-slate-400"><Loader2 className="w-4 h-4 animate-spin mr-2" />Loading users...</p>) 
+          {loadingUsers ? (<p className="flex items-center justify-center text-xs text-center text-slate-400"><Loader className="w-4 h-4 animate-spin mr-2" />Loading users...</p>) 
             : filteredUsers.length === 0 ? (<p className="text-xs text-center text-slate-400">No users found</p>) 
             : (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
