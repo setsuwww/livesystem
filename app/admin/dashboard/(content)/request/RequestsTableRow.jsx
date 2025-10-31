@@ -15,7 +15,7 @@ import { capitalize } from '@/_function/globalFunction';
 import { updateShiftChangeRequestStatus, updatePermissionStatus } from "@/_components/server/shiftAction"
 
 export default function RequestsTableRow({
-  id, type, requestedBy, user,
+  id, requestedBy, user,
   oldShift, targetShift,
   info, reason, status,
   date, startDate, endDate,   
@@ -105,7 +105,7 @@ export default function RequestsTableRow({
     return (
       <div className="flex flex-col items-start justify-start gap-1 text-left">
         <div className="flex items-center space-x-1">
-          <span className="font-semibold text-emerald-400">
+          <span className="font-semibold text-teal-400">
             From :
           </span>
           <Badge
@@ -184,7 +184,7 @@ export default function RequestsTableRow({
         <TableCell className="text-slate-400 whitespace-nowrap text-sm">
           {requestType === "shift" ? (
             <div>
-              <p className="text-emerald-500">{startDate || "-"}</p>
+              <p className="text-teal-500">{startDate || "-"}</p>
               <p className="text-rose-500">{endDate || "-"}</p>
             </div>
           ) : (

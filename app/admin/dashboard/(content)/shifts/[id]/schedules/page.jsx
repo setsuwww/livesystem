@@ -19,7 +19,8 @@ export default async function ShiftUsersPage({ params, searchParams }) {
   const PAGE_SIZE = 10;
 
   const [shift, totalUsers] = await Promise.all([
-    prisma.shift.findUnique({ where: { id: shiftId },
+    prisma.shift.findUnique({
+      where: { id: shiftId },
       include: { users: true },
     }),
     prisma.schedule.count({
@@ -48,14 +49,14 @@ export default async function ShiftUsersPage({ params, searchParams }) {
       <DashboardHeader title={`${title} schedules`} subtitle="Manage shift users" />
       <ContentForm>
         <ContentForm.Header>
-        <ContentInformation heading={`${title} shift schedules`} subheading={`View all schedules on this shift`} />
-        <Link href="/admin/dashboard/schedules" className="flex items-center text-sm font-semibold text-blue-500 my-2">
-          Schedule detail <ChevronRight strokeWidth={2} size={20} />
-        </Link>
+          <ContentInformation heading={`${title} shift schedules`} subheading={`View all schedules on this shift`} />
+          <Link href="/admin/dashboard/schedules" className="flex items-center text-sm font-semibold text-blue-500 my-2">
+            Schedule detail <ChevronRight strokeWidth={2} size={20} />
+          </Link>
         </ContentForm.Header>
 
         <ContentForm.Body>
-        <ScheduleTable data={schedulesDataMapped} />
+          <ScheduleTable data={schedulesDataMapped} />
         </ContentForm.Body>
 
         <Pagination page={page} totalPages={totalPages} basePath={`/admin/dashboard/shifts/${shiftId}`} />

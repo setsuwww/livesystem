@@ -17,7 +17,7 @@ import { Label } from "@/_components/ui/Label"
 
 import { createUser } from "@/_components/server/userAction.js"
 import { capitalize, formatIntToTime } from "@/_function/globalFunction"
-import { roleOptions } from "@/_constants/roleOptions"
+import { roleOptions } from "@/_constants/roleConstants"
 import { Loader } from 'lucide-react';
 
 export default function CreateForm({ divisions, shifts }) {

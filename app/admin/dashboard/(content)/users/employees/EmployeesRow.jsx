@@ -17,10 +17,7 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
   return (
     <TableRow key={user.id}>
       <TableCell>
-        <Checkbox
-          checked={selected.includes(user.id)}
-          onCheckedChange={() => toggleSelect(user.id)}
-        />
+        <Checkbox checked={selected.includes(user.id)} onCheckedChange={() => toggleSelect(user.id)}/>
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-3">
@@ -45,7 +42,7 @@ export const EmployeesRow = React.memo(function EmployeesRow({ user, selected, t
         </div>
       </TableCell>
       <TableCell>
-        <Badge className="px-2 py-0.5 text-xs font-semibold text-emerald-600 bg-emerald-100/50 border-emerald-300">
+        <Badge className="px-2 py-0.5 text-xs font-semibold text-teal-600 bg-teal-100/50 border-teal-300">
           {capitalize(user.role)}
         </Badge>
       </TableCell>

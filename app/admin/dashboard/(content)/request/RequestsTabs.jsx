@@ -16,13 +16,8 @@ export default function RequestsTabs({
 
   const toggleMode = () => setMode(isHistory ? "pending" : "history")
 
-  // Filter di client — asumsi shiftRequests & permissionRequests udah include semua status
-  const filteredShift = shiftRequests.filter((r) =>
-    isHistory ? true : r.status === "PENDING"
-  )
-  const filteredPermission = permissionRequests.filter((r) =>
-    isHistory ? true : r.status === "PENDING"
-  )
+  const filteredShift = shiftRequests.filter((r) => isHistory ? true : r.status === "PENDING")
+  const filteredPermission = permissionRequests.filter((r) => isHistory ? true : r.status === "PENDING")
 
   return (
     <Tabs defaultValue="shift" className="w-full">

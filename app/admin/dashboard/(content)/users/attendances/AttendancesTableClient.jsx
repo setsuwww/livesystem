@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/_components/ui/Badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
 import { shiftStyles } from "@/_constants/shiftConstants"
-import { attedancesStyles } from "@/_constants/attedanceConstants"
+import { attedancesStyles } from "@/_constants/attendanceConstants"
 import { safeFormat, capitalize } from "@/_function/globalFunction"
 import { ContentInformation } from "@/_components/content/ContentInformation"
 import { getAttendancesByDate } from "@/_components/server/attendanceAction"
@@ -114,7 +114,7 @@ export default function AttendancesTableClient() {
 
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm text-emerald-500">
+                      <span className="text-sm text-teal-500">
                         {safeFormat(att.checkInTime, "HH:mm")}
                       </span>
                       <span className="text-sm text-rose-500">

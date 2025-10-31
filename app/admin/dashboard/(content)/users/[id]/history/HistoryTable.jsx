@@ -3,7 +3,7 @@
 import { Badge } from "@/_components/ui/Badge"
 import { Checkbox } from "@/_components/ui/Checkbox"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
-import { attedancesStyles } from "@/_constants/attedanceConstants"
+import { attedancesStyles } from "@/_constants/attendanceConstants"
 import { shiftStyles } from "@/_constants/shiftConstants"
 
 import { capitalize } from "@/_function/globalFunction";

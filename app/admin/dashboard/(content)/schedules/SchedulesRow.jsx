@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useMemo } from "react";
 import { format } from "date-fns";
 import { CalendarClock } from "lucide-react";
@@ -7,7 +9,7 @@ import { TableRow, TableCell } from "@/_components/ui/Table";
 import { Checkbox } from "@/_components/ui/Checkbox";
 
 import { capitalize } from "@/_function/globalFunction";
-import { frequencyStyles } from "@/_constants/frequencyStyles";
+import { frequencyStyles } from "@/_constants/scheduleConstants";
 
 export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelect, onEdit, onDelete }) {
 
@@ -46,7 +48,7 @@ export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelec
       </TableCell>
       <TableCell>
         <div className="text-sm font-semibold flex flex-col">
-          <span className="text-emerald-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
+          <span className="text-teal-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
           <span className="text-rose-500">{schedule.endDate && ` ${format(new Date(schedule.endDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
         </div>
       </TableCell>

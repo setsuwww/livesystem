@@ -13,7 +13,7 @@ import { Label } from "@/_components/ui/Label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/_components/ui/Popover"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/_components/ui/Dialog"
 
-import { divisionStyles } from "@/_constants/divisionStyles"
+import { divisionStyles } from "@/_constants/divisionConstants"
 import { DivisionsStatusBadge } from "./DivisionsStatusBadge"
 import { DivisionsActionHeader } from "./DivisionsActionHeader"
 import { useDivisionsHooks } from "@/_function/hooks/useDivisionsHooks"
@@ -39,12 +39,13 @@ export default function DivisionsTable({ data }) {
 
   useEffect(() => {
     async function fetchConfig() {
-      try { const res = await fetch("/api/system-config")
+      try {
+        const res = await fetch("/api/system-config")
         const data = await res.json()
         setAllActive(data.allWfaActive)
-      } 
-      catch (err) {console.error("❌ Failed to fetch config:", err)} 
-      finally {setLoadingConfig(false)}
+      }
+      catch (err) { console.error("❌ Failed to fetch config:", err) }
+      finally { setLoadingConfig(false) }
     }
     fetchConfig()
   }, [])
@@ -74,12 +75,17 @@ export default function DivisionsTable({ data }) {
 
       mutate && mutate()
       window.location.reload()
-    } 
-    catch (err) { console.error("❌ Error confirming bulk toggle:", err)}
+    }
+    catch (err) { console.error("❌ Error confirming bulk toggle:", err) }
   }
 
   if (loadingConfig) {
-    return <p className="flex items-center gap-x-1 text-sm text-slate-500"><Loader size={14} className="animate-spin" /> Loading offices</p>
+    return (
+      <p className="flex items-center gap-x-1 text-sm text-slate-500">
+        <Loader size={14} className="animate-spin" />
+        Loading offices
+      </p>
+    )
   }
 
   return (
@@ -93,13 +99,9 @@ export default function DivisionsTable({ data }) {
         </div>
 
         <DivisionsActionHeader
-          search={search}
-          onSearchChange={setSearch}
-          typeFilter={typeFilter}
-          onTypeFilterChange={setTypeFilter}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-          selectedCount={selectedIds.length}
+          search={search} onSearchChange={setSearch}
+          typeFilter={typeFilter} onTypeFilterChange={setTypeFilter}
+          statusFilter={statusFilter} onStatusFilterChange={setStatusFilter}
           onDeleteSelected={handleDeleteSelected}
           onDeleteAll={handleDeleteAll}
           onExportPDF={handleExportPDF}
@@ -110,17 +112,13 @@ export default function DivisionsTable({ data }) {
         <div className="rounded-md overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow>                   
-<TableHead className="w-[40px] text-center">
-  <Checkbox
-    checked={
-      filteredData.length > 0 &&
-      selectedIds.length === filteredData.length
-    }
-    onCheckedChange={toggleSelectAll}
-    className="translate-y-[1px]"
-  />
-</TableHead>
+              <TableRow>
+                <TableHead className="w-[40px] text-center">
+                  <Checkbox checked={ filteredData.length > 0 && selectedIds.length === filteredData.length}
+                    onCheckedChange={toggleSelectAll}
+                    className="translate-y-[1px]"
+                  />
+                </TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
@@ -141,12 +139,10 @@ export default function DivisionsTable({ data }) {
                 filteredData.map((division) => (
                   <TableRow key={division.id}>
                     <TableCell className="text-center">
-  <Checkbox
-    checked={selectedIds.includes(division.id)}
-    onCheckedChange={() => toggleSelect(division.id)}
-    className="translate-y-[1px]"
-  />
-</TableCell>
+                      <Checkbox checked={selectedIds.includes(division.id)} onCheckedChange={() => toggleSelect(division.id)}
+                        className="translate-y-[1px]"
+                      />
+                    </TableCell>
 
 
                     <TableCell>

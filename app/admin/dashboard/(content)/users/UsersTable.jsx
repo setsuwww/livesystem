@@ -4,27 +4,28 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Checkbox } from "@/_components/ui/Checkbox";
 import { UsersActionHeader } from "./UsersActionHeader";
 import { UsersRow } from "./UsersRow";
-import { roleStyles } from "@/_constants/roleStyles";
+import { roleStyles } from "@/_constants/roleConstants";
 import { useUsersHooks } from "@/_function/hooks/useUsersHooks";
 
-export default function UsersTable({ data }) { const {
+export default function UsersTable({ data }) {
+  const hooks = useUsersHooks(data);
+  const {
     search, handleSearchChange,
-    roleFilter, handleRoleFilterChange, shiftFilter, handleShiftFilterChange, filteredData,
-    selectedIds, selectedIdsSet, isAllSelected,
+    roleFilter, handleRoleFilterChange, shiftFilter, handleShiftFilterChange,
+    filteredData, selectedIds, selectedIdsSet, isAllSelected,
     toggleSelect, selectAll, deleteSelected, deleteAll,
-    handleEditUser, handleDeleteUser,
-    onExportPDF,
-  } = useUsersHooks(data);
+    handleEditUser, handleDeleteUser, onExportPDF
+  } = hooks;
 
   return (
     <div className="rounded-md space-y-4">
-      <UsersActionHeader selectedCount={selectedIds.length}
-        onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
+      <UsersActionHeader
         search={search} onSearchChange={handleSearchChange}
         roleFilter={roleFilter} onRoleFilterChange={handleRoleFilterChange}
         shiftFilter={shiftFilter} onShiftFilterChange={handleShiftFilterChange}
-        filteredData={filteredData}
+        selectedCount={selectedIds.length} onDeleteSelected={deleteSelected} onDeleteAll={deleteAll}
         onExportPDF={() => onExportPDF(filteredData)}
+        filteredData={filteredData}
       />
 
       <Table>
@@ -48,9 +49,10 @@ export default function UsersTable({ data }) { const {
               </TableCell>
             </TableRow>
           ) : (
-            filteredData.map(user => (
+            filteredData.map((user) => (
               <UsersRow key={user.id} user={user}
-                isSelected={selectedIdsSet.has(user.id)} onToggleSelect={toggleSelect}
+                isSelected={selectedIdsSet.has(user.id)}
+                onToggleSelect={toggleSelect}
                 onEdit={handleEditUser} onDelete={handleDeleteUser}
                 roleStyles={roleStyles}
               />

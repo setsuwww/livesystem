@@ -1,96 +1,82 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import jsPDF from "jspdf"
-import autoTable from "jspdf-autotable"
-import { deleteUsers, deleteUserWithId } from "@/_components/server/userAction"
+import { useCallback } from "react"
+import { deleteUsers, deleteUserWithId, getUserWithId } from "@/_components/server/userAction"
+import { exportUser } from "@/_function/exports/exportUser"
 import { useToast } from "@/_components/client/Toast-Provider"
 
-export const handleUsers = (selectedIds, setSelectedIds, filteredData, reloadData) => {
-  const router = useRouter()
+export function handleUsers({ filteredData, selectedIds, setSelectedIds }) {
   const { addToast } = useToast()
 
-  const toggleSelect = (id) =>
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
-    )
+  const toggleSelect = useCallback((id) => {
+    setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])
+  }, [setSelectedIds])
 
-  const selectAll = () =>
-    setSelectedIds((prev) =>
-      prev.length === filteredData.length ? [] : filteredData.map((u) => u.id)
-    )
+  const selectAll = useCallback((checked) => { if (checked) setSelectedIds(filteredData.map((u) => u.id))
+    else setSelectedIds([])
+  }, [filteredData, setSelectedIds])
 
-  const deleteSelected = async () => {
-    if (selectedIds.length === 0) return
-    try {
-      const res = await deleteUsers(selectedIds)
-      if (res.success) {
-        addToast(res.message, { type: "success", title: "Success", description: "Selected users deleted." })
-        reloadData()
-      }
-    } catch {
+  const isAllSelected = filteredData.length > 0 && selectedIds.length === filteredData.length
+
+  const deleteSelected = useCallback(async () => {
+    if (selectedIds.length === 0) {
+      addToast("No users selected", { type: "warning" })
+      return
+    }
+
+    if (!confirm(`Delete ${selectedIds.length} selected users?`)) return
+
+    try { await deleteUsers(selectedIds)
+      addToast("Selected users deleted", { type: "success" })
+      setSelectedIds([])
+    } 
+    catch (err) { console.error(err)
       addToast("Failed to delete selected users", { type: "error" })
     }
-  }
+  }, [selectedIds, addToast, setSelectedIds])
 
-  const deleteAll = async () => {
-    if (filteredData.length === 0) return
-    try {
-      const res = await deleteUsers(filteredData.map((u) => u.id))
-      if (res.success) {
-        addToast(res.message, { type: "success", title: "Success" })
-        reloadData()
-      }
-    } catch {
+  const deleteAll = useCallback(async () => {
+    if (!confirm("Delete ALL users?")) return
+    try { await deleteUsers(filteredData.map((u) => u.id))
+      addToast("All users deleted", { type: "success" })
+      setSelectedIds([])
+    } catch (err) {
+      console.error(err)
       addToast("Failed to delete all users", { type: "error" })
     }
-  }
+  }, [filteredData, addToast, setSelectedIds])
 
-  const handleEditUser = (id) => router.push(`/admin/dashboard/users/${id}/edit`)
+  const handleEditUser = useCallback(async (id) => {
+    try { const user = await getUserWithId(id)
+      if (!user) return addToast("User not found", { type: "error" })
+      console.log("Editing user:", user)
+      addToast(`Editing ${user.name}`, { type: "info" })
+    } 
+    catch (err) { console.error(err)
+      addToast("Failed to load user data", { type: "error" })
+    }
+  }, [addToast])
 
-  const handleDeleteUser = async (id) => {
-    if (!confirm("Are you sure you want to delete this user?")) return
-    try {
-      const res = await deleteUserWithId(id)
-      if (res.success) {
-        addToast("User deleted successfully", { type: "success" })
-        reloadData()
-      }
-    } catch {
+  const handleDeleteUser = useCallback(async (id) => {
+    if (!confirm("Delete this user?")) return
+    try { await deleteUserWithId(id)
+      addToast("User deleted", { type: "success" })
+      setSelectedIds((prev) => prev.filter((x) => x !== id))
+    } 
+    catch (err) { console.error(err)
       addToast("Failed to delete user", { type: "error" })
     }
-  }
+  }, [addToast, setSelectedIds])
 
-  const onExportPDF = (filteredData) => {
-    const doc = new jsPDF()
-    doc.setFontSize(18)
-    doc.text("User Report", 14, 22)
-    doc.setFontSize(11)
-    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30)
-
-    const tableData = filteredData.map((item) => [
-      item.id,
-      item.name,
-      item.email,
-      new Date(item.createdAt).toLocaleDateString(),
-    ])
-
-    autoTable(doc, {
-      head: [["ID", "Name", "Email", "Created At"]],
-      body: tableData,
-      startY: 40,
-    })
-
-    doc.save("userReport.pdf")
-  }
+  const onExportPDF = useCallback((data) => {
+    exportUser(data)
+    addToast("PDF exported successfully", { type: "success" })
+  }, [addToast])
 
   return {
-    toggleSelect,
-    selectAll,
-    deleteSelected,
-    deleteAll,
-    handleEditUser,
-    handleDeleteUser,
+    toggleSelect, selectAll,
+    isAllSelected, deleteSelected, deleteAll,
+    handleEditUser, handleDeleteUser,
     onExportPDF,
   }
 }

@@ -2,35 +2,12 @@
 import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/_components/ui/Card"
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/_components/ui/Chart"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/_components/ui/Select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/_components/ui/Card"
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/_components/ui/Chart"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
 
 export function DashboardAreaChart({
-  title,
-  description,
-  data,
-  config,
-  defaultRange = "90d"
+  title, description, data, config, defaultRange = "90d"
 }) {
   const [timeRange, setTimeRange] = React.useState(defaultRange)
 
@@ -57,10 +34,7 @@ export function DashboardAreaChart({
           {description && <CardDescription>{description}</CardDescription>}
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger
-            className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex"
-            aria-label="Select a value"
-          >
+          <SelectTrigger className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex" aria-label="Select a value">
             <SelectValue placeholder="Select range" />
           </SelectTrigger>
           <SelectContent className="rounded-lg">
@@ -79,42 +53,20 @@ export function DashboardAreaChart({
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer config={config} className="aspect-auto h-[250px] w-full">
           <AreaChart data={filteredData}>
-            {/* Dynamic gradients for each series */}
             <defs>
               {Object.entries(config).map(([key, cfg]) => (
-                <linearGradient
-                  key={key}
-                  id={`fill-${key}`}
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="5%"
-                    stopColor={`var(--color-${key})`}
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor={`var(--color-${key})`}
-                    stopOpacity={0.1}
-                  />
+                <linearGradient key={key} id={`fill-${key}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={`var(--color-${key})`} stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor={`var(--color-${key})`} stopOpacity={0.1}/>
                 </linearGradient>
               ))}
             </defs>
 
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
+            <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} minTickGap={32}
               tickFormatter={(value) =>
                 new Date(value).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
+                  month: "short", day: "numeric",
                 })
               }
             />
@@ -124,8 +76,7 @@ export function DashboardAreaChart({
                 <ChartTooltipContent
                   labelFormatter={(value) =>
                     new Date(value).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
+                      month: "short", day: "numeric",
                     })
                   }
                   indicator="dot"
@@ -133,15 +84,10 @@ export function DashboardAreaChart({
               }
             />
             {Object.keys(config)
-              .filter((k) => k !== "visitors") // skip non-series if ada
+              .filter((k) => k !== "visitors") 
               .map((key) => (
-                <Area
-                  key={key}
-                  dataKey={key}
-                  type="natural"
-                  fill={`url(#fill-${key})`}
-                  stroke={`var(--color-${key})`}
-                  stackId="a"
+                <Area key={key} dataKey={key}
+                  type="natural" fill={`url(#fill-${key})`} stroke={`var(--color-${key})`} stackId="a"
                 />
               ))}
             <ChartLegend content={<ChartLegendContent />} />

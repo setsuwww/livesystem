@@ -48,9 +48,9 @@ const variantStyles = {
     parentIcon: "bg-yellow-100",
   },
   success: {
-    border: "border-emerald-500",
-    icon: <CheckCircle2 className="w-7 h-7 text-emerald-500" />,
-    parentIcon: "bg-emerald-100",
+    border: "border-teal-500",
+    icon: <CheckCircle2 className="w-7 h-7 text-teal-500" />,
+    parentIcon: "bg-teal-100",
   },
   danger: {
     border: "border-rose-500",

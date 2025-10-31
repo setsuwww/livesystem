@@ -42,7 +42,6 @@ export default function FastActions() {
 
   return (
     <div className="flex items-center justify-between gap-4 flex-wrap">
-      {/* Left: Action Buttons */}
       <div className="flex flex-wrap gap-2">
         {actions.map((action) => (
           <div key={action.label} className="flex items-center">
@@ -53,8 +52,7 @@ export default function FastActions() {
               </Button>
             </Link>
             <Link href={action.hrefCreate}>
-              <Button variant="outline" className="bg-white hover:bg-slate-100/70 border-slate-200 rounded-l-none border-l-0"
-              >
+              <Button variant="outline" className="bg-white hover:bg-slate-100/70 border-slate-200 rounded-l-none border-l-0">
                 <Plus className="w-4 h-4 text-slate-400" />
               </Button>
             </Link>
@@ -62,22 +60,13 @@ export default function FastActions() {
         ))}
       </div>
 
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl pl-3 pr-0.5 py-1 focus:caret-sky-300 focus-within:border-sky-300 focus-within:ring-4 focus-within:ring-sky-100 transition-colors"
-      >
+      <form onSubmit={handleSearch} className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl pl-3 pr-0.5 py-1 focus:caret-sky-300 focus-within:border-sky-300 focus-within:ring-4 focus-within:ring-sky-100 transition-colors">
         <Search className="text-gray-400 w-4 h-4 group-focus-within:text-sky-500 transition-colors" />
-        <input
-          type="text"
-          placeholder="Search url"
-          value={searchUrl}
-          onChange={(e) => setSearchUrl(e.target.value)}
+        <input type="text" placeholder="Search url"
+          value={searchUrl} onChange={(e) => setSearchUrl(e.target.value)}
           className="outline-none text-sm w-[17rem] bg-transparent py-1 rounded-lg"
         />
-        <Button
-          type="submit"
-          className="hidden text-xs bg-sky-500 hover:bg-sky-600 text-white py-2"
-        >
+        <Button type="submit" className="hidden text-xs bg-sky-500 hover:bg-sky-600 text-white py-2">
           Search
         </Button>
       </form>

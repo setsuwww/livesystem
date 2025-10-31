@@ -9,59 +9,37 @@ import ContentForm from "@/_components/content/ContentForm"
 import { ContentInformation } from "@/_components/content/ContentInformation"
 
 async function getRequests(mode = "pending") {
-  // Mode logic — kalo history, hapus semua filter
   const isHistory = mode === "history"
 
   const [shiftRequests, attendanceRequests] = await Promise.all([
     prisma.shiftChangeRequest.findMany({
-      where: isHistory
-        ? {} // ambil semua
-        : {
-            OR: [{ status: "PENDING_ADMIN" }, { status: "PENDING_TARGET" }],
-          },
+      where: isHistory ? {}
+        : { OR: [{ status: "PENDING_ADMIN" }, { status: "PENDING_TARGET" }]},
       orderBy: { createdAt: "desc" },
       select: {
         id: true,
-        reason: true,
-        status: true,
+        reason: true, status: true,
         createdAt: true,
-        startDate: true,
-        endDate: true,
-        requestedBy: {
-          select: { name: true, email: true },
-        },
-        targetUser: {
-          select: { name: true, email: true },
-        },
-        oldShift: {
-          select: { name: true, type: true },
-        },
-        targetShift: {
-          select: { name: true, type: true },
-        },
+        startDate: true, endDate: true,
+        requestedBy: { select: { name: true, email: true } },
+        targetUser: { select: { name: true, email: true } },
+        oldShift: { select: { name: true, type: true } },
+        targetShift: { select: { name: true, type: true } },
       },
     }),
 
     prisma.attendance.findMany({
-      where: isHistory
-        ? {}
-        : { status: "PERMISSION", approval: "PENDING" },
+      where: isHistory ? {} : { status: "PERMISSION", approval: "PENDING" },
       orderBy: { date: "desc" },
       select: {
-        id: true,
-        date: true,
-        reason: true,
-        approval: true,
+        id: true, date: true,
+        reason: true, approval: true,
         user: {
           select: {
-            name: true,
-            email: true,
-            division: { select: { name: true } },
+            name: true, email: true, division: { select: { name: true } },
           },
         },
-        shift: {
-          select: { type: true },
-        },
+        shift: { select: { type: true } },
       },
     }),
   ])
@@ -85,46 +63,30 @@ async function getRequests(mode = "pending") {
         name: r.targetShift?.name || "-",
         type: r.targetShift?.type || "-",
       },
-      info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${
-        r.targetShift?.name || "?"
-      } (${r.targetShift?.type || "-"})`,
+      info: `${r.oldShift?.name || "?"} (${r.oldShift?.type || "-"}) → ${r.targetShift?.name || "?"} (${r.targetShift?.type || "-"})`,
       typeShift: r.targetShift?.type || r.oldShift?.type || "-",
       reason: r.reason || "-",
       startDate: r.startDate
         ? new Date(r.startDate).toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
+            weekday: "long", day: "numeric", month: "long", year: "numeric",
           })
         : "-",
       endDate: r.endDate
         ? new Date(r.endDate).toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
+            weekday: "long", day: "numeric", month: "long", year: "numeric",
           })
         : "-",
       date: r.createdAt
         ? new Date(r.createdAt).toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
+            weekday: "long", day: "numeric", month: "long", year: "numeric",
           })
         : "-",
-      status:
-        r.status === "PENDING_ADMIN" || r.status === "PENDING_TARGET"
-          ? "PENDING"
-          : r.status,
+      status: r.status === "PENDING_ADMIN" || r.status === "PENDING_TARGET" ? "PENDING" : r.status,
     })),
 
-    attendance: attendanceRequests.map((r) => ({
-      id: `perm-${r.id}`,
+    attendance: attendanceRequests.map((r) => ({ id: `perm-${r.id}`,
       requestedBy: {
-        name: r.user?.name || "-",
-        email: r.user?.email || "-",
+        name: r.user?.name || "-", email: r.user?.email || "-",
         division: r.user?.division?.name || "-",
       },
       user: null,
@@ -133,14 +95,10 @@ async function getRequests(mode = "pending") {
       typeShift: r.shift?.type || "-",
       date: r.date
         ? new Date(r.date).toLocaleDateString("en-US", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
+            weekday: "long", day: "numeric", month: "long", year: "numeric",
           })
         : "-",
-      status:
-        r.approval === "PENDING" ? "PENDING" : r.approval || "UNKNOWN",
+      status: r.approval === "PENDING" ? "PENDING" : r.approval || "UNKNOWN",
     })),
   }
 }
@@ -166,10 +124,7 @@ export default async function Page({ searchParams }) {
         </ContentForm.Header>
 
         <ContentForm.Body>
-          <RequestsTabs
-            shiftRequests={shift}
-            permissionRequests={attendance}
-            mode={mode}
+          <RequestsTabs shiftRequests={shift} permissionRequests={attendance} mode={mode}
           />
         </ContentForm.Body>
       </ContentForm>

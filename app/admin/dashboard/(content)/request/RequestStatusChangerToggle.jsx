@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/_components/ui/Button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/_components/ui/Dropdown-menu";
 import { ChevronDown, Loader } from "lucide-react";
-import { dotStatusColor, getDisplayStatus } from "@/_constants/attedanceConstants";
+import { dotStatusColor, getDisplayStatus } from "@/_constants/attendanceConstants";
 
 export default function RequestStatusChangerToggle({
   requestId, status,
@@ -42,7 +42,7 @@ export default function RequestStatusChangerToggle({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-32">
-        <DropdownMenuItem onClick={() => handleChange("APPROVED")} className="text-emerald-500 focus:bg-emerald-50 focus:text-emerald-600">
+        <DropdownMenuItem onClick={() => handleChange("APPROVED")} className="text-teal-500 focus:bg-teal-50 focus:text-teal-600">
           Approve
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleChange("REJECTED")} className="text-rose-500 focus:bg-rose-50 focus:text-rose-700">

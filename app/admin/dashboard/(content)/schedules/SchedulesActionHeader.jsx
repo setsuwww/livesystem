@@ -1,4 +1,4 @@
-import { FolderInput, Trash2, Search } from "lucide-react";
+import { FolderInput, Trash2 } from "lucide-react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
 import { Button } from "@/_components/ui/Button";
@@ -6,7 +6,7 @@ import { Input } from "@/_components/ui/Input";
 
 export default function SchedulesActionHeader({
   search, setSearch,
-  selectedCount, totalCount,
+  selectedCount,
   onDeleteSelected, onDeleteAll,
   onExportPDF,
   filterFrequency, onFilterFrequencyChange
@@ -34,7 +34,6 @@ export default function SchedulesActionHeader({
         />
       </div>
 
-      {/* Actions */}
       <div className="flex items-center gap-x-2">
         <Button variant="ghost" size="sm" className="text-rose-500"
           onClick={onDeleteSelected}
@@ -49,7 +48,7 @@ export default function SchedulesActionHeader({
           <Trash2 size={16} /> Delete All
         </Button>
 
-        <Button variant="ghost" size="sm" className="bg-emerald-100/50 hover:bg-emerald-100 text-emerald-600"
+        <Button variant="ghost" size="sm" className="bg-teal-100/50 hover:bg-teal-100 text-teal-600"
           onClick={onExportPDF}
         >
           <FolderInput size={16} /> Export

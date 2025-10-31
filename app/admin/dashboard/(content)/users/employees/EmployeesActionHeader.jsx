@@ -8,8 +8,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/_components/ui/Popove
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem } from "@/_components/ui/Command"
 import { Badge } from "@/_components/ui/Badge"
 import { cn } from "@/_lib/utils"
-import { divisionStyles } from '@/_constants/divisionStyles';
-import { capitalize } from '@/_function/globalFunction';
+import { divisionStyles } from '@/_constants/divisionConstants';
 
 export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
   search, setSearch,
@@ -77,8 +76,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
                     .map((d) => (
                       <CommandItem key={d.id} value={d.name} onSelect={() => { setDivisionFilter(String(d.id))
                           setOpenDivision(false)
-                        }}
-                      >
+                        }}>
                         <Check className={cn("mr-2 h-4 w-4", divisionFilter === String(d.id) ? "opacity-100" : "opacity-0")}/>
                         {d.name}
                       </CommandItem>
@@ -101,7 +99,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
         <Button variant="ghost" size="sm" className="bg-rose-50 text-rose-500 hover:bg-rose-100" onClick={onDeleteAll}>
           <Trash2 className="w-4 h-4 mr-1" /> Delete All
         </Button>
-        <Button variant="ghost" size="sm" className="bg-emerald-100/50 text-emerald-600 hover:bg-emerald-100" onClick={onExport}>
+        <Button variant="ghost" size="sm" className="bg-teal-100/50 text-teal-600 hover:bg-teal-100" onClick={onExport}>
           <FolderInput className="w-4 h-4 mr-1" /> Export
         </Button>
       </div>

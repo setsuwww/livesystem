@@ -1,11 +1,6 @@
 import Link from 'next/link'
 
-export default function AuthLink({
-  className = "",
-  question,
-  link,
-  href
-}) {
+export default function AuthLink({ className = "", question, link, href }) {
   return (
     <p className={`${className} font-medium text-sm text-center text-slate-500 whitespace-nowrap`}>
       {question}{' '}

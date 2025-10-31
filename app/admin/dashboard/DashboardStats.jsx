@@ -5,22 +5,11 @@ import React from "react"
 import Link from "next/link"
 
 function DashboardStatsComponent({
-  title,
-  link,
-  textlink,
-  caption,
-  value,
-  valueColor = "",
-  icon,
-  color,
-  dark = false, // default light mode
+  title, link, textlink, caption, value, valueColor = "", icon, color, dark = false,
 }) {
-  const base =
-    "p-5 rounded-2xl border shadow-sm flex items-center gap-4 transition-colors"
+  const base = "p-5 rounded-2xl border shadow-sm flex items-center gap-4 transition-colors"
 
-  // default theme styles
-  const theme = dark
-    ? "border-slate-500 bg-slate-600 text-slate-100 hover:border-slate-600"
+  const theme = dark ? "border-slate-500 bg-slate-600 text-slate-100 hover:border-slate-600"
     : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
 
   const defaultIcon =
@@ -28,11 +17,7 @@ function DashboardStatsComponent({
 
   return (
     <div className={`${base} ${theme}`}>
-      <div
-        className={`flex items-center justify-center w-14 h-14 rounded-full ${
-          color || defaultIcon
-        }`}
-      >
+      <div className={`flex items-center justify-center w-14 h-14 rounded-full ${ color || defaultIcon }`}>
         {icon}
       </div>
 
@@ -41,9 +26,7 @@ function DashboardStatsComponent({
           <h2 className="text-sm font-medium">{title}</h2>
           {link && (
             <Link href={link}>
-              <EllipsisVertical
-                strokeWidth={2}
-                size={15}
+              <EllipsisVertical strokeWidth={2} size={15}
                 className={dark ? "text-slate-400" : "text-slate-500"}
               />
               {textlink}

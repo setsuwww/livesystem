@@ -40,7 +40,7 @@ export default function AttendancesApprovalPartials({
 
           {status === "PERMISSION" && users.length > 0 && (
             <div className="text-xs text-slate-500 flex items-center gap-2">
-              <span className="px-2 py-1 rounded-md bg-emerald-50 text-emerald-600">
+              <span className="px-2 py-1 rounded-md bg-teal-50 text-teal-600">
                 A : {approvalCounts.accepted}
               </span>
               <span className="px-2 py-1 rounded-md bg-yellow-50 text-yellow-600">

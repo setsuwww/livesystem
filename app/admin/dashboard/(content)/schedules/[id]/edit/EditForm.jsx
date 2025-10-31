@@ -42,9 +42,7 @@ export default function EditForm({ schedule, users, shifts }) {
     }
   }, [schedule])
 
-  const handleChange = useCallback((field, value) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
-  }, [])
+  const handleChange = useCallback((field, value) => { setForm((prev) => ({ ...prev, [field]: value }))}, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

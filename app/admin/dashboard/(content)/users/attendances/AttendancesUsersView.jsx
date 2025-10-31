@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Button } from "@/_components/ui/Button";
 import { Badge } from "@/_components/ui/Badge";
 import { capitalize } from "@/_function/globalFunction";
-import { attedancesStyles } from "@/_constants/attedanceConstants";
+import { attedancesStyles } from "@/_constants/attendanceConstants";
 
 export default function AttendancesUsersView({ selectedStatus, shifts, allUsers, onClose }) {
   if (!selectedStatus) return null;

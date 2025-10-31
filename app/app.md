@@ -9,3 +9,11 @@ fitur izin, dan cuti,
 total jam kerja -1(istirahat)
 toggle status active/inactive bisa ditoggle secara manual dan massal
 
+pemisahan folder 
+- hooks
+- handlers
+
+hooks digunakan untuk fitur besar seperti, filter, sort, search, 
+handlers digunakan untuk menangani fitur ringan seperti toggle, edit, delete, select, delete selected, delete all, dan export
+helpers digunakan untuk mempersingkat code panjang seperti getAttedanceStatus, getDivisionStatus, dan parse tipe data
+

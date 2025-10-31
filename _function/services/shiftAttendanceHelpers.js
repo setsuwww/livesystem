@@ -17,4 +17,3 @@ export function minutesToTime(minutes) {
   const mins = String(minutes % 60).padStart(2, "0");
   return `${hours}:${mins}`;
 }
-

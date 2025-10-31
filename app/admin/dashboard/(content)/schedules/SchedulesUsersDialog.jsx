@@ -6,7 +6,7 @@ import { CalendarClock, PenSquareIcon } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/_components/ui/Dialog";
 
 import { capitalize } from "@/_function/globalFunction";
-import { frequencyStyles } from "@/_constants/frequencyStyles";
+import { frequencyStyles } from "@/_constants/scheduleConstants";
 
 export default function ScheduleUsersDialog({ users, schedules }) {
   const [open, setOpen] = useState(false);

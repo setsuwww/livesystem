@@ -10,9 +10,7 @@ const PAGE_SIZE = 5
 export default async function Page({ searchParams }) {
   const page = Number(searchParams?.page) || 1
   const [divisions, total] = await Promise.all([
-    prisma.division.findMany({
-      skip: (page - 1) * PAGE_SIZE,
-      take: PAGE_SIZE,
+    prisma.division.findMany({ skip: (page - 1) * PAGE_SIZE, take: PAGE_SIZE,
       orderBy: { createdAt: "desc" },
       select: {
         id: true, name: true, location: true, type: true, status: true,
@@ -38,12 +36,8 @@ export default async function Page({ searchParams }) {
       <DashboardHeader title="Divisions" subtitle="List of Division locations" />
       <ContentForm>
         <ContentForm.Header>
-          <ContentInformation
-            heading="List Divisions"
-            subheading="Manage all Division data in this table"
-            show={true}
-            buttonText="Create Division"
-            href="/admin/dashboard/Divisions/create"
+          <ContentInformation heading="List Divisions" subheading="Manage all Division data in this table"
+            show={true} buttonText="Create Division" href="/admin/dashboard/Divisions/create"
           />
         </ContentForm.Header>
 

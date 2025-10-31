@@ -38,8 +38,7 @@ export async function getCurrentUser() {
   try { const decoded = await getUserFromCookie()
     if (!decoded?.id) return null
 
-    const user = await prisma.user.findUnique({
-      where: { id: Number(decoded.id) },
+    const user = await prisma.user.findUnique({ where: { id: Number(decoded.id) },
       include: { shift: true, division: true }
     })
 

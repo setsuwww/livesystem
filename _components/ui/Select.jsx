@@ -34,7 +34,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "group border-slate-200/70 data-[placeholder]:text-slate-500 [&_svg:not([class*='text-'])]:text-slate-500",
+        "group border-slate-200/90 data-[placeholder]:text-slate-500 [&_svg:not([class*='text-'])]:text-slate-500",
         "focus-visible:border-sky-300 focus-visible:ring-sky-100",
         "aria-invalid:ring-rose-300 aria-invalid:border-rose-500",
         "flex w-fit items-center justify-between gap-2 rounded-md border bg-white px-3 py-2 text-sm",
@@ -51,7 +51,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="text-slate-400/60 size-4 transition-transform duration-200 group-data-[state=open]:rotate-180"/>
+        <ChevronDownIcon className="text-slate-400/80 size-4 transition-transform duration-200 group-data-[state=open]:rotate-180"/>
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
 
@@ -115,8 +115,8 @@ function SelectItem({
       {...props}
     >
       <span className="absolute right-2 flex size-3.5 items-center justify-center">
-        <SelectPrimitive.ItemIndicator className="bg-emerald-50 group-hover:bg-emerald-100 p-0.5 rounded-full">
-          <CheckIcon className="size-4 text-emerald-400 group-hover:text-emerald-600" />
+        <SelectPrimitive.ItemIndicator className="bg-teal-50 group-hover:bg-teal-100 p-0.5 rounded-full">
+          <CheckIcon className="size-4 text-teal-400 group-hover:text-teal-600" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

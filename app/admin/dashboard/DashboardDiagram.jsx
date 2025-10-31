@@ -1,18 +1,6 @@
 "use client";
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/_components/ui/Card";
-import {
-  BarChart,
-  Bar,
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer
-} from "recharts";
+import { BarChart, Bar, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, Legend, ResponsiveContainer } from "recharts";
 
 export function BarDiagram({ title, description, data, series }) {
   const seriesToUse = series ?? [{ key: "value", color: "#4f46e5", label: "Value" }];

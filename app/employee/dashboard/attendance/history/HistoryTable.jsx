@@ -1,25 +1,17 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/_components/ui/Table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
 import { Badge } from "@/_components/ui/Badge"
 import { Button } from "@/_components/ui/Button"
 import { ArrowUpDown, ArrowDownUp, CalendarDays } from "lucide-react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
-import { attedancesStyles } from "@/_constants/attedanceConstants"
+import { attedancesStyles } from "@/_constants/attendanceConstants"
 import { shiftStyles } from "@/_constants/shiftConstants"
 import { capitalize, safeFormat } from "@/_function/globalFunction"
 
 export default function HistoryTable({ data, initialOrder }) {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const [order, setOrder] = useState(initialOrder)
 
@@ -114,7 +106,7 @@ export default function HistoryTable({ data, initialOrder }) {
 
                   <TableCell className="text-sm font-semibold">
                     <div className="flex flex-col">
-                      <span className="text-emerald-600">Checkin at: {safeFormat(att.checkInTime, "HH:mm")}</span> 
+                      <span className="text-teal-600">Checkin at: {safeFormat(att.checkInTime, "HH:mm")}</span> 
                       <span className="text-rose-600">Checkout at: {safeFormat(att.checkOutTime, "HH:mm")}</span>
                     </div>
                   </TableCell>

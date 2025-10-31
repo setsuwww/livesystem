@@ -11,7 +11,7 @@ import { ContentInformation } from "@/_components/content/ContentInformation";
 import { Label } from "@/_components/ui/Label";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { capitalize } from "@/_function/globalFunction";
-import { roleOptions } from "@/_constants/roleOptions";
+import { roleOptions } from "@/_constants/roleConstants";
 import { updateUser } from "@/_components/server/userAction.js";
 import { Loader } from 'lucide-react';
 

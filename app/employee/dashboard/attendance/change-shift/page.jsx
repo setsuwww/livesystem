@@ -14,20 +14,17 @@ export default async function Page() {
   const id = user.id;
 
   const employees = await prisma.user.findMany({
-    where: { 
-      role: "EMPLOYEE", 
-      NOT: { id: parseInt(id) }, 
-    },
+    where: { role: "EMPLOYEE", NOT: { id: parseInt(id) }},
     include: { shift: true },
     orderBy: { name: "asc" },
   })
 
   const requests = await prisma.shiftChangeRequest.findMany({
     where: {
-      targetUserId: user.id, // hanya request ke dia
+      targetUserId: user.id,
     },
     include: {
-      user: true, // pengirim
+      user: true,
       oldShift: true,
       targetShift: true,
     },

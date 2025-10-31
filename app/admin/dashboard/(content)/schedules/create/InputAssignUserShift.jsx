@@ -100,15 +100,15 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
           </div>
 
           {(startDate || startTime) && (
-  <div className="flex items-center gap-3 text-emerald-600 mt-1">
+  <div className="flex items-center gap-3 text-teal-600 mt-1">
     <div className="flex items-center gap-1 text-xs font-semibold">
-      <CalendarArrowUp size={14} className="text-emerald-600" />
+      <CalendarArrowUp size={14} className="text-teal-600" />
       <span>{startDate}</span>
     </div>
 
     {startTime && (
       <div className="flex items-center gap-1 text-xs font-semibold">
-        <Clock size={14} className="text-emerald-600" />
+        <Clock size={14} className="text-teal-600" />
         <span>{startTime}</span>
       </div>
     )}
@@ -241,8 +241,8 @@ export default function InputAssignUserShift({ events, setEvents, users }) {
                         </div>
 
                         {isSelected && (
-                          <div className="ml-auto bg-emerald-100/50 p-1.5 rounded-md  transition-colors">
-                            <Check className="h-4 w-4 text-emerald-600 transition-colors" />
+                          <div className="ml-auto bg-teal-100/50 p-1.5 rounded-md  transition-colors">
+                            <Check className="h-4 w-4 text-teal-600 transition-colors" />
                           </div>
                         )}
                       </div>

@@ -1,60 +1,50 @@
 "use client";
+import { useState, useMemo, useCallback } from "react";
+import { handleUsers } from "../handlers/handleUsers";
 
-import { useState, useMemo, useCallback, useDeferredValue, useRef } from "react";
-import { handleUsers } from "@/_function/handlers/handleUsers";
-
-export function useUsersHooks(data) {
+export function useUsersHooks(initialData) {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [shiftFilter, setShiftFilter] = useState("all");
   const [selectedIds, setSelectedIds] = useState([]);
 
-  const deferredSearch = useDeferredValue(search);
-  const searchInputRef = useRef(null);
-
-  const extractShiftType = useCallback((shift) => { if (!shift || shift === "-") return "NO_SHIFT";
-    const match = shift.match(/^(\w+)/);
-    const type = match ? match[1].toUpperCase() : "NO_SHIFT";
-    return type === "OFF" ? "NO_SHIFT" : type;
-  }, []);
+  const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
   const filteredData = useMemo(() => {
-    return data.filter((user) => {
-      const matchSearch = deferredSearch === "" ||
-        [user.name, user.email, user.role, user.shift]
-          .filter(Boolean) .join(" ")
-          .toUpperCase() .includes(deferredSearch.toUpperCase());
+    console.log("ShiftFilter:", shiftFilter);
+    console.log("Sample shifts:", initialData.map(u => u.shift));
+    
+    return initialData.filter((user) => {
+      const name = user.name?.toLowerCase() || "";
+      const email = user.email?.toLowerCase() || "";
+      const role = user.role?.toUpperCase() || "USER";
 
-      const matchRole = roleFilter === "all" ||
-        user.role?.toUpperCase() === roleFilter.toUpperCase();
+      const shiftName = typeof user.shift === "string" ? user.shift : user.shift?.name || "None";
 
-      let matchShift = true;
-      if (shiftFilter !== "all") {
-        if (shiftFilter.toUpperCase() === "NO_SHIFT") { matchShift = !user.shift || user.shift === "-";} 
-        else { matchShift = extractShiftType(user.shift) === shiftFilter.toUpperCase() }
-      }
+      const matchSearch = name.includes(search.toLowerCase()) || email.includes(search.toLowerCase());
+      const matchRole = roleFilter === "all" || role === roleFilter.toUpperCase();
+      const matchShift = shiftFilter === "all" || shiftName.toLowerCase().includes(shiftFilter.toLowerCase());
 
       return matchSearch && matchRole && matchShift;
     });
-  }, [data, deferredSearch, roleFilter, shiftFilter, extractShiftType]);
+  }, [initialData, search, roleFilter, shiftFilter]);
 
-  const selectedIdsSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+  const handleSearchChange = useCallback((v) => setSearch(v), []);
+  const handleRoleFilterChange = useCallback((v) => setRoleFilter(v), []);
+  const handleShiftFilterChange = useCallback((v) => setShiftFilter(v), []);
 
-  const { toggleSelect, selectAll, deleteSelected, deleteAll, handleEditUser, handleDeleteUser, onExportPDF } = handleUsers(selectedIds, setSelectedIds, filteredData, () => location.reload());
-
-  const handleSearchChange = useCallback((value) => { setSearch(value)}, []);
-  const handleRoleFilterChange = useCallback((value) => { setRoleFilter(value)}, []);
-  const handleShiftFilterChange = useCallback((value) => { setShiftFilter(value)}, []);
-
-  const isAllSelected = useMemo(() => selectedIds.length > 0 && selectedIds.length === filteredData.length, [selectedIds, filteredData]);
+  const {
+    toggleSelect, selectAll,
+    isAllSelected, deleteSelected, deleteAll,
+    handleEditUser, handleDeleteUser,
+    onExportPDF,
+  } = handleUsers({ filteredData, selectedIds, setSelectedIds })
 
   return {
     search, roleFilter, shiftFilter,
-    selectedIds, filteredData, selectedIdsSet, isAllSelected,
-    searchInputRef, handleSearchChange, handleRoleFilterChange, handleShiftFilterChange,
+    selectedIds, selectedIdsSet, isAllSelected, filteredData,
+    handleSearchChange, handleRoleFilterChange, handleShiftFilterChange,
     toggleSelect, selectAll, deleteSelected, deleteAll,
-    handleEditUser, handleDeleteUser,
-    onExportPDF,
+    handleEditUser, handleDeleteUser, onExportPDF
   };
 }
-

@@ -40,42 +40,22 @@ export const DivisionsActionHeader = ({
           </SelectContent>
         </Select>
 
-        <Input
-          ref={searchInputRef}
-          placeholder="Search division..."
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full sm:w-64 py-2" typeSearch={true}
+        <Input ref={searchInputRef} value={search} onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search division..." className="w-full sm:w-64 py-2" typeSearch={true}
         />
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-rose-500"
-          onClick={onDeleteSelected}
-          disabled={selectedCount === 0}
-        >
+        <Button variant="ghost" size="sm" className="text-rose-500" onClick={onDeleteSelected} disabled={selectedCount === 0}>
           Delete Selected
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="bg-rose-50 hover:bg-rose-100 text-rose-500"
-          onClick={onDeleteAll}
-        >
+        <Button variant="ghost" size="sm" className="bg-rose-50 hover:bg-rose-100 text-rose-500" onClick={onDeleteAll}>
           <Trash2 size={18} strokeWidth={2} />
           Delete All
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="bg-emerald-100/50 hover:bg-emerald-100 text-emerald-600"
-          onClick={() => onExportPDF(filteredData)}
-        >
+        <Button variant="ghost" size="sm" className="bg-teal-100/50 hover:bg-teal-100 text-teal-600" onClick={() => onExportPDF(filteredData)}>
           <FolderInput size={16} />
           Export
         </Button>

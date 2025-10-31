@@ -30,12 +30,8 @@ export default async function Page({ searchParams }) {
   const attendance = await getAttendanceHistory(user.id)
 
   const tableData = attendance
-    .sort((a, b) => order === "asc"
-      ? new Date(a.date) - new Date(b.date)
-        : new Date(b.date) - new Date(a.date)
-    )
-    .map((a) => ({
-      id: a.id,
+    .sort((a, b) => order === "asc" ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date))
+    .map((a) => ({ id: a.id,
       date: new Date(a.date).toLocaleDateString("en-US", {
         weekday: "long",
       }),
@@ -43,9 +39,7 @@ export default async function Page({ searchParams }) {
         day: "numeric", month: "long", year: "numeric",
       }),
       shift: `${a.shift?.type || "-"} - ${a.shift?.name}`,
-      status: a.status === "PERMISSION"
-          ? `${a.status} (${a.approval || "PENDING"})`
-            : a.status,
+      status: a.status === "PERMISSION" ? `${a.status} (${a.approval || "PENDING"})` : a.status,
       reason: a.reason || "—",
       adminNote: a.adminReason || "-",
       checkInTime: a.checkInTime || "-", checkOutTime: a.checkOutTime || "-",

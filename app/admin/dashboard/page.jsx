@@ -1,9 +1,8 @@
-import { Clock, Sun, SunMoon, Moon, Zap, ChartNoAxesCombined, FileClock, BrushCleaning } from "lucide-react";
+import { Clock, Sun, SunMoon, Moon, Zap, ChartNoAxesCombined } from "lucide-react";
 
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { DashboardStats } from "@/app/admin/dashboard/DashboardStats";
 import { ContentInformation } from "@/_components/content/ContentInformation";
-import { Button } from '@/_components/ui/Button';
 import { AreaDiagram, BarDiagram } from "./DashboardDiagram";
 
 import { prisma } from "@/_lib/prisma";
@@ -11,8 +10,6 @@ import FastActions from './page-action';
 
 export default async function AdminDashboardPage() {
   const totalUsers = await prisma.user.count();
-  const totalSchedules = await prisma.user.count();
-  const totalShifts = await prisma.user.count();
 
   const morningEmployees = await prisma.user.count({
     where: { shift: { type: "MORNING" } },

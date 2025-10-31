@@ -135,16 +135,6 @@
   button, a {
     @apply cursor-pointer;
   }
-  .input-type-search {
-    @apply bg-slate-100 border-slate-100 focus:ring-0 focus:border-0 focus:outline-none focus-visible:ring-0;
-  }
-  .input-tpye-select-option {
-    @apply border-0 border-slate-100 shadow-sm;
-  }
-}
-
-input[type="datetime-local"]:placeholder-shown {
-  color: #9ca3af;
 }
 
 ::-webkit-scrollbar {

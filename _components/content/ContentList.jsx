@@ -2,9 +2,9 @@ import { CircleCheckBig, CircleX, Info } from "lucide-react";
 
 const typeStyles = {
   p: {
-    text: "text-emerald-500",
-    bg: "bg-emerald-100/50",
-    border: "border-emerald-200",
+    text: "text-teal-500",
+    bg: "bg-teal-100/50",
+    border: "border-teal-200",
     icon: CircleCheckBig
   },
   n: {

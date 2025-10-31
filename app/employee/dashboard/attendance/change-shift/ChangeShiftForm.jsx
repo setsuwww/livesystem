@@ -96,7 +96,6 @@ export default function ChangeShiftForm({ employees = [] }) {
           onSubmit={handleSubmit}
           className="space-y-6 bg-white p-6 rounded-xl border border-slate-200"
         >
-          {/* Select Employee */}
           <div className="space-y-2">
             <Label>Select Employee</Label>
             <Select
@@ -151,18 +150,13 @@ export default function ChangeShiftForm({ employees = [] }) {
             </Select>
           </div>
 
-          {/* Date Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Start Date</Label>
               <div className="flex items-center gap-2">
                 <CalendarDays className="text-slate-400" />
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
-                  min={todayIso}
+                <input type="date" className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
+                  value={startDate} onChange={(e) => setStartDate(e.target.value)} min={todayIso}
                 />
               </div>
             </div>
@@ -171,30 +165,20 @@ export default function ChangeShiftForm({ employees = [] }) {
               <Label>End Date (optional)</Label>
               <div className="flex items-center gap-2">
                 <CalendarDays className="text-slate-400" />
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
-                  min={startDate || todayIso}
+                <input value={endDate} onChange={(e) => setEndDate(e.target.value)} min={startDate || todayIso}
+                  type="date" className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-400 text-sm"
                 />
               </div>
             </div>
           </div>
 
-          {/* Reason */}
           <div className="space-y-2">
             <Label>Reason for Change</Label>
-            <Textarea
-              className="bg-white"
-              placeholder="Explain why this shift change is needed..."
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              rows={4}
+            <Textarea className="bg-white" placeholder="Explain why this shift change is needed..."
+              value={reason} onChange={(e) => setReason(e.target.value)} rows={4}
             />
           </div>
 
-          {/* Submit */}
           <Button type="submit" className="w-full" disabled={disabled}>
             {loading && <Loader className="animate-spin mr-2 h-4 w-4" />}
             Submit Request

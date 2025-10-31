@@ -7,7 +7,7 @@ import Link from "next/link";
 export const Pagination = React.memo(function ({
   page,
   totalPages,
-  basePath = "/schedules"
+  basePath = "/"
 }) {
   if (totalPages <= 1) return null;
 

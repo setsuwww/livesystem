@@ -14,25 +14,18 @@ const PAGE_SIZE = 5;
 export const revalidate = 60;
 
 async function getUsers(page = 1) {
-  return prisma.user.findMany({
-    skip: (page - 1) * PAGE_SIZE,
-    take: PAGE_SIZE,
+  return prisma.user.findMany({ skip: (page - 1) * PAGE_SIZE, take: PAGE_SIZE,
     orderBy: { createdAt: "desc" },
     select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
+      id: true, name: true, email: true, role: true,
+      createdAt: true, updatedAt: true,
       shift: {
         select: { name: true, type: true, startTime: true, endTime: true },
       },
       division: {
         select: { name: true,
           startTime: true, endTime: true,
-          shifts: {
-            select: { name: true, startTime: true, endTime: true },
+          shifts: { select: { name: true, startTime: true, endTime: true },
             where: { isActive: true },
           },
         },

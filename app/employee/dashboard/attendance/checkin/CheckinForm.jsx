@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react"
 import { toast } from "sonner"
-import { Clock, LogIn, LogOut, Plane, Shuffle, Loader, CheckCircle2, XCircle, AlertTriangle, Circle } from "lucide-react"
+import { Clock, LogIn, LogOut, Plane, Shuffle, CheckCircle2, XCircle, AlertTriangle, Circle } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/_components/ui/Card"
 import { userSendCheckIn, userSendCheckOut, userSendPermissionRequest } from "@/_components/server/attendanceAction"
 import { apiFetchData } from "@/_function/helpers/fetch"
@@ -92,7 +92,7 @@ export default function CheckinForm() {
       <ContentInformation heading="Your Statistic" subheading="Views your attendance" />
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         <StatCard
-          iconClassName="bg-gradient-to-tr from-emerald-100 to-emerald-50 text-emerald-500 border-emerald-100"
+          iconClassName="bg-gradient-to-tr from-teal-100 to-teal-50 text-teal-500 border-teal-100"
           icon={<CheckCircle2 />}
           label="Present"
           value={stats?.PRESENT ?? 0}
@@ -131,7 +131,7 @@ export default function CheckinForm() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
             <Button onClick={handleCheckIn} disabled={isPending}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2">
+              className="w-full bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
               <LogIn className="w-4 h-4" />
               Check In
             </Button>
@@ -177,7 +177,6 @@ export default function CheckinForm() {
   )
 }
 
-/* --- Subcomponents --- */
 function StatCard({ iconClassName ,icon, label, value }) {
   return (
     <Card className="border border-slate-200 shadow-xs">

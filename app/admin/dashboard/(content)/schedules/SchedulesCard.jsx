@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarClock, MoreHorizontal, User2 } from "lucide-react";
+import { CalendarClock, MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
 
 import { Checkbox } from "@/_components/ui/Checkbox";
@@ -13,7 +13,7 @@ import SchedulesActionHeader from "./SchedulesActionHeader";
 import ScheduleUsersDialog from "./SchedulesUsersDialog";
 import { handleSchedules } from "@/_function/handlers/handleSchedules";
 import { capitalize } from "@/_function/globalFunction";
-import { frequencyStyles } from "@/_constants/frequencyStyles";
+import { frequencyStyles } from "@/_constants/scheduleConstants";
 
 export default function SchedulesCard({ data }) {
   const [search, setSearch] = useState("");

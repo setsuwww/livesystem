@@ -9,7 +9,7 @@ import { CircleUserRound, File } from "lucide-react"
 import { Badge } from "@/_components/ui/Badge"
 import { capitalize } from "@/_function/globalFunction"
 import { shiftStyles } from "@/_constants/shiftConstants"
-import { attedancesStyles } from "@/_constants/attedanceConstants"
+import { attedancesStyles } from "@/_constants/attendanceConstants"
 import ContentForm from "@/_components/content/ContentForm"
 import { ContentInformation } from "@/_components/content/ContentInformation"
 
@@ -112,7 +112,7 @@ export default function ChangeShiftTable({ requests = [], currentUserId }) {
                     <TableCell>
                       <div className="flex gap-2">
                         <Button size="sm" variant="outline" disabled={isPending} onClick={() => handleAction(req.id, "ACCEPT")}
-                          className="text-emerald-600 hover:bg-emerald-50 hover:text-emerald-600 hover:border-emerald-100"
+                          className="text-teal-600 hover:bg-teal-50 hover:text-teal-600 hover:border-teal-100"
                         >
                           Accept
                         </Button>

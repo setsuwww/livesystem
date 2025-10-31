@@ -4,8 +4,7 @@ import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { ChevronDown, Grip, Menu, X, Users, Clock, LayoutDashboard, User, CircleUserRound, Building2 } from "lucide-react"
-import SubHeading from "./content/SubHeading"
-import { roleStyles } from "@/_constants/roleStyles"
+import { roleStyles } from "@/_constants/roleConstants"
 import clsx from "clsx"
 
 const linkBase = "flex items-center gap-2 text-sm px-3 py-2 transition-colors"
@@ -37,8 +36,8 @@ function SidebarSubLink({ href, children, minimized }) {
 
   return (
     <Link href={href} className={clsx(subLinkBase, "rounded-lg",
-        isActive ? "text-slate-700 font-semibold"
-          : "text-slate-500 hover:text-slate-700 hover:bg-slate-100/70"
+        isActive ? "text-slate-600 font-semibold"
+          : "text-slate-400 hover:text-slate-700 hover:bg-slate-100/70"
       )}
     >
       {children}
