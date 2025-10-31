@@ -19,16 +19,19 @@ export function useEmployeesHooks(users, shifts) {
         u.name.toLowerCase().includes(search.toLowerCase()) ||
         u.email.toLowerCase().includes(search.toLowerCase());
 
-      const matchDivision = divisionFilter === "all" || u.division?.id === Number(divisionFilter);
+      const matchDivision =
+        divisionFilter === "all" || u.division?.id === Number(divisionFilter);
 
       return matchSearch && matchDivision;
     });
   }, [data, search, divisionFilter]);
 
-  const toggleSelect = useCallback((id) =>
-    setSelected((prev) => prev.includes(id)
-        ? prev.filter((s) => s !== id)
-        : [...prev, id]
+  const toggleSelect = useCallback(
+    (id) =>
+      setSelected((prev) =>
+        prev.includes(id)
+          ? prev.filter((s) => s !== id)
+          : [...prev, id]
       ),
     []
   );
@@ -48,7 +51,10 @@ export function useEmployeesHooks(users, shifts) {
   }, []);
 
   const exportCSV = useCallback(() => {
-    const csv = [["ID", "Name", "Email", "Role"], ...filteredData.map((u) => [u.id, u.name, u.email, u.role])]
+    const csv = [
+      ["ID", "Name", "Email", "Role"],
+      ...filteredData.map((u) => [u.id, u.name, u.email, u.role]),
+    ]
       .map((row) => row.join(","))
       .join("\n");
 
@@ -60,32 +66,43 @@ export function useEmployeesHooks(users, shifts) {
     a.click();
   }, [filteredData]);
 
-  const onSwitch = useCallback(
-    async (id, newActiveState) => {
-      try { await api.patch(`/users/${id}`, { active: newActiveState });
-        setData((prev) =>
-          prev.map((u) =>  u.id === id ? { ...u, active: newActiveState } : u)
-        );
-      } 
-      catch (err) {alert("Failed to update user state")}
-    }, []
-  );
+  const onSwitch = useCallback(async (id, newActiveState) => {
+    try {
+      await api.patch(`/users/${id}`, { active: newActiveState });
+      setData((prev) =>
+        prev.map((u) =>
+          u.id === id ? { ...u, active: newActiveState } : u
+        )
+      );
+    } catch (err) {
+      alert("Failed to update user state");
+    }
+  }, []);
 
-  const onDelete = useCallback(async (id) => { if (!confirm("Are you sure to delete this user?")) return;
-    try { await api.delete(`/users/${id}`);
+  const onDelete = useCallback(async (id) => {
+    if (!confirm("Are you sure to delete this user?")) return;
+    try {
+      await api.delete(`/users/${id}`);
       setData((prev) => prev.filter((u) => u.id !== id));
-    } 
-    catch (err) {alert("Failed to delete user");}
+    } catch (err) {
+      alert("Failed to delete user");
+    }
   }, []);
 
   return {
-    search, setSearch,
-    selected, setSelected,
-    data, filteredData,
-    divisionFilter, setDivisionFilter,
+    search,
+    setSearch,
+    selected,
+    setSelected,
+    data,
+    filteredData,
+    divisionFilter,
+    setDivisionFilter,
     toggleSelect,
-    deleteSelected, deleteAll,
+    deleteSelected,
+    deleteAll,
     exportCSV,
-    onSwitch, onDelete,
+    onSwitch,
+    onDelete,
   };
 }

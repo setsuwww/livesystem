@@ -122,7 +122,7 @@ export default function UpdateAssignUserShift({ events, setEvents, users }) {
                           <p className="text-sm font-medium">{u.name}</p>
                           <p className="text-xs text-slate-400">{u.email}</p>
                         </div>
-                        {isSelected && <Check className="ml-auto h-4 w-4 text-teal-600" />}
+                        {isSelected && <Check className="ml-auto h-4 w-4 text-emerald-600" />}
                       </div>
                     </CommandItem>
                   )

@@ -73,7 +73,7 @@ export const DivisionsActionHeader = ({
         <Button
           variant="ghost"
           size="sm"
-          className="bg-teal-100 hover:bg-teal-200 text-teal-700"
+          className="bg-emerald-100/50 hover:bg-emerald-100 text-emerald-600"
           onClick={() => onExportPDF(filteredData)}
         >
           <FolderInput size={16} />

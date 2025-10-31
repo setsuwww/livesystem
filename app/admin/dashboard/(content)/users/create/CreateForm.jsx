@@ -18,6 +18,7 @@ import { Label } from "@/_components/ui/Label"
 import { createUser } from "@/_components/server/userAction.js"
 import { capitalize, formatIntToTime } from "@/_function/globalFunction"
 import { roleOptions } from "@/_constants/roleOptions"
+import { Loader } from 'lucide-react';
 
 export default function CreateForm({ divisions, shifts }) {
   const router = useRouter()
@@ -203,7 +204,10 @@ export default function CreateForm({ divisions, shifts }) {
 
           <ContentForm.Footer>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Creating..." : "Create User"}
+              {isPending 
+                ? (<><Loader className="w-4 h-4 animate-spin" /> Creating...</>) 
+                : "Create User"
+              }
             </Button>
           </ContentForm.Footer>
         </form>

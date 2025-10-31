@@ -92,7 +92,7 @@ export default function CheckinForm() {
       <ContentInformation heading="Your Statistic" subheading="Views your attendance" />
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
         <StatCard
-          iconClassName="bg-gradient-to-tr from-teal-100 to-teal-50 text-teal-500 border-teal-100"
+          iconClassName="bg-gradient-to-tr from-emerald-100 to-emerald-50 text-emerald-500 border-emerald-100"
           icon={<CheckCircle2 />}
           label="Present"
           value={stats?.PRESENT ?? 0}
@@ -131,7 +131,7 @@ export default function CheckinForm() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-2">
             <Button onClick={handleCheckIn} disabled={isPending}
-              className="w-full bg-teal-600 hover:bg-teal-700 text-white flex items-center gap-2">
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center gap-2">
               <LogIn className="w-4 h-4" />
               Check In
             </Button>
@@ -157,7 +157,7 @@ export default function CheckinForm() {
 
           {showPermission && (
             <div className="mt-4 space-y-3 mb-2">
-              <Label>Reason <span className="text-red-500">*</span></Label>
+              <Label>Reason <span className="text-rose-500">*</span></Label>
               <input type="text" placeholder="Enter your reason..." value={reason} onChange={(e) => setReason(e.target.value)}
                 className="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm"
               />

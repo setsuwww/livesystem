@@ -65,8 +65,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
               <CommandList>
                 <CommandEmpty>No division found.</CommandEmpty>
                 <CommandGroup>
-                  <CommandItem value="all"
-                    onSelect={() => { setDivisionFilter("all")
+                  <CommandItem value="all" onSelect={() => { setDivisionFilter("all")
                       setOpenDivision(false)
                     }}
                   >
@@ -76,8 +75,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
 
                   {divisions.filter((d) => statusFilter.length === 0 || statusFilter.includes(d.type))
                     .map((d) => (
-                      <CommandItem key={d.id} value={d.name} onSelect={() => {
-                          setDivisionFilter(String(d.id))
+                      <CommandItem key={d.id} value={d.name} onSelect={() => { setDivisionFilter(String(d.id))
                           setOpenDivision(false)
                         }}
                       >
@@ -103,7 +101,7 @@ export const EmployeesActionHeader = React.memo(function EmployeesActionHeader({
         <Button variant="ghost" size="sm" className="bg-rose-50 text-rose-500 hover:bg-rose-100" onClick={onDeleteAll}>
           <Trash2 className="w-4 h-4 mr-1" /> Delete All
         </Button>
-        <Button variant="ghost" size="sm" className="bg-teal-100 text-teal-600 hover:bg-teal-200" onClick={onExport}>
+        <Button variant="ghost" size="sm" className="bg-emerald-100/50 text-emerald-600 hover:bg-emerald-100" onClick={onExport}>
           <FolderInput className="w-4 h-4 mr-1" /> Export
         </Button>
       </div>

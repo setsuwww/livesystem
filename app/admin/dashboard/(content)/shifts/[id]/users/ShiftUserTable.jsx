@@ -82,7 +82,7 @@ export default function UserShiftTable({ data }) {
             <Trash2 size={18} strokeWidth={2} />
             Delete All
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => console.log("Export CSV")} className="bg-teal-100 text-teal-600 hover:bg-teal-200">
+          <Button size="sm" variant="ghost" onClick={() => console.log("Export CSV")} className="bg-emerald-100/50 text-emerald-600 hover:bg-emerald-100">
             <FolderInput size={16} /> Export
           </Button>
         </div>

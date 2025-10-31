@@ -77,12 +77,12 @@ async function main() {
   }
 
   const usersData = [
-    { name: "Mikasa", email: "mikasa@g.com", password: "mikasa123", role: Role.ADMIN },
-    { name: "Dirman", email: "dirman@g.com", password: "dirman123", role: Role.EMPLOYEE },
-    { name: "Buyung", email: "buyung@g.com", password: "buyung123", role: Role.EMPLOYEE },
-    { name: "Mursidi", email: "mursidi@g.com", password: "mursidi123", role: Role.EMPLOYEE },
-    { name: "Surya", email: "surya@g.com", password: "surya123", role: Role.EMPLOYEE },
-    { name: "Agus", email: "agus@g.com", password: "agus123", role: Role.EMPLOYEE },
+    { name: "Mikasa", email: "mikasa@next.org", password: "mikasa123", role: Role.ADMIN },
+    { name: "Dirman", email: "dirman@next.org", password: "dirman123", role: Role.EMPLOYEE },
+    { name: "Buyung", email: "buyung@next.org", password: "buyung123", role: Role.EMPLOYEE },
+    { name: "Mursidi", email: "mursidi@next.org", password: "mursidi123", role: Role.EMPLOYEE },
+    { name: "Surya", email: "surya@next.org", password: "surya123", role: Role.EMPLOYEE },
+    { name: "Agus", email: "agus@next.org", password: "agus123", role: Role.EMPLOYEE },
   ];
 
   for (const [i, u] of usersData.entries()) {

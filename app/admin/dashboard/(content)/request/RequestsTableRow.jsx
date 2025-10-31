@@ -77,7 +77,7 @@ export default function RequestsTableRow({
             <p className="text-sm font-semibold text-slate-600">{person.name}</p>
             <p className="text-xs text-slate-400">{person.email}</p>
             {person.division?.name && (
-              <p className="text-xs font-medium text-indigo-500">
+              <p className="text-xs font-medium text-purple-500">
                 {person.division.name}
               </p>
             )}
@@ -105,7 +105,7 @@ export default function RequestsTableRow({
     return (
       <div className="flex flex-col items-start justify-start gap-1 text-left">
         <div className="flex items-center space-x-1">
-          <span className="font-semibold text-teal-400">
+          <span className="font-semibold text-emerald-400">
             From :
           </span>
           <Badge
@@ -184,7 +184,7 @@ export default function RequestsTableRow({
         <TableCell className="text-slate-400 whitespace-nowrap text-sm">
           {requestType === "shift" ? (
             <div>
-              <p className="text-teal-500">{startDate || "-"}</p>
+              <p className="text-emerald-500">{startDate || "-"}</p>
               <p className="text-rose-500">{endDate || "-"}</p>
             </div>
           ) : (

@@ -13,6 +13,7 @@ import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import { capitalize } from "@/_function/globalFunction";
 import { roleOptions } from "@/_constants/roleOptions";
 import { updateUser } from "@/_components/server/userAction.js";
+import { Loader } from 'lucide-react';
 
 export default function EditForm({ user, divisions, shifts }) {
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function EditForm({ user, divisions, shifts }) {
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
-            <ContentInformation heading="Public" subheading="Update user info" />
+            <ContentInformation heading="Public" subheading="Update user info" show={true} buttonText="Back" variant="outline" href="/admin/dashboard/users/employees" />
           </ContentForm.Header>
 
           <ContentForm.Body>
@@ -114,7 +115,7 @@ export default function EditForm({ user, divisions, shifts }) {
                   <SelectContent>
                     {availableShifts.map((s) => (
                       <SelectItem key={s.id} value={String(s.id)}>
-                        {capitalize(s.name)} ({s.startTime} - {s.endTime})
+                        {capitalize(s.name)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -125,7 +126,10 @@ export default function EditForm({ user, divisions, shifts }) {
 
           <ContentForm.Footer>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Updating..." : "Update User"}
+              {isPending 
+                ? (<><Loader className="w-4 h-4 animate-spin" /> Updating...</>) 
+                : "Update User"
+              }
             </Button>
           </ContentForm.Footer>
         </form>

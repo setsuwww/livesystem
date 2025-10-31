@@ -68,7 +68,6 @@ model SystemConfig {
   updatedAt    DateTime @updatedAt
 }
 
-/// Division / Lokasi Kerja
 model Division {
   id        Int            @id @default(autoincrement())
   name      String
@@ -92,7 +91,6 @@ model Division {
   updatedAt DateTime @updatedAt
 }
 
-/// User
 model User {
   id       Int    @id @default(autoincrement())
   name     String
@@ -118,7 +116,6 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-/// Waktu Shift
 model Shift {
   id        Int       @id @default(autoincrement())
   name      String
@@ -145,7 +142,6 @@ model Shift {
   updatedAt DateTime @updatedAt
 }
 
-/// Schedule massal / individu
 model Schedule {
   id          Int           @id @default(autoincrement())
   title       String
@@ -165,7 +161,6 @@ model Schedule {
   updatedAt DateTime @updatedAt
 }
 
-/// 
 model SchedulesOnUsers {
   id         Int @id @default(autoincrement())
   scheduleId Int
@@ -177,7 +172,6 @@ model SchedulesOnUsers {
   @@unique([scheduleId, userId])
 }
 
-/// Hari spesifik jadwal
 model ScheduleDate {
   id            Int      @id @default(autoincrement())
   scheduleId    Int
@@ -191,7 +185,6 @@ model ScheduleDate {
   @@unique([scheduleId, date])
 }
 
-/// Custom Shift
 model UserShiftAssignment {
   id         Int      @id @default(autoincrement())
   userId     Int
@@ -204,7 +197,6 @@ model UserShiftAssignment {
   @@unique([userId, shiftId])
 }
 
-/// Absensi
 model Attendance {
   id           Int              @id @default(autoincrement())
   date         DateTime

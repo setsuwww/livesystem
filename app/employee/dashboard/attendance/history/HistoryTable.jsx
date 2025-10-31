@@ -114,7 +114,7 @@ export default function HistoryTable({ data, initialOrder }) {
 
                   <TableCell className="text-sm font-semibold">
                     <div className="flex flex-col">
-                      <span className="text-teal-600">Checkin at: {safeFormat(att.checkInTime, "HH:mm")}</span> 
+                      <span className="text-emerald-600">Checkin at: {safeFormat(att.checkInTime, "HH:mm")}</span> 
                       <span className="text-rose-600">Checkout at: {safeFormat(att.checkOutTime, "HH:mm")}</span>
                     </div>
                   </TableCell>

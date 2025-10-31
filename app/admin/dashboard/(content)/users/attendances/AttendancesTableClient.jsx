@@ -48,7 +48,7 @@ export default function AttendancesTableClient() {
             type="date"
             value={date}
             onChange={(e) => handleDateChange(e.target.value)}
-            className="border rounded-md px-3 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="border rounded-md px-3 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
 
           <Select value={sortOrder} onValueChange={setSortOrder}>
@@ -114,7 +114,7 @@ export default function AttendancesTableClient() {
 
                   <TableCell>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm text-teal-500">
+                      <span className="text-sm text-emerald-500">
                         {safeFormat(att.checkInTime, "HH:mm")}
                       </span>
                       <span className="text-sm text-rose-500">

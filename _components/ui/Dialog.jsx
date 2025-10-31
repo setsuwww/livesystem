@@ -20,8 +20,8 @@ const variantStyles = {
     title: "text-yellow-700",
   },
   success: {
-    border: "border-teal-500",
-    title: "text-teal-700",
+    border: "border-emerald-500",
+    title: "text-emerald-600",
   },
   danger: {
     border: "border-rose-500",

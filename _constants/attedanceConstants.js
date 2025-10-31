@@ -1,13 +1,13 @@
 export const statusPriority = ["ABSENT", "LATE", "PERMISSION"];
 
 export const attedancesStyles = {
-  Present: "text-teal-600 bg-teal-100 border-teal-300",
+  Present: "text-emerald-600 bg-emerald-100 border-emerald-300",
   Late: "text-yellow-600 bg-yellow-100 border-yellow-300",
   Permission: "text-blue-600 bg-blue-100 border-blue-300",
   Absent: "text-rose-600 bg-rose-100 border-rose-300",
 
   Rejected: "text-white bg-rose-500 border-rose-500",
-  Accepted: "text-white bg-teal-500 border-teal-500",
+  Accepted: "text-white bg-emerald-500 border-emerald-500",
   Pending: "text-white bg-yellow-500 border-yellow-500",
 };
 
@@ -15,7 +15,7 @@ export const dotStatusColor = {
   PENDING: "bg-yellow-500",
   PENDING_TARGET: "bg-yellow-500",
   PENDING_ADMIN: "bg-yellow-500",
-  APPROVED: "bg-teal-500",
+  APPROVED: "bg-emerald-500",
   REJECTED: "bg-rose-500",
 };
 
@@ -33,13 +33,13 @@ export function getDisplayStatus(status) {
 
 export const statusColorsClass = {
   PRESENT: { 
-    bgPing: "bg-teal-400", 
-    bgDot: "bg-radial from-teal-400 to-teal-500", 
+    bgPing: "bg-emerald-400", 
+    bgDot: "bg-radial from-emerald-400 to-emerald-500", 
 
-    head: "text-teal-800",
-    text: "text-teal-600", 
-    subtext: "text-teal-400", 
-    border: "bg-teal-100 border-teal-600" 
+    head: "text-emerald-800",
+    text: "text-emerald-600", 
+    subtext: "text-emerald-400", 
+    border: "bg-emerald-100 border-emerald-600" 
   },
   ABSENT: { 
     bgPing: "bg-rose-400", 

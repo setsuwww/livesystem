@@ -29,7 +29,7 @@ export default function RequestStatusChangerToggle({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" disabled={disabled || isPending} className="border-slate-200 text-slate-400 font-semibold rounded-full flex items-center gap-2">
+        <Button variant="outline" size="sm" disabled={disabled || isPending} className="border-slate-200 text-slate-400 text-sm font-semibold rounded-full flex items-center gap-2">
           <span className={`w-2.5 h-2.5 rounded-full ${dotStatusColor[current]}`} />
           <span>
             {getDisplayStatus(current)}
@@ -42,7 +42,7 @@ export default function RequestStatusChangerToggle({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-32">
-        <DropdownMenuItem onClick={() => handleChange("APPROVED")} className="text-teal-500 focus:bg-teal-50 focus:text-teal-700">
+        <DropdownMenuItem onClick={() => handleChange("APPROVED")} className="text-emerald-500 focus:bg-emerald-50 focus:text-emerald-600">
           Approve
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleChange("REJECTED")} className="text-rose-500 focus:bg-rose-50 focus:text-rose-700">

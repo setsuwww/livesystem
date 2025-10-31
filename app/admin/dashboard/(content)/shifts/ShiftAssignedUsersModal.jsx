@@ -79,7 +79,7 @@ export function ShiftAssignedUsersModal({ shift }) {
                 <li key={s.id} className="flex items-center justify-between border-b border-slate-200 pb-2">
                   <span className="text-sm font-semibold text-slate-600">{s.title}</span>
                   <span className="text-xs text-slate-400">
-                    <span className="text-teal-400">{formatDateTime(s.startDate)}</span>
+                    <span className="text-emerald-400">{formatDateTime(s.startDate)}</span>
                     {` - `}
                     <span className="text-rose-400">{formatDateTime(s.endDate)}</span>
                   </span>

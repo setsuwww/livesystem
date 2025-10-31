@@ -46,7 +46,7 @@ export const SchedulesRow = React.memo(function ({ schedule, isSelected, onSelec
       </TableCell>
       <TableCell>
         <div className="text-sm font-semibold flex flex-col">
-          <span className="text-teal-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
+          <span className="text-emerald-500">{schedule.startDate && ` ${format(new Date(schedule.startDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
           <span className="text-rose-500">{schedule.endDate && ` ${format(new Date(schedule.endDate), "dd-MMMM-yyyy HH:mm:ss")}`}</span>
         </div>
       </TableCell>

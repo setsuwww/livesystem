@@ -4,7 +4,6 @@ import EditForm from "./EditForm";
 export default async function Page({ params }) {
   const userId = parseInt(params.id);
 
-  // ambil data paralel
   const [user, shifts, divisions] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
@@ -14,18 +13,14 @@ export default async function Page({ params }) {
       },
     }),
     prisma.shift.findMany({
-      select: { id: true, name: true,
-        startTime: true, endTime: true,
-      },
+      select: { id: true, name: true },
     }),
     prisma.division.findMany({
       select: {
         id: true, name: true,
-        startTime: true, endTime: true,
         shifts: {
           select: {
             id: true, name: true,
-            startTime: true, endTime: true,
           },
         },
       },
@@ -35,7 +30,7 @@ export default async function Page({ params }) {
   if (!user) {
     return (
       <div className="p-6">
-        <h1 className="text-xl font-semibold text-red-500">User not found</h1>
+        <h1 className="text-xl font-semibold text-rose-500">User not found</h1>
       </div>
     );
   }

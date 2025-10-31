@@ -1,52 +1,37 @@
 "use client"
 
-import React, { useEffect, useState, useRef, useTransition } from "react"
+import React, { useTransition } from "react"
 import { LogOut, Inbox } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import useSWR from "swr"
 import { LogoutAuthAction } from "@/app/auth/login/action"
 
+const fetcher = (url) => fetch(url).then((res) => res.json())
+
 export const DashboardHeader = React.memo(function DashboardHeader({ title, subtitle }) {
-  const [hasNotifications, setHasNotifications] = useState(false)
-  const [isPending, startTransition] = useTransition()
-  const [dataHash, setDataHash] = useState(null)
   const pathname = usePathname()
-  const rightActionClass = "flex items-center text-sm font-semibold rounded-lg bg-white/50 border border-slate-300/70 text-slate-600 transition-colors py-1.5"
+  const [isPending, startTransition] = useTransition()
+
+  const { data, error, isLoading } = useSWR("/api/system-config/admin-notification", fetcher, {
+    refreshInterval: 60000,
+    revalidateOnFocus: true,
+  })
+
+  const hasNotifications = data?.hasNotifications || false
 
   const segments = pathname.split("/").filter(Boolean)
   const formatLabel = (text) => text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
   const visibleSegments = segments.slice(0, 3)
 
-  useEffect(() => { let isMounted = true
-    async function fetchNotifications() {
-      try { const res = await fetch("/api/system-config/admin-notification")
-        const data = await res.json()
-        const newHash = JSON.stringify(data)
-
-        if (isMounted && newHash !== dataHash) {
-          setDataHash(newHash)
-          setHasNotifications(data.hasNotifications)
-        }
-      } catch (err) {
-        console.error("Failed to fetch notifications:", err)
-      }
-    }
-
-    fetchNotifications()
-    const interval = setInterval(fetchNotifications, 60000)
-    return () => {
-      isMounted = false
-      clearInterval(interval)
-    }
-  }, [dataHash])
-
   const handleLogout = () => {
-    startTransition(async () => {
-      const result = await LogoutAuthAction()
-      if (result.success) { window.location.href = "/login"} 
-      else { alert("Logout failed.")}
+    startTransition(async () => { const result = await LogoutAuthAction()
+      if (result.success) window.location.href = "/login"
+      else alert("Logout failed.")
     })
   }
+
+  const rightActionClass = "flex items-center text-sm font-semibold rounded-lg bg-white/50 border border-slate-300/70 text-slate-600 transition-colors py-1.5"
 
   return (
     <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-4">
@@ -67,7 +52,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
                 {!isLast 
                   ? (<Link href={href} className="font-semibold text-slate-700">{formatLabel(segment)}</Link>) 
                   : (<span className="text-slate-500">{formatLabel(segment)}</span>)
-                } 
+                }
                 {!isLast && <span className="mx-2">/</span>}
               </span>
             )
@@ -75,10 +60,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
         </nav>
 
         <div className="flex items-center gap-x-2">
-          <Link
-            href="/admin/dashboard/request"
-            className={`hover:text-sky-600 relative px-2 ${rightActionClass} hover:bg-white hover:border-slate-300/90`}
-          >
+          <Link href="/admin/dashboard/request" className={`hover:text-sky-600 relative px-2 ${rightActionClass} hover:bg-white hover:border-slate-300/90`}>
             <Inbox size={20} strokeWidth={2} />
             {hasNotifications && (
               <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
@@ -88,9 +70,7 @@ export const DashboardHeader = React.memo(function DashboardHeader({ title, subt
             )}
           </Link>
 
-          <button
-            onClick={handleLogout}
-            disabled={isPending}
+          <button onClick={handleLogout} disabled={isPending}
             className={`hover:text-rose-500 px-4 gap-x-1 ${rightActionClass} hover:bg-white hover:border-slate-300/90 disabled:opacity-50`}
           >
             <LogOut strokeWidth={2.5} size={15} />

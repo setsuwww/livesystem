@@ -47,7 +47,7 @@ export default function DashboardHeaderClient({ user }) {
           <span>{today}</span>
         </div>
 
-        <button onClick={handleLogout} disabled={isPending} className="text-sm flex items-center font-semibold space-x-1 px-3 py-1.5 rounded-lg text-red-500 border border-slate-200 transition-colors disabled:opacity-60">
+        <button onClick={handleLogout} disabled={isPending} className="text-sm flex items-center font-semibold space-x-1 px-3 py-1.5 rounded-lg text-rose-500 border border-slate-200 transition-colors disabled:opacity-60">
           <LogOut size={14} />
           <span className="text-slate-600">
             {isPending ? "Logging out..." : "Logout"}
