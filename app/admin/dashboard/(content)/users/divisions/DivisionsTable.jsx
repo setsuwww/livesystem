@@ -44,7 +44,7 @@ export default function DivisionsTable({ data }) {
         const data = await res.json()
         setAllActive(data.allWfaActive)
       }
-      catch (err) { console.error("❌ Failed to fetch config:", err) }
+      catch (err) { console.error("Failed to fetch config:", err) }
       finally { setLoadingConfig(false) }
     }
     fetchConfig()
@@ -197,7 +197,7 @@ export default function DivisionsTable({ data }) {
                         <AlarmClock strokeWidth={1.5} size={16} />
                         <span>
                           {division.startTime != null && division.endTime != null
-                            ? `${minutesToTime(division.startTime)} - ${minutesToTime(division.endTime)}`
+                            ? `${division.startTime} - ${division.endTime}`
                             : "-"}
                         </span>
                       </div>

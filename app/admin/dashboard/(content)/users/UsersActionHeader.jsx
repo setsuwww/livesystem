@@ -1,12 +1,12 @@
 "use client";
+
 import { Trash2, FolderInput } from "lucide-react";
 import { Input } from "@/_components/ui/Input";
 import { Button } from "@/_components/ui/Button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select";
 import React from "react";
 
-export const UsersActionHeader = React.memo(
-  ({
+export const UsersActionHeader = React.memo(({
     search, onSearchChange,
     roleFilter, onRoleFilterChange,
     shiftFilter, onShiftFilterChange,
@@ -36,9 +36,9 @@ export const UsersActionHeader = React.memo(
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="morning">Morning</SelectItem>
-              <SelectItem value="afternoon">Afternoon</SelectItem>
-              <SelectItem value="evening">Evening</SelectItem>
+              <SelectItem value="MORNING">Morning</SelectItem>
+              <SelectItem value="AFTERNOON">Afternoon</SelectItem>
+              <SelectItem value="EVENING">Evening</SelectItem>
             </SelectContent>
           </Select>
 

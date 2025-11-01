@@ -13,17 +13,9 @@ import ContentForm from "@/_components/content/ContentForm";
 import { ContentInformation } from "@/_components/content/ContentInformation";
 
 import { apiFetchData } from "@/_function/helpers/fetch";
+import { typeOptions, statusOptions } from '@/_constants/divisionConstants';
 import { capitalize, timeToMinutes } from "@/_function/globalFunction";
-
-const typeOptions = [
-  { label: "WFO (Work From division)", value: "WFO" },
-  { label: "WFA (Work From Anywhere)", value: "WFA" },
-];
-
-const statusOptions = [
-  { label: "ACTIVE", value: "ACTIVE" },
-  { label: "INACTIVE", value: "INACTIVE" },
-];
+import { Loader } from 'lucide-react';
 
 export default function CreateDivisionForm() {
   const router = useRouter();
@@ -35,7 +27,7 @@ export default function CreateDivisionForm() {
     radius: "",
     type: "WFO",
     status: "INACTIVE",
-    startTime: "", // HH:mm format
+    startTime: "",
     endTime: "",
   });
   const [loading, setLoading] = useState(false);
@@ -69,7 +61,7 @@ export default function CreateDivisionForm() {
         data: payload,
         successMessage: "Division created successfully ✅",
         errorMessage: "Failed to create division ❌",
-        onSuccess: () => router.push("/admin/dashboard/users/locations"),
+        onSuccess: () => router.push("/admin/dashboard/users/divisions"),
       });
     } finally {
       setLoading(false);
@@ -86,13 +78,8 @@ export default function CreateDivisionForm() {
       <ContentForm>
         <form onSubmit={handleSubmit} className="space-y-2">
           <ContentForm.Header>
-            <ContentInformation
-              heading="Division Info"
-              subheading="Division details & location"
-              show={true}
-              variant="outline"
-              buttonText="Back"
-              href="/admin/dashboard/divisions"
+            <ContentInformation heading="Division Info" subheading="Division details & location"
+              show={true} variant="outline" buttonText="Back" href="/admin/dashboard/divisions"
             />
           </ContentForm.Header>
 
@@ -221,7 +208,10 @@ export default function CreateDivisionForm() {
 
           <ContentForm.Footer>
             <Button type="submit" disabled={loading}>
-              {loading ? "Creating..." : "Create division"}
+              {loading
+                ? (<><Loader className="w-4 h-4 animate-spin" /> Creating...</>) 
+                : "Create User"
+              }
             </Button>
           </ContentForm.Footer>
         </form>

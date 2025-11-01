@@ -55,6 +55,7 @@ export default async function Page({ searchParams }) {
           label: capitalize(u.shift.name || u.shift.type),
           start: u.shift.startTime,
           end: u.shift.endTime,
+          type: u.shift.type,
         }
       : null;
 
@@ -64,6 +65,7 @@ export default async function Page({ searchParams }) {
             label: `${u.division.shifts[0].name} - (Division)`,
             start: u.division.shifts[0].startTime,
             end: u.division.shifts[0].endTime,
+            type: "DIVISION"
           }
         : null;
 
@@ -73,6 +75,7 @@ export default async function Page({ searchParams }) {
             label: u.division.name,
             start: u.division.startTime,
             end: u.division.endTime,
+            type: "DIVISION_TIME"
           }
         : null;
 
@@ -90,6 +93,7 @@ export default async function Page({ searchParams }) {
       role: capitalize(u.role),
       shift: shiftLabel,
       shiftTime,
+      shiftType: finalShift ? finalShift.type : null,
       createdAt: u.createdAt.toISOString(),
       updatedAt: u.updatedAt.toISOString(),
     };

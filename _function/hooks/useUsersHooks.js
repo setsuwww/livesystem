@@ -23,7 +23,8 @@ export function useUsersHooks(initialData) {
 
       const matchSearch = name.includes(search.toLowerCase()) || email.includes(search.toLowerCase());
       const matchRole = roleFilter === "all" || role === roleFilter.toUpperCase();
-      const matchShift = shiftFilter === "all" || shiftName.toLowerCase().includes(shiftFilter.toLowerCase());
+      const shiftType = user.shiftType?.toLowerCase() || "none";
+      const matchShift = shiftFilter === "all" || shiftType === shiftFilter.toLowerCase();
 
       return matchSearch && matchRole && matchShift;
     });

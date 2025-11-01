@@ -1,18 +1,9 @@
 "use client"
 
 import { useState, useMemo, useCallback, useRef } from "react"
-import useSWR from "swr"
 import { handleDivisions } from "../handlers/handleDivisions"
 
-const fetcher = async (url) => {
-  const res = await fetch(url)
-  const data = await res.json()
-  return Array.isArray(data) ? data : data.data || []
-}
-
-export function useDivisionsHooks(initialData = []) {
-  const { data: divisions = [], mutate } = useSWR("/api/division", fetcher)
-
+export function useDivisionsHooks(initialData) {
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
@@ -21,51 +12,46 @@ export function useDivisionsHooks(initialData = []) {
   const searchRef = useRef(null)
 
   const filteredData = useMemo(() => {
-    return divisions.filter((division) => {
-      const matchesSearch =
-        division.name.toLowerCase().includes(search.toLowerCase()) ||
-        division.location.toLowerCase().includes(search.toLowerCase())
-
-      const matchesType = typeFilter === "all" || division.type === typeFilter
-      const matchesStatus = statusFilter === "all" || division.status === statusFilter
-
-      return matchesSearch && matchesType && matchesStatus
+    return initialData.filter((division) => {
+      const matchSearch = division.name.toLowerCase().includes(search.toLowerCase())
+      const matchType = typeFilter === "all" || division.type === typeFilter
+      const matchStatus = statusFilter === "all" || division.status === statusFilter
+      return matchSearch && matchType && matchStatus
     })
-  }, [divisions, search, typeFilter, statusFilter])
+  }, [initialData, search, typeFilter, statusFilter])
 
-  const toggleSelect = useCallback((id) => {
-    setSelectedIds((prev) => prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id])
-  }, [])
-
-  const toggleSelectAll = useCallback(() => {
-    if (selectedIds.length === filteredData.length) { setSelectedIds([])} 
-    else { setSelectedIds(filteredData.map((d) => d.id))}
-  }, [selectedIds, filteredData])
-
-  const handleDeleteAll = useCallback(() => handleDivisions.onDeleteAll?.(mutate),
-    [mutate]
-  )
-
-  const handleDeleteSelected = useCallback(() => handleDivisions.onDeleteSelected?.(selectedIds, mutate),
-    [selectedIds, mutate]
-  )
-
-  const handleExportPDF = useCallback(() => handleDivisions.onExportPDF?.(filteredData),
-    [filteredData]
-  )
+  const {
+    toggleSelect,
+    toggleSelectAll,
+    isAllSelected,
+    onEdit,
+    onDelete,
+    handleDeleteSelected,
+    handleDeleteAll,
+    onToggleStatus,
+    onBulkUpdate,
+    onExportPDF,
+  } = handleDivisions({ filteredData, selectedIds, setSelectedIds })
 
   return {
-    search, setSearch,
-    typeFilter, setTypeFilter,
-    statusFilter, setStatusFilter,
+    search,
+    setSearch,
+    typeFilter,
+    setTypeFilter,
+    statusFilter,
+    setStatusFilter,
     filteredData,
     selectedIds,
     toggleSelect,
     toggleSelectAll,
+    isAllSelected,
     handleDeleteSelected,
     handleDeleteAll,
-    handleExportPDF,
+    onEdit,
+    onDelete,
+    onToggleStatus,
+    onBulkUpdate,
+    onExportPDF,
     searchRef,
-    mutate,
   }
 }

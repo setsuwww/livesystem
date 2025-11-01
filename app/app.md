@@ -17,3 +17,11 @@ hooks digunakan untuk fitur besar seperti, filter, sort, search,
 handlers digunakan untuk menangani fitur ringan seperti toggle, edit, delete, select, delete selected, delete all, dan export
 helpers digunakan untuk mempersingkat code panjang seperti getAttedanceStatus, getDivisionStatus, dan parse tipe data
 
+request hanya bisa dikirim h-2 sebelum mulai
+request periode paling lama dari 1 - 5 hari
+
+admin requester responser karyawan user
+history dan 
+status dari responser dan admin ada di history 
+
+responser -> data requester

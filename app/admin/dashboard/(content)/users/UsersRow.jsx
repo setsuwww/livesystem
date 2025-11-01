@@ -12,7 +12,6 @@ import { UsersActionButton } from "./UsersActionButton"
 
 export const UsersRow = React.memo(function UsersRow({ user, isSelected, onToggleSelect, onEdit, onDelete, roleStyles }) {
   const handleToggle = () => onToggleSelect(user.id)
-
   const formatedCreatedDate = useMemo(() => format(new Date(user.createdAt), "dd MMMM yyyy"), [user.createdAt])
   const formatedUpdatedDate = useMemo(() => format(new Date(user.updatedAt), "dd MMMM yyyy"), [user.updatedAt])
 

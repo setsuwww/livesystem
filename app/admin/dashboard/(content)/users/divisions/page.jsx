@@ -33,11 +33,11 @@ export default async function Page({ searchParams }) {
 
   return (
     <section>
-      <DashboardHeader title="Divisions" subtitle="List of Division locations" />
+      <DashboardHeader title="Divisions" subtitle="List of Division divisions" />
       <ContentForm>
         <ContentForm.Header>
           <ContentInformation heading="List Divisions" subheading="Manage all Division data in this table"
-            show={true} buttonText="Create Division" href="/admin/dashboard/Divisions/create"
+            show={true} buttonText="Create Division" href="/admin/dashboard/users/divisions/create"
           />
         </ContentForm.Header>
 
