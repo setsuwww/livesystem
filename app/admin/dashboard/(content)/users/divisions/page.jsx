@@ -18,7 +18,7 @@ export default async function Page({ searchParams }) {
         startTime: true, endTime: true, createdAt: true, updatedAt: true,
       },
     }),
-    prisma.Division.count(),
+    prisma.division.count(),
   ])
 
   const totalPages = Math.ceil(total / PAGE_SIZE)

@@ -6,16 +6,11 @@ import { Button } from "@/_components/ui/Button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
 
 export const DivisionsActionHeader = ({
-  search,
-  onSearchChange,
-  typeFilter,
-  onTypeFilterChange,
-  statusFilter,
-  onStatusFilterChange,
-  selectedCount,
-  onDeleteSelected,
-  onDeleteAll,
-  onExportPDF,
+  search, onSearchChange,
+  typeFilter, onTypeFilterChange,
+  statusFilter, onStatusFilterChange,
+  selectedCount, onDeleteSelected,
+  onDeleteAll, onExportPDF,
   filteredData,
   searchInputRef,
 }) => {
@@ -58,20 +53,14 @@ export const DivisionsActionHeader = ({
           Delete Selected
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="bg-rose-50 hover:bg-rose-100 text-rose-500"
+        <Button variant="ghost" size="sm" className="bg-rose-50 hover:bg-rose-100 text-rose-500"
           onClick={onDeleteAll}
         >
           <Trash2 size={18} strokeWidth={2} />
           Delete All
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="bg-teal-100/50 hover:bg-teal-100 text-teal-600"
+        <Button variant="ghost" size="sm" className="bg-teal-100/50 hover:bg-teal-100 text-teal-600"
           onClick={() => onExportPDF(filteredData)}
         >
           <FolderInput size={16} />

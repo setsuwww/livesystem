@@ -29,22 +29,23 @@ export function handleDivisions({ filteredData, selectedIds, setSelectedIds, mut
   const onEdit = useCallback(
     (division) => {
       toast.info(`Editing ${division.name}`)
-      router.push(`/admin/dashboard/divisions/${division.id}/edit`)
+      router.push(`/admin/dashboard/users/divisions/${division.id}/edit`)
     },
     [router]
   )
 
   const onDelete = useCallback(
-    async (divisionId) => {
-      if (!confirm("Delete this division?")) return
-      try { const res = await fetch(`/api/division/${divisionId}`, { method: "DELETE" })
+    async (division) => {
+      if (!confirm(`Delete ${division.name}?`)) return
+      try {
+        const res = await fetch(`/api/division/${division.id}`, { method: "DELETE" })
         if (!res.ok) throw new Error("Failed to delete division")
 
         toast.success("Division deleted")
-        setSelectedIds((prev) => prev.filter((x) => x !== divisionId))
+        setSelectedIds((prev) => prev.filter((x) => x !== division.id))
         mutate && mutate()
-      } 
-      catch (err) { console.error(err)
+      } catch (err) {
+        console.error(err)
         toast.error("Error deleting division")
       }
     },
@@ -58,55 +59,70 @@ export function handleDivisions({ filteredData, selectedIds, setSelectedIds, mut
     }
 
     if (!confirm(`Delete ${selectedIds.length} selected divisions?`)) return
-    try { await Promise.all(selectedIds.map((id) => fetch(`/api/division/${id}`, { method: "DELETE" })))
+    try {
+      await Promise.all(
+        selectedIds.map((id) => fetch(`/api/division/${id}`, { method: "DELETE" }))
+      )
       toast.success("Selected divisions deleted")
       setSelectedIds([])
       mutate && mutate()
-    } 
-    catch (err) { console.error(err)
+    } catch (err) {
+      console.error(err)
       toast.error("Failed to delete selected divisions")
     }
   }, [selectedIds, mutate, setSelectedIds])
 
   const handleDeleteAll = useCallback(async () => {
     if (!confirm("Delete ALL divisions?")) return
-    try { await Promise.all(filteredData.map((d) => fetch(`/api/division/${d.id}`, { method: "DELETE" })))
+    try {
+      await Promise.all(
+        filteredData.map((d) => fetch(`/api/division/${d.id}`, { method: "DELETE" }))
+      )
       toast.success("All divisions deleted")
       setSelectedIds([])
       mutate && mutate()
-    } 
-    catch (err) {console.error(err)
+    } catch (err) {
+      console.error(err)
       toast.error("Failed to delete all divisions")
     }
   }, [filteredData, mutate, setSelectedIds])
 
-  const onToggleStatus = useCallback(async (division) => {
-    const newStatus = division.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"
-    try { await fetch(`/api/division/${division.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      })
-      toast.success(`Division ${newStatus}`)
-      mutate && mutate()
-    } 
-    catch (err) { console.error(err)
-      toast.error("Failed to toggle status")
-    }
-  }, [mutate])
+  const onToggleStatus = useCallback(
+    async (division) => {
+      const newStatus = division.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"
+      try {
+        await fetch(`/api/division/${division.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        })
+        toast.success(`Division ${newStatus}`)
+        mutate && mutate()
+      } catch (err) {
+        console.error(err)
+        toast.error("Failed to toggle status")
+      }
+    },
+    [mutate]
+  )
 
-  const onBulkUpdate = useCallback(async ({ activateType, deactivateType, isActive }) => {
-    try { await fetch("/api/division", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ activateType, deactivateType, isActive }),
-      })
-      toast.success("Divisions bulk updated")
-    } 
-    catch (err) { console.error(err)
-      toast.error("Bulk update failed")
-    }
-  }, [])
+  const onBulkUpdate = useCallback(
+    async ({ activateType, deactivateType, isActive }) => {
+      try {
+        await fetch("/api/division", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ activateType, deactivateType, isActive }),
+        })
+        toast.success("Divisions bulk updated")
+        mutate && mutate()
+      } catch (err) {
+        console.error(err)
+        toast.error("Bulk update failed")
+      }
+    },
+    [mutate]
+  )
 
   const onExportPDF = useCallback((data) => {
     toast.success(`Exported ${data.length} divisions to PDF`)

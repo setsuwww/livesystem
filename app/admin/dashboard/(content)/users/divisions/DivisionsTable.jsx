@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
-import { MapPin, AlarmClock, Radar, Locate, LocateFixed, Loader } from "lucide-react"
+import { MapPin, AlarmClock, Radar, Locate, LocateFixed, Loader, Building2 } from "lucide-react"
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
 import { Badge } from "@/_components/ui/Badge"
@@ -18,18 +18,20 @@ import { DivisionsStatusBadge } from "./DivisionsStatusBadge"
 import { DivisionsActionHeader } from "./DivisionsActionHeader"
 import { useDivisionsHooks } from "@/_function/hooks/useDivisionsHooks"
 import { handleDivisions } from "@/_function/handlers/handleDivisions"
-import { minutesToTime } from "@/_function/globalFunction"
 
 export default function DivisionsTable({ data }) {
   const {
+    mutate,
     search, setSearch,
     typeFilter, setTypeFilter,
     statusFilter, setStatusFilter,
     filteredData,
-    selectedIds, toggleSelect, toggleSelectAll,
-    handleDeleteSelected, handleDeleteAll,
+    selectedIds,
+    toggleSelect, toggleSelectAll,
+    handleDeleteSelected,
+    handleDeleteAll,
     handleExportPDF,
-    searchRef, mutate
+    onEdit, onDelete, onToggleStatus, onBulkUpdate,
   } = useDivisionsHooks(data)
 
   const [allActive, setAllActive] = useState(false)
@@ -43,9 +45,11 @@ export default function DivisionsTable({ data }) {
         const res = await fetch("/api/system-config")
         const data = await res.json()
         setAllActive(data.allWfaActive)
+      } catch (err) {
+        console.error("Failed to fetch config:", err)
+      } finally {
+        setLoadingConfig(false)
       }
-      catch (err) { console.error("Failed to fetch config:", err) }
-      finally { setLoadingConfig(false) }
     }
     fetchConfig()
   }, [])
@@ -67,16 +71,16 @@ export default function DivisionsTable({ data }) {
         body: JSON.stringify({ allWfaActive: pendingStatus }),
       })
 
-      await handleDivisions.onBulkUpdate({
+      await onBulkUpdate({
         activateType: "WFA",
         deactivateType: "WFO",
         isActive: pendingStatus,
       })
 
       mutate && mutate()
-      window.location.reload()
+    } catch (err) {
+      console.error("❌ Error confirming bulk toggle:", err)
     }
-    catch (err) { console.error("❌ Error confirming bulk toggle:", err) }
   }
 
   if (loadingConfig) {
@@ -99,14 +103,16 @@ export default function DivisionsTable({ data }) {
         </div>
 
         <DivisionsActionHeader
-          search={search} onSearchChange={setSearch}
-          typeFilter={typeFilter} onTypeFilterChange={setTypeFilter}
-          statusFilter={statusFilter} onStatusFilterChange={setStatusFilter}
+          search={search}
+          onSearchChange={setSearch}
+          typeFilter={typeFilter}
+          onTypeFilterChange={setTypeFilter}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
           onDeleteSelected={handleDeleteSelected}
           onDeleteAll={handleDeleteAll}
           onExportPDF={handleExportPDF}
           filteredData={filteredData}
-          searchInputRef={searchRef}
         />
 
         <div className="rounded-md overflow-hidden">
@@ -114,7 +120,8 @@ export default function DivisionsTable({ data }) {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[40px] text-center">
-                  <Checkbox checked={ filteredData.length > 0 && selectedIds.length === filteredData.length}
+                  <Checkbox
+                    checked={filteredData.length > 0 && selectedIds.length === filteredData.length}
                     onCheckedChange={toggleSelectAll}
                     className="translate-y-[1px]"
                   />
@@ -139,47 +146,23 @@ export default function DivisionsTable({ data }) {
                 filteredData.map((division) => (
                   <TableRow key={division.id}>
                     <TableCell className="text-center">
-                      <Checkbox checked={selectedIds.includes(division.id)} onCheckedChange={() => toggleSelect(division.id)}
+                      <Checkbox
+                        checked={selectedIds.includes(division.id)}
+                        onCheckedChange={() => toggleSelect(division.id)}
                         className="translate-y-[1px]"
                       />
                     </TableCell>
 
-
                     <TableCell>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <div className="group flex items-center space-x-2 cursor-pointer hover:bg-slate-50 border-transparent border hover:border-dashed hover:border-slate-200 transition p-1.5 rounded-md">
-                            <div className="group-hover:bg-slate-300 bg-slate-200 group-hover:text-slate-700 text-slate-600 transition p-2 rounded-full">
-                              <MapPin strokeWidth={1} />
-                            </div>
-                            <div className="flex flex-col p-1 rounded-md">
-                              <span className="text-sm text-slate-600 group-hover:text-slate-700 font-semibold">{division.name}</span>
-                              <span className="text-xs text-slate-400 group-hover:text-slate-500 ">{division.location}</span>
-                            </div>
-                          </div>
-                        </PopoverTrigger>
-
-                        <PopoverContent className="w-auto text-sm">
-                          <div className="space-y-2">
-                            <h4 className="font-bold text-slate-600 mb-2">Coordinate</h4>
-                            <p className="flex items-center space-x-1">
-                              <Radar size={20} strokeWidth={1.5} className="text-sky-600" />
-                              <span className="font-medium text-slate-700">Radius:</span>{" "}
-                              <span className="text-slate-500">{division.radius ?? "-"}</span>
-                            </p>
-                            <p className="flex items-center space-x-1">
-                              <Locate size={20} strokeWidth={1.5} className="text-sky-600" />
-                              <span className="font-medium text-slate-700">Latitude:</span>{" "}
-                              <span className="text-slate-500">{division.latitude ?? "-"}</span>
-                            </p>
-                            <p className="flex items-center space-x-1">
-                              <LocateFixed size={20} strokeWidth={1.5} className="text-sky-600" />
-                              <span className="font-medium text-slate-700">Longitude:</span>{" "}
-                              <span className="text-slate-500">{division.longitude ?? "-"}</span>
-                            </p>
-                          </div>
-                        </PopoverContent>
-                      </Popover>
+                              <div className="flex items-center gap-3">
+          <div className="bg-slate-200 p-2 rounded-full">
+            <Building2 className="h-5 w-5 text-slate-600" strokeWidth={1} />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-600">{division.name}</p>
+            <p className="text-xs text-slate-400">{division.location}</p>
+          </div>
+        </div>
                     </TableCell>
 
                     <TableCell>
@@ -189,14 +172,19 @@ export default function DivisionsTable({ data }) {
                     </TableCell>
 
                     <TableCell>
-                      <DivisionsStatusBadge status={division.status} onToggle={() => handleDivisions.onToggleStatus(division, mutate)} />
+                      <DivisionsStatusBadge
+                        status={division.status}
+                        onToggle={() => onToggleStatus(division)}
+                      />
                     </TableCell>
 
                     <TableCell>
-                      <div className="text-slate-600 flex items-center space-x-2">
-                        <AlarmClock strokeWidth={1.5} size={16} />
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <div className="p-2 text-yellow-700 bg-yellow-100 rounded-full">
+                          <AlarmClock size={16} strokeWidth={1.5} />
+                        </div>
                         <span>
-                          {division.startTime != null && division.endTime != null
+                          {division.startTime && division.endTime
                             ? `${division.startTime} - ${division.endTime}`
                             : "-"}
                         </span>
@@ -205,21 +193,21 @@ export default function DivisionsTable({ data }) {
 
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="text-sm text-slate-600 font-semibold">
-                          {format(new Date(division.createdAt), "dd MMM yyyy")}
+                        <span className="text-sm font-semibold text-slate-600">
+                          {format(new Date(division.createdAt), "dd MMMM yyyy")}
                         </span>
                         <span className="text-xs text-slate-400">
-                          {format(new Date(division.updatedAt), "dd MMM yyyy")}
+                          {format(new Date(division.updatedAt), "dd MMMM yyyy")}
                         </span>
                       </div>
                     </TableCell>
 
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => handleDivisions.onEdit(division)}>
+                        <Button size="sm" variant="outline" onClick={() => onEdit(division)}>
                           Edit
                         </Button>
-                        <Button size="sm" variant="destructive" onClick={() => handleDivisions.onDelete(division)}>
+                        <Button size="sm" variant="destructive" onClick={() => onDelete(division)}>
                           Delete
                         </Button>
                       </div>
@@ -232,6 +220,7 @@ export default function DivisionsTable({ data }) {
         </div>
       </div>
 
+      {/* Dialog konfirmasi */}
       <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <DialogContent className="max-w-[500px]">
           <DialogHeader>
@@ -246,9 +235,7 @@ export default function DivisionsTable({ data }) {
             <Button variant="outline" onClick={() => setConfirmOpen(false)}>
               Cancel
             </Button>
-            <Button variant="default" onClick={confirmBulkToggle}>
-              Confirm
-            </Button>
+            <Button onClick={confirmBulkToggle}>Confirm</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

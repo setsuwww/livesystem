@@ -1,71 +1,89 @@
-"use client";
-import { useState, useMemo } from "react";
-import { capitalize } from "@/_function/globalFunction";
-import { statusColorsClass } from "@/_constants/attendanceConstants";
+"use client"
 
-import AttendancesApprovalPartials from "./AttendancesApprovalPartials";
-import AttendancesUsersView from "./AttendancesUsersView";
+import { useState, useMemo, useCallback } from "react"
+import { capitalize } from "@/_function/globalFunction"
+import { statusColorsClass } from "@/_constants/attendanceConstants"
+
+import AttendancesApprovalPartials from "./AttendancesApprovalPartials"
+import AttendancesUsersView from "./AttendancesUsersView"
 
 export function AttendancesCard({ shifts = [] }) {
-  const [selectedStatus, setSelectedStatus] = useState(null);
-  const handleOpen = (status) => setSelectedStatus(status);
-  const handleClose = () => setSelectedStatus(null);
+  const [selectedStatus, setSelectedStatus] = useState(null)
 
   const allUsers = useMemo(() => {
     return shifts.flatMap((shift) =>
       (shift.users || []).map((u) => ({
         ...u,
         attendanceStatus: String(u?.attendanceStatus || "PRESENT").toUpperCase(),
-        approval: u?.approval ? String(u.approval).toUpperCase() : "",
+        approval: u?.approval ? String(u.approval).toUpperCase() : "PENDING",
         _shiftId: shift.id,
         _shiftType: shift.type,
         _shiftDivision: shift.divisionName,
       }))
-    );
-  }, [shifts]);
+    )
+  }, [shifts])
 
-  const defaultStatuses = ["ABSENT", "LATE", "PERMISSION"];
+  const handleOpen = useCallback((status) => {
+    setSelectedStatus(status)
+  }, [])
 
-  const statusSummary = defaultStatuses.map((status) => {
-    const users = allUsers.filter((u) => u.attendanceStatus === status);
-    const approvalCounts = users.reduce(
-      (acc, u) => {
-        const a = (u.approval || "PENDING").toUpperCase();
-        if (a === "ACCEPTED") acc.accepted++;
-        else if (a === "REJECTED") acc.rejected++;
-        else acc.pending++;
-        return acc;
-      },
-      { accepted: 0, pending: 0, rejected: 0 }
-    );
+  const handleClose = useCallback(() => {
+    setSelectedStatus(null)
+  }, [])
 
-    return { status, users, approvalCounts };
-  });
+  const defaultStatuses = useMemo(() => ["ABSENT", "LATE", "PERMISSION"], [])
+
+  const statusSummary = useMemo(() => {
+    return defaultStatuses.map((status) => {
+      const users = allUsers.filter((u) => u.attendanceStatus === status)
+
+      const approvalCounts = users.reduce(
+        (acc, u) => {
+          switch (u.approval) {
+            case "ACCEPTED":
+              acc.accepted++
+              break
+            case "REJECTED":
+              acc.rejected++
+              break
+            default:
+              acc.pending++
+              break
+          }
+          return acc
+        }, { accepted: 0, pending: 0, rejected: 0 }
+      )
+
+      return { status, users, approvalCounts }
+    })
+  }, [allUsers, defaultStatuses])
 
   return (
     <div>
       <div className="text-xs text-slate-500 flex items-center gap-2 mb-4">
         <span className="px-2 py-1 rounded-md bg-teal-50 text-teal-600">
-          A = Accepted 
+          A = Accepted
         </span>
         <span className="px-2 py-1 rounded-md bg-yellow-50 text-yellow-600">
-          P = Pending 
+          P = Pending
         </span>
         <span className="px-2 py-1 rounded-md bg-rose-50 text-rose-600">
-          R = Rejected 
+          R = Rejected
         </span>
       </div>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {statusSummary.map(({ status, users, approvalCounts }) => (
-        <AttendancesApprovalPartials
-          key={status}
-          status={status}
-          users={users}
-          approvalCounts={approvalCounts}
-          statusColorsClass={statusColorsClass}
-          onClick={() => users.length > 0 && handleOpen(status)}
-        />
-      ))}
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {statusSummary.map(({ status, users, approvalCounts }) => (
+          <AttendancesApprovalPartials
+            key={status}
+            status={status}
+            users={users}
+            approvalCounts={approvalCounts}
+            statusColorsClass={statusColorsClass}
+            onClick={() => users.length > 0 && handleOpen(status)}
+          />
+        ))}
+      </div>
 
       <AttendancesUsersView
         selectedStatus={selectedStatus}
@@ -74,6 +92,5 @@ export function AttendancesCard({ shifts = [] }) {
         onClose={handleClose}
       />
     </div>
-    </div>
-  );
+  )
 }

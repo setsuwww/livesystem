@@ -138,7 +138,6 @@ export const EmployeesSwitchModal = React.memo(function EmployeesSwitchModal({ o
               )}
         </section>
 
-
         <div className="flex justify-end gap-2 mt-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel

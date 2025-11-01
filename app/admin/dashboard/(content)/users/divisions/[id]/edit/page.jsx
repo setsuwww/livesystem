@@ -3,7 +3,7 @@ import { prisma } from "@/_lib/prisma";
 import { DashboardHeader } from "@/app/admin/dashboard/DashboardHeader";
 import ContentForm from "@/_components/content/ContentForm";
 import { ContentInformation } from "@/_components/content/ContentInformation";
-import EditDivisionForm from "./EditDivisionForm";
+import EditDivisionForm from "./EditForm";
 
 export const revalidate = 60;
 
@@ -32,7 +32,7 @@ async function getDivision(id) {
 
 export default async function Page({ params }) {
   const { id } = params;
-  const division = await getDivision(id);
+  const division = await getDivision(Number(id));
 
   if (!division) return notFound();
 
@@ -42,21 +42,7 @@ export default async function Page({ params }) {
         title={`Edit Division`}
         subtitle="Update division details and configuration"
       />
-      <ContentForm>
-        <ContentForm.Header>
-          <ContentInformation
-            heading="Edit Division"
-            subheading={`Editing data for: ${division.name}`}
-            show
-            variant="outline"
-            buttonText="Back"
-            href="/admin/dashboard/divisions"
-          />
-        </ContentForm.Header>
-
-        {/* CSR form */}
-        <EditDivisionForm division={division} />
-      </ContentForm>
+      <EditDivisionForm division={division} />
     </section>
   );
 }

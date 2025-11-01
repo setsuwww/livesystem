@@ -1,15 +1,18 @@
 "use client"
 
-import { useState, useMemo, useCallback, useRef } from "react"
+import useSWR from "swr"
+import { useState, useMemo } from "react"
 import { handleDivisions } from "../handlers/handleDivisions"
 
+const fetcher = (url) => fetch(url).then((res) => res.json())
+
 export function useDivisionsHooks(initialData) {
+  const { data, mutate } = useSWR("/api/divisions", fetcher, { fallbackData: initialData })
+
   const [search, setSearch] = useState("")
   const [typeFilter, setTypeFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedIds, setSelectedIds] = useState([])
-
-  const searchRef = useRef(null)
 
   const filteredData = useMemo(() => {
     return initialData.filter((division) => {
@@ -20,20 +23,15 @@ export function useDivisionsHooks(initialData) {
     })
   }, [initialData, search, typeFilter, statusFilter])
 
-  const {
-    toggleSelect,
-    toggleSelectAll,
-    isAllSelected,
-    onEdit,
-    onDelete,
-    handleDeleteSelected,
-    handleDeleteAll,
-    onToggleStatus,
-    onBulkUpdate,
-    onExportPDF,
-  } = handleDivisions({ filteredData, selectedIds, setSelectedIds })
+  const divisionActions = handleDivisions({
+    filteredData,
+    selectedIds,
+    setSelectedIds,
+    mutate,
+  })
 
   return {
+    mutate,
     search,
     setSearch,
     typeFilter,
@@ -42,16 +40,6 @@ export function useDivisionsHooks(initialData) {
     setStatusFilter,
     filteredData,
     selectedIds,
-    toggleSelect,
-    toggleSelectAll,
-    isAllSelected,
-    handleDeleteSelected,
-    handleDeleteAll,
-    onEdit,
-    onDelete,
-    onToggleStatus,
-    onBulkUpdate,
-    onExportPDF,
-    searchRef,
+    ...divisionActions,
   }
 }

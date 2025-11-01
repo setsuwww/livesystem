@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect } from "react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/_components/ui/Table"
 import { Badge } from "@/_components/ui/Badge"
+import { Input } from "@/_components/ui/Input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/_components/ui/Select"
 import { shiftStyles } from "@/_constants/shiftConstants"
 import { attedancesStyles } from "@/_constants/attendanceConstants"
@@ -44,11 +45,9 @@ export default function AttendancesTableClient() {
         />
 
         <div className="flex items-center gap-3">
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => handleDateChange(e.target.value)}
-            className="border rounded-md px-3 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          <Input type="date"
+            value={date} onChange={(e) => handleDateChange(e.target.value)}
+            typeSearch={true}
           />
 
           <Select value={sortOrder} onValueChange={setSortOrder}>
